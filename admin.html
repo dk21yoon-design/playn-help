@@ -37,6 +37,22 @@ a{color:var(--lamp)}
   <h2 style="font-size:18px;margin-top:22px">공실특가 신청</h2>
   <div id="list"></div>
 
+  <h2 style="font-size:18px;margin-top:28px">보증금·청소 점검</h2>
+  <div id="clList"><p class="sub">불러오는 중</p></div>
+  <p class="meta" style="color:var(--mute);font-size:13px;margin-top:6px">청소 매니저 링크 (이 주소를 매니저에게 보내주세요): <span id="clLink" style="word-break:break-all"></span></p>
+
+  <h2 style="font-size:18px;margin-top:28px">리그 기록 확인</h2>
+  <div id="lgSub"><p class="sub">불러오는 중</p></div>
+
+  <h2 style="font-size:18px;margin-top:28px">후기 답글 초안 (스페이스클라우드)</h2>
+  <div id="rvList"><p class="sub">불러오는 중</p></div>
+
+  <h2 style="font-size:18px;margin-top:28px">패치노트 릴스 초안</h2>
+  <div id="ptList"><p class="sub">불러오는 중</p></div>
+
+  <h2 style="font-size:18px;margin-top:28px">재고 예측</h2>
+  <div id="stList"><p class="sub">불러오는 중</p></div>
+
   <h2 style="font-size:18px;margin-top:28px">군인 인증 확인</h2>
   <div id="milList"><p class="sub">불러오는 중</p></div>
   <p class="meta" style="color:var(--mute);font-size:13px;margin-top:6px">AI가 먼저 판독해요: 서류 종류·이름·손글씨 코드·기간·편집 흔적 + 위조 감별 2차 검사. 확실하면 자동 승인(사진 72시간 보관, 이상하면 취소 가능), 가짜·불일치는 자동 반려, 애매하면 여기로 와요. 확인 포인트: 손글씨 코드가 서류 옆에 실물로 있는지, 이름·소속이 또렷한지, 휴대폰 화면이면 다른 폰으로 찍은 실제 화면인지.</p>
@@ -116,6 +132,34 @@ $("bdAdd").onclick=async()=>{const x=await cpost({action:"admin_badge",phone:$("
 const won=n=>Number(n).toLocaleString()+"원";
 const alert0=(el,t)=>{let s=el.querySelector(".sub.r");if(!s){s=document.createElement("span");s.className="sub r";el.appendChild(s)}s.textContent=t};
 const MK={milipass:"밀리패스",leave:"휴가증",card:"군 신분증"};
+const AAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto";
+const apost=b=>fetch(AAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
+const H=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const VL={ok:"깨끗함 → 반환",minor:"보통 → 반환",charge:"⚠️ 차감 검토",unknown:"판독 실패"};
+async function loadAuto(){const x=await apost({action:"admin_lists"});if(!x.ok)return;
+ $("clLink").textContent=x.cleaner_link;
+ const C=$("clList");C.innerHTML=x.cleans.length?"":'<p class="sub">보증금 처리할 점검이 없어요.</p>';
+ x.cleans.forEach(c=>{const d=document.createElement("div");d.className="card "+(c.verdict==="charge"?"":"confirmed");d.style.opacity=1;
+  d.innerHTML=`<b>${H(c.branch)} · ${H(c.use_date)} · ${H((c.guest||"").replace(/\*/g,""))} ${c.phone?tel(String(c.phone).replace(/\D/g,"")):""}</b><div class="meta">AI: ${VL[c.verdict]||c.verdict} — ${H(c.ai?.notes)}</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${(c.urls||[]).filter(Boolean).map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" style="width:84px;height:84px;object-fit:cover;border-radius:8px"></a>`).join("")}</div>`;
+  const b=document.createElement("button");b.className="ok";b.style.marginTop="8px";b.textContent="보증금 처리 완료";b.onclick=async()=>{await apost({action:"admin_deposit_done",id:c.id});loadAuto()};d.appendChild(b);C.appendChild(d)});
+ const L=$("lgSub");L.innerHTML=x.leagues.length?"":'<p class="sub">확인할 리그 기록이 없어요.</p>';
+ x.leagues.forEach(l=>{const d=document.createElement("div");d.className="card";
+  d.innerHTML=`<b>${H(l.branch)} · ${H(l.team)} · AI ${l.streak}연승</b><div class="meta">${H(l.play_date)} · ${H(l.riot_ids)}<br>사유: ${H(l.note)}</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${(l.urls||[]).filter(Boolean).map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" style="width:110px;border-radius:8px"></a>`).join("")}</div>`;
+  const a=document.createElement("div");a.className="act";a.innerHTML=`<input type="number" min="1" value="${l.streak||""}" style="width:90px" title="연승 수정"><button class="ok">순위표에 올리기</button><button class="no">반려</button>`;
+  const [n,ok,no]=a.children;ok.onclick=async()=>{await apost({action:"admin_league_decide",id:l.id,approve:true,streak:n.value});loadAuto();loadLeague()};no.onclick=async()=>{await apost({action:"admin_league_decide",id:l.id,approve:false});loadAuto()};
+  d.appendChild(a);L.appendChild(d)});
+ const R=$("rvList");R.innerHTML=x.reviews.length?"":'<p class="sub">답글이 필요한 새 후기가 없어요.</p>';
+ x.reviews.forEach(r=>{const d=document.createElement("div");d.className="card";
+  d.innerHTML=`<b>${H(r.branch)} · ${H(r.guest)} · ${H(r.posted)}</b><div class="meta">"${H(r.body)}"</div><div class="tip" style="white-space:pre-wrap">${H(r.draft)}</div>`;
+  const a=document.createElement("div");a.className="act";a.innerHTML=`<button class="ok">답글 복사</button><a href="${r.url}" target="_blank" rel="noopener" class="sub">후기 페이지 열기</a><button class="no">답글 달았어요</button>`;
+  const [cp,,dn]=a.children;cp.onclick=async()=>{try{await navigator.clipboard.writeText(r.draft);cp.textContent="복사했어요"}catch(e){}};dn.onclick=async()=>{await apost({action:"admin_review_done",id:r.id});loadAuto()};
+  d.appendChild(a);R.appendChild(d)});
+ const P=$("ptList");P.innerHTML=x.patches.length?"":'<p class="sub">새 패치가 나오면 자동으로 초안이 생겨요.</p>';
+ x.patches.forEach(p=>{const t=p.draft||{};const d=document.createElement("div");d.className="card";
+  d.innerHTML=`<b>${H(p.game)} · ${H(p.title)}</b><div class="meta">${t.raw?H(t.raw).slice(0,600):`훅: ${H(t.hook)}<br>상향: ${(t.buffs||[]).map(x=>H(x.name)).join(", ")}<br>하향: ${(t.nerfs||[]).map(x=>H(x.name)).join(", ")}`}</div><div class="tip" style="white-space:pre-wrap">${H((t.script||[]).join("\n"))}</div><p class="meta">영상으로 만들려면 Claude에게 "${H(p.title)} 릴스 만들어줘"라고 말씀해 주세요.</p>`;P.appendChild(d)});
+ const S=$("stList");S.innerHTML=x.stock.length?"":'<p class="sub">청소 매니저가 처음 재고를 입력하면 예측이 시작돼요.</p>';
+ x.stock.forEach(s=>{const d=document.createElement("div");d.className="card "+(s.alert?"":"confirmed");d.style.opacity=1;d.innerHTML=`<b>${H(s.branch)} · ${H(s.item)} · 남은 약 ${s.left}개</b><div class="meta">${s.out_date?`${s.out_date} 예약 때 부족 (${s.days<=0?"오늘":s.days+"일 뒤"})`:"14일 안에는 충분해요"}</div>`;
+  const a=document.createElement("div");a.className="act";a.innerHTML='<input type="number" min="0" placeholder="실제 개수" style="width:110px"><button class="no">개수 고치기</button>';const [q,bt]=a.children;bt.onclick=async()=>{await apost({action:"admin_stock_set",branch:s.branch,item:s.item,qty:q.value});loadAuto()};d.appendChild(a);S.appendChild(d)})}
 const MAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-military";
 const mpost=b=>fetch(MAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
 async function loadMil(){const x=await mpost({action:"admin_mil_list"});const L=$("milList");L.innerHTML="";
@@ -143,7 +187,7 @@ async function loadMember(){const x=await cpost({action:"admin_member",phone:$("
  const add=document.createElement("div");add.className="act";add.innerHTML='<input placeholder="쿠폰 이름 (예: 생일 3만원 할인권)" style="flex:1;width:auto"><input type="number" placeholder="금액(선택)" style="width:110px"><button class="no">직접 지급</button>';
  const [t,a,bt]=add.children;bt.onclick=async()=>{const r=await cpost({action:"admin_coupon_add",phone:x.phone,title:t.value,amount:a.value});if(r.ok)loadMember()};O.appendChild(add)}
 $("mbGo").onclick=loadMember;
-const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs();loadMil()}};
+const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs();loadMil();loadAuto()}};
 if(KEY)load();
 </script>
 </body>

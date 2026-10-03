@@ -36,6 +36,11 @@
 @media(max-width:600px){.prize{grid-template-columns:1fr}}
 .prize div{background:var(--panel);border-radius:14px;padding:16px}.prize b{display:block;color:var(--lamp);font-size:14px}.prize span{font-size:17px;font-weight:700}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.lf{margin-top:14px;background:var(--ink);color:var(--night);border-radius:var(--r-lg);padding:18px}
+.lf label{display:block;font-size:14px;font-weight:700;margin-top:12px}
+.lf input,.lf select,.lf textarea{display:block;width:100%;margin-top:6px;border:1.5px solid #CFCBF0;border-radius:12px;padding:11px 12px;font:16px Pretendard,sans-serif;background:#fff;color:var(--night)}
+.lf .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.lf .g2{grid-template-columns:1fr}}
+.lf .sub{color:#5A5690}.lf .msg{margin-top:10px;font-weight:700}
 </style>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
@@ -54,15 +59,29 @@
   <section class="s"><h2 class="disp">참가 방법</h2>
     <ol class="rules">
       <li>플레이앤 어느 지점이든 5명이 한 팀으로 예약해요. 참가비는 없어요.</li>
-      <li>시작할 때 호스트에게 "리그 참가"라고 문자로 알리고, 다섯 명의 라이엇 ID(닉네임#태그)를 보내주세요. 등록한 계정만 인정돼요.</li>
+      <li>다섯 명의 라이엇 ID(닉네임#태그)로만 인정돼요. 대리·부계정은 안 돼요.</li>
       <li>대관 시간 중 연속된 <b id="win">3</b>시간 안에서 나온 <b>5인 자유랭크 최고 연승</b>을 기록해요. 지면 0부터 다시 시작해요.</li>
-      <li>끝나면 전적 사이트(op.gg 등) 화면을 캡처해서 보내주세요. 확인되면 순위표에 올라가요.</li>
+      <li>끝나면 아래 "기록 올리기"에 전적 사이트(op.gg 등) 캡처를 올려주세요. AI가 연승을 바로 읽어서 순위표에 올려요.</li>
       <li>대리·부계정·계정 공유가 확인되면 기록이 지워지고 이후 리그에 참가할 수 없어요.</li>
       <li>동점이면 먼저 기록한 팀이 위예요. 시즌은 매달 1일에 새로 시작하고, 우승팀은 다음 달 첫 주에 발표해요.</li>
     </ol>
     <div class="cta"><a class="btn lamp" href="/#deals">5명 예약하기 (이번 주 빈자리)</a><a class="btn ghost" href="/#crew">N CREW 가입하고 알림 받기</a></div>
   </section>
 
+
+  <section class="s" id="submit"><h2 class="disp">기록 올리기</h2>
+    <div class="lf" id="lf">
+      <p class="sub" id="lfLogin" hidden>N CREW 멤버만 올릴 수 있어요. <a href="/me/">내 N CREW에서 로그인</a>한 뒤 다시 와주세요.</p>
+      <div id="lfForm" hidden>
+        <div class="g2"><label>지점<select id="lBr"><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></label><label>이용 날짜<input id="lDate" type="date"></label></div>
+        <label>팀 이름<input id="lTeam" maxlength="30" placeholder="명예의 전당에 남을 이름"></label>
+        <label>팀원 5명 라이엇 ID (줄바꿈이나 쉼표로)<textarea id="lIds" rows="3" placeholder="닉네임#KR1, ..."></textarea></label>
+        <label>전적 캡처 (최대 3장, 자유랭크 연승이 보이게)<input id="lImg" type="file" accept="image/*" multiple></label>
+        <button class="btn pink" id="lGo" style="width:100%;margin-top:12px">기록 올리기</button>
+        <div class="msg" id="lMsg"></div>
+      </div>
+    </div>
+  </section>
   <section class="s"><h2 class="disp">명예의 전당</h2><p class="sub">역대 최고 연승 기록이에요.</p><div class="hof" id="hof"></div></section>
 </main>
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a></div>
@@ -80,5 +99,15 @@ fetch(API).then(r=>r.json()).then(j=>{
   return `<div class="col"><h3 class="disp">${b}</h3><ol>${rs.length?rs.map((r,i)=>`<li><span class="r">${i+1}</span><span class="t"><b>${esc(r.team)}</b><small>${r.play_date.slice(5).replace("-","/")}</small></span><span class="s">${r.streak}연승</span></li>`).join(""):`<li class="empty">아직 기록이 없어요. 첫 기록의 주인공이 되어보세요.</li>`}</ol></div>`}).join("");
  $("hof").innerHTML=j.hall.length?j.hall.map(r=>`<div><span class="s">${r.streak}연승</span><span><b>${esc(r.team)}</b><br><small style="color:var(--dim)">${sname(r.season)} · ${r.branch}</small></span></div>`).join(""):'<p class="sub">첫 시즌이 진행 중이에요. 여기에 이름을 남길 첫 팀을 기다려요.</p>';
 }).catch(()=>{$("board").innerHTML='<p class="sub">순위를 불러오지 못했어요.</p>'});
+
+/* 기록 올리기 */
+const AAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto";
+let TK=null;try{TK=localStorage.getItem("pn_token")}catch(e){}
+if(TK){$("lfForm").hidden=false;$("lDate").value=new Date(Date.now()+9*3600e3).toISOString().slice(0,10)}else $("lfLogin").hidden=false;
+function shrink(f){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.85))};im.onerror=rej;im.src=URL.createObjectURL(f)})}
+if($("lGo"))$("lGo").onclick=async()=>{const M=$("lMsg");M.style.color="#5A5690";M.textContent="AI가 전적을 읽는 중이에요 (20~40초)…";$("lGo").disabled=true;
+ const imgs=[];for(const f of [...$("lImg").files].slice(0,3)){try{imgs.push(await shrink(f))}catch(e){}}
+ const j=await fetch(AAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"league_submit",token:TK,branch:$("lBr").value,date:$("lDate").value,team:$("lTeam").value,riot_ids:$("lIds").value,images:imgs})}).then(r=>r.json()).catch(()=>({}));
+ $("lGo").disabled=false;M.style.color=j.ok?"#1F7A4D":"#D1124F";M.textContent=j.message||j.error||"다시 시도해 주세요";if(j.status==="approved")setTimeout(()=>location.reload(),2500)};
 </script>
 </body></html>
