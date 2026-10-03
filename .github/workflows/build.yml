@@ -1,0 +1,21 @@
+name: 매거진·지점 페이지 자동 갱신
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # 6시간마다 (UTC)
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python3 tools/build.py
+      - name: 바뀐 게 있으면 커밋
+        run: |
+          git config user.name "playn-bot"
+          git config user.email "playn-bot@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || (git commit -m "자동 갱신: 매거진·지점 페이지" && git push)
