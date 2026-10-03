@@ -292,7 +292,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
       <li><b>매주 빈자리 알림</b><span>그 주에 비어있는 날짜를 카카오톡·문자로 먼저 알려드려요.</span></li>
       <li><b>멤버 특가로 신청</b><span>이 페이지에서 날짜를 고르면 호스트가 확인 후 문자로 확정해 드려요.</span></li>
       <li><b>입금하면 예약 완료</b><span>확정 문자에 적힌 계좌로 입금하면 끝. 선착순이라 빠를수록 유리해요.</span></li>
-      <li><b>올수록 레벨업</b><span>방문할수록 루키 → 레귤러 → 에이스 → 레전드. 10번이면 모든 예약 20% 할인. 쿠폰은 자동으로 들어와요. <a href="me/">내 N CREW 보기</a></span></li>
+      <li><b>올수록 레벨업</b><span>방문할수록 루키 → 레귤러 → 에이스 → 레전드. 10번이면 모든 예약 20% 할인. 쿠폰은 자동으로 들어오고, <b>내 N CREW에서 예약하면 할인이 바로 적용</b>돼요. <a href="me/">내 N CREW 보기</a></span></li>
     </ol>
     <form class="form" id="joinForm" novalidate>
       <h3 class="disp">N CREW 가입</h3>
@@ -314,13 +314,23 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <div><span class="k">가입하면 · 루키</span><b>빈자리 특가 20%</b><span>이번 주 빈자리를 멤버가로. <b style="display:inline;font-size:inherit;color:var(--lamp)">당일 예약은 35%</b></span></div>
     <div><span class="k">2번 방문 · 레귤러</span><b>음료 2 + 물 2</b><span>올 때마다 1.5L 음료 2병과 물 2병 무료</span></div>
     <div><span class="k">5번 방문 · 에이스</span><b>3시간 연장권</b><span>입실 전이나 퇴실 후로 3시간 더. 앞뒤 예약 때문에 못 쓰면 4만원 할인</span></div>
-    <div class="hot"><span class="k">10번 방문 · 레전드</span><b>모든 예약 20% + 통대관 무료</b><span>통대관 1회 무료 (금·토 제외). 금·토는 야간 예약하면 통대관으로 업그레이드</span></div>
+    <div class="hot"><span class="k">10번 방문 · 레전드</span><b>모든 예약 20% + 통대관 무료</b><span>통대관 1회 무료 (금·토 제외, 금·토는 야간 예약하면 통대관으로 업그레이드) + 보증금 면제</span></div>
     <div><span class="k">친구 초대</span><b>둘 다 2시간 연장권</b><span>친구가 첫 예약하면 초대한 사람과 친구 모두. 조기입실이나 퇴실 연장으로</span></div>
     <div class="hot"><span class="k">초대왕 · VIP</span><b>10만원 할인권 + 매번 10%</b><span>내가 초대한 친구들이 5번 이상 이용하면 VIP로 승급</span></div>
-    <div><span class="k">나라사랑 애국자</span><b>군인 첫 예약 5만원 할인</b><span>방문할 때마다 음료·물 2병 (섞어서 골라도 돼요). <a href="for/military/">자세히</a></span></div>
+    <div><span class="k">나라사랑 애국자</span><b>군인 첫 예약 5만원 할인</b><span>온라인으로 군인 인증하면 배지 + 방문마다 음료·물 2병. <a href="for/military/">인증 방법</a></span></div>
     <div><span class="k">플레이앤 리그</span><b>1위 평일 야간 무료</b><span>5명이 롤 자유랭크 연승 도전. 지점별 1위 팀은 평일 야간 패키지 무료 (5인). <a href="league/">순위 보기</a></span></div>
   </div>
-  <p class="sub" style="font-size:13.5px;margin-top:10px">할인은 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물·연장권 같은 서비스는 할인과 함께 받을 수 있어요. 쿠폰은 받은 날부터 6개월 동안 쓸 수 있고, <a href="me/">내 N CREW</a>에서 확인할 수 있어요.</p>
+  <div class="perks" style="margin-top:12px">
+    <div><span class="k">크루장</span><b>음료 4병 + 1시간 연장</b><span>같이 온 친구 3명이 그날 내 초대 링크로 가입하면</span></div>
+    <div><span class="k">14일 재방문</span><b>3만원 할인권</b><span>다녀간 날부터 14일 안에 다시 예약하면 자동으로 들어와요</span></div>
+    <div><span class="k">평일 주간 스탬프</span><b>3번 오면 1번 무료</b><span>평일 주간 패키지 3번 이용할 때마다 무료권 1장</span></div>
+    <div><span class="k">3개 지점 정복</span><b>5만원 할인권</b><span>홍대·연남·연트럴을 모두 다녀가면</span></div>
+    <div><span class="k">생일</span><b>3만원 할인권</b><span>생일 등록하면 2주 전에 자동 지급. 케이크 보관·초 준비까지</span></div>
+    <div class="hot"><span class="k">플레이앤 패스</span><b>50만원 충전 → 60만원</b><span>미리 충전하고 예약할 때 잔액으로 결제</span></div>
+    <div><span class="k">리그 도전</span><b>5연승이면 음료 2병</b><span>순위와 상관없이 5연승 이상 기록한 팀원 모두</span></div>
+    <div><span class="k">친구 초대 · VIP</span><b>초대할수록 커져요</b><span>친구 첫 예약 → 둘 다 2시간 연장권, 친구들 5번 이용 → VIP</span></div>
+  </div>
+  <p class="sub" style="font-size:13.5px;margin-top:10px"><b style="color:var(--lamp)">할인·쿠폰은 playn.kr 홈페이지 예약에서만 적용돼요</b> (<a href="me/">내 N CREW → 멤버 예약하기</a> 또는 위 빈자리 보드). 할인은 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물·연장권 같은 서비스는 네이버·스페이스클라우드 예약이어도 받을 수 있어요. 쿠폰은 받은 날부터 6개월 동안 쓸 수 있고, <a href="me/">내 N CREW</a>에서 확인할 수 있어요.</p>
 </div></section>
 
 <section class="blk" id="branches"><div class="wrap">
@@ -376,8 +386,10 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <details><summary>주차할 수 있나요?</summary><p>전용 주차 공간은 없어요. 근처 공영주차장이나 모두의주차장 앱을 이용하면 더 저렴해요.</p></details>
     <details><summary>시간 연장이나 짐을 미리 맡길 수 있나요?</summary><p>다음 예약을 확인해야 해서 호스트에게 먼저 연락 주세요 (010-8339-5818).</p></details>
     <details><summary>환불은 어떻게 돼요?</summary><p>이용 8일 전까지 취소하면 100% 환불되고, 7일 전부터는 환불이 어려워요. 스페이스클라우드는 결제 후 2시간 안에 취소하면 100% 환불돼요.</p></details>
-    <details><summary>N CREW 할인끼리 같이 쓸 수 있어요?</summary><p>할인은 한 예약에 가장 큰 것 1개만 적용돼요 (멤버 특가 20%·당일 35%, VIP 10%, 레전드 20%, 금액 할인권 중 하나). 음료·물 서비스와 연장권은 할인과 함께 받을 수 있어요.</p></details>
-    <details><summary>연장권은 어떻게 써요?</summary><p>예약 입실 시간 전이나 퇴실 시간 후로 쓸 수 있어요. 앞뒤 예약을 확인해야 해서 미리 호스트에게 문자 주세요. 예약이 겹쳐 못 쓰게 되면 그 예약 이용금액에서 4만원 할인해 드려요.</p></details>
+    <details><summary>N CREW 할인끼리 같이 쓸 수 있어요?</summary><p>할인과 쿠폰은 playn.kr 홈페이지 예약(내 N CREW → 멤버 예약하기, 빈자리 보드)에서만 적용되고, 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물 서비스와 연장권은 어느 예약이든 받을 수 있어요.</p></details>
+    <details><summary>왜 홈페이지 예약만 할인돼요?</summary><p>예약 플랫폼 수수료가 들지 않는 직접 예약이라, 그만큼을 멤버 할인으로 돌려드리는 거예요. 날짜를 고르면 내 레벨·쿠폰 중 가장 좋은 가격을 바로 계산해 드려요.</p></details>
+    <details><summary>연장권은 어떻게 써요?</summary><p>예약 입실 시간 전이나 퇴실 시간 후로 쓸 수 있어요. 앞뒤 예약을 확인해야 해서 미리 호스트에게 문자 주세요. 예약이 겹쳐 못 쓰게 되면 4만원 할인으로 바꿔드려요 (그 예약이 홈페이지 예약이면 바로, 아니면 다음 홈페이지 예약에서).</p></details>
+    <details><summary>군인 인증은 어떻게 해요?</summary><p>N CREW 가입 → 내 N CREW에서 밀리패스 모바일 신분증 화면이나 휴가증 사진을 올리면 돼요. 호스트가 확인하면 배지와 5만원 할인권이 바로 들어오고, 사진은 확인 즉시 지워요.</p></details>
     <details><summary>반려동물과 함께 가도 되나요?</summary><p>반려동물은 함께 올 수 없어요.</p></details>
   </div>
   <p class="sub" style="margin-top:14px">더 궁금한 건 <a href="help/">AI 상담사</a>에게 24시간 물어볼 수 있어요.</p>

@@ -37,6 +37,10 @@ a{color:var(--lamp)}
   <h2 style="font-size:18px;margin-top:22px">공실특가 신청</h2>
   <div id="list"></div>
 
+  <h2 style="font-size:18px;margin-top:28px">군인 인증 확인</h2>
+  <div id="milList"><p class="sub">불러오는 중</p></div>
+  <p class="meta" style="color:var(--mute);font-size:13px;margin-top:6px">확인 기준: ① 사진·이름이 본인과 맞는지 ② 밀리패스는 화면 캡처보다 움직이는 화면(실물) 확인이 확실해요 ③ 휴가증은 기간이 지금 포함되는지. 승인하면 배지·5만원 할인권이 자동으로 들어가고 사진은 바로 지워져요. 입실 때 실물(밀리패스 앱 화면)을 한 번 더 보면 완벽해요.</p>
+
   <h2 style="font-size:18px;margin-top:28px">멤버 혜택·쿠폰 확인</h2>
   <div class="card" style="border-left-color:#3DDC97">
     <div class="act" style="margin-top:0"><input id="mbPhone" placeholder="손님 번호" style="flex:1;width:auto"><button class="ok" id="mbGo">확인</button></div>
@@ -62,7 +66,7 @@ a{color:var(--lamp)}
   <div id="refList"><p class="sub">불러오는 중</p></div>
 
   <h2 style="font-size:18px;margin-top:28px">배지 달아주기</h2>
-  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">나라사랑 애국자 (군인 신분 확인 → 5만원 할인권 자동 지급)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
+  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">나라사랑 애국자 (현장에서 직접 확인했을 때 · 5만원 할인권 자동 지급)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
   <p style="margin-top:16px"><a href="./">홈페이지 보기</a> · <a href="league/">리그 보기</a></p>
 </div>
 <script>
@@ -82,11 +86,11 @@ async function load(){const j=await post({action:"admin_list"});
   $("sum").textContent=`멤버 ${j.members}명 · 대기 중인 신청 ${pend}건`;$("disc").value=j.discount;$("discT").value=j.discount_today;
   const L=$("list");L.innerHTML=j.requests.length?"":'<p class="sub" style="margin-top:14px">아직 신청이 없어요.</p>';
   j.requests.forEach(r=>{const c=document.createElement("div");c.className="card "+r.status;
-    c.innerHTML=`<b>#${r.id} ${r.branch} ${lab(r.use_date)} ${PK[r.pkg]}</b><div class="meta">${r.name} · <a href="tel:${r.phone}">${tel(r.phone)}</a> · ${r.people?r.people+"명":"인원 미정"}${r.memo?"<br>메모: "+r.memo.replace(/</g,"&lt;"):""}<br>정가 ${r.regular_price?r.regular_price.toLocaleString()+"원":"-"} → 특가 ${r.deal_price?r.deal_price.toLocaleString()+"원":"미정"} · ${r.status==="pending"?"대기 중":r.status==="confirmed"?"확정":"마감 처리"}</div>`;
+    c.innerHTML=`<b>#${r.id} ${r.branch} ${lab(r.use_date)} ${PK[r.pkg]}</b><div class="meta">${r.name} · <a href="tel:${r.phone}">${tel(r.phone)}</a> · ${r.people?r.people+"명":"인원 미정"}${r.memo?"<br>메모: "+r.memo.replace(/</g,"&lt;"):""}<br>${r.kind==="member"?"<b style=\"color:#3DDC97\">멤버 예약</b> · ":""}정가 ${r.regular_price?r.regular_price.toLocaleString()+"원":"-"} → ${r.deal_price!=null?r.deal_price.toLocaleString()+"원":"미정"}${r.discount_note?" ("+r.discount_note+")":""}${r.upgrade_full?" · <b>통대관 업그레이드</b>":""}${r.pay_pass?" · <b>패스 결제</b>":""} · ${r.status==="pending"?"대기 중":r.status==="confirmed"?"확정":"마감 처리"}</div>`;
     if(r.status==="pending"){const a=document.createElement("div");a.className="act";
-      a.innerHTML=`<input type="number" placeholder="특가 금액" value="${r.deal_price||""}"><button class="ok">확정 + 문자</button><button class="no">마감 + 문자</button>`;
+      a.innerHTML=`<input type="number" placeholder="금액" value="${r.deal_price!=null?r.deal_price:""}"><button class="ok">확정 + 문자</button><button class="no">마감 + 문자</button>`;
       const [inp,ok,no]=a.children;
-      ok.onclick=async()=>{if(!inp.value){alertBox(a,"특가 금액을 넣어주세요");return}ok.disabled=no.disabled=true;const x=await post({action:"admin_decide",id:r.id,status:"confirmed",price:inp.value});alertBox(a,x.sms?"확정 문자 보냈어요":"확정했어요 (문자 발송 실패, 직접 연락해 주세요)");setTimeout(load,1200)};
+      ok.onclick=async()=>{if(inp.value===""){alertBox(a,"금액을 넣어주세요");return}ok.disabled=no.disabled=true;const x=await post({action:"admin_decide",id:r.id,status:"confirmed",price:inp.value});alertBox(a,x.sms?"확정 문자 보냈어요":"확정했어요 (문자 발송 실패, 직접 연락해 주세요)");setTimeout(load,1200)};
       no.onclick=async()=>{ok.disabled=no.disabled=true;const x=await post({action:"admin_decide",id:r.id,status:"rejected"});alertBox(a,x.sms?"마감 문자 보냈어요":"마감 처리했어요");setTimeout(load,1200)};
       c.appendChild(a)}
     L.appendChild(c)})}
@@ -110,6 +114,16 @@ async function loadRefs(){const x=await cpost({action:"admin_refs"});const R=$("
   R.appendChild(c)})}
 $("bdAdd").onclick=async()=>{const x=await cpost({action:"admin_badge",phone:$("bdPhone").value,badge:$("bdType").value});$("bdMsg").textContent=x.ok?"달았어요":(x.error||"실패")};
 const won=n=>Number(n).toLocaleString()+"원";
+const alert0=(el,t)=>{let s=el.querySelector(".sub.r");if(!s){s=document.createElement("span");s.className="sub r";el.appendChild(s)}s.textContent=t};
+const MK={milipass:"밀리패스",leave:"휴가증",card:"군 신분증"};
+async function loadMil(){const x=await cpost({action:"admin_mil_list"});const L=$("milList");L.innerHTML="";
+ const items=(x.items||[]).filter(i=>i.status==="pending");if(!items.length){L.innerHTML='<p class="sub">대기 중인 군인 인증이 없어요.</p>';return}
+ items.forEach(i=>{const c=document.createElement("div");c.className="card";c.innerHTML=`<b>${(i.name||"").replace(/</g,"&lt;")} · ${tel(i.phone)}</b><div class="meta">${MK[i.kind]} · 전역 예정 ${i.discharge_date}</div>${i.url?`<a href="${i.url}" target="_blank" rel="noopener"><img src="${i.url}" style="max-width:100%;border-radius:10px;margin-top:10px"></a>`:""}`;
+  const a=document.createElement("div");a.className="act";a.innerHTML='<input type="date" title="전역일 수정"><button class="ok">승인 (배지·쿠폰 지급)</button><input placeholder="반려 사유" style="width:140px"><button class="no">반려</button>';
+  const [u,ok,why,no]=a.children;u.value=i.discharge_date||"";
+  ok.onclick=async()=>{ok.disabled=no.disabled=true;await cpost({action:"admin_mil_decide",id:i.id,approve:true,until:u.value});loadMil()};
+  no.onclick=async()=>{ok.disabled=no.disabled=true;await cpost({action:"admin_mil_decide",id:i.id,approve:false,note:why.value});loadMil()};
+  c.appendChild(a);L.appendChild(c)})}
 async function loadMember(){const x=await cpost({action:"admin_member",phone:$("mbPhone").value});const O=$("mbOut");
  if(!x.ok){O.innerHTML=`<p class="meta">${x.error||"찾지 못했어요"}</p>`;return}
  const cps=x.coupons.filter(c=>c.status!=="void");
@@ -118,10 +132,12 @@ async function loadMember(){const x=await cpost({action:"admin_member",phone:$("
   if(c.status==="active"){const u=document.createElement("button");u.className="ok";u.textContent="사용";u.onclick=async()=>{await cpost({action:"admin_coupon_use",id:c.id,note:"사용"});loadMember()};d.appendChild(u);
    if(c.kind==="ext2"||c.kind==="ext3"){const f=document.createElement("button");f.className="no";f.textContent="못 씀 → 4만원 할인";f.onclick=async()=>{await cpost({action:"admin_coupon_use",id:c.id,note:"예약 겹쳐 4만원 할인으로 대체"});loadMember()};d.appendChild(f)}}
   O.appendChild(d)});
+ const ps=document.createElement("div");ps.className="act";ps.innerHTML=`<span class="sub" style="flex:1">패스 잔액 ${won(x.pass_balance)} · 생일 ${x.birthday||"미등록"} · 군인 ${x.military.status==="approved"?x.military.until+"까지":"아님"}</span><input type="number" placeholder="충전 입금액" style="width:130px"><button class="no">패스 충전</button>`;
+ const [_,pa,pb]=ps.children;pb.onclick=async()=>{const r=await cpost({action:"admin_pass_charge",phone:x.phone,paid:pa.value});if(r.ok){alert0(ps,`${won(r.credit)} 충전 · 잔액 ${won(r.balance)}`);loadMember()}else alert0(ps,r.error||"실패")};O.appendChild(ps);
  const add=document.createElement("div");add.className="act";add.innerHTML='<input placeholder="쿠폰 이름 (예: 생일 3만원 할인권)" style="flex:1;width:auto"><input type="number" placeholder="금액(선택)" style="width:110px"><button class="no">직접 지급</button>';
  const [t,a,bt]=add.children;bt.onclick=async()=>{const r=await cpost({action:"admin_coupon_add",phone:x.phone,title:t.value,amount:a.value});if(r.ok)loadMember()};O.appendChild(add)}
 $("mbGo").onclick=loadMember;
-const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs()}};
+const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs();loadMil()}};
 if(KEY)load();
 </script>
 </body>
