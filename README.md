@@ -1,7 +1,7 @@
-# Play N AI 상담사
+# playn.kr
 
-게임파티룸 플레이앤 손님용 AI 상담 화면입니다.
+플레이앤(Play N) 홈페이지
 
-- 홍대루프탑점: `?b=hongdae`
-- 연남루프탑점: `?b=yeonnam`
-- 연트럴파크점: `?b=yeontral`
+- `/` 홈페이지 · 이번 주 빈자리 · N CREW 가입
+- `/help/?b=hongdae|yeonnam|yeontral` AI 상담사
+- `/admin.html` N CREW 신청 관리 (관리 키 필요)
