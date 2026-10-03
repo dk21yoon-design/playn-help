@@ -27,7 +27,7 @@ TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>
 <nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
 
 FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
-<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">휴가 나온 장병</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div></div></footer>"""
+<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">나라사랑 애국자 (군인)</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div></div></footer>"""
 
 SMARTSTORE = {'43667': 'https://smartstore.naver.com/playn_/products/9434661597', '55750': 'https://smartstore.naver.com/playn_/products/9430485644', '72605': 'https://smartstore.naver.com/playn_/products/12071850850'}
 
@@ -286,14 +286,15 @@ def post_page(p, cats, related):
 
 # ───────────────────────── 목적별 페이지 (/for/…)
 FOR_PAGES = [
-  dict(slug="military", title="휴가 나온 날, 플레이앤", kicker="휴가증 챌린지",
-       desc="휴가·외박 나온 장병을 위한 홍대·연남 게임파티룸. 휴가증 보여주면 평일 1시간 추가.",
+  dict(slug="military", title="나라사랑 애국자 서비스", kicker="휴가 나온 장병 우대",
+       desc="휴가·외박 나온 장병을 위한 홍대·연남 게임파티룸. 군인 첫 예약 5만원 할인, 올 때마다 음료·물 2병.",
        lead="부대 동기들이랑 휴가 맞춰 나왔는데 PC방은 좀 아쉽다면. 프로 장비 PC 5대, 루프탑 바베큐, 노래방까지 한 공간에서 다 같이.",
-       perks=[("휴가증 보여주면 평일 1시간 추가","휴가증·외출증·외박증 중 하나를 입실할 때 보여주세요. 평일 이용이고 앞뒤 예약이 없을 때 적용돼요."),
-              ("N CREW 군인 배지","가입하고 호스트에게 말하면 '휴가 나온 용사' 배지를 달아드려요."),
-              ("5명이면 리그 도전","다섯이 롤 자유랭크 연승전에 도전하면 명예의 전당에 부대 이름(팀 이름)을 남길 수 있어요.")],
+       perks=[("군인 첫 예약 5만원 할인","군인 신분으로 처음 예약하면 이용금액에서 5만원 할인해 드려요. 예약할 때 호스트에게 휴가증·외출증·외박증 중 하나를 보여주세요."),
+              ("올 때마다 음료·물 2병","1.5L 음료와 물 중에서 2병, 섞어서 골라도 돼요."),
+              ("나라사랑 애국자 배지","N CREW에 가입하고 신분을 확인하면 배지와 5만원 할인권이 내 N CREW에 바로 들어와요."),
+              ("5명이면 리그 도전","다섯이 롤 자유랭크 연승에 도전하면 명예의 전당에 부대 이름(팀 이름)을 남길 수 있어요. 지점별 1위는 평일 야간 패키지 무료.")],
        picks=["5명이면 연트럴파크점(5인 최적), 6명 이상이면 홍대·연남루프탑점", "복귀 전날 밤이면 야간 패키지(19:00~다음 날 09:30)"],
-       note="이벤트 기간: 2026년 12월 31일까지 · 1팀 1회 · 휴가증 사진은 찍지 않고 눈으로만 확인해요."),
+       note="5만원 할인은 1인 1회, 다른 할인과 중복되지 않아요 (더 큰 할인 1개 적용) · 신분증은 사진을 찍지 않고 눈으로만 확인해요."),
   dict(slug="worlds", title="롤드컵, 새벽에 혼자 보지 말고", kicker="롤드컵 2026 단체 관람",
        desc="롤드컵 2026 새벽 경기를 친구들과 큰 화면으로. 홍대·연남 게임파티룸 플레이앤 야간 패키지.",
        lead="올해 롤드컵은 미국에서 열려서 한국은 새벽~아침 경기가 많아요. 야간 패키지면 저녁에 들어와서 내전 한 판, 새벽엔 다 같이 응원, 아침에 퇴실.",
@@ -322,7 +323,7 @@ FOR_PAGES = [
 FOR_CSS = """
 .fh{padding:30px 0 6px}.fh .k{color:var(--lamp);font-weight:800;font-size:14px}
 .fh h1{font-size:clamp(34px,7.5vw,62px);margin-top:6px}.fh p{color:var(--mute);font-size:17px;margin-top:12px;max-width:36em}
-.pk3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.pk3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:18px}
 @media(max-width:820px){.pk3{grid-template-columns:1fr}}
 .pk3 div{background:var(--panel);border-radius:var(--r-md);padding:18px;border-top:3px solid var(--brand)}
 .pk3 b{display:block;font-size:18px}.pk3 span{color:var(--mute);font-size:15px;display:block;margin-top:6px}

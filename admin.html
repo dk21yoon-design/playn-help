@@ -32,10 +32,17 @@ a{color:var(--lamp)}
 <div class="sub" id="sum">관리 키를 넣어주세요</div>
 <div class="bar" id="login"><input id="key" type="password" placeholder="관리 키" style="flex:1;width:auto"><button class="ok" id="go">열기</button></div>
 <div id="main" hidden>
-  <div class="bar">멤버 특가 할인율 <input id="disc" type="number" min="0" max="70">% <button class="no" id="saveDisc">저장</button><span id="discMsg" class="sub"></span></div>
+  <div class="bar">멤버 특가 <input id="disc" type="number" min="0" max="70">% · 당일 <input id="discT" type="number" min="0" max="70">% <button class="no" id="saveDisc">저장</button><span id="discMsg" class="sub"></span></div>
   <div class="tip">확정을 누르면 손님에게 확정 문자(특가 금액·입금 계좌·이용 안내 링크)가 자동으로 가요.<br>그다음 스페이스클라우드 캘린더에 <b>"멤버특가 ○○ 확정"</b> 외부예약을 손님 번호와 함께 등록해 주세요. 그러면 다른 세부공간 막기와 안내문자는 지금처럼 자동으로 처리돼요.</div>
   <h2 style="font-size:18px;margin-top:22px">공실특가 신청</h2>
   <div id="list"></div>
+
+  <h2 style="font-size:18px;margin-top:28px">멤버 혜택·쿠폰 확인</h2>
+  <div class="card" style="border-left-color:#3DDC97">
+    <div class="act" style="margin-top:0"><input id="mbPhone" placeholder="손님 번호" style="flex:1;width:auto"><button class="ok" id="mbGo">확인</button></div>
+    <div id="mbOut"></div>
+    <p class="meta">예약 문의가 오면 번호로 레벨·VIP·쿠폰을 확인하고, 쓴 쿠폰은 "사용"을 눌러주세요. 할인은 한 예약에 1개(가장 큰 것), 음료·연장권 같은 서비스는 함께 줘도 돼요.</p>
+  </div>
 
   <h2 style="font-size:18px;margin-top:28px">플레이앤 리그 기록 등록</h2>
   <div class="card" style="border-left-color:#FF2E6E">
@@ -55,7 +62,7 @@ a{color:var(--lamp)}
   <div id="refList"><p class="sub">불러오는 중</p></div>
 
   <h2 style="font-size:18px;margin-top:28px">배지 달아주기</h2>
-  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">휴가 나온 용사 (휴가증 확인)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
+  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">나라사랑 애국자 (군인 신분 확인 → 5만원 할인권 자동 지급)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
   <p style="margin-top:16px"><a href="./">홈페이지 보기</a> · <a href="league/">리그 보기</a></p>
 </div>
 <script>
@@ -72,7 +79,7 @@ async function load(){const j=await post({action:"admin_list"});
   if(!j.ok){$("sum").textContent=j.error||"관리 키가 맞지 않아요";$("login").hidden=false;$("main").hidden=true;return}
   st.set(KEY);$("login").hidden=true;$("main").hidden=false;
   const pend=j.requests.filter(r=>r.status==="pending").length;
-  $("sum").textContent=`멤버 ${j.members}명 · 대기 중인 신청 ${pend}건`;$("disc").value=j.discount;
+  $("sum").textContent=`멤버 ${j.members}명 · 대기 중인 신청 ${pend}건`;$("disc").value=j.discount;$("discT").value=j.discount_today;
   const L=$("list");L.innerHTML=j.requests.length?"":'<p class="sub" style="margin-top:14px">아직 신청이 없어요.</p>';
   j.requests.forEach(r=>{const c=document.createElement("div");c.className="card "+r.status;
     c.innerHTML=`<b>#${r.id} ${r.branch} ${lab(r.use_date)} ${PK[r.pkg]}</b><div class="meta">${r.name} · <a href="tel:${r.phone}">${tel(r.phone)}</a> · ${r.people?r.people+"명":"인원 미정"}${r.memo?"<br>메모: "+r.memo.replace(/</g,"&lt;"):""}<br>정가 ${r.regular_price?r.regular_price.toLocaleString()+"원":"-"} → 특가 ${r.deal_price?r.deal_price.toLocaleString()+"원":"미정"} · ${r.status==="pending"?"대기 중":r.status==="confirmed"?"확정":"마감 처리"}</div>`;
@@ -85,7 +92,7 @@ async function load(){const j=await post({action:"admin_list"});
     L.appendChild(c)})}
 function alertBox(el,t){let s=el.querySelector(".sub");if(!s){s=document.createElement("span");s.className="sub";el.appendChild(s)}s.textContent=t}
 $("go").onclick=()=>{KEY=$("key").value.trim();load()};
-$("saveDisc").onclick=async()=>{const x=await post({action:"admin_discount",value:$("disc").value});$("discMsg").textContent=x.ok?`${x.discount}%로 바꿨어요`:"저장 실패"};
+$("saveDisc").onclick=async()=>{const x=await post({action:"admin_discount",value:$("disc").value,today:$("discT").value});$("discMsg").textContent=x.ok?`특가 ${x.discount}% · 당일 ${x.discount_today}%로 바꿨어요`:"저장 실패"};
 
 /* 리그·초대·배지 */
 const CAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";
@@ -98,10 +105,22 @@ $("lgAdd").onclick=async()=>{const x=await cpost({action:"admin_league_add",bran
 async function loadRefs(){const x=await cpost({action:"admin_refs"});const R=$("refList");R.innerHTML="";
  if(!x.ok||!x.refs.length){R.innerHTML='<p class="sub">아직 초대로 가입한 멤버가 없어요.</p>';return}
  x.refs.forEach(r=>{const c=document.createElement("div");c.className="card "+(r.rewarded?"confirmed":"");
-  c.innerHTML=`<b>${r.inviter||"?"} → ${r.friend}</b><div class="meta">초대한 사람 ${tel(r.inviter_phone||"")} · 친구 ${tel(r.friend_phone)}<br>${r.booked?"친구 첫 예약 확정됨":"친구 아직 예약 전"} · ${r.rewarded?"보상 완료":"보상 전"}</div>`;
-  if(r.booked&&!r.rewarded){const b=document.createElement("button");b.className="ok";b.style.marginTop="8px";b.textContent="두 사람 보상 줬어요";b.onclick=async()=>{await cpost({action:"admin_ref_done",phone:r.friend_phone});loadRefs()};c.appendChild(b)}
+  c.innerHTML=`<b>${r.inviter||"?"}${r.inviter_vip?" (VIP)":""} → ${r.friend}</b><div class="meta">초대한 사람 ${tel(r.inviter_phone||"")} · 친구 ${tel(r.friend_phone)}<br>${r.booked?"친구 첫 예약 확정됨":"친구 아직 예약 전"} · 친구 이용 ${r.visits}회 · ${r.rewarded?"2시간 연장권 자동 지급됨":"보상 전"}</div>`;
+  if(r.booked&&!r.rewarded){const b=document.createElement("button");b.className="ok";b.style.marginTop="8px";b.textContent="보상 지금 지급";b.onclick=async()=>{await cpost({action:"admin_ref_done",phone:r.friend_phone});loadRefs()};c.appendChild(b)}
   R.appendChild(c)})}
 $("bdAdd").onclick=async()=>{const x=await cpost({action:"admin_badge",phone:$("bdPhone").value,badge:$("bdType").value});$("bdMsg").textContent=x.ok?"달았어요":(x.error||"실패")};
+const won=n=>Number(n).toLocaleString()+"원";
+async function loadMember(){const x=await cpost({action:"admin_member",phone:$("mbPhone").value});const O=$("mbOut");
+ if(!x.ok){O.innerHTML=`<p class="meta">${x.error||"찾지 못했어요"}</p>`;return}
+ const cps=x.coupons.filter(c=>c.status!=="void");
+ O.innerHTML=`<p style="margin-top:10px"><b>${x.name.replace(/</g,"&lt;")} · Lv.${x.level.lv} ${x.level.name}${x.vip?" · VIP":""}</b></p><p class="meta">방문 ${x.visits}회 · 할인율 ${x.rate?x.rate+"% (모든 예약)":"없음 (특가만)"} · 지금 혜택: ${x.level.perk}</p>`;
+ cps.forEach(c=>{const d=document.createElement("div");d.className="act";d.innerHTML=`<span style="flex:1"><b>${c.title}</b> <span class="sub">${c.status==="used"?"사용함":c.expires_at+"까지"}</span></span>`;
+  if(c.status==="active"){const u=document.createElement("button");u.className="ok";u.textContent="사용";u.onclick=async()=>{await cpost({action:"admin_coupon_use",id:c.id,note:"사용"});loadMember()};d.appendChild(u);
+   if(c.kind==="ext2"||c.kind==="ext3"){const f=document.createElement("button");f.className="no";f.textContent="못 씀 → 4만원 할인";f.onclick=async()=>{await cpost({action:"admin_coupon_use",id:c.id,note:"예약 겹쳐 4만원 할인으로 대체"});loadMember()};d.appendChild(f)}}
+  O.appendChild(d)});
+ const add=document.createElement("div");add.className="act";add.innerHTML='<input placeholder="쿠폰 이름 (예: 생일 3만원 할인권)" style="flex:1;width:auto"><input type="number" placeholder="금액(선택)" style="width:110px"><button class="no">직접 지급</button>';
+ const [t,a,bt]=add.children;bt.onclick=async()=>{const r=await cpost({action:"admin_coupon_add",phone:x.phone,title:t.value,amount:a.value});if(r.ok)loadMember()};O.appendChild(add)}
+$("mbGo").onclick=loadMember;
 const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs()}};
 if(KEY)load();
 </script>

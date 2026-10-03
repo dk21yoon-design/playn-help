@@ -37,6 +37,13 @@
 .bd .ic{width:46px;height:46px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;font:400 20px "Black Han Sans",sans-serif;background:var(--deep);color:var(--dim)}
 .bd.got{color:var(--ink)}.bd.got .ic{background:var(--lamp);color:var(--night)}
 .bd b{display:block;font-size:14px;margin-bottom:2px}
+.cp{display:grid;gap:10px;margin-top:14px}
+.cp div{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border-radius:14px;padding:14px;border-left:4px solid var(--lamp)}
+.cp div.off{opacity:.5;border-left-color:var(--line)}
+.cp .amt{font:400 20px "Black Han Sans",sans-serif;color:var(--lamp);min-width:84px}
+.cp b{display:block}.cp small{color:var(--mute);font-size:13px;line-height:1.5;display:block;margin-top:2px}
+.vip{display:inline-block;margin-left:8px;background:var(--lamp);color:var(--night);font:800 12px Pretendard,sans-serif;padding:3px 8px;border-radius:6px;vertical-align:middle}
+.rate{margin-top:10px;font-size:15px;color:#fff}
 .inv{margin-top:14px;background:var(--deep);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
 .inv .code{font:400 34px "Black Han Sans",sans-serif;letter-spacing:.06em;color:var(--lamp)}
 .inv .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
@@ -49,7 +56,7 @@
 
   <div class="box" id="login">
     <h1 class="disp">내 N CREW 보기</h1>
-    <p>가입한 번호로 인증하면 레벨, 방문 기록, 업적 배지, 친구 초대 코드를 볼 수 있어요.</p>
+    <p>가입한 번호로 인증하면 레벨, 내 쿠폰, 업적 배지, 친구 초대 코드를 볼 수 있어요.</p>
     <div class="field"><label for="ph">휴대폰 번호</label><input id="ph" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000"></div>
     <button class="btn pink" id="send">인증번호 받기</button>
     <div class="field" id="codeWrap" hidden><label for="code">인증번호 6자리</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
@@ -59,12 +66,13 @@
 
   <div id="prof" hidden>
     <div class="card"><div class="lv" id="lvTag"></div><h2 class="disp" id="lvName"></h2><div class="nm" id="nm"></div>
-      <div class="bar"><i id="bar"></i></div><div class="nx" id="nx"></div><div class="perk" id="perk"></div></div>
-    <section class="s"><h2 class="disp">레벨 혜택</h2><div class="levels" id="levels"></div><p class="sub" style="font-size:13.5px">방문 수는 예약하신 번호로 자동으로 세요 (2026년 10월부터). 혜택은 입실할 때 호스트에게 레벨을 말씀해 주세요.</p></section>
+      <div class="bar"><i id="bar"></i></div><div class="nx" id="nx"></div><div class="perk" id="perk"></div><div class="rate" id="rate"></div></div>
+    <section class="s"><h2 class="disp">내 쿠폰</h2><div class="cp" id="cp"></div><p class="sub" id="stack" style="font-size:13px;margin-top:10px"></p></section>
+    <section class="s"><h2 class="disp">레벨 혜택</h2><div class="levels" id="levels"></div><p class="sub" style="font-size:13.5px">방문 수는 예약하신 번호로 자동으로 세요 (2026년 10월부터). 혜택은 예약하거나 입실할 때 호스트에게 레벨을 말씀해 주세요. 레벨 혜택은 아래 단계 것도 모두 받아요.</p></section>
     <section class="s"><h2 class="disp">업적 배지</h2><div class="badges" id="badges"></div></section>
     <section class="s"><h2 class="disp">친구 초대</h2>
       <div class="inv"><div class="sub" style="color:var(--mute)">내 초대 코드</div><div class="code" id="ref"></div>
-        <p class="sub" id="refRule" style="margin-top:6px"></p><p class="sub" id="refStat" style="margin-top:4px"></p>
+        <p class="sub" id="refRule" style="margin-top:6px"></p><p class="sub" id="refStat" style="margin-top:4px"></p><p class="sub" id="vipStat" style="margin-top:4px;color:var(--lamp);font-weight:700"></p>
         <div class="acts"><button class="btn lamp" id="share">초대 링크 보내기</button><button class="btn ghost" id="logout" type="button">로그아웃</button></div></div>
     </section>
   </div>
@@ -74,7 +82,8 @@
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";const $=id=>document.getElementById(id);
 const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json());
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
-const ICON={first:"1",all3:"3",allday:"24",owl:"夜",league:"W",friend:"+",military:"★"};
+const ICON={first:"1",all3:"3",allday:"24",owl:"夜",league:"W",friend:"+",vip:"V",military:"★"};
+const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("ph").value=st.get("pn_phone")||"";
 $("ph").addEventListener("input",e=>{const d=e.target.value.replace(/\D/g,"").slice(0,11);e.target.value=d.length<4?d:d.length<8?d.slice(0,3)+"-"+d.slice(3):d.slice(0,3)+"-"+d.slice(3,d.length-4)+"-"+d.slice(-4)});
 function msg(t,ok){$("msg").className="msg "+(ok?"ok":"err");$("msg").textContent=t}
@@ -87,13 +96,18 @@ $("logout").onclick=()=>{st.set("pn_token",null);location.reload()};
 async function load(){const t=st.get("pn_token");if(!t)return;const p=await post({action:"me",token:t}).catch(()=>({}));
  if(!p.ok){st.set("pn_token",null);return}
  $("login").hidden=true;$("prof").hidden=false;
- $("lvTag").textContent=`Lv.${p.level.lv} · 방문 ${p.visits}회`;$("lvName").textContent=p.level.name;$("nm").textContent=`${p.name}님 · ${p.since} 가입`;
+ $("lvTag").textContent=`Lv.${p.level.lv} · 방문 ${p.visits}회`;$("lvName").innerHTML=esc(p.level.name)+(p.vip?'<span class="vip">VIP</span>':"");$("nm").textContent=`${p.name}님 · ${p.since} 가입`;
  const cur=p.level.min,nx=p.next?p.next.min:cur;const pct=p.next?Math.min(100,(p.visits-cur)/(nx-cur)*100):100;$("bar").style.width=pct+"%";
  $("nx").textContent=p.next?`${p.next.name}까지 ${p.next.min-p.visits}번 더 방문하면 돼요`:"최고 레벨이에요!";
  $("perk").textContent="지금 혜택: "+p.level.perk;
+ $("rate").textContent=p.rate?`모든 예약 ${p.rate}% 할인 중 (${p.vip&&p.rate<20?"VIP":"레전드"}) · 예약할 때 호스트에게 알려주세요`:`빈자리 멤버 특가 ${p.deal}% · 당일 예약 ${p.deal_today}%`;
+ const cps=p.coupons.filter(c=>c.status!=="void");
+ $("cp").innerHTML=cps.length?cps.map(c=>`<div class="${c.status==="active"?"":"off"}"><span class="amt">${c.amount?(c.amount/10000)+"만원":c.kind==="ext3"?"3시간":c.kind==="ext2"?"2시간":c.kind==="full_free"?"통대관":"서비스"}</span><span><b>${esc(c.title)}${c.status==="used"?" · 사용함":""}</b><small>${esc(c.detail)}</small><small>${c.expires_at} 까지</small></span></div>`).join(""):'<p class="sub">아직 쿠폰이 없어요. 5번 방문하면 3시간 연장권, 친구가 첫 예약하면 2시간 연장권이 자동으로 들어와요.</p>';
+ $("stack").textContent=p.stack||"";
  $("levels").innerHTML=p.levels.map(l=>`<div class="${l.lv===p.level.lv?"on":""}"><b>Lv.${l.lv} ${l.name}</b>${l.min?l.min+"회 방문":"가입"}<br>${l.perk}</div>`).join("");
  $("badges").innerHTML=p.badges.map(b=>`<div class="bd ${b.got?"got":""}"><div class="ic">${ICON[b.id]||"·"}</div><b>${b.name}</b>${b.desc}</div>`).join("");
- $("ref").textContent=p.ref_code;$("refRule").textContent=p.referral_reward;$("refStat").textContent=`초대한 친구 ${p.invited}명 · 첫 예약 완료 ${p.invited_ok}명`;
+ $("ref").textContent=p.ref_code;$("refRule").textContent=p.referral_reward;$("refStat").textContent=`초대한 친구 ${p.invited}명 · 첫 예약 완료 ${p.invited_ok}명 · 친구들 이용 ${p.friend_visits}회`;
+ $("vipStat").textContent=p.vip?"VIP 멤버예요. 모든 예약 10% 할인 중이에요.":`초대한 친구들이 ${p.vip_need}번 이용하면 VIP (10만원 할인권 + 매 예약 10% 할인) · ${Math.max(0,p.vip_need-p.friend_visits)}번 남았어요`;
  $("share").onclick=async()=>{const u=`https://playn.kr/?ref=${p.ref_code}#crew`;const tx=`플레이앤 N CREW 초대장이에요. 이 링크로 가입하고 첫 예약하면 우리 둘 다 혜택 받아요 🎮`;
   try{if(navigator.share)await navigator.share({title:"플레이앤 N CREW 초대",text:tx,url:u});else{await navigator.clipboard.writeText(tx+" "+u);$("share").textContent="복사했어요"}}catch(e){}};
 }
