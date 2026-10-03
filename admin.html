@@ -34,8 +34,29 @@ a{color:var(--lamp)}
 <div id="main" hidden>
   <div class="bar">멤버 특가 할인율 <input id="disc" type="number" min="0" max="70">% <button class="no" id="saveDisc">저장</button><span id="discMsg" class="sub"></span></div>
   <div class="tip">확정을 누르면 손님에게 확정 문자(특가 금액·입금 계좌·이용 안내 링크)가 자동으로 가요.<br>그다음 스페이스클라우드 캘린더에 <b>"멤버특가 ○○ 확정"</b> 외부예약을 손님 번호와 함께 등록해 주세요. 그러면 다른 세부공간 막기와 안내문자는 지금처럼 자동으로 처리돼요.</div>
+  <h2 style="font-size:18px;margin-top:22px">공실특가 신청</h2>
   <div id="list"></div>
-  <p style="margin-top:16px"><a href="./">홈페이지 보기</a></p>
+
+  <h2 style="font-size:18px;margin-top:28px">플레이앤 리그 기록 등록</h2>
+  <div class="card" style="border-left-color:#FF2E6E">
+    <div class="act" style="margin-top:0">
+      <select id="lgBr" style="padding:10px;border-radius:10px;border:0;font:inherit"><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select>
+      <input id="lgTeam" placeholder="팀 이름" style="width:140px">
+      <input id="lgStreak" type="number" min="1" placeholder="연승" style="width:80px">
+      <input id="lgDate" type="date" style="width:150px">
+    </div>
+    <div class="act"><input id="lgMembers" placeholder="팀원 번호 (선택, 쉼표로 · 업적 배지용)" style="flex:1;width:auto"></div>
+    <div class="act"><button class="ok" id="lgAdd">순위표에 올리기</button><span class="sub" id="lgMsg"></span></div>
+    <p class="meta">전적 사이트 캡처를 확인한 뒤 올려주세요. 바로 playn.kr/league에 보여요.</p>
+  </div>
+  <div id="lgList"></div>
+
+  <h2 style="font-size:18px;margin-top:28px">친구 초대 보상</h2>
+  <div id="refList"><p class="sub">불러오는 중</p></div>
+
+  <h2 style="font-size:18px;margin-top:28px">배지 달아주기</h2>
+  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">휴가 나온 용사 (휴가증 확인)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
+  <p style="margin-top:16px"><a href="./">홈페이지 보기</a> · <a href="league/">리그 보기</a></p>
 </div>
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site";
@@ -65,6 +86,23 @@ async function load(){const j=await post({action:"admin_list"});
 function alertBox(el,t){let s=el.querySelector(".sub");if(!s){s=document.createElement("span");s.className="sub";el.appendChild(s)}s.textContent=t}
 $("go").onclick=()=>{KEY=$("key").value.trim();load()};
 $("saveDisc").onclick=async()=>{const x=await post({action:"admin_discount",value:$("disc").value});$("discMsg").textContent=x.ok?`${x.discount}%로 바꿨어요`:"저장 실패"};
+
+/* 리그·초대·배지 */
+const CAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";
+const cpost=b=>fetch(CAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
+async function loadLeague(){const j=await fetch(CAPI+"?league=1").then(r=>r.json()).catch(()=>null);if(!j)return;const L=$("lgList");L.innerHTML="";
+ j.records.forEach(r=>{const c=document.createElement("div");c.className="card";c.innerHTML=`<b>${r.branch} · ${r.team.replace(/</g,"&lt;")} · ${r.streak}연승</b><div class="meta">${r.play_date} · ${j.season}</div>`;
+  const d=document.createElement("button");d.className="no";d.textContent="삭제";d.style.marginTop="8px";d.onclick=async()=>{await cpost({action:"admin_league_del",id:r.id});loadLeague()};c.appendChild(d);L.appendChild(c)})}
+$("lgAdd").onclick=async()=>{const x=await cpost({action:"admin_league_add",branch:$("lgBr").value,team:$("lgTeam").value,streak:$("lgStreak").value,date:$("lgDate").value,members:$("lgMembers").value});
+ $("lgMsg").textContent=x.ok?"올렸어요":(x.error||"실패");if(x.ok){$("lgTeam").value="";$("lgStreak").value="";$("lgMembers").value="";loadLeague()}};
+async function loadRefs(){const x=await cpost({action:"admin_refs"});const R=$("refList");R.innerHTML="";
+ if(!x.ok||!x.refs.length){R.innerHTML='<p class="sub">아직 초대로 가입한 멤버가 없어요.</p>';return}
+ x.refs.forEach(r=>{const c=document.createElement("div");c.className="card "+(r.rewarded?"confirmed":"");
+  c.innerHTML=`<b>${r.inviter||"?"} → ${r.friend}</b><div class="meta">초대한 사람 ${tel(r.inviter_phone||"")} · 친구 ${tel(r.friend_phone)}<br>${r.booked?"친구 첫 예약 확정됨":"친구 아직 예약 전"} · ${r.rewarded?"보상 완료":"보상 전"}</div>`;
+  if(r.booked&&!r.rewarded){const b=document.createElement("button");b.className="ok";b.style.marginTop="8px";b.textContent="두 사람 보상 줬어요";b.onclick=async()=>{await cpost({action:"admin_ref_done",phone:r.friend_phone});loadRefs()};c.appendChild(b)}
+  R.appendChild(c)})}
+$("bdAdd").onclick=async()=>{const x=await cpost({action:"admin_badge",phone:$("bdPhone").value,badge:$("bdType").value});$("bdMsg").textContent=x.ok?"달았어요":(x.error||"실패")};
+const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs()}};
 if(KEY)load();
 </script>
 </body>

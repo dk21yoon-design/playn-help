@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<title>플레이앤 리그 · 명예의 전당 | 5인 자유랭크 연승전</title>
+<meta name="description" content="매달 열리는 플레이앤 리그. 5명이 한 팀으로 롤 자유랭크 연승 기록에 도전하고, 우승팀은 명예의 전당에 영구히 남아요.">
+<link rel="canonical" href="https://playn.kr/league/">
+<meta property="og:title" content="플레이앤 리그 · 명예의 전당"><meta property="og:description" content="5명이 몇 연승까지 갈 수 있을까? 매달 열리는 롤 자유랭크 연승전."><meta property="og:image" content="https://playn.kr/assets/og.png"><meta property="og:url" content="https://playn.kr/league/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<style>
+.lh{padding:30px 0 4px}.lh h1{font-size:clamp(38px,8vw,70px)}.lh p{color:var(--mute);font-size:17px;margin-top:10px;max-width:36em}
+.season{display:inline-block;margin-top:14px;background:var(--brand);color:#fff;font-weight:800;font-size:14px;padding:6px 12px;border-radius:8px}
+.board{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:820px){.board{grid-template-columns:1fr}}
+.col{background:var(--deep);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px}
+.col h3{font-size:20px}
+.col ol{list-style:none;margin-top:10px}
+.col li{display:flex;align-items:center;gap:12px;padding:11px 4px;border-top:1px solid var(--line)}
+.col li .r{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:var(--panel);flex:none}
+.col li:nth-child(1) .r{background:var(--lamp);color:var(--night)}
+.col li .t{flex:1;min-width:0}.col li .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.col li .t small{color:var(--dim)}
+.col li .s{font:400 26px "Black Han Sans",sans-serif;color:var(--lamp);font-variant-numeric:tabular-nums}
+.col .empty{color:var(--dim);font-size:14.5px;padding:14px 4px}
+.hof{margin-top:16px;display:grid;gap:8px}
+.hof div{display:flex;gap:14px;align-items:center;background:var(--panel);border-radius:12px;padding:12px 14px}
+.hof .s{font:400 30px "Black Han Sans",sans-serif;color:var(--lamp);min-width:70px}
+.rules{list-style:none;margin-top:14px;counter-reset:r}
+.rules li{counter-increment:r;position:relative;padding:12px 0 12px 42px;border-top:1px solid var(--line);font-size:15.5px}
+.rules li::before{content:counter(r);position:absolute;left:0;top:12px;width:28px;height:28px;border-radius:8px;background:var(--panel);color:var(--lamp);font-weight:800;display:grid;place-items:center;font-size:14px}
+.prize{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+@media(max-width:600px){.prize{grid-template-columns:1fr}}
+.prize div{background:var(--panel);border-radius:14px;padding:16px}.prize b{display:block;color:var(--lamp);font-size:14px}.prize span{font-size:17px;font-weight:700}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
+<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>
+<main class="wrap">
+  <div class="crumb"><a href="/">플레이앤</a> / 플레이앤 리그</div>
+  <section class="lh"><h1 class="disp">다섯 명이서<br>몇 연승까지?</h1>
+    <p>매달 열리는 플레이앤 리그. 친구 다섯이 한 팀으로 롤 5인 자유랭크 연승에 도전해요. 지점별 1위 팀은 명예의 전당에 영구히 남아요.</p>
+    <span class="season" id="seasonTag">시즌 불러오는 중</span>
+  </section>
+
+  <section class="s"><h2 class="disp">이번 시즌 순위</h2><div class="board" id="board"></div></section>
+
+  <section class="s"><h2 class="disp">상품</h2><div class="prize" id="prize"></div></section>
+
+  <section class="s"><h2 class="disp">참가 방법</h2>
+    <ol class="rules">
+      <li>플레이앤 어느 지점이든 5명이 한 팀으로 예약해요. 참가비는 없어요.</li>
+      <li>시작할 때 호스트에게 "리그 참가"라고 문자로 알리고, 다섯 명의 라이엇 ID(닉네임#태그)를 보내주세요. 등록한 계정만 인정돼요.</li>
+      <li>대관 시간 중 연속된 <b id="win">3</b>시간 안에서 나온 <b>5인 자유랭크 최고 연승</b>을 기록해요. 지면 0부터 다시 시작해요.</li>
+      <li>끝나면 전적 사이트(op.gg 등) 화면을 캡처해서 보내주세요. 확인되면 순위표에 올라가요.</li>
+      <li>대리·부계정·계정 공유가 확인되면 기록이 지워지고 이후 리그에 참가할 수 없어요.</li>
+      <li>동점이면 먼저 기록한 팀이 위예요. 시즌은 매달 1일에 새로 시작하고, 우승팀은 다음 달 첫 주에 발표해요.</li>
+    </ol>
+    <div class="cta"><a class="btn lamp" href="/#deals">5명 예약하기 (이번 주 빈자리)</a><a class="btn ghost" href="/#crew">N CREW 가입하고 알림 받기</a></div>
+  </section>
+
+  <section class="s"><h2 class="disp">명예의 전당</h2><p class="sub">역대 최고 연승 기록이에요.</p><div class="hof" id="hof"></div></section>
+</main>
+<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a></div>
+<p style="margin-top:8px">플레이앤 리그는 플레이앤이 자체 운영하는 이벤트이며 Riot Games와 관련이 없어요.</p></div></footer>
+<a class="fab" href="/help/"><i></i>AI 상담사</a>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community?league=1";
+const BR=["홍대루프탑점","연남루프탑점","연트럴파크점"];const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sname=s=>{const [y,m]=s.split("-");return `${y}년 ${+m}월 시즌`};
+fetch(API).then(r=>r.json()).then(j=>{
+ $("seasonTag").textContent=sname(j.season)+" 진행 중";$("win").textContent=j.rules.window_hours||3;
+ $("prize").innerHTML=`<div><b>지점별 1위</b><span>${esc(j.rules.prize1||"")}</span></div><div><b>지점별 2위</b><span>${esc(j.rules.prize2||"")}</span></div>`;
+ $("board").innerHTML=BR.map(b=>{const rs=j.records.filter(r=>r.branch===b).slice(0,10);
+  return `<div class="col"><h3 class="disp">${b}</h3><ol>${rs.length?rs.map((r,i)=>`<li><span class="r">${i+1}</span><span class="t"><b>${esc(r.team)}</b><small>${r.play_date.slice(5).replace("-","/")}</small></span><span class="s">${r.streak}연승</span></li>`).join(""):`<li class="empty">아직 기록이 없어요. 첫 기록의 주인공이 되어보세요.</li>`}</ol></div>`}).join("");
+ $("hof").innerHTML=j.hall.length?j.hall.map(r=>`<div><span class="s">${r.streak}연승</span><span><b>${esc(r.team)}</b><br><small style="color:var(--dim)">${sname(r.season)} · ${r.branch}</small></span></div>`).join(""):'<p class="sub">첫 시즌이 진행 중이에요. 여기에 이름을 남길 첫 팀을 기다려요.</p>';
+}).catch(()=>{$("board").innerHTML='<p class="sub">순위를 불러오지 못했어요.</p>'});
+</script>
+</body></html>

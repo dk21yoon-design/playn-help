@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<meta name="robots" content="noindex">
+<title>내 N CREW | 플레이앤</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<style>
+.box{max-width:520px;margin:30px auto 0;background:var(--ink);color:var(--night);border-radius:var(--r-lg);padding:22px}
+.box h1{font-size:28px}.box p{color:#5A5690;font-size:14.5px;margin-top:6px}
+.field{margin-top:14px}.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.field input{width:100%;border:1.5px solid #CFCBF0;border-radius:12px;padding:12px 13px;font:16px Pretendard,sans-serif}
+.field input:focus{outline:none;border-color:var(--brand)}
+.box .btn{width:100%;margin-top:14px}
+.msg{margin-top:10px;font-size:14px;font-weight:600}.msg.err{color:#D1124F}.msg.ok{color:#1F7A4D}
+.card{margin-top:26px;border-radius:var(--r-lg);padding:22px;background:linear-gradient(135deg,#2B1D5E,#4A1A55);position:relative;overflow:hidden}
+.card .lv{font:400 15px Pretendard,sans-serif;color:var(--lamp);font-weight:800}
+.card h2{font-size:clamp(34px,8vw,52px);margin-top:4px}
+.card .nm{color:#E3DCFF;margin-top:4px}
+.bar{height:12px;border-radius:999px;background:rgba(255,255,255,.12);margin-top:18px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--lamp);border-radius:999px}
+.card .nx{font-size:14px;color:#E3DCFF;margin-top:8px}
+.card .perk{margin-top:14px;background:rgba(14,12,44,.45);border-radius:12px;padding:12px 14px;font-size:15px}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+@media(max-width:560px){.levels{grid-template-columns:repeat(2,1fr)}}
+.levels div{background:var(--panel);border-radius:12px;padding:12px;font-size:13.5px;color:var(--mute)}
+.levels div.on{outline:2px solid var(--lamp);color:var(--ink)}
+.levels b{display:block;color:var(--ink);font-size:15px}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+@media(max-width:560px){.badges{grid-template-columns:repeat(3,1fr)}}
+.bd{background:var(--panel);border-radius:14px;padding:14px 10px;text-align:center;font-size:13px;color:var(--dim)}
+.bd .ic{width:46px;height:46px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;font:400 20px "Black Han Sans",sans-serif;background:var(--deep);color:var(--dim)}
+.bd.got{color:var(--ink)}.bd.got .ic{background:var(--lamp);color:var(--night)}
+.bd b{display:block;font-size:14px;margin-bottom:2px}
+.inv{margin-top:14px;background:var(--deep);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
+.inv .code{font:400 34px "Black Han Sans",sans-serif;letter-spacing:.06em;color:var(--lamp)}
+.inv .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
+<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/me/">내 N CREW</a></nav></div></header>
+<main class="wrap">
+  <div class="crumb"><a href="/">플레이앤</a> / 내 N CREW</div>
+
+  <div class="box" id="login">
+    <h1 class="disp">내 N CREW 보기</h1>
+    <p>가입한 번호로 인증하면 레벨, 방문 기록, 업적 배지, 친구 초대 코드를 볼 수 있어요.</p>
+    <div class="field"><label for="ph">휴대폰 번호</label><input id="ph" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000"></div>
+    <button class="btn pink" id="send">인증번호 받기</button>
+    <div class="field" id="codeWrap" hidden><label for="code">인증번호 6자리</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+    <button class="btn lamp" id="verify" hidden>확인</button>
+    <div class="msg" id="msg" role="status"></div>
+  </div>
+
+  <div id="prof" hidden>
+    <div class="card"><div class="lv" id="lvTag"></div><h2 class="disp" id="lvName"></h2><div class="nm" id="nm"></div>
+      <div class="bar"><i id="bar"></i></div><div class="nx" id="nx"></div><div class="perk" id="perk"></div></div>
+    <section class="s"><h2 class="disp">레벨 혜택</h2><div class="levels" id="levels"></div><p class="sub" style="font-size:13.5px">방문 수는 예약하신 번호로 자동으로 세요 (2026년 10월부터). 혜택은 입실할 때 호스트에게 레벨을 말씀해 주세요.</p></section>
+    <section class="s"><h2 class="disp">업적 배지</h2><div class="badges" id="badges"></div></section>
+    <section class="s"><h2 class="disp">친구 초대</h2>
+      <div class="inv"><div class="sub" style="color:var(--mute)">내 초대 코드</div><div class="code" id="ref"></div>
+        <p class="sub" id="refRule" style="margin-top:6px"></p><p class="sub" id="refStat" style="margin-top:4px"></p>
+        <div class="acts"><button class="btn lamp" id="share">초대 링크 보내기</button><button class="btn ghost" id="logout" type="button">로그아웃</button></div></div>
+    </section>
+  </div>
+</main>
+<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span></div></div></footer>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";const $=id=>document.getElementById(id);
+const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json());
+const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+const ICON={first:"1",all3:"3",allday:"24",owl:"夜",league:"W",friend:"+",military:"★"};
+$("ph").value=st.get("pn_phone")||"";
+$("ph").addEventListener("input",e=>{const d=e.target.value.replace(/\D/g,"").slice(0,11);e.target.value=d.length<4?d:d.length<8?d.slice(0,3)+"-"+d.slice(3):d.slice(0,3)+"-"+d.slice(3,d.length-4)+"-"+d.slice(-4)});
+function msg(t,ok){$("msg").className="msg "+(ok?"ok":"err");$("msg").textContent=t}
+$("send").onclick=async()=>{$("send").disabled=true;msg("보내는 중…",true);const j=await post({action:"otp_send",phone:$("ph").value}).catch(()=>({}));
+ $("send").disabled=false;if(j.ok){msg("문자로 인증번호를 보냈어요.",true);$("codeWrap").hidden=false;$("verify").hidden=false;$("code").focus()}
+ else{msg(j.error||"잠시 후 다시 시도해 주세요");if(j.need_join){$("msg").innerHTML+=' <a href="/#crew">가입하러 가기</a>'}}};
+$("verify").onclick=async()=>{const j=await post({action:"otp_verify",phone:$("ph").value,code:$("code").value}).catch(()=>({}));
+ if(j.ok){st.set("pn_token",j.token);st.set("pn_phone",$("ph").value);load()}else msg(j.error||"다시 시도해 주세요")};
+$("logout").onclick=()=>{st.set("pn_token",null);location.reload()};
+async function load(){const t=st.get("pn_token");if(!t)return;const p=await post({action:"me",token:t}).catch(()=>({}));
+ if(!p.ok){st.set("pn_token",null);return}
+ $("login").hidden=true;$("prof").hidden=false;
+ $("lvTag").textContent=`Lv.${p.level.lv} · 방문 ${p.visits}회`;$("lvName").textContent=p.level.name;$("nm").textContent=`${p.name}님 · ${p.since} 가입`;
+ const cur=p.level.min,nx=p.next?p.next.min:cur;const pct=p.next?Math.min(100,(p.visits-cur)/(nx-cur)*100):100;$("bar").style.width=pct+"%";
+ $("nx").textContent=p.next?`${p.next.name}까지 ${p.next.min-p.visits}번 더 방문하면 돼요`:"최고 레벨이에요!";
+ $("perk").textContent="지금 혜택: "+p.level.perk;
+ $("levels").innerHTML=p.levels.map(l=>`<div class="${l.lv===p.level.lv?"on":""}"><b>Lv.${l.lv} ${l.name}</b>${l.min?l.min+"회 방문":"가입"}<br>${l.perk}</div>`).join("");
+ $("badges").innerHTML=p.badges.map(b=>`<div class="bd ${b.got?"got":""}"><div class="ic">${ICON[b.id]||"·"}</div><b>${b.name}</b>${b.desc}</div>`).join("");
+ $("ref").textContent=p.ref_code;$("refRule").textContent=p.referral_reward;$("refStat").textContent=`초대한 친구 ${p.invited}명 · 첫 예약 완료 ${p.invited_ok}명`;
+ $("share").onclick=async()=>{const u=`https://playn.kr/?ref=${p.ref_code}#crew`;const tx=`플레이앤 N CREW 초대장이에요. 이 링크로 가입하고 첫 예약하면 우리 둘 다 혜택 받아요 🎮`;
+  try{if(navigator.share)await navigator.share({title:"플레이앤 N CREW 초대",text:tx,url:u});else{await navigator.clipboard.writeText(tx+" "+u);$("share").textContent="복사했어요"}}catch(e){}};
+}
+load();
+</script>
+</body></html>

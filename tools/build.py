@@ -24,10 +24,10 @@ HEAD_COMMON = """<meta charset="utf-8">
 <link rel="stylesheet" href="/assets/base.css">"""
 
 TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
-<nav><a href="/#deals">공실특가</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/#magazine">매거진</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
+<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
 
 FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
-<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a></div></div></footer>"""
+<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">휴가 나온 장병</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div></div></footer>"""
 
 SMARTSTORE = {'43667': 'https://smartstore.naver.com/playn_/products/9434661597', '55750': 'https://smartstore.naver.com/playn_/products/9430485644', '72605': 'https://smartstore.naver.com/playn_/products/12071850850'}
 
@@ -283,6 +283,80 @@ def post_page(p, cats, related):
 {FOOT}
 </body></html>"""
 
+
+# ───────────────────────── 목적별 페이지 (/for/…)
+FOR_PAGES = [
+  dict(slug="military", title="휴가 나온 날, 플레이앤", kicker="휴가증 챌린지",
+       desc="휴가·외박 나온 장병을 위한 홍대·연남 게임파티룸. 휴가증 보여주면 평일 1시간 추가.",
+       lead="부대 동기들이랑 휴가 맞춰 나왔는데 PC방은 좀 아쉽다면. 프로 장비 PC 5대, 루프탑 바베큐, 노래방까지 한 공간에서 다 같이.",
+       perks=[("휴가증 보여주면 평일 1시간 추가","휴가증·외출증·외박증 중 하나를 입실할 때 보여주세요. 평일 이용이고 앞뒤 예약이 없을 때 적용돼요."),
+              ("N CREW 군인 배지","가입하고 호스트에게 말하면 '휴가 나온 용사' 배지를 달아드려요."),
+              ("5명이면 리그 도전","다섯이 롤 자유랭크 연승전에 도전하면 명예의 전당에 부대 이름(팀 이름)을 남길 수 있어요.")],
+       picks=["5명이면 연트럴파크점(5인 최적), 6명 이상이면 홍대·연남루프탑점", "복귀 전날 밤이면 야간 패키지(19:00~다음 날 09:30)"],
+       note="이벤트 기간: 2026년 12월 31일까지 · 1팀 1회 · 휴가증 사진은 찍지 않고 눈으로만 확인해요."),
+  dict(slug="worlds", title="롤드컵, 새벽에 혼자 보지 말고", kicker="롤드컵 2026 단체 관람",
+       desc="롤드컵 2026 새벽 경기를 친구들과 큰 화면으로. 홍대·연남 게임파티룸 플레이앤 야간 패키지.",
+       lead="올해 롤드컵은 미국에서 열려서 한국은 새벽~아침 경기가 많아요. 야간 패키지면 저녁에 들어와서 내전 한 판, 새벽엔 다 같이 응원, 아침에 퇴실.",
+       perks=[("큰 화면으로 같이 응원","홍대루프탑점 75인치 TV, 연남루프탑점 대형 빔프로젝터"),
+              ("경기 전엔 우리끼리 내전","PC 5대로 5인 내전이나 자유랭크 연승전"),
+              ("밤새 먹고 마시기","배달·주류 반입 가능, 루프탑 바베큐 1인 1만원")],
+       picks=["주요 일정: 10/16 개막 · 10/24~11/1 스위스 스테이지 · 11/4~7 8강 · 11/8~9 4강 · 11/15 결승 (한국 시간 기준, 대회 공식 일정 확인)", "추천: 야간 패키지 19:00~다음 날 09:30"],
+       note="경기 일정은 대회 사정에 따라 바뀔 수 있어요. 자세한 정리는 매거진 '롤드컵 2026 관람 가이드'에 있어요. 리그 오브 레전드와 롤드컵은 Riot Games의 상표이며, 플레이앤은 Riot Games와 관련이 없어요."),
+  dict(slug="birthday", title="생일은 게임하고 고기 굽고 노래까지", kicker="생일·기념일 파티",
+       desc="홍대 생일파티 장소 찾는다면 플레이앤. 게이밍 PC, 노래방, 보드게임, 루프탑 바베큐까지 최대 16명.",
+       lead="파티룸은 많은데 할 게 없어서 금방 지루해지죠. 플레이앤은 PC 게임, 콘솔, 노래방, 보드게임, 루프탑 바베큐를 돌아가며 하다 보면 시간이 모자라요.",
+       perks=[("최대 16명","홍대·연남루프탑점 단독층 루프탑"),
+              ("할 게 끝이 없는 공간","PC 5대 · PS·스위치 · 노래방(시간 제한 없음) · 보드게임"),
+              ("음식은 자유롭게","배달·주류 반입 가능, 일회용품·술잔 구비, 루프탑 바베큐")],
+       picks=["하루 종일 놀려면 통대관(12:00~다음 날 10:00)", "6번째 사람부터 1명당 2만원 · 보증금 20만원 별도"],
+       note="파티 소품 사용 기준은 예약 후 호스트에게 확인해 주세요."),
+  dict(slug="club", title="동아리·과·회사 내전은 여기서", kicker="단체 내전·팀빌딩",
+       desc="롤·발로란트 동아리 내전, 과 MT, 회사 팀빌딩까지. 프로 장비 PC 5대와 루프탑이 있는 홍대 게임파티룸 플레이앤.",
+       lead="5대5 내전은 PC방보다 한 공간에서 하는 게 열 배 재밌어요. 지는 팀이 고기 굽기, 이긴 팀은 루프탑에서 쉬기.",
+       perks=[("팀 교대 내전","PC 5대로 한 팀씩 교대 · 나머지는 TV·노래방·보드게임"),
+              ("리그 기록까지","5인 자유랭크 연승 기록은 플레이앤 리그 순위에 올라가요"),
+              ("뒤풀이까지 한 번에","루프탑 바베큐 · 배달·주류 반입 가능 · 최대 16명")],
+       picks=["10명 이상이면 홍대·연남루프탑점", "동아리·학생회 협찬이나 정기 대관은 호스트에게 문의해 주세요"],
+       note="단체 예약·정기 이용 문의: 010-8339-5818 (문자 환영)"),
+]
+FOR_CSS = """
+.fh{padding:30px 0 6px}.fh .k{color:var(--lamp);font-weight:800;font-size:14px}
+.fh h1{font-size:clamp(34px,7.5vw,62px);margin-top:6px}.fh p{color:var(--mute);font-size:17px;margin-top:12px;max-width:36em}
+.pk3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media(max-width:820px){.pk3{grid-template-columns:1fr}}
+.pk3 div{background:var(--panel);border-radius:var(--r-md);padding:18px;border-top:3px solid var(--brand)}
+.pk3 b{display:block;font-size:18px}.pk3 span{color:var(--mute);font-size:15px;display:block;margin-top:6px}
+.lst{list-style:none;margin-top:14px}.lst li{padding:11px 0 11px 22px;border-top:1px solid var(--line);position:relative}
+.lst li::before{content:"";position:absolute;left:2px;top:20px;width:8px;height:8px;border-radius:2px;background:var(--lamp)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.note{color:var(--dim);font-size:13.5px;margin-top:12px}
+"""
+
+def for_page(f):
+    perks = "".join(f"<div><b>{E(a)}</b><span>{E(b)}</span></div>" for a, b in f["perks"])
+    picks = "".join(f"<li>{E(x)}</li>" for x in f["picks"])
+    return f"""<!doctype html>
+<html lang="ko"><head>
+{HEAD_COMMON}
+<title>{E(f['title'])} | 플레이앤 {E(f['kicker'])}</title>
+<meta name="description" content="{E(f['desc'])}">
+<link rel="canonical" href="{SITE}/for/{f['slug']}/">
+<meta property="og:title" content="{E(f['title'])}"><meta property="og:description" content="{E(f['desc'])}"><meta property="og:image" content="{SITE}/assets/og.png"><meta property="og:url" content="{SITE}/for/{f['slug']}/">
+<style>{FOR_CSS}</style>
+</head><body>
+{TOP}
+<main class="wrap">
+  <div class="crumb"><a href="/">플레이앤</a> / {E(f['kicker'])}</div>
+  <section class="fh"><span class="k">{E(f['kicker'])}</span><h1 class="disp">{E(f['title'])}</h1><p>{E(f['lead'])}</p>
+    <div class="cta"><a class="btn lamp" href="/#deals">이번 주 빈자리 보기</a><a class="btn ghost" href="/plan/">우리 인원에 맞는 지점 찾기</a></div></section>
+  <section class="s"><div class="pk3">{perks}</div></section>
+  <section class="s"><h2 class="disp">이렇게 고르세요</h2><ul class="lst">{picks}</ul><p class="note">{E(f['note'])}</p>
+    <div class="cta"><a class="btn pink" href="/#crew">N CREW 가입하고 특가 받기</a><a class="btn ghost" href="tel:{HOST.replace('-','')}">전화 문의</a></div></section>
+  <section class="s"><h2 class="disp" style="font-size:22px">지점 둘러보기</h2><div class="cta"><a class="btn ghost" href="/hongdae/">홍대루프탑점</a><a class="btn ghost" href="/yeonnam/">연남루프탑점</a><a class="btn ghost" href="/yeontral/">연트럴파크점</a></div></section>
+</main>
+{FOOT}
+<a class="fab" href="/help/"><i></i>AI 상담사</a>
+</body></html>"""
+
 def main():
     def get(url):
         with urllib.request.urlopen(url, timeout=30) as r: return json.load(r)
@@ -293,7 +367,11 @@ def main():
         d = os.path.join(ROOT, b["slug"]); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w").write(branch_page(b, meta["prices"]))
         urls.append((f"{SITE}/{b['slug']}/", "weekly", "0.9"))
-    urls += [(f"{SITE}/gear/", "weekly", "0.8"), (f"{SITE}/plan/", "monthly", "0.8")]
+    urls += [(f"{SITE}/gear/", "weekly", "0.8"), (f"{SITE}/plan/", "monthly", "0.8"), (f"{SITE}/league/", "daily", "0.8")]
+    for f in FOR_PAGES:
+        d = os.path.join(ROOT, "for", f["slug"]); os.makedirs(d, exist_ok=True)
+        open(os.path.join(d, "index.html"), "w").write(for_page(f))
+        urls.append((f"{SITE}/for/{f['slug']}/", "monthly", "0.7"))
     mdir = os.path.join(ROOT, "m"); os.makedirs(mdir, exist_ok=True)
     keep = set()
     for p in data["posts"]:
