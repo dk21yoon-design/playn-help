@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>N CREW 관리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--night:#16133F;--panel:#211D57;--line:#3A3580;--lamp:#FFB547;--brand:#FF2E6E;--ink:#F1EFFF;--mute:#A6A2D6}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{background:var(--night);color:var(--ink);font-family:Pretendard,sans-serif;max-width:640px;margin:0 auto;padding:16px;word-break:keep-all}
+h1{font-size:22px;margin:6px 0 4px}
+.sub{color:var(--mute);font-size:14px}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0;background:var(--panel);border-radius:14px;padding:12px}
+.bar input{width:64px}
+input,button{font:inherit}
+input{background:#fff;color:var(--night);border:0;border-radius:10px;padding:10px}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+.ok{background:var(--lamp);color:var(--night)}.no{background:#3A3580;color:var(--ink)}
+.card{background:var(--panel);border-radius:14px;padding:14px;margin:10px 0;border-left:4px solid var(--lamp)}
+.card.confirmed{border-left-color:#3DDC97;opacity:.85}.card.rejected{border-left-color:#666;opacity:.6}
+.card b{font-size:17px}.card .meta{color:var(--mute);font-size:14px;margin-top:4px}
+.card .act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.card .act input{width:120px}
+.tip{background:#2B1D5E;border-radius:12px;padding:12px;font-size:13.5px;color:#E3DCFF;margin-top:8px;line-height:1.55}
+a{color:var(--lamp)}
+</style>
+</head>
+<body>
+<h1>N CREW 관리</h1>
+<div class="sub" id="sum">관리 키를 넣어주세요</div>
+<div class="bar" id="login"><input id="key" type="password" placeholder="관리 키" style="flex:1;width:auto"><button class="ok" id="go">열기</button></div>
+<div id="main" hidden>
+  <div class="bar">멤버 특가 할인율 <input id="disc" type="number" min="0" max="70">% <button class="no" id="saveDisc">저장</button><span id="discMsg" class="sub"></span></div>
+  <div class="tip">확정을 누르면 손님에게 확정 문자(특가 금액·입금 계좌·이용 안내 링크)가 자동으로 가요.<br>그다음 스페이스클라우드 캘린더에 <b>"멤버특가 ○○ 확정"</b> 외부예약을 손님 번호와 함께 등록해 주세요. 그러면 다른 세부공간 막기와 안내문자는 지금처럼 자동으로 처리돼요.</div>
+  <div id="list"></div>
+  <p style="margin-top:16px"><a href="crew/">홈페이지 보기</a></p>
+</div>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site";
+const PK={day:"주간",night:"야간",full:"통대관"};
+const $=id=>document.getElementById(id);
+const st={get(){try{return localStorage.getItem("pn_admin")}catch(e){return null}},set(v){try{localStorage.setItem("pn_admin",v)}catch(e){}}};
+let KEY=(location.hash.match(/k=([\w]+)/)||[])[1]||st.get()||"";
+if(location.hash)history.replaceState(null,"",location.pathname);
+const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
+const lab=s=>{const d=new Date(s+"T00:00:00");return `${d.getMonth()+1}/${d.getDate()}(${"일월화수목금토"[d.getDay()]})`};
+const tel=p=>p.replace(/^(\d{3})(\d{3,4})(\d{4})$/,"$1-$2-$3");
+async function load(){const j=await post({action:"admin_list"});
+  if(!j.ok){$("sum").textContent=j.error||"관리 키가 맞지 않아요";$("login").hidden=false;$("main").hidden=true;return}
+  st.set(KEY);$("login").hidden=true;$("main").hidden=false;
+  const pend=j.requests.filter(r=>r.status==="pending").length;
+  $("sum").textContent=`멤버 ${j.members}명 · 대기 중인 신청 ${pend}건`;$("disc").value=j.discount;
+  const L=$("list");L.innerHTML=j.requests.length?"":'<p class="sub" style="margin-top:14px">아직 신청이 없어요.</p>';
+  j.requests.forEach(r=>{const c=document.createElement("div");c.className="card "+r.status;
+    c.innerHTML=`<b>#${r.id} ${r.branch} ${lab(r.use_date)} ${PK[r.pkg]}</b><div class="meta">${r.name} · <a href="tel:${r.phone}">${tel(r.phone)}</a> · ${r.people?r.people+"명":"인원 미정"}${r.memo?"<br>메모: "+r.memo.replace(/</g,"&lt;"):""}<br>정가 ${r.regular_price?r.regular_price.toLocaleString()+"원":"-"} → 특가 ${r.deal_price?r.deal_price.toLocaleString()+"원":"미정"} · ${r.status==="pending"?"대기 중":r.status==="confirmed"?"확정":"마감 처리"}</div>`;
+    if(r.status==="pending"){const a=document.createElement("div");a.className="act";
+      a.innerHTML=`<input type="number" placeholder="특가 금액" value="${r.deal_price||""}"><button class="ok">확정 + 문자</button><button class="no">마감 + 문자</button>`;
+      const [inp,ok,no]=a.children;
+      ok.onclick=async()=>{if(!inp.value){alertBox(a,"특가 금액을 넣어주세요");return}ok.disabled=no.disabled=true;const x=await post({action:"admin_decide",id:r.id,status:"confirmed",price:inp.value});alertBox(a,x.sms?"확정 문자 보냈어요":"확정했어요 (문자 발송 실패, 직접 연락해 주세요)");setTimeout(load,1200)};
+      no.onclick=async()=>{ok.disabled=no.disabled=true;const x=await post({action:"admin_decide",id:r.id,status:"rejected"});alertBox(a,x.sms?"마감 문자 보냈어요":"마감 처리했어요");setTimeout(load,1200)};
+      c.appendChild(a)}
+    L.appendChild(c)})}
+function alertBox(el,t){let s=el.querySelector(".sub");if(!s){s=document.createElement("span");s.className="sub";el.appendChild(s)}s.textContent=t}
+$("go").onclick=()=>{KEY=$("key").value.trim();load()};
+$("saveDisc").onclick=async()=>{const x=await post({action:"admin_discount",value:$("disc").value});$("discMsg").textContent=x.ok?`${x.discount}%로 바꿨어요`:"저장 실패"};
+if(KEY)load();
+</script>
+</body>
+</html>
