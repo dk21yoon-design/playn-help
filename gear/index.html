@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<title>기어 라이브러리 | 사기 전에 써보는 곳, 플레이앤</title>
+<meta name="description" content="플레이앤 홍대·연남·연트럴 지점에 있는 게이밍 마우스·키보드·헤드셋·모니터 전체 목록. 프로게이머 장비를 직접 써보고 고르세요.">
+<link rel="canonical" href="https://playn.kr/gear/">
+<meta property="og:title" content="플레이앤 기어 라이브러리 | 사기 전에 써보는 곳"><meta property="og:description" content="데스에더 V3 프로, 지슈라, 닌자87 PRO, GSP 670… 지점별 장비를 직접 써보세요."><meta property="og:image" content="https://playn.kr/assets/og.png"><meta property="og:url" content="https://playn.kr/gear/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<style>
+.gh{padding:30px 0 6px}
+.gh h1{font-size:clamp(38px,8vw,68px)}
+.gh p{color:var(--mute);font-size:17px;margin-top:10px;max-width:34em}
+.flt{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.flt button{border:1.5px solid var(--line);background:none;color:var(--mute);font:600 14px Pretendard,sans-serif;padding:9px 14px;border-radius:999px;cursor:pointer}
+.flt button[aria-pressed=true]{background:var(--lamp);border-color:var(--lamp);color:var(--night)}
+.flt .sep{width:1px;background:var(--line);margin:0 4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+.it{background:var(--panel);border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;gap:6px;border-left:4px solid var(--c,var(--lamp))}
+.it .k{font-size:12.5px;color:var(--dim);font-weight:700}
+.it h3{font-size:17px;line-height:1.35}
+.it .d{color:var(--mute);font-size:14px}
+.it .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.it .tags span{font-size:12px;padding:3px 8px;border-radius:6px;background:var(--deep);color:var(--ink)}
+.it .tags .w{background:#173B33;color:#7EF0C3}
+.vote{margin-top:16px;display:grid;gap:8px}
+.vote button{all:unset;cursor:pointer;display:block;position:relative;background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:13px 14px;overflow:hidden}
+.vote button:focus-visible{outline:3px solid var(--lamp)}
+.vote .bar{position:absolute;inset:0 auto 0 0;background:rgba(255,181,71,.16);transition:width .4s}
+.vote .row{position:relative;display:flex;justify-content:space-between;gap:12px;font-size:15px}
+.vote .row b{color:var(--lamp);font-variant-numeric:tabular-nums}
+.vote button[disabled]{cursor:default}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.note{color:var(--dim);font-size:13.5px;margin-top:10px}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
+<nav><a href="/#deals">공실특가</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>
+<main class="wrap">
+  <div class="crumb"><a href="/">플레이앤</a> / 기어 라이브러리</div>
+  <section class="gh">
+    <h1 class="disp">사기 전에<br>써보는 곳</h1>
+    <p>수십만 원짜리 마우스·키보드·헤드셋, 리뷰만 보고 사기엔 아깝잖아요. 플레이앤 지점에 있는 장비 전부를 공개해요. 친구들이랑 놀면서 직접 손에 쥐어보고 고르세요.</p>
+  </section>
+  <div class="flt" id="fType" role="toolbar" aria-label="종류"></div>
+  <div class="flt" id="fBr" role="toolbar" aria-label="지점"></div>
+  <div class="grid" id="grid"></div>
+  <p class="note">스페이스클라우드 시설 안내 기준이에요. 장비는 수시로 바뀌니 꼭 써보고 싶은 게 있으면 예약할 때 호스트에게 말씀해 주세요.</p>
+
+  <section class="s" id="vote-sec">
+    <h2 class="disp">다음에 들일 장비, 투표해 주세요</h2>
+    <p class="sub">표를 가장 많이 받은 장비를 지점에 들여놓을게요. 1인 1장비 1표예요.</p>
+    <div class="vote" id="vote"><p class="sub">불러오는 중이에요</p></div>
+  </section>
+
+  <section class="s">
+    <h2 class="disp">이 장비로 놀러 오기</h2>
+    <div class="cta"><a class="btn lamp" href="/#deals">이번 주 빈자리 보기</a><a class="btn ghost" href="/plan/">우리 인원에 맞는 지점 찾기</a><a class="btn ghost" href="/#magazine">기어 뉴스 읽기</a></div>
+  </section>
+</main>
+<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a></div></div></footer>
+<a class="fab" href="/help/"><i></i>AI 상담사</a>
+<script>
+const BR={h:["홍대","/hongdae/"],y:["연남","/yeonnam/"],t:["연트럴","/yeontral/"]};
+const TYPES=[["all","전체"],["mouse","마우스"],["keyboard","키보드"],["headset","헤드셋"],["pc","PC·모니터"],["console","콘솔·놀거리"]];
+const COLOR={mouse:"#FFB547",keyboard:"#FF2E6E",headset:"#7EF0C3",pc:"#8E9BFF",console:"#C79BFF"};
+const G=[
+ ["mouse","h","로지텍 G PRO X SUPERLIGHT","'지슈라'로 불리는 프로게이머 단골 경량 마우스",["무선"]],
+ ["mouse","h","로지텍 G403","손에 꽉 차는 무난한 그립",["무선"]],
+ ["mouse","h","로지텍 G703","G403 계열 무선 버전",["무선"]],
+ ["mouse","h","레이저 데스에더 (화이트)","오른손 인체공학 스테디셀러",["유선"]],
+ ["mouse","h","레이저 바이퍼 미니","손이 작은 분께 맞는 소형",["유선"]],
+ ["mouse","h","제닉스 GX AIR","국산 경량 무선",["무선"]],
+ ["headset","h","젠하이저 GSP 670","무선 게이밍 헤드셋 상위급",["무선"]],
+ ["headset","h","레이저 바라쿠다 X","가볍게 쓰는 무선 헤드셋",["무선"]],
+ ["headset","h","하이퍼X 클라우드 2","착용감 좋기로 유명한 게이밍 헤드셋",["무선"]],
+ ["headset","h","젠하이저 게임제로","밀폐형 유선 헤드셋",["유선"]],
+ ["headset","h","커세어 HS80 RGB","무선 헤드셋",["무선"]],
+ ["pc","h","게이밍 PC 5대 · 전 좌석 더블모니터","27인치 QHD 165Hz · 라이젠 5800X · RTX 3070",["모션데스크","모니터암"]],
+ ["console","h","PS5 · 닌텐도 스위치","듀얼센스 2개, 조이콘 4개 · 75인치 TV",["노래방","보드게임 15종+"]],
+ ["mouse","y","레이저 데스에더 V3 프로 페이커 에디션","페이커 에디션 한정판",["무선"]],
+ ["mouse","y","로지텍 G PRO X SUPERLIGHT","'지슈라' 경량 무선",["무선"]],
+ ["mouse","y","레이저 오로치 V2","작고 가벼운 무선 모바일 마우스",["무선"]],
+ ["mouse","y","로지텍 G304","가성비 무선",["무선"]],
+ ["mouse","y","제닉스 타이탄 GX AIR","국산 경량 무선",["무선"]],
+ ["mouse","y","그 외 무선 마우스","화이트·블랙 컬러 여러 종",["무선"]],
+ ["keyboard","y","닌자87 PRO × 5대","백축·녹축·황축·적축 등 스위치별로 쳐보고 고르기",["무선","텐키리스"]],
+ ["headset","y","젠하이저 GSP 670","무선 게이밍 헤드셋 상위급",["무선"]],
+ ["headset","y","스틸시리즈 아크티스 9","무선 헤드셋",["무선"]],
+ ["headset","y","오디지 펜로즈","평판형 드라이버 무선 헤드셋",["무선"]],
+ ["headset","y","커세어 HS80","무선 헤드셋",["무선"]],
+ ["headset","y","아수스 ROG 센츄리온","7.1 유선 헤드셋",["유선"]],
+ ["pc","y","게이밍 PC 5대 · 더블모니터","27인치 QHD 165Hz + 27인치 FHD 240Hz · 라이젠 7500F · RTX 4070",["모션데스크"]],
+ ["console","y","플레이스테이션 · 닌텐도","조이스틱 각 4개 · 철권 조이스틱 2개 · 빔프로젝터",["노래방","보드게임"]],
+ ["mouse","t","8K 마우스 11종","벡시·잠자리·샤크·로지텍·레이저·제닉스 · 유무선 골라 쓰기",["8K 폴링"]],
+ ["keyboard","t","키보드 8종","8K 지원 · 래피드 트리거 · 자석축 키보드",["래피드 트리거","자석축"]],
+ ["headset","t","무선 헤드셋 5종","로지텍·젠하이저·레이저",["무선"]],
+ ["pc","t","게이밍 PC 5대 · 더블모니터","24인치 FHD 320Hz + 34인치 QHD 165Hz · RTX 5070 / 4070",["320Hz","눕는 좌식 의자"]],
+];
+let fT="all",fB="all";const $=id=>document.getElementById(id);
+function btns(el,list,cur,set){el.innerHTML="";list.forEach(([k,n])=>{const b=document.createElement("button");b.type="button";b.textContent=n;b.setAttribute("aria-pressed",k===cur);b.onclick=()=>{set(k);render()};el.appendChild(b)})}
+function render(){btns($("fType"),TYPES,fT,k=>fT=k);btns($("fBr"),[["all","전 지점"],["h","홍대루프탑점"],["y","연남루프탑점"],["t","연트럴파크점"]],fB,k=>fB=k);
+ const g=$("grid");g.innerHTML="";G.filter(x=>(fT==="all"||x[0]===fT)&&(fB==="all"||x[1]===fB)).forEach(([t,b,n,d,tags])=>{
+  const c=document.createElement("article");c.className="it";c.style.setProperty("--c",COLOR[t]);
+  c.innerHTML=`<span class="k">${TYPES.find(x=>x[0]===t)[1]} · <a href="${BR[b][1]}" style="color:inherit">${BR[b][0]}</a></span><h3></h3><p class="d"></p><div class="tags">${tags.map(x=>`<span class="${x==="무선"?"w":""}">${x}</span>`).join("")}</div>`;
+  c.querySelector("h3").textContent=n;c.querySelector(".d").textContent=d;g.appendChild(c)})}
+render();
+/* 투표 */
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";
+let voter;try{voter=localStorage.getItem("pn_voter")||(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem("pn_voter",voter)}catch(e){voter=Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function voted(){try{return JSON.parse(localStorage.getItem("pn_voted")||"[]")}catch(e){return[]}}
+function drawVote(list){const v=$("vote");v.innerHTML="";const max=Math.max(1,...list.map(x=>x.votes));const mine=voted();
+ list.sort((a,b)=>b.votes-a.votes).forEach(x=>{const b=document.createElement("button");b.type="button";const done=mine.includes(x.item);b.disabled=done;
+  b.innerHTML=`<span class="bar" style="width:${x.votes/max*100}%"></span><span class="row"><span></span><b>${x.votes}표${done?" · 투표함":""}</b></span>`;b.querySelector(".row span").textContent=x.item;
+  b.onclick=async()=>{b.disabled=true;const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"vote",item:x.item,voter})}).then(r=>r.json()).catch(()=>({}));
+   if(r.ok||r.already){try{localStorage.setItem("pn_voted",JSON.stringify([...voted(),x.item]))}catch(e){}}load()};v.appendChild(b)})}
+function load(){fetch(API).then(r=>r.json()).then(j=>drawVote(j.candidates)).catch(()=>{$("vote").innerHTML='<p class="sub">투표를 불러오지 못했어요.</p>'})}
+load();
+</script>
+</body></html>
