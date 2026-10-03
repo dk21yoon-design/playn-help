@@ -207,7 +207,7 @@ def branch_page(b, prices):
 
   <section class="s"><h2 class="disp">요금</h2><p class="sub">패키지 요금이에요. 보증금 20만원은 별도이고 퇴실 후 돌려드려요.</p>
     <div style="overflow-x:auto"><table class="price"><thead><tr><th>패키지</th><th>평일</th><th>금요일·<br>공휴일 전날</th><th>토요일·<br>연휴 중</th><th>일요일·<br>공휴일 당일</th></tr></thead><tbody>{rows}</tbody></table></div>
-    <p class="note">표가 잘리면 옆으로 밀어보세요 · 5명부터 1명 추가마다 2만원 · 바베큐 1인 1만원 · N CREW 멤버는 빈 날짜를 특가로 신청할 수 있어요.</p>
+    <p class="note">표가 잘리면 옆으로 밀어보세요 · 5명까지 기본, 6번째 사람부터 1명당 2만원 · 바베큐 1인 1만원 · N CREW 멤버는 빈 날짜를 특가로 신청할 수 있어요.</p>
   </section>
 
   <section class="s"><h2 class="disp">이용 규칙</h2>
