@@ -55,7 +55,7 @@ $("go").onclick=async()=>{const o=$("out");$("go").disabled=true;o.innerHTML='<d
  const imgs=[];for(const f of [...$("ph").files].slice(0,4)){try{imgs.push(await shrink(f))}catch(e){}}
  const stock={};document.querySelectorAll("[data-it]").forEach(i=>{if(i.value!=="")stock[i.dataset.it]=i.value});
  const r=document.querySelector("input[name=r]:checked");
- const j=await post({action:"clean_submit",branch:$("br").value,res_id:r?Number(r.value):null,images:imgs,stock}).catch(()=>({}));
+ const j=await post({action:"clean_submit",branch:$("br").value,res_id:r?String(r.value):null,images:imgs,stock}).catch(()=>({}));
  $("go").disabled=false;
  if(!j.ok){o.innerHTML='<div class="res ch">'+(j.error||"다시 시도해 주세요")+'</div>';return}
  if(j.stock_only){o.innerHTML='<div class="res ok">재고를 저장했어요.</div>';return}

@@ -34,6 +34,11 @@ a{color:var(--lamp)}
 <div id="main" hidden>
   <div class="bar">멤버 특가 <input id="disc" type="number" min="0" max="70">% · 당일 <input id="discT" type="number" min="0" max="70">% <button class="no" id="saveDisc">저장</button><span id="discMsg" class="sub"></span></div>
   <div class="tip">확정을 누르면 손님에게 확정 문자(특가 금액·입금 계좌·이용 안내 링크)가 자동으로 가요.<br>그다음 스페이스클라우드 캘린더에 <b>"멤버특가 ○○ 확정"</b> 외부예약을 손님 번호와 함께 등록해 주세요. 그러면 다른 세부공간 막기와 안내문자는 지금처럼 자동으로 처리돼요.</div>
+  <h2 style="font-size:18px;margin-top:22px">연장 요청</h2>
+  <div class="bar">1시간 연장 요금 <input id="extHr" type="number" min="0" step="1000" style="width:100px">원 <label style="font-size:14px"><input type="checkbox" id="extAuto" style="width:auto"> 자동 승인</label> <button class="no" id="extSave">저장</button><span id="extMsg" class="sub"></span></div>
+  <div class="tip">손님이 AI 상담사에게 연장을 요청하면 여기로 와요. 승인하면 손님에게 확정 문자(퇴실 시간·요금·계좌)가 가고, 노션 청소 일정이 미뤄지고, 스페이스클라우드 다른 세부공간도 자동으로 막혀요.<br>요금을 정하고 <b>자동 승인</b>을 켜면 다음 예약과 안 겹치는 요청은 바로 확정돼요.</div>
+  <div id="extList"><p class="sub">불러오는 중</p></div>
+
   <h2 style="font-size:18px;margin-top:22px">공실특가 신청</h2>
   <div id="list"></div>
 
@@ -187,7 +192,19 @@ async function loadMember(){const x=await cpost({action:"admin_member",phone:$("
  const add=document.createElement("div");add.className="act";add.innerHTML='<input placeholder="쿠폰 이름 (예: 생일 3만원 할인권)" style="flex:1;width:auto"><input type="number" placeholder="금액(선택)" style="width:110px"><button class="no">직접 지급</button>';
  const [t,a,bt]=add.children;bt.onclick=async()=>{const r=await cpost({action:"admin_coupon_add",phone:x.phone,title:t.value,amount:a.value});if(r.ok)loadMember()};O.appendChild(add)}
 $("mbGo").onclick=loadMember;
-const _load=load;load=async function(){await _load();if(!$("main").hidden){loadLeague();loadRefs();loadMil();loadAuto()}};
+const EXS={requested:"⏳ 대기",confirmed:"✅ 확정",rejected:"거절"};
+async function loadExt(){const x=await apost({action:"admin_ext_list"});if(!x.ok)return;
+ const st=x.settings||{};$("extHr").value=st.hourly??"";$("extAuto").checked=!!st.auto;
+ const E=$("extList"),items=x.items.filter(e=>!/테스트/.test(e.branch));E.innerHTML=items.length?"":'<p class="sub">연장 요청이 없어요.</p>';
+ items.forEach(e=>{const d=document.createElement("div");d.className="card"+(e.status==="requested"?"":" confirmed");
+  const f=t=>t?t.slice(5,16).replace("-","/").replace("T"," "):"없음";
+  d.innerHTML=`<b>${EXS[e.status]||e.status} · ${H(e.branch)} · ${e.hours}시간 연장</b><div class="meta">퇴실 ${f(e.orig_end)} → <b>${f(e.new_end)}</b> · 다음 예약 ${f(e.next_start)}<br>손님 ${H(e.guest||"")} ${e.phone?tel(e.phone):"(번호 없음 — 직접 연락)"}${e.price!=null?` · 요금 ${Number(e.price).toLocaleString()}원`:""}</div>`;
+  if(e.status==="requested"){const a=document.createElement("div");a.className="act";a.innerHTML=`<input type="number" min="0" step="1000" placeholder="요금(원)" value="${st.hourly?st.hourly*e.hours:""}"><button class="ok">승인</button><button class="no">거절</button>`;
+   const [pr,ok,no]=a.children;ok.onclick=async()=>{ok.disabled=true;ok.textContent="처리 중";const r=await apost({action:"admin_ext_decide",id:e.id,approve:true,price:pr.value});if(!r.ok)alert0(a,r.error||"실패");loadExt()};
+   no.onclick=async()=>{const r=await apost({action:"admin_ext_decide",id:e.id,approve:false,note:"다음 예약 준비"});if(!r.ok)alert0(a,r.error||"실패");loadExt()};d.appendChild(a)}
+  E.appendChild(d)})}
+$("extSave").onclick=async()=>{const r=await apost({action:"admin_ext_settings",hourly:$("extHr").value,auto:$("extAuto").checked});$("extMsg").textContent=r.ok?" 저장했어요":" 실패"};
+const _load=load;load=async function(){await _load();if(!$("main").hidden){loadExt();loadLeague();loadRefs();loadMil();loadAuto()}};
 if(KEY)load();
 </script>
 </body>
