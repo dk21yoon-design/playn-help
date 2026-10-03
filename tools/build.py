@@ -29,6 +29,8 @@ TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>
 FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
 <div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a></div></div></footer>"""
 
+SMARTSTORE = {'43667': 'https://smartstore.naver.com/playn_/products/9434661597', '55750': 'https://smartstore.naver.com/playn_/products/9430485644', '72605': 'https://smartstore.naver.com/playn_/products/12071850850'}
+
 # ───────────────────────── 지점 데이터 (스페이스클라우드 공간 소개·시설 안내, 노션 안내문 기준 · 2026-10-03)
 BRANCHES = [
   dict(
@@ -84,9 +86,11 @@ BRANCHES = [
 ]
 for b in BRANCHES:
     b["sc_url"] = f"https://www.spacecloud.kr/space/{b['sc']}"
+    b["ss_url"] = SMARTSTORE[b["sc"]]
     b["map_url"] = f"https://map.naver.com/p/search/{urllib.request.quote('게임파티룸 플레이앤 ' + b['name'].replace('점',''))}"
     b["route_url"] = (f"http://map.naver.com/index.nhn?elng={b['lng']}&elat={b['lat']}&etext="
                       + urllib.request.quote('게임파티룸 플레이앤 ' + b['name']) + "&menu=route&pathType=1")
+
 
 PACKAGES = [("주간", "11:00 ~ 17:30", "6시간 30분"), ("야간", "19:00 ~ 다음 날 09:30", "14시간 30분"), ("통대관", "12:00 ~ 다음 날 10:00", "22시간")]
 RULES = [
@@ -145,7 +149,7 @@ def ld_business(b):
         "geo": {"@type": "GeoCoordinates", "latitude": b["lat"], "longitude": b["lng"]},
         "openingHours": "Mo-Su 00:00-24:00", "priceRange": "₩100,000~",
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": b["rating"], "reviewCount": b["reviews_n"], "bestRating": 5},
-        "sameAs": ["https://www.instagram.com/playn_no.1/", b["sc_url"]],
+        "sameAs": ["https://www.instagram.com/playn_no.1/", b["sc_url"], b["ss_url"]],
     }
 
 def branch_page(b, prices):
@@ -177,7 +181,8 @@ def branch_page(b, prices):
     <p class="tag">{E(b['tagline'])}</p>
     <div class="facts"><span class="star">★ {b['rating']:.2f} · 후기 {b['reviews_n']}개</span><span>{b['cap']}</span><span>{b['floor']}</span><span>{b['area']}</span><span>24시간 운영</span></div>
     <div class="cta">
-      <a class="btn lamp" href="{b['sc_url']}" target="_blank" rel="noopener">스페이스클라우드에서 예약</a>
+      <a class="btn lamp" href="{b['ss_url']}" target="_blank" rel="noopener">네이버로 예약</a>
+      <a class="btn lamp" href="{b['sc_url']}" target="_blank" rel="noopener">스페이스클라우드로 예약</a>
       <a class="btn pink" href="/?branch={b['name']}#deals">이번 주 멤버 특가 보기</a>
       <a class="btn ghost" href="tel:{HOST.replace('-','')}">전화 문의</a>
     </div>
