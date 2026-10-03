@@ -158,13 +158,45 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 .sheet .slot .price strong{color:var(--lamp);font-size:22px}
 .sheet .x{float:right;border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:var(--night)}
 .sheet h3{font-size:22px}
+
+/* 게임 매거진 */
+.mag-tabs{display:flex;gap:8px;overflow-x:auto;margin-top:22px;padding-bottom:6px;scrollbar-width:none}
+.mag-tabs::-webkit-scrollbar{display:none}
+.mag-tabs button{flex:none;border:1.5px solid var(--line);background:none;color:var(--mute);font:600 14px Pretendard,sans-serif;padding:9px 14px;border-radius:999px;cursor:pointer}
+.mag-tabs button[aria-pressed=true]{background:var(--lamp);border-color:var(--lamp);color:var(--night)}
+.mag-tabs button small{font-weight:500;opacity:.75;margin-left:4px}
+.mag{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 14px;margin-top:18px}
+@media(max-width:900px){.mag{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.mag{grid-template-columns:repeat(2,1fr);gap:16px 10px}}
+.post{all:unset;cursor:pointer;display:block;min-width:0}
+.post:focus-visible{outline:3px solid var(--lamp);outline-offset:3px;border-radius:12px}
+.post .th{position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:var(--panel)}
+.post img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.post:hover img{transform:scale(1.03)}
+.post .kind{position:absolute;left:8px;top:8px;font-size:11.5px;font-weight:700;background:rgba(14,12,44,.78);color:var(--ink);padding:4px 8px;border-radius:6px}
+.post .ser{display:block;color:var(--lamp);font-size:12.5px;font-weight:700;margin-top:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post .hl{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15px;font-weight:700;line-height:1.4;margin-top:3px}
+.mag-more{display:flex;justify-content:center;margin-top:22px}
+.viewer{max-width:560px}
+.viewer .media{margin:12px -18px 0;background:#000}
+.viewer video{display:block;width:100%;max-height:62vh;background:#000}
+.viewer .cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:0}
+.viewer .cards img{flex:none;width:100%;scroll-snap-align:center;display:block}
+.viewer .cnt{font-size:12.5px;color:#5A5690;text-align:center;margin-top:6px}
+.viewer .ser{color:#B0570A;font-weight:800;font-size:13px;margin-top:14px}
+.viewer h4{font-size:20px;line-height:1.35;margin-top:4px}
+.viewer .txt{white-space:pre-wrap;font-size:15px;line-height:1.7;margin-top:10px;color:#2A2660}
+.viewer .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.viewer .tags span{font-size:12.5px;background:#E4E1FA;color:#3B3680;padding:3px 9px;border-radius:999px}
+.viewer .acts{display:flex;gap:8px;margin-top:16px}
+.viewer .acts a,.viewer .acts button{flex:1}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="#">PLAY <b>N</b></a>
-  <nav><a href="#deals">공실특가</a><a href="#branches">지점</a><a href="#crew" class="join">N CREW 가입</a></nav>
+  <nav><a href="#deals">공실특가</a><a href="#magazine">매거진</a><a href="#branches">지점</a><a href="#crew" class="join">N CREW 가입</a></nav>
 </div></header>
 
 <main>
@@ -182,6 +214,14 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <div id="grid"></div>
     <div class="legend"><span><i style="background:#2A2470;box-shadow:0 0 0 1px #4B44A6 inset"></i>예약 가능(멤버 특가)</span><span><i style="background:rgba(58,53,128,.25)"></i>마감</span><span><i style="background:var(--lamp)"></i>주말·연휴 요금</span></div>
   </div>
+</div></section>
+
+<section class="blk" id="magazine"><div class="wrap">
+  <h2 class="disp">게임 매거진</h2>
+  <p class="sub">@playn_no.1에 올린 게임 추천, 신작, 기어, e스포츠 소식을 주제별로 모아뒀어요. 친구들이랑 뭐 할지 고를 때 열어보세요.</p>
+  <div class="mag-tabs" id="magTabs" role="toolbar" aria-label="매거진 주제"></div>
+  <div class="mag" id="mag"><p class="sub">불러오는 중이에요</p></div>
+  <div class="mag-more"><button class="btn ghost" id="magMore" hidden>더 보기</button></div>
 </div></section>
 
 <section class="blk" id="crew"><div class="wrap">
@@ -268,6 +308,20 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
   </div>
 </div>
 
+<div class="sheet-bg" id="postBg" hidden>
+  <div class="sheet viewer" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+    <button class="x" data-close aria-label="닫기">×</button>
+    <div style="height:18px"></div>
+    <div class="media" id="pvMedia"></div>
+    <div class="cnt" id="pvCnt"></div>
+    <div class="ser" id="pvSer"></div>
+    <h4 id="pvTitle"></h4>
+    <div class="txt" id="pvText"></div>
+    <div class="tags" id="pvTags"></div>
+    <div class="acts"><a class="btn pink" id="pvInsta" target="_blank" rel="noopener">인스타그램에서 보기</a><button class="btn ghost" id="pvShare" type="button" style="color:var(--night);box-shadow:inset 0 0 0 1.5px #CFCBF0">링크 복사</button></div>
+  </div>
+</div>
+
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site";
 const BR=["홍대루프탑점","연남루프탑점","연트럴파크점"],SHORT={"홍대루프탑점":"홍대","연남루프탑점":"연남","연트럴파크점":"연트럴"};
@@ -308,7 +362,7 @@ let sel=null,lastFocus=null;
 function openSheet(d,k,s){sel={d,k,s};lastFocus=document.activeElement;const p=PK.find(x=>x[0]===k);
   $("sSlot").innerHTML=`<b>${cur} · ${d.label} ${p[1]}</b><div style="font-size:13.5px;color:var(--mute)">${p[2]}</div><div class="price">${s.deal?`<s>${won(s.regular)}</s><strong>${won(s.deal)}</strong>`:`<strong>가격은 호스트가 문자로 안내해요</strong>`}</div>`;
   $("rPhone").value=store.get("pn_phone")||"";$("rMsg").textContent="";$("rMsg").className="msg";$("rBtn").disabled=false;$("sheetBg").hidden=false;setTimeout(()=>($("rPhone").value?$("rPeople"):$("rPhone")).focus(),50)}
-function closeAll(){$("sheetBg").hidden=true;$("leaveBg").hidden=true;lastFocus&&lastFocus.focus()}
+function closeAll(){$("sheetBg").hidden=true;$("leaveBg").hidden=true;const pb=$("postBg");if(pb&&!pb.hidden){pb.hidden=true;$("pvMedia").innerHTML="";if(location.hash.startsWith("#m-"))history.replaceState(null,"",location.pathname+location.search)}lastFocus&&lastFocus.focus()}
 $("sClose").onclick=closeAll;document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeAll);
 ["sheetBg","leaveBg"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target.id===id)closeAll()}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});
@@ -338,6 +392,31 @@ $("lBtn").onclick=async()=>{const m=$("lMsg");if($("lPhone").value.replace(/\D/g
 
 /* 카카오 채널 */
 fetch(API).then(r=>r.json()).then(j=>{if(j.kakao){$("kakaoBtn").href=j.kakao;$("kakaoBtn").hidden=false}}).catch(()=>{});
+/* 게임 매거진 */
+const POSTS_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-posts";
+let MAG={posts:[],categories:[]},magCat="all",magShown=8;
+function magRender(){const list=MAG.posts.filter(p=>magCat==="all"||p.cat===magCat);const g=$("mag");g.innerHTML="";
+  if(!list.length){g.innerHTML='<p class="sub">아직 이 주제 글이 없어요.</p>';$("magMore").hidden=true;return}
+  list.slice(0,magShown).forEach(p=>{const b=document.createElement("button");b.className="post";b.type="button";
+    b.innerHTML=`<div class="th">${p.cover?`<img loading="lazy" alt="" src="${p.cover}">`:""}<span class="kind">${p.type==="video"?"영상":"카드 "+p.images.length+"장"}</span></div><span class="ser"></span><span class="hl"></span>`;
+    b.querySelector(".ser").textContent=p.series;b.querySelector(".hl").textContent=p.headline;
+    b.onclick=()=>openPost(p);g.appendChild(b)});
+  $("magMore").hidden=list.length<=magShown}
+function magTabs(){const t=$("magTabs");t.innerHTML="";[{id:"all",name:"전체"},...MAG.categories].forEach(c=>{const n=c.id==="all"?MAG.posts.length:MAG.posts.filter(p=>p.cat===c.id).length;
+  const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",c.id===magCat);b.innerHTML=`${c.name}<small>${n}</small>`;
+  b.onclick=()=>{magCat=c.id;magShown=8;magTabs();magRender()};t.appendChild(b)})}
+$("magMore").onclick=()=>{magShown+=8;magRender()};
+function openPost(p){lastFocus=document.activeElement;const m=$("pvMedia");m.innerHTML="";$("pvCnt").textContent="";
+  if(p.video){const v=document.createElement("video");v.src=p.video;v.poster=p.cover||"";v.controls=true;v.playsInline=true;v.setAttribute("playsinline","");v.preload="metadata";m.appendChild(v)}
+  else if(p.images.length){const c=document.createElement("div");c.className="cards";p.images.forEach((u,i)=>{const im=document.createElement("img");im.src=u;im.alt=`${p.series} ${i+1}번째 카드`;im.loading=i?"lazy":"eager";c.appendChild(im)});
+    c.addEventListener("scroll",()=>{$("pvCnt").textContent=`${Math.round(c.scrollLeft/c.clientWidth)+1} / ${p.images.length} · 옆으로 넘겨보세요`});m.appendChild(c);$("pvCnt").textContent=`1 / ${p.images.length} · 옆으로 넘겨보세요`}
+  const cat=MAG.categories.find(c=>c.id===p.cat);$("pvSer").textContent=(cat?cat.name+" · ":"")+p.series;$("pvTitle").textContent=p.headline;$("pvText").textContent=p.text;
+  $("pvTags").innerHTML="";p.tags.forEach(t=>{const s=document.createElement("span");s.textContent="#"+t;$("pvTags").appendChild(s)});
+  $("pvInsta").href=p.insta||"https://www.instagram.com/playn_no.1/";
+  $("pvShare").textContent="링크 복사";$("pvShare").onclick=()=>{const u=location.origin+location.pathname+"#m-"+p.id;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>$("pvShare").textContent="복사했어요").catch(()=>{$("pvShare").textContent="복사 실패"})};
+  history.replaceState(null,"","#m-"+p.id);$("postBg").hidden=false;$("postBg").querySelector(".x").focus()}
+$("postBg").addEventListener("click",e=>{if(e.target.id==="postBg")closeAll()});
+fetch(POSTS_API).then(r=>r.json()).then(j=>{MAG=j;magTabs();magRender();const h=location.hash.match(/^#m-(\d+)/);if(h){const p=MAG.posts.find(x=>x.id==h[1]);if(p){document.getElementById("magazine").scrollIntoView();openPost(p)}}}).catch(()=>{$("mag").innerHTML='<p class="sub">매거진을 불러오지 못했어요. 인스타그램 @playn_no.1에서 볼 수 있어요.</p>'});
 </script>
 </body>
 </html>
