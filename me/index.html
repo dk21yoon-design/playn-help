@@ -98,13 +98,15 @@
     </section>
     <section class="s"><h2 class="disp">더 받을 수 있는 혜택</h2>
       <div class="mini">
-        <div id="milBox"><h3>🎖 나라사랑 애국자 인증</h3><p id="milDesc">현역 장병이면 인증하고 배지 + 첫 예약 5만원 할인권 + 방문마다 음료·물 2병을 받으세요. 사진은 호스트만 보고 확인이 끝나면 바로 지워요.</p>
-          <div id="milForm"><select id="milKind"><option value="milipass">밀리패스 모바일 신분증 화면 (권장)</option><option value="leave">휴가증·외출증·외박증</option><option value="card">군 신분증 (사진면)</option></select>
+        <div id="milBox"><h3>🎖 나라사랑 애국자 인증</h3><p id="milDesc">현역 장병이면 사진 한 장으로 인증하고 배지 + 첫 예약 5만원 할인권 + 방문마다 음료·물 2병을 받으세요. AI가 바로 확인해요.</p>
+          <div id="milForm"><select id="milKind"><option value="milipass">밀리패스 모바일 신분증 화면 (권장)</option><option value="card">군 신분증 실물 카드</option><option value="leave">휴가증·외출증·외박증</option></select>
           <input id="milUntil" type="date" aria-label="전역 예정일"><p style="font-size:12.5px;margin-top:4px">↑ 전역 예정일</p>
+          <button class="btn ghost" id="milCodeBtn" type="button" style="margin-top:10px">① 인증 코드 받기</button>
+          <div id="milCodeBox" hidden style="margin-top:10px;background:var(--deep);border-radius:12px;padding:12px;text-align:center"><div style="font-size:13px;color:var(--mute)">종이에 이 숫자를 손으로 적어주세요 (30분 유효)</div><div id="milCode" style="font:400 44px 'Black Han Sans',sans-serif;letter-spacing:.2em;color:var(--lamp)"></div>
+          <div style="font-size:13px;color:var(--mute);text-align:left;line-height:1.55">② 적은 종이를 신분증(또는 밀리패스 화면) 옆에 두고 <b>함께</b> 찍어주세요. 이름·계급·소속이 보여야 해요. 군번·주민번호 뒷자리는 가려도 돼요.<br>밀리패스는 다른 폰(친구 폰)으로 화면을 찍어 올려주세요. 화면 캡처는 종이 코드가 같이 안 나와서 인정이 안 돼요.</div></div>
           <input id="milFile" type="file" accept="image/*">
-          <p style="font-size:12.5px">군번·주민번호 뒷자리는 가리고 찍어도 돼요. 이름·사진·소속(계급)만 보이면 충분해요.</p>
-          <label class="chk2" style="color:var(--mute)"><input type="checkbox" id="milAgree"><span>(필수) 군인 신분 확인을 위해 사진을 수집하고, 확인 즉시 삭제하는 데 동의해요</span></label>
-          <button class="btn lamp" id="milGo">인증 신청</button></div><div id="milMsg" class="msg"></div></div>
+          <label class="chk2" style="color:var(--mute)"><input type="checkbox" id="milAgree"><span>(필수) 군인 신분 확인을 위해 사진을 수집하고, AI(Anthropic) 자동 판독 후 삭제하는 데 동의해요. 자동 승인되면 72시간 뒤, 호스트 확인이면 확인 즉시 지워요.</span></label>
+          <button class="btn lamp" id="milGo">③ 인증 신청</button></div><div id="milMsg" class="msg"></div></div>
         <div><h3>🎂 생일 등록</h3><p id="bdDesc">생일 2주 전에 3만원 할인권이 자동으로 들어와요 (생일 1주 뒤까지). 케이크 냉장 보관·초도 준비해 드려요.</p>
           <div id="bdForm"><input id="bdIn" placeholder="월-일 (예: 03-15)" maxlength="5" inputmode="numeric"><button class="btn lamp" id="bdGo">등록 (한 번만 가능)</button></div><div id="bdMsg" class="msg"></div>
           <h3 style="margin-top:22px">💳 플레이앤 패스</h3><p id="passDesc">50만원 충전하면 60만원어치 써요. 충전은 호스트에게 문자 주세요 (010-8339-5818).</p></div>
@@ -181,11 +183,15 @@ $("bGo").onclick=async()=>{$("bGo").disabled=true;const j=await post({action:"me
  else{$("bMsg").className="msg err";$("bMsg").textContent=j.error||"다시 시도해 주세요";$("bGo").disabled=false}};
 /* 군인 인증 */
 function shrink(f){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.82))};im.onerror=rej;im.src=URL.createObjectURL(f)})}
+const MAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-military";
+const mpost=b=>fetch(MAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json());
+$("milCodeBtn").onclick=async()=>{const j=await mpost({action:"mil_code",token:st.get("pn_token")}).catch(()=>({}));if(j.ok){$("milCode").textContent=j.code;$("milCodeBox").hidden=false;$("milCodeBtn").textContent="새 코드 받기"}else{$("milMsg").className="msg err2";$("milMsg").textContent=j.error||"다시 시도해 주세요"}};
 $("milGo").onclick=async()=>{const M=$("milMsg");M.className="msg err2";const f=$("milFile").files[0];
- if(!$("milUntil").value){M.textContent="전역 예정일을 넣어주세요";return}if(!f){M.textContent="사진을 골라주세요";return}if(!$("milAgree").checked){M.textContent="사진 수집 동의가 필요해요";return}
- $("milGo").disabled=true;M.className="msg ok2";M.textContent="올리는 중…";let img;try{img=await shrink(f)}catch(e){M.className="msg err2";M.textContent="사진을 읽지 못했어요";$("milGo").disabled=false;return}
- const j=await post({action:"mil_submit",token:st.get("pn_token"),kind:$("milKind").value,discharge:$("milUntil").value,agree:true,image:img}).catch(()=>({}));
- if(j.ok){M.textContent="신청했어요! 호스트가 확인하면 문자로 알려드려요.";$("milForm").hidden=true}else{M.className="msg err2";M.textContent=j.error||"다시 시도해 주세요";$("milGo").disabled=false}};
+ if(!$("milUntil").value){M.textContent="전역 예정일을 넣어주세요";return}if($("milCodeBox").hidden){M.textContent="먼저 ① 인증 코드를 받아주세요";return}if(!f){M.textContent="사진을 찍어주세요";return}if(!$("milAgree").checked){M.textContent="사진 수집 동의가 필요해요";return}
+ $("milGo").disabled=true;M.className="msg ok2";M.textContent="AI가 확인하는 중이에요 (10~30초)…";let img;try{img=await shrink(f)}catch(e){M.className="msg err2";M.textContent="사진을 읽지 못했어요";$("milGo").disabled=false;return}
+ const j=await mpost({action:"mil_submit",token:st.get("pn_token"),kind:$("milKind").value,discharge:$("milUntil").value,agree:true,image:img}).catch(()=>({}));
+ if(j.ok){M.className="msg ok2";M.textContent=j.message;$("milForm").hidden=true;if(j.status==="approved")setTimeout(load,1500)}
+ else{M.className="msg err2";M.textContent=j.error||"다시 시도해 주세요";$("milGo").disabled=false;$("milCodeBox").hidden=true;$("milCodeBtn").textContent="① 인증 코드 다시 받기"}};
 /* 생일 */
 $("bdIn").addEventListener("input",e=>{const d=e.target.value.replace(/\D/g,"").slice(0,4);e.target.value=d.length>2?d.slice(0,2)+"-"+d.slice(2):d});
 $("bdGo").onclick=async()=>{const j=await post({action:"set_birthday",token:st.get("pn_token"),birthday:$("bdIn").value}).catch(()=>({}));$("bdMsg").className="msg "+(j.ok?"ok2":"err2");$("bdMsg").textContent=j.ok?"등록했어요!":(j.error||"다시 시도해 주세요");if(j.ok)setTimeout(load,800)};

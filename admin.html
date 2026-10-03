@@ -39,7 +39,7 @@ a{color:var(--lamp)}
 
   <h2 style="font-size:18px;margin-top:28px">군인 인증 확인</h2>
   <div id="milList"><p class="sub">불러오는 중</p></div>
-  <p class="meta" style="color:var(--mute);font-size:13px;margin-top:6px">확인 기준: ① 사진·이름이 본인과 맞는지 ② 밀리패스는 화면 캡처보다 움직이는 화면(실물) 확인이 확실해요 ③ 휴가증은 기간이 지금 포함되는지. 승인하면 배지·5만원 할인권이 자동으로 들어가고 사진은 바로 지워져요. 입실 때 실물(밀리패스 앱 화면)을 한 번 더 보면 완벽해요.</p>
+  <p class="meta" style="color:var(--mute);font-size:13px;margin-top:6px">AI가 먼저 판독해요: 서류 종류·이름·손글씨 코드·기간·편집 흔적 + 위조 감별 2차 검사. 확실하면 자동 승인(사진 72시간 보관, 이상하면 취소 가능), 가짜·불일치는 자동 반려, 애매하면 여기로 와요. 확인 포인트: 손글씨 코드가 서류 옆에 실물로 있는지, 이름·소속이 또렷한지, 휴대폰 화면이면 다른 폰으로 찍은 실제 화면인지.</p>
 
   <h2 style="font-size:18px;margin-top:28px">멤버 혜택·쿠폰 확인</h2>
   <div class="card" style="border-left-color:#3DDC97">
@@ -66,7 +66,7 @@ a{color:var(--lamp)}
   <div id="refList"><p class="sub">불러오는 중</p></div>
 
   <h2 style="font-size:18px;margin-top:28px">배지 달아주기</h2>
-  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">나라사랑 애국자 (현장에서 직접 확인했을 때 · 5만원 할인권 자동 지급)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
+  <div class="card"><div class="act" style="margin-top:0"><input id="bdPhone" placeholder="멤버 번호" style="width:160px"><select id="bdType" style="padding:10px;border-radius:10px;border:0;font:inherit"><option value="military">나라사랑 애국자 (예외 수동 지급 · 5만원 할인권)</option></select><button class="ok" id="bdAdd">달아주기</button><span class="sub" id="bdMsg"></span></div></div>
   <p style="margin-top:16px"><a href="./">홈페이지 보기</a> · <a href="league/">리그 보기</a></p>
 </div>
 <script>
@@ -116,13 +116,19 @@ $("bdAdd").onclick=async()=>{const x=await cpost({action:"admin_badge",phone:$("
 const won=n=>Number(n).toLocaleString()+"원";
 const alert0=(el,t)=>{let s=el.querySelector(".sub.r");if(!s){s=document.createElement("span");s.className="sub r";el.appendChild(s)}s.textContent=t};
 const MK={milipass:"밀리패스",leave:"휴가증",card:"군 신분증"};
-async function loadMil(){const x=await cpost({action:"admin_mil_list"});const L=$("milList");L.innerHTML="";
- const items=(x.items||[]).filter(i=>i.status==="pending");if(!items.length){L.innerHTML='<p class="sub">대기 중인 군인 인증이 없어요.</p>';return}
- items.forEach(i=>{const c=document.createElement("div");c.className="card";c.innerHTML=`<b>${(i.name||"").replace(/</g,"&lt;")} · ${tel(i.phone)}</b><div class="meta">${MK[i.kind]} · 전역 예정 ${i.discharge_date}</div>${i.url?`<a href="${i.url}" target="_blank" rel="noopener"><img src="${i.url}" style="max-width:100%;border-radius:10px;margin-top:10px"></a>`:""}`;
-  const a=document.createElement("div");a.className="act";a.innerHTML='<input type="date" title="전역일 수정"><button class="ok">승인 (배지·쿠폰 지급)</button><input placeholder="반려 사유" style="width:140px"><button class="no">반려</button>';
-  const [u,ok,why,no]=a.children;u.value=i.discharge_date||"";
-  ok.onclick=async()=>{ok.disabled=no.disabled=true;await cpost({action:"admin_mil_decide",id:i.id,approve:true,until:u.value});loadMil()};
-  no.onclick=async()=>{ok.disabled=no.disabled=true;await cpost({action:"admin_mil_decide",id:i.id,approve:false,note:why.value});loadMil()};
+const MAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-military";
+const mpost=b=>fetch(MAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
+async function loadMil(){const x=await mpost({action:"admin_mil_list"});const L=$("milList");L.innerHTML="";
+ const items=(x.items||[]).filter(i=>i.status==="pending"||(i.status==="approved"&&i.auto&&i.url));
+ if(!items.length){L.innerHTML='<p class="sub">확인할 군인 인증이 없어요. (AI가 반려한 건 여기 안 보여요)</p>';return}
+ items.forEach(i=>{const a0=i.ai||{};const c=document.createElement("div");c.className="card"+(i.status==="approved"?" confirmed":"");
+  c.innerHTML=`<b>${(i.name||"").replace(/</g,"&lt;")} · ${tel(i.phone)} ${i.status==="approved"?"· AI 자동 승인됨":"· 확인 필요"}</b><div class="meta">${MK[i.kind]} · 전역 예정 ${i.discharge_date}<br>AI: ${(a0.reason||"").replace(/</g,"&lt;")}<br>이름 ${a0.name_match?"일치":"불일치"} · 코드 ${a0.code_match?"일치":"불일치"} · 확신도 ${a0.confidence??"-"}${a0.auth?` · 진위 ${a0.auth.authentic}`:""}${(a0.tamper||[]).length?"<br>의심: "+a0.tamper.join(", ").replace(/</g,"&lt;"):""}<br>사유: ${i.note||""}</div>${i.url?`<a href="${i.url}" target="_blank" rel="noopener"><img src="${i.url}" style="max-width:100%;border-radius:10px;margin-top:10px"></a>`:""}`;
+  const a=document.createElement("div");a.className="act";
+  if(i.status==="pending"){a.innerHTML='<input type="date" title="전역일 수정"><button class="ok">승인 (배지·쿠폰 지급)</button><input placeholder="반려 사유" style="width:140px"><button class="no">반려</button>';
+   const [u,ok,why,no]=a.children;u.value=i.discharge_date||"";
+   ok.onclick=async()=>{ok.disabled=no.disabled=true;await mpost({action:"admin_mil_decide",id:i.id,approve:true,until:u.value});loadMil()};
+   no.onclick=async()=>{ok.disabled=no.disabled=true;await mpost({action:"admin_mil_decide",id:i.id,approve:false,note:why.value});loadMil()}}
+  else{a.innerHTML='<span class="sub" style="flex:1">사진은 72시간 뒤 자동 삭제</span><button class="no">이상해요 → 승인 취소</button>';a.children[1].onclick=async()=>{await mpost({action:"admin_mil_revoke",id:i.id});loadMil()}}
   c.appendChild(a);L.appendChild(c)})}
 async function loadMember(){const x=await cpost({action:"admin_member",phone:$("mbPhone").value});const O=$("mbOut");
  if(!x.ok){O.innerHTML=`<p class="meta">${x.error||"찾지 못했어요"}</p>`;return}
