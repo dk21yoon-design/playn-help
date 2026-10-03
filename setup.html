@@ -1,0 +1,11 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>AI 키 등록</title>
+<style>body{font:16px -apple-system,Pretendard,sans-serif;background:#0B0B10;color:#F2F2F7;padding:24px;max-width:480px;margin:auto}input,button{width:100%;padding:13px;font-size:16px;border-radius:12px;box-sizing:border-box}input{background:#12121A;color:#fff;border:1px solid #2A2A36;margin-top:10px}button{margin-top:12px;background:#FF2E6E;color:#fff;border:0;font-weight:800}#m{margin-top:16px;color:#3DF2FF}</style></head>
+<body><h2>Play N AI 상담사 · 키 등록</h2><p style="color:#9A9AAA">사장님 전용 화면이에요. 받은 링크로만 한 번 쓸 수 있어요.</p>
+<input id="k" type="password" placeholder="sk-ant-..." autocomplete="off"><button id="b">저장</button><div id="m"></div>
+<script>
+const t=new URLSearchParams(location.hash.slice(1)).get('t');
+document.getElementById('b').onclick=async()=>{const k=document.getElementById('k').value.trim();const m=document.getElementById('m');
+if(!t){m.textContent='링크가 올바르지 않아요.';return}
+const r=await fetch('https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({setup:t,key:k})});
+const j=await r.json();m.textContent=j.ok?'✅ 저장 완료! 이제 AI 상담사가 답변을 시작해요.':'❌ '+(j.error||'실패');}
+</script></body></html>
