@@ -38,6 +38,10 @@ a{color:var(--lamp)}
   <div class="tip">손님이 퇴실 후 링크에서 쓴 물품을 체크하면 차감·환급액이 자동 계산돼요. 계좌를 복사해 송금한 뒤 <b>송금 완료</b>를 누르면 손님에게 내역 문자가 자동으로 가요. ⚠️는 확인이 필요한 건(청소 점검 차감 판정·후기 캡처 없음)이에요.</div>
   <div id="settleList"><p class="sub">불러오는 중</p></div>
 
+  <h2 style="font-size:18px;margin-top:22px" id="worlds">롤드컵 우승팀 이벤트</h2>
+  <div class="tip">손님이 체크인 때 우승 예상 팀을 골라요(그룹당 1번). 결승이 끝나면 우승팀을 고르고 <b>적중 처리</b>를 누르세요. 맞힌 그룹이 계좌와 함께 나오고, 송금 후 <b>지급 완료</b>를 누르면 손님에게 문자가 가요.</div>
+  <div id="worldsBox"><p class="sub">불러오는 중</p></div>
+
   <h2 style="font-size:18px;margin-top:22px">연장 요청</h2>
   <div class="bar">1시간 연장 요금 <input id="extHr" type="number" min="0" step="1000" style="width:100px">원 <label style="font-size:14px"><input type="checkbox" id="extAuto" style="width:auto"> 자동 승인</label> <button class="no" id="extSave">저장</button><span id="extMsg" class="sub"></span></div>
   <div class="tip">손님이 AI 상담사에게 연장을 요청하면 여기로 와요. 승인하면 손님에게 확정 문자(퇴실 시간·요금·계좌)가 가고, 노션 청소 일정이 미뤄지고, 스페이스클라우드 다른 세부공간도 자동으로 막혀요.<br>요금을 정하고 <b>자동 승인</b>을 켜면 다음 예약과 안 겹치는 요청은 바로 확정돼요.</div>
@@ -231,7 +235,20 @@ async function loadExt(){const x=await apost({action:"admin_ext_list"});if(!x.ok
    no.onclick=async()=>{const r=await apost({action:"admin_ext_decide",id:e.id,approve:false,note:"다음 예약 준비"});if(!r.ok)alert0(a,r.error||"실패");loadExt()};d.appendChild(a)}
   E.appendChild(d)})}
 $("extSave").onclick=async()=>{const r=await apost({action:"admin_ext_settings",hourly:$("extHr").value,auto:$("extAuto").checked});$("extMsg").textContent=r.ok?" 저장했어요":" 실패"};
-const _load=load;load=async function(){await _load();if(!$("main").hidden){loadSettle();loadExt();loadLeague();loadRefs();loadMil();loadAuto()}};
+async function loadWorlds(extra={}){const x=await spost({action:"admin_worlds",...extra});const E=$("worldsBox");if(!x.ok){E.innerHTML='<p class="sub">불러오지 못했어요</p>';return}
+ const ev=x.event||{},T=Object.entries(x.tally).filter(t=>t[0]!=="(테스트)").sort((a,b)=>b[1]-a[1]);
+ const wins=x.items.filter(p=>p.result==="win");
+ E.innerHTML=`<div class="meta">예측 ${T.reduce((a,t)=>a+t[1],0)}그룹 · ${T.map(t=>`${H(t[0])} ${t[1]}`).join(" · ")||"아직 없음"}</div>
+  <div class="bar" style="margin-top:8px">우승팀 <select id="wWin"><option value="">(결승 전)</option>${(ev.teams||[]).map(t=>`<option ${ev.winner===t?"selected":""}>${H(t)}</option>`).join("")}</select> <button class="no" id="wSet">적중 처리</button></div>
+  ${ev.winner?`<div class="meta" style="margin-top:8px"><b>적중 ${wins.length}그룹 · 총 ${W(wins.length*(ev.payout||100000))}</b></div>`:""}`;
+ wins.forEach(p=>{const d=document.createElement("div");d.className="card";const acc=p.acc?`${p.acc.bank} ${p.acc.account} (${p.acc.holder})`:"계좌 없음 — 손님에게 문의";
+  d.innerHTML=`<b>${p.paid_at?"✅ 지급 완료":"🏆 지급 대기"} · ${H(p.branch)} ${H(String(p.use_date).slice(5))} · ${H(p.guest||"")} ${p.headcount||""}명</b><div class="meta">${H(acc)}${p.phone?" · "+tel(p.phone):""}</div>`;
+  if(!p.paid_at){const a=document.createElement("div");a.className="act";a.innerHTML=`<button class="no">계좌 복사</button><a class="no" href="supertoss://" style="padding:10px;border-radius:10px;text-decoration:none">토스 열기</a><button class="ok">지급 완료</button>`;
+   const [c,,ok]=a.children;c.onclick=()=>navigator.clipboard.writeText(p.acc?p.acc.account:"");ok.onclick=()=>{ok.disabled=true;loadWorlds({paid_id:p.id})};d.appendChild(a)}
+  E.appendChild(d)});
+ $("wSet").onclick=()=>{const v=$("wWin").value;if(v&&!confirm0(`${v} 우승으로 적중 처리할까요?`))return;loadWorlds({winner:v})}}
+function confirm0(t){return window.confirm(t)}
+const _load=load;load=async function(){await _load();if(!$("main").hidden){loadSettle();loadWorlds();loadExt();loadLeague();loadRefs();loadMil();loadAuto()}};
 if(KEY)load();
 </script>
 </body>
