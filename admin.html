@@ -34,6 +34,10 @@ a{color:var(--lamp)}
 <div id="main" hidden>
   <div class="bar">멤버 특가 <input id="disc" type="number" min="0" max="70">% · 당일 <input id="discT" type="number" min="0" max="70">% <button class="no" id="saveDisc">저장</button><span id="discMsg" class="sub"></span></div>
   <div class="tip">확정을 누르면 손님에게 확정 문자(특가 금액·입금 계좌·이용 안내 링크)가 자동으로 가요.<br>그다음 스페이스클라우드 캘린더에 <b>"멤버특가 ○○ 확정"</b> 외부예약을 손님 번호와 함께 등록해 주세요. 그러면 다른 세부공간 막기와 안내문자는 지금처럼 자동으로 처리돼요.</div>
+  <h2 style="font-size:18px;margin-top:22px" id="settle">보증금 정산</h2>
+  <div class="tip">손님이 퇴실 후 링크에서 쓴 물품을 체크하면 차감·환급액이 자동 계산돼요. 계좌를 복사해 송금한 뒤 <b>송금 완료</b>를 누르면 손님에게 내역 문자가 자동으로 가요. ⚠️는 확인이 필요한 건(청소 점검 차감 판정·후기 캡처 없음)이에요.</div>
+  <div id="settleList"><p class="sub">불러오는 중</p></div>
+
   <h2 style="font-size:18px;margin-top:22px">연장 요청</h2>
   <div class="bar">1시간 연장 요금 <input id="extHr" type="number" min="0" step="1000" style="width:100px">원 <label style="font-size:14px"><input type="checkbox" id="extAuto" style="width:auto"> 자동 승인</label> <button class="no" id="extSave">저장</button><span id="extMsg" class="sub"></span></div>
   <div class="tip">손님이 AI 상담사에게 연장을 요청하면 여기로 와요. 승인하면 손님에게 확정 문자(퇴실 시간·요금·계좌)가 가고, 노션 청소 일정이 미뤄지고, 스페이스클라우드 다른 세부공간도 자동으로 막혀요.<br>요금을 정하고 <b>자동 승인</b>을 켜면 다음 예약과 안 겹치는 요청은 바로 확정돼요.</div>
@@ -192,6 +196,29 @@ async function loadMember(){const x=await cpost({action:"admin_member",phone:$("
  const add=document.createElement("div");add.className="act";add.innerHTML='<input placeholder="쿠폰 이름 (예: 생일 3만원 할인권)" style="flex:1;width:auto"><input type="number" placeholder="금액(선택)" style="width:110px"><button class="no">직접 지급</button>';
  const [t,a,bt]=add.children;bt.onclick=async()=>{const r=await cpost({action:"admin_coupon_add",phone:x.phone,title:t.value,amount:a.value});if(r.ok)loadMember()};O.appendChild(add)}
 $("mbGo").onclick=loadMember;
+const SAPI="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle";
+const spost=b=>fetch(SAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
+const STS={checked_in:"🟡 이용 중",submitted:"🟢 송금 대기",hold:"⚠️ 확인 필요",paid:"✅ 완료"};
+const W=n=>Number(n||0).toLocaleString()+"원";
+async function loadSettle(){const x=await spost({action:"admin_settle_list"});if(!x.ok)return;
+ const E=$("settleList");E.innerHTML=x.items.length?"":'<p class="sub">정산할 건이 없어요.</p>';
+ x.items.sort((a,b)=>({hold:0,submitted:1,checked_in:2}[a.status]??3)-({hold:0,submitted:1,checked_in:2}[b.status]??3)).forEach(s=>{
+  const c=s.checkin||{},k=s.calc;const d=document.createElement("div");d.className="card"+(s.status==="checked_in"?" confirmed":"");
+  d.innerHTML=`<b>${STS[s.status]||s.status} · ${H(s.branch)} ${H(String(s.use_date).slice(5))} · ${H(c.depositor||s.guest||"")} ${c.headcount?c.headcount+"명":""}</b>
+   <div class="meta">후기 ${c.review==="none"?"X":c.review==="early"?"조기입실":"음료"} · 바베큐 ${c.bbq?"O":"X"} · ${H(c.platform||"")}${s.phone?" · "+tel(s.phone):""}</div>`+
+   (k?`<div class="meta" style="margin-top:6px">${k.lines.map(l=>`${H(l.name)} ${W(l.amount)}`).join(" · ")}<br><b style="font-size:17px">환급 ${W(k.refund)}</b> (차감 ${W(k.total)})</div>`:`<div class="meta">퇴실 정산 전</div>`)+
+   ((s.flags||[]).length?`<div class="tip" style="margin-top:6px">⚠️ ${s.flags.map(H).join("<br>⚠️ ")}</div>`:"")+
+   (s.proof_url?`<a href="${s.proof_url}" target="_blank" rel="noopener"><img src="${s.proof_url}" style="width:90px;border-radius:8px;margin-top:6px"></a>`:"");
+  if(k&&s.status!=="paid"){const acc=`${c.bank||""} ${c.account||""}`;
+   const a=document.createElement("div");a.className="act";a.style.flexWrap="wrap";
+   a.innerHTML=`<button class="no">계좌 복사</button><button class="no">금액 복사</button><a class="no" href="supertoss://" style="padding:10px;border-radius:10px;text-decoration:none">토스 열기</a><input type="number" step="1000" placeholder="추가 차감(원)"><input type="text" placeholder="사유 (예: 실내화 오염)"><button class="no">차감 반영</button><button class="ok">송금 완료</button>`;
+   const [ca,cm,,ex,rs,ad,pd]=a.children;
+   ca.onclick=async()=>{try{await navigator.clipboard.writeText(acc.trim());ca.textContent="복사됨"}catch(e){}};
+   cm.onclick=async()=>{try{await navigator.clipboard.writeText(String(k.refund));cm.textContent="복사됨"}catch(e){}};
+   ad.onclick=async()=>{const r=await spost({action:"admin_settle_adjust",id:s.id,extra:ex.value,reason:rs.value});if(!r.ok)alert0(a,r.error||"실패");loadSettle()};
+   pd.onclick=async()=>{pd.disabled=true;pd.textContent="처리 중";const r=await spost({action:"admin_settle_paid",id:s.id});if(!r.ok)alert0(a,r.error||"실패");loadSettle()};
+   d.appendChild(a)}
+  E.appendChild(d)})}
 const EXS={requested:"⏳ 대기",confirmed:"✅ 확정",rejected:"거절"};
 async function loadExt(){const x=await apost({action:"admin_ext_list"});if(!x.ok)return;
  const st=x.settings||{};$("extHr").value=st.hourly??"";$("extAuto").checked=!!st.auto;
@@ -204,7 +231,7 @@ async function loadExt(){const x=await apost({action:"admin_ext_list"});if(!x.ok
    no.onclick=async()=>{const r=await apost({action:"admin_ext_decide",id:e.id,approve:false,note:"다음 예약 준비"});if(!r.ok)alert0(a,r.error||"실패");loadExt()};d.appendChild(a)}
   E.appendChild(d)})}
 $("extSave").onclick=async()=>{const r=await apost({action:"admin_ext_settings",hourly:$("extHr").value,auto:$("extAuto").checked});$("extMsg").textContent=r.ok?" 저장했어요":" 실패"};
-const _load=load;load=async function(){await _load();if(!$("main").hidden){loadExt();loadLeague();loadRefs();loadMil();loadAuto()}};
+const _load=load;load=async function(){await _load();if(!$("main").hidden){loadSettle();loadExt();loadLeague();loadRefs();loadMil();loadAuto()}};
 if(KEY)load();
 </script>
 </body>
