@@ -66,7 +66,8 @@
     <div class="ev" id="wBox" hidden>
       <label class="t" for="wp">🏆 <span id="wTitle">롤드컵 우승팀 맞히고 10만원 받기</span></label>
       <select id="wp"><option value="">우승 예상 팀 고르기 (선택)</option></select>
-      <p>그룹당 1번, 제출하면 바꿀 수 없어요. 맞히면 결승(<span id="wFinal"></span>) 뒤 <b id="wPay">10만원</b>을 보증금 환급 계좌로 보내드려요.</p>
+      <p>지금 고르면 적중 시 <b id="wPay">10만원</b> (<span id="wTier"></span>). 그룹당 1번, 제출하면 바꿀 수 없어요.<br><b>팀원 전원 N CREW 가입</b>해야 페이백 대상이에요. 체크인 후 팀 링크를 단톡방에 공유해 주세요. 결승(<span id="wFinal"></span>) 뒤 7일 안에 보증금 환급 계좌로 보내드려요.</p>
+      <div id="wTeam" hidden style="margin-top:10px;background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px"></div>
     </div>
     <div class="crew" id="crBox" hidden>
       <label><input type="checkbox" id="crJ"><span>N CREW 가입하기 (무료)<small>다음 예약 멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택 · 빈자리 특가 알림. 특가·이벤트 문자 수신에 동의해요. 언제든 수신 거부할 수 있어요.</small></span></label>
@@ -122,8 +123,8 @@ async function load(){
   $("accTxt").textContent=D.account;$("depAmt").textContent=won(D.rules.deposit);
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
   $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people;$("hcHint").textContent=n>b?`기본 ${b}명 + 추가 ${n-b}명 (1인 ${won(D.rules.extra_person)}, 예약 때 결제 안 하셨으면 보증금에서 차감)`:""};
-  if(D.worlds){$("wBox").hidden=false;$("wTitle").textContent=D.worlds.title;$("wPay").textContent=won(D.worlds.payout);const f=new Date(D.worlds.final+"T00:00:00");$("wFinal").textContent=`${f.getMonth()+1}/${f.getDate()}`;
-    if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true}
+  if(D.worlds){$("wBox").hidden=false;$("wTitle").textContent=D.worlds.title;$("wPay").textContent=won(D.pick?D.pick_payout:D.worlds.payout);$("wTier").textContent=D.worlds.tier||"";const f=new Date(D.worlds.final+"T00:00:00");$("wFinal").textContent=`${f.getMonth()+1}/${f.getDate()}`;
+    if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}
     else if(!D.worlds.open){$("wp").innerHTML="<option>예측 마감됐어요</option>";$("wp").disabled=true}
     else D.worlds.teams.forEach(t=>{const o=document.createElement("option");o.textContent=t;$("wp").appendChild(o)})}
   if(!D.member){$("crBox").hidden=false;$("crJ").onchange=()=>$("crNl").hidden=!$("crJ").checked}
@@ -132,13 +133,18 @@ async function load(){
     document.querySelector(`[name=rv][value=${c.review}]`).checked=true;document.querySelector(`[name=bq][value="${c.bbq?1:0}"]`).checked=true;$("hc").oninput()}
   $("tabs").hidden=false;show(D.checkin&&mode!=="in"?"out":(D.checkin?mode:"in"));
 }
-$("fin").onsubmit=async e=>{e.preventDefault();$("goIn").disabled=true;
+function teamBox(){if(!D.group)return;const c=D.crew||{joined:0,need:0},url=`https://playn.kr/team/?g=${D.group}`;$("wTeam").hidden=false;
+  $("wTeam").innerHTML=`<b style="color:#fff">팀원 가입 ${c.joined}/${c.need}명</b> ${c.valid?"✅ 페이백 대상":"— 전원 가입하면 대상이 돼요"}<br><span style="font-size:13px;word-break:break-all">${url}</span><br><button type="button" id="wShare" class="btn lamp" style="margin-top:8px;padding:8px 14px;font-size:14px">팀 링크 공유</button>`;
+  $("wShare").onclick=async()=>{const t="플레이앤 롤드컵 우승팀 이벤트! 우리 팀 페이백 받으려면 전원 N CREW 가입 필요 👉 "+url;try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);$("wShare").textContent="복사됨"}}catch(e){}}}
+$("fin").onsubmit=async e=>{e.preventDefault();
+  if($("wp").value&&!$("wp").disabled&&!D.member&&!$("crJ").checked)return msg("mIn","롤드컵 이벤트는 N CREW 가입 팀만 참여할 수 있어요. 'N CREW 가입하기'를 체크해 주세요.");
+  $("goIn").disabled=true;
   const acc=$("ac").value.trim();
   const r=await post({action:"checkin",headcount:$("hc").value,depositor:$("dp").value,review:document.querySelector("[name=rv]:checked").value,bbq:document.querySelector("[name=bq]:checked").value==="1",platform:document.querySelector("[name=pf]:checked").value,bank:$("bk").value,account:acc||(D.checkin?"keep":""),holder:$("ho").value||$("dp").value,companions:$("cp").value,worlds_pick:$("wp").disabled?"":$("wp").value,crew_join:$("crJ").checked,crew_night:$("crN").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("goIn").disabled=false;
   if(!r.ok)return msg("mIn",r.error||"다시 시도해 주세요");
-  msg("mIn","체크인 완료! 보증금 입금 부탁드려요 🙏<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수!`:""),true);
-  D=await post({action:"info"});if(D.member)$("crBox").hidden=true;if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true}};
+  msg("mIn","체크인 완료! 보증금 입금 부탁드려요 🙏<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
+  D=await post({action:"info"});if(D.member)$("crBox").hidden=true;if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}};
 function stepper(id,max=99){return `<div class="st" data-id="${id}"><button type="button">−</button><span>${Q[id]||0}</span><button type="button">+</button></div>`}
 function renderOut(){
   const no=!D.checkin;["extraBox","bbqBox","rvBox","sum","goOut"].forEach(i=>$(i).hidden=no);

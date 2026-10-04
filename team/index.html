@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<title>우리 팀 롤드컵 픽 · N CREW 가입 | 플레이앤</title>
+<meta property="og:title" content="우리 팀 롤드컵 페이백 받으려면 N CREW 가입!">
+<meta property="og:description" content="팀원 전원이 가입해야 우승팀 적중 페이백 대상이 돼요. 30초면 끝나요.">
+<style>
+.tw{max-width:520px;margin:24px auto 60px}
+.hd{border-radius:22px;padding:22px;background:radial-gradient(120% 90% at 85% 0%,#FF4FA3 0%,#3B1F6E 50%,#16133F 100%);color:#fff}
+.hd small{font-weight:800;letter-spacing:.06em;opacity:.85}.hd h1{font-size:28px;margin:8px 0 0;line-height:1.3}.hd h1 b{color:#7CF5B8}
+.bar{height:14px;border-radius:99px;background:rgba(255,255,255,.18);margin-top:14px;overflow:hidden}.bar i{display:block;height:100%;background:#7CF5B8;border-radius:99px;transition:width .4s}
+.hd p{margin:8px 0 0;font-size:14.5px;opacity:.92;line-height:1.55}
+.fm{margin-top:14px;background:var(--ink);color:var(--night);border-radius:var(--r-lg);padding:18px}
+.fm label.t{display:block;font-weight:800;font-size:14.5px;margin:12px 0 6px}.fm label.t:first-child{margin-top:0}
+.fm input[type=text],.fm input[type=tel]{width:100%;border:1.5px solid #CFCBF0;border-radius:12px;padding:12px;font:16px Pretendard,sans-serif}
+.ck{display:flex;gap:8px;align-items:flex-start;font-weight:700;margin-top:10px;line-height:1.45}.ck small{display:block;font-weight:500;color:#5B5790}
+.msg{margin-top:12px;border-radius:12px;padding:12px 14px;font-weight:700;line-height:1.55}.msg.ok{background:#DDF7EA;color:#14532D}.msg.er{background:#FFE1E6;color:#8A1030}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a></div></header>
+<main class="wrap"><div class="tw">
+  <section class="hd">
+    <small>PLAY N · 롤드컵 우승팀 이벤트</small>
+    <h1 id="h">불러오는 중…</h1>
+    <div class="bar"><i id="bar" style="width:0"></i></div>
+    <p id="pr"></p>
+  </section>
+  <form class="fm" id="f">
+    <label class="t" for="nm">이름</label><input id="nm" type="text" required placeholder="홍길동">
+    <label class="t" for="ph">휴대폰 번호</label><input id="ph" type="tel" inputmode="numeric" required placeholder="010-0000-0000">
+    <label class="ck"><input type="checkbox" id="ag"><span>N CREW 가입 · 특가·이벤트 문자 수신 동의 (필수)<small>멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택 · 빈자리 특가 알림. 언제든 수신 거부할 수 있어요.</small></span></label>
+    <label class="ck"><input type="checkbox" id="nt"><span>밤 9시~아침 8시 당일 특가 알림도 받을게요 <small>(선택)</small></span></label>
+    <button class="btn pink" style="width:100%;margin-top:16px" id="go">가입하고 우리 팀에 합류</button>
+    <div id="m"></div>
+  </form>
+  <p style="margin-top:14px;font-size:13px;color:var(--mute);line-height:1.6">이벤트 안내: <a href="/worlds/" style="color:inherit">playn.kr/worlds</a> · 이 이벤트는 플레이앤이 자체 진행하며 Riot Games와 관련이 없습니다.</p>
+</div></main>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle";
+const g=new URLSearchParams(location.search).get("g")||"",$=i=>document.getElementById(i);
+const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,g})}).then(r=>r.json());
+const won=n=>Number(n||0).toLocaleString("ko-KR")+"원";
+function show(r){if(!r.ok){$("h").textContent=r.error||"링크를 다시 확인해 주세요";$("f").hidden=true;return}
+  const d=new Date(r.date+"T00:00:00");$("h").innerHTML=`${r.branch} ${d.getMonth()+1}/${d.getDate()} 팀의 픽<br><b>${r.team}</b> · 적중 시 ${won(r.payout)}`;
+  $("bar").style.width=Math.min(100,Math.round(r.joined/Math.max(1,r.need)*100))+"%";
+  $("pr").innerHTML=r.valid?`팀원 ${r.joined}/${r.need}명 가입 완료 ✅ 페이백 대상이에요!`:`팀원 ${r.joined}/${r.need}명 가입 — <b>${r.need-r.joined}명</b> 더 가입하면 페이백 대상이 돼요.`}
+post({action:"team_info"}).then(show).catch(()=>show({ok:false}));
+$("f").onsubmit=async e=>{e.preventDefault();$("go").disabled=true;
+  const r=await post({action:"team_join",name:$("nm").value,phone:$("ph").value,agree:$("ag").checked,night_agree:$("nt").checked}).catch(()=>({ok:false,error:"연결이 불안정해요"}));
+  $("go").disabled=false;
+  if(!r.ok){$("m").innerHTML=`<div class="msg er">${r.error||"다시 시도해 주세요"}</div>`;return}
+  show(r);$("m").innerHTML=`<div class="msg ok">가입 완료! 우리 팀 ${r.joined}/${r.need}명이에요. 아직 안 한 친구에게 이 링크를 보내주세요.</div>`;$("nm").value="";$("ph").value=""}
+</script>
+</body></html>

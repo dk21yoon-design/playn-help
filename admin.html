@@ -39,7 +39,7 @@ a{color:var(--lamp)}
   <div id="settleList"><p class="sub">불러오는 중</p></div>
 
   <h2 style="font-size:18px;margin-top:22px" id="worlds">롤드컵 우승팀 이벤트</h2>
-  <div class="tip">손님이 체크인 때 우승 예상 팀을 골라요(그룹당 1번). 결승이 끝나면 우승팀을 고르고 <b>적중 처리</b>를 누르세요. 맞힌 그룹이 계좌와 함께 나오고, 송금 후 <b>지급 완료</b>를 누르면 손님에게 문자가 가요.</div>
+  <div class="tip">손님이 체크인 때 우승 예상 팀을 골라요(그룹당 1번). 사장님 픽·진행 단계·탈락팀을 저장하면 사이트 현황판과 카드뉴스에 반영돼요. 결승 뒤 우승팀을 고르고 <b>적중 처리</b> → 팀원 전원 가입한 팀만 계좌와 함께 <b>지급 대기</b>로 떠요 → 송금 후 <b>지급 완료</b>(손님 문자 자동).</div>
   <div id="worldsBox"><p class="sub">불러오는 중</p></div>
 
   <h2 style="font-size:18px;margin-top:22px">연장 요청</h2>
@@ -236,16 +236,21 @@ async function loadExt(){const x=await apost({action:"admin_ext_list"});if(!x.ok
   E.appendChild(d)})}
 $("extSave").onclick=async()=>{const r=await apost({action:"admin_ext_settings",hourly:$("extHr").value,auto:$("extAuto").checked});$("extMsg").textContent=r.ok?" 저장했어요":" 실패"};
 async function loadWorlds(extra={}){const x=await spost({action:"admin_worlds",...extra});const E=$("worldsBox");if(!x.ok){E.innerHTML='<p class="sub">불러오지 못했어요</p>';return}
- const ev=x.event||{},T=Object.entries(x.tally).filter(t=>t[0]!=="(테스트)").sort((a,b)=>b[1]-a[1]);
- const wins=x.items.filter(p=>p.result==="win");
- E.innerHTML=`<div class="meta">예측 ${T.reduce((a,t)=>a+t[1],0)}그룹 · ${T.map(t=>`${H(t[0])} ${t[1]}`).join(" · ")||"아직 없음"}</div>
-  <div class="bar" style="margin-top:8px">우승팀 <select id="wWin"><option value="">(결승 전)</option>${(ev.teams||[]).map(t=>`<option ${ev.winner===t?"selected":""}>${H(t)}</option>`).join("")}</select> <button class="no" id="wSet">적중 처리</button></div>
-  ${ev.winner?`<div class="meta" style="margin-top:8px"><b>적중 ${wins.length}그룹 · 총 ${W(wins.length*(ev.payout||100000))}</b></div>`:""}`;
- wins.forEach(p=>{const d=document.createElement("div");d.className="card";const acc=p.acc?`${p.acc.bank} ${p.acc.account} (${p.acc.holder})`:"계좌 없음 — 손님에게 문의";
-  d.innerHTML=`<b>${p.paid_at?"✅ 지급 완료":"🏆 지급 대기"} · ${H(p.branch)} ${H(String(p.use_date).slice(5))} · ${H(p.guest||"")} ${p.headcount||""}명</b><div class="meta">${H(acc)}${p.phone?" · "+tel(p.phone):""}</div>`;
-  if(!p.paid_at){const a=document.createElement("div");a.className="act";a.innerHTML=`<button class="no">계좌 복사</button><a class="no" href="supertoss://" style="padding:10px;border-radius:10px;text-decoration:none">토스 열기</a><button class="ok">지급 완료</button>`;
+ const ev=x.event||{},T=Object.entries(x.tally).filter(t=>t[0]!=="(테스트)").sort((a,b)=>b[1]-a[1]),el=new Set(ev.eliminated||[]);
+ const all=x.items.filter(p=>p.team!=="(테스트)"),wins=all.filter(p=>p.result==="win"),okW=wins.filter(p=>p.crew&&p.crew.valid);
+ const opt=(v)=>(ev.teams||[]).map(t=>`<option ${v===t?"selected":""}>${H(t)}</option>`).join("");
+ E.innerHTML=`<div class="meta">참여 ${all.length}팀 (전원 가입 ${all.filter(p=>p.crew&&p.crew.valid).length}팀) · ${T.map(t=>`${H(t[0])} ${t[1]}`).join(" · ")||"아직 없음"}</div>
+  <div class="bar" style="margin-top:8px">사장님 픽 <select id="wPn"><option value="">(없음)</option>${opt(ev.playn_pick)}</select> 진행 단계 <input id="wSt" value="${H(ev.stage||"")}" placeholder="예: 스위스 3라운드" style="width:150px"> <button class="no" id="wSv">저장</button></div>
+  <details style="margin-top:6px"><summary class="sub">탈락팀 체크 (사이트·카드뉴스에 반영)</summary><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${(ev.teams||[]).map(t=>`<label style="font-size:14px"><input type="checkbox" class="wEl" value="${H(t)}" ${el.has(t)?"checked":""} style="width:auto"> ${H(t)}</label>`).join("")}</div></details>
+  <div class="bar" style="margin-top:8px">우승팀 <select id="wWin"><option value="">(결승 전)</option>${opt(ev.winner)}</select> <button class="no" id="wSet">적중 처리</button></div>
+  ${ev.winner?`<div class="meta" style="margin-top:8px"><b>페이백 대상 ${okW.length}팀 · 총 ${W(okW.reduce((a,p)=>a+(p.payout||0),0))}</b> (적중했지만 팀원 가입 미달 ${wins.length-okW.length}팀)</div>`:""}
+  <details style="margin-top:6px"><summary class="sub">전체 참여 팀 보기 (${all.length})</summary><div style="font-size:13.5px;line-height:1.8;margin-top:6px">${all.map(p=>`${H(String(p.use_date).slice(5))} ${H(p.branch)} · ${H(p.guest||"")} · <b>${H(p.team)}</b> · ${W(p.payout)} · 가입 ${p.crew?p.crew.joined:0}/${p.headcount}${p.crew&&p.crew.valid?" ✅":""}`).join("<br>")}</div></details>`;
+ wins.sort((a,b)=>(b.crew&&b.crew.valid)-(a.crew&&a.crew.valid)).forEach(p=>{const v=p.crew&&p.crew.valid,d=document.createElement("div");d.className="card";const acc=p.acc?`${p.acc.bank} ${p.acc.account} (${p.acc.holder})`:"계좌 없음 — 손님에게 문의";
+  d.innerHTML=`<b>${p.paid_at?"✅ 지급 완료":v?"🏆 지급 대기":"⛔ 팀원 가입 미달"} · ${W(p.payout)} · ${H(p.branch)} ${H(String(p.use_date).slice(5))} · ${H(p.guest||"")}</b><div class="meta">가입 ${p.crew?p.crew.joined:0}/${p.headcount}명 · ${H(acc)}${p.phone?" · "+tel(p.phone):""}</div>`;
+  if(!p.paid_at&&v){const a=document.createElement("div");a.className="act";a.innerHTML=`<button class="no">계좌 복사</button><a class="no" href="supertoss://" style="padding:10px;border-radius:10px;text-decoration:none">토스 열기</a><button class="ok">지급 완료</button>`;
    const [c,,ok]=a.children;c.onclick=()=>navigator.clipboard.writeText(p.acc?p.acc.account:"");ok.onclick=()=>{ok.disabled=true;loadWorlds({paid_id:p.id})};d.appendChild(a)}
   E.appendChild(d)});
+ $("wSv").onclick=()=>loadWorlds({playn_pick:$("wPn").value,stage:$("wSt").value,eliminated:[...document.querySelectorAll(".wEl:checked")].map(c=>c.value)});
  $("wSet").onclick=()=>{const v=$("wWin").value;if(v&&!confirm0(`${v} 우승으로 적중 처리할까요?`))return;loadWorlds({winner:v})}}
 function confirm0(t){return window.confirm(t)}
 const _load=load;load=async function(){await _load();if(!$("main").hidden){loadSettle();loadWorlds();loadExt();loadLeague();loadRefs();loadMil();loadAuto()}};
