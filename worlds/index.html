@@ -237,7 +237,7 @@ const T={
  "FURIA":{r:"CBLOL",c:"#424242",s:"브라질 대표",a:"FUR"}};
 const RC={LCK:"#FF4FA3",LPL:"#FFC83D",LEC:"#7CF5B8",LCS:"#6EA8FF",LCP:"#C49BFF",CBLOL:"#FF8A65",기타:"#888"};
 const meta=t=>T[t]||{r:"기타",c:"#555",s:"",a:t.slice(0,3).toUpperCase()};
-const badge=t=>{const m=meta(t);return m.l?`<img src="${LOGO}${m.l}.png" alt="${esc(t)} 로고" loading="lazy">`:`<span class="mono" style="--tc:${m.c}">${esc(m.a)}</span>`};
+const badge=t=>{const m=meta(t);return m.l?`<img src="${LOGO}${m.l}.png" alt="${esc(t)} 로고"${m.l=="dk"?' style="filter:invert(1)"':""}>`:`<span class="mono" style="--tc:${m.c}">${esc(m.a)}</span>`};
 let P=null,mine=null,me=null,phone=st.get("pn_phone")||"",locked=false,checked=false;
 const msg=(t,c)=>{const m=$("vMsg");m.className="vmsg "+(c||"");m.textContent=t};
 const toast=t=>{const e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2200)};
@@ -312,7 +312,7 @@ async function ticket(scroll){
   g.fillStyle="#fff";g.font="78px 'Black Han Sans',sans-serif";g.fillText((me?me+"의":"나의")+" 우승 예언",80,250);
   // 카드
   g.fillStyle="rgba(255,255,255,.06)";g.beginPath();g.roundRect(80,320,W-160,560,40);g.fill();g.strokeStyle=m.c;g.lineWidth=6;g.stroke();
-  if(m.l){try{const im=await new Promise((ok,no)=>{const i=new Image();i.crossOrigin="anonymous";i.onload=()=>ok(i);i.onerror=no;i.src=LOGO+m.l+".png"});const s=Math.min(520/im.width,260/im.height);g.drawImage(im,W/2-im.width*s/2,410+130-im.height*s/2,im.width*s,im.height*s)}catch(e){}}
+  if(m.l){try{const im=await new Promise((ok,no)=>{const i=new Image();i.crossOrigin="anonymous";i.onload=()=>ok(i);i.onerror=no;i.src=LOGO+m.l+".png"});const s=Math.min(520/im.width,260/im.height);if(m.l=="dk")g.filter="invert(1)";g.drawImage(im,W/2-im.width*s/2,410+130-im.height*s/2,im.width*s,im.height*s);g.filter="none"}catch(e){}}
   else{g.fillStyle=m.c;g.beginPath();g.roundRect(W/2-150,420,300,240,36);g.fill();g.fillStyle="#fff";g.font="700 96px 'Chakra Petch',sans-serif";g.textAlign="center";g.fillText(m.a,W/2,575);g.textAlign="left"}
   g.textAlign="center";g.fillStyle="#fff";g.font="64px 'Black Han Sans',sans-serif";g.fillText(mine,W/2,780);
   g.fillStyle="#B8B3EA";g.font="600 34px Pretendard,sans-serif";g.fillText(m.s||"",W/2,836);
