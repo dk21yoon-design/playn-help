@@ -240,6 +240,7 @@ async function loadWorlds(extra={}){const x=await spost({action:"admin_worlds",.
  const all=x.items.filter(p=>p.team!=="(테스트)"),wins=all.filter(p=>p.result==="win"),okW=wins.filter(p=>p.crew&&p.crew.valid);
  const opt=(v)=>(ev.teams||[]).map(t=>`<option ${v===t?"selected":""}>${H(t)}</option>`).join("");
  E.innerHTML=`<div class="meta">참여 ${all.length}팀 (전원 가입 ${all.filter(p=>p.crew&&p.crew.valid).length}팀) · ${T.map(t=>`${H(t[0])} ${t[1]}`).join(" · ")||"아직 없음"}</div>
+  <div class="meta">🗳️ 홈페이지 팬 투표 ${x.fan_total||0}표 · ${Object.entries(x.fan||{}).sort((a,b)=>b[1]-a[1]).map(t=>`${H(t[0])} ${t[1]}`).join(" · ")||"아직 없음"}</div>
   <div class="bar" style="margin-top:8px">사장님 픽 <select id="wPn"><option value="">(없음)</option>${opt(ev.playn_pick)}</select> 진행 단계 <input id="wSt" value="${H(ev.stage||"")}" placeholder="예: 스위스 3라운드" style="width:150px"> <button class="no" id="wSv">저장</button></div>
   <details style="margin-top:6px"><summary class="sub">탈락팀 체크 (사이트·카드뉴스에 반영)</summary><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${(ev.teams||[]).map(t=>`<label style="font-size:14px"><input type="checkbox" class="wEl" value="${H(t)}" ${el.has(t)?"checked":""} style="width:auto"> ${H(t)}</label>`).join("")}</div></details>
   <div class="bar" style="margin-top:8px">우승팀 <select id="wWin"><option value="">(결승 전)</option>${opt(ev.winner)}</select> <button class="no" id="wSet">적중 처리</button></div>
