@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="/assets/base.css">
-<title>롤드컵 우승팀 맞히고 10만원 페이백 | 플레이앤</title>
+<title>롤드컵 우승팀 투표 · 맞히고 10만원 페이백 | 플레이앤</title>
 <meta name="description" content="플레이앤 게임파티룸에서 롤드컵 응원하고, 나이트·통대관에서 응원하고 우승팀 맞히면 이용료 최대 10만원 페이백.">
 <meta property="og:title" content="롤드컵 우승팀 맞히고 10만원 받아가자 | 플레이앤">
 <meta property="og:description" content="롤드컵 기간 플레이앤에서 응원하고 우승팀을 맞히면 그룹당 이용료 10만원 페이백">
@@ -26,6 +26,36 @@
 .rules h2{font-size:15px;margin:0 0 6px;color:inherit}
 .cta{display:flex;gap:8px;margin-top:18px}.cta a{flex:1;text-align:center}
 .legal{margin-top:14px;font-size:12px;color:var(--mute);line-height:1.6}
+.vote{margin-top:18px;border-radius:20px;padding:20px 18px;background:#1E1A4A;color:#fff}
+.vote h2{font-family:"Black Han Sans",Pretendard,sans-serif;font-size:26px;margin:0;line-height:1.2}
+.vote h2 em{font-style:normal;color:#7CF5B8}
+.vote .sub{margin:6px 0 0;font-size:14px;opacity:.8;line-height:1.55}
+.vote .f{display:flex;gap:8px;margin-top:14px}
+.vote input[type=tel],.vote input[type=text],.vote select{flex:1;min-width:0;padding:12px 14px;border-radius:12px;border:1.5px solid #4A4380;background:#120F33;color:#fff;font-size:16px}
+.vote .btnv{padding:12px 16px;border-radius:12px;border:0;background:#FF4FA3;color:#fff;font-weight:800;font-size:15px;cursor:pointer;white-space:nowrap}
+.vote .btnv:disabled{opacity:.5}
+.reg{margin-top:14px;font-size:12px;font-weight:800;letter-spacing:.06em;opacity:.6}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:6px}
+.tg button{padding:11px 10px;border-radius:12px;border:1.5px solid #4A4380;background:#120F33;color:#fff;font-size:14px;font-weight:700;text-align:left;cursor:pointer}
+.tg button.on{border-color:#7CF5B8;background:#7CF5B8;color:#16133F}
+.tg button:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+.vmsg{margin-top:10px;font-size:14px;line-height:1.5;min-height:1em}
+.vmsg.ok{color:#7CF5B8}.vmsg.err{color:#FFB3D6}
+.jbox{margin-top:14px;padding:14px;border-radius:14px;background:#120F33;display:none}
+.jbox .row{display:flex;gap:8px;margin-top:8px}
+.jbox label.c{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:13.5px;line-height:1.45}
+.jbox details{margin-top:8px;font-size:12.5px;opacity:.75}
+.board{margin-top:18px}
+.bar{display:grid;grid-template-columns:118px 1fr 74px;gap:8px;align-items:center;margin:7px 0;font-size:14px}
+.bar .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .g{height:14px;border-radius:9px;background:#2A2650;overflow:hidden}
+.bar .g i{display:block;height:100%;background:#FFC83D;transition:width .6s}
+.bar.top .g i{background:#FF4FA3}.bar.top .t{color:#FF8FC4;font-weight:800}
+.bar.mine .t:after{content:" ✓";color:#7CF5B8}
+.bar .n{text-align:right;font-variant-numeric:tabular-nums;opacity:.85}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#7CF5B8}
+.live:before{content:"";width:8px;height:8px;border-radius:50%;background:#7CF5B8;animation:bl 1.4s infinite}
+@keyframes bl{50%{opacity:.25}}
 </style>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a></div></header>
@@ -34,6 +64,7 @@
     <div class="k">PLAY N · WORLDS 2026 EVENT</div>
     <h1>롤드컵 우승팀 맞히고<br><em>10만원</em> 받아가자</h1>
     <p>플레이앤 나이트·통대관에서 친구들이랑 롤드컵 응원하고, 우승팀을 맞히면 팀당 이용료를 돌려드려요. 8강 전 픽은 <b>10만원</b>, 8강 이후 픽은 <b>5만원</b>.</p>
+    <a href="#vote" style="display:inline-block;margin-top:14px;background:#7CF5B8;color:#16133F;font-weight:900;padding:11px 18px;border-radius:12px;text-decoration:none">🗳️ 우승팀 투표하고 실시간 순위 보기</a>
   </section>
   <div class="steps">
     <div class="step"><b class="n">1</b><div><h3>나이트·통대관 예약</h3><p>10/12 ~ 11/14 이용하는 나이트·통대관 예약이면 3개 지점 어디든 참여해요.</p></div></div>
@@ -41,12 +72,29 @@
     <div class="step"><b class="n">3</b><div><h3>팀원 전원 N CREW 가입</h3><p>체크인하면 팀 링크가 와요. 단톡방에 공유해서 이용 인원 전원이 가입하면 페이백 대상 확정!</p></div></div>
     <div class="step"><b class="n">4</b><div><h3>맞히면 페이백</h3><p>결승(11/15) 뒤 7일 안에 보증금 환급 계좌로 보내드려요.</p></div></div>
   </div>
+  <section class="vote" id="vote">
+    <div class="live">실시간</div>
+    <h2>롤드컵 우승, <em>누가</em> 가져갈까?</h2>
+    <p class="sub">N CREW 멤버라면 누구나 1표! 예약 안 해도 투표할 수 있어요. 마감(<span id="vLock">11/3 23:59</span>) 전까지는 다시 골라 바꿀 수 있어요.</p>
+    <div class="f"><input id="vPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="N CREW 휴대폰 번호 010-0000-0000"><button class="btnv" id="vCheck">확인</button></div>
+    <div class="vmsg" id="vMsg" role="status"></div>
+    <div class="jbox" id="jBox">
+      <b>30초 가입하고 바로 투표</b>
+      <div class="row"><input id="jName" type="text" maxlength="20" placeholder="이름" autocomplete="name"><select id="jBranch"><option value="">자주 가는 지점</option><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></div>
+      <label class="c"><input type="checkbox" id="jAgree"><span><b>(필수)</b> 공실 특가·이벤트 등 광고성 정보를 카카오톡·문자로 받는 데 동의해요</span></label>
+      <label class="c"><input type="checkbox" id="jNight"><span>(선택) 밤 9시 ~ 아침 8시 당일 특가 알림도 받을게요</span></label>
+      <details><summary>개인정보 수집·이용 안내</summary>수집 항목: 이름, 휴대폰 번호, 자주 가는 지점 · 목적: 공실 특가·이벤트 알림, 롤드컵 투표 · 보관: 탈퇴(수신 거부) 시까지. 동의하지 않으면 가입·투표가 어려워요. 수신 거부는 playn.kr 맨 아래에서 언제든 할 수 있어요.</details>
+      <button class="btnv" id="jGo" style="margin-top:12px;width:100%">N CREW 가입하고 투표하기</button>
+    </div>
+    <div id="vTeams"></div>
+    <div class="board"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>팬 투표 현황</b><span id="vTot" style="font-size:13px;opacity:.75"></span></div><div id="vBoard">불러오는 중…</div></div>
+  </section>
   <section class="rules" id="live" style="color:var(--ink)">
-    <h2 style="color:inherit">📊 실시간 플레이앤 픽 현황</h2>
+    <h2 style="color:inherit">📊 페이백 참여 팀 픽 현황 <span style="font-size:12px;font-weight:600;color:var(--mute)">(나이트·통대관 이용 팀)</span></h2>
     <div id="lv">불러오는 중…</div>
   </section>
   <section class="rules"><h2>📺 지점마다 보고 싶은 화면으로</h2>75인치 TV · 빔프로젝터 · 게이밍 PC 5대 — 메인 경기는 큰 화면으로, 다른 경기·다시보기는 PC로 각자.</section>
-  <div class="cta"><a class="btn pink" href="/#deals">빈자리 보고 예약하기</a><a class="btn lamp" href="/crew/?src=worlds">N CREW 가입</a></div>
+  <div class="cta"><a class="btn pink" href="/#deals">빈자리 보고 예약하기</a><a class="btn lamp" href="#vote">투표하러 가기</a></div>
   <div class="rules">
     <h2>꼭 확인해 주세요</h2>
     · 대상: 2026년 10월 12일 ~ 11월 14일 이용하는 <b>나이트·통대관</b> 예약 확정 팀 (예약 1건 = 1팀)<br>
@@ -59,14 +107,72 @@
   <p class="legal">이 이벤트는 플레이앤이 자체 진행하며 Riot Games와 관련이 없습니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.</p>
 </div></main>
 <script>
-fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{
-  const E=document.getElementById("lv");if(!x.ok){E.textContent="잠시 후 다시 확인해 주세요.";return}
+(()=>{
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",SITE="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site";
+const $=i=>document.getElementById(i),post=(u,b)=>fetch(u,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json());
+const REG={"LCK":["Gen.G","한화생명e스포츠","T1","디플러스 기아"],"LPL":["Anyone's Legend","Bilibili Gaming","Top Esports","Invictus Gaming"],"LEC":["G2 Esports","Movistar KOI","Karmine Corp"],"LCS":["Team Liquid","Cloud9","LYON"],"LCP":["Team Secret Whales","CTBC Flying Oysters","MVK Esports"],"CBLOL":["LØS","FURIA"]};
+const st={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+let P=null,mine=null,phone=st.get("pn_phone")||"",locked=false;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const msg=(t,c)=>{const m=$("vMsg");m.className="vmsg "+(c||"");m.textContent=t};
+if(phone)$("vPhone").value=phone;
+function teams(){
+  if(!P)return;const el=new Set(P.eliminated||[]),all=P.teams||[];const used=new Set();let h="";
+  for(const[r,ts]of Object.entries(REG)){const x=ts.filter(t=>all.includes(t));if(!x.length)continue;x.forEach(t=>used.add(t));
+    h+=`<div class="reg">${r}</div><div class="tg">`+x.map(t=>`<button data-t="${esc(t)}" class="${t===mine?"on":""}" ${el.has(t)||locked?"disabled":""}>${esc(t)}</button>`).join("")+`</div>`}
+  const rest=all.filter(t=>!used.has(t));if(rest.length)h+=`<div class="reg">기타</div><div class="tg">`+rest.map(t=>`<button data-t="${esc(t)}" class="${t===mine?"on":""}" ${el.has(t)||locked?"disabled":""}>${esc(t)}</button>`).join("")+`</div>`;
+  $("vTeams").innerHTML=h;
+  $("vTeams").querySelectorAll("button[data-t]").forEach(b=>b.onclick=()=>vote(b.dataset.t));
+}
+function board(){
+  if(!P)return;const f=P.fan||{},tot=P.fan_total||0,el=new Set(P.eliminated||[]);
+  const rows=(P.teams||[]).map(t=>[t,f[t]||0]).sort((a,b)=>b[1]-a[1]||(P.teams.indexOf(a[0])-P.teams.indexOf(b[0])));
+  const max=Math.max(1,...rows.map(r=>r[1]));
+  $("vTot").textContent=`총 ${tot.toLocaleString()}표 · 15초마다 갱신`;
+  if(!tot){$("vBoard").innerHTML=`<div style="opacity:.75;margin-top:8px;font-size:14px">아직 투표가 없어요. 첫 표의 주인공이 되어 보세요!</div>`;return}
+  $("vBoard").innerHTML=rows.filter(r=>r[1]>0).map(([t,n],i)=>{const pc=Math.round(n/tot*100);return `<div class="bar ${i===0?"top":""} ${t===mine?"mine":""}" style="${el.has(t)?"opacity:.4;text-decoration:line-through":""}"><span class="t">${i===0?"👑 ":""}${esc(t)}</span><span class="g"><i style="width:${Math.round(n/max*100)}%"></i></span><span class="n">${pc}% · ${n}표</span></div>`}).join("");
+}
+async function load(){try{const x=await post(API,{action:"worlds_public"});if(!x.ok)return;P=x;
+  const lk=new Date(x.vote_lock);locked=Date.now()>lk.getTime();$("vLock").textContent=`${lk.getMonth()+1}/${lk.getDate()} ${String(lk.getHours()).padStart(2,"0")}:${String(lk.getMinutes()).padStart(2,"0")}`;
+  if(locked&&!$("vMsg").textContent)msg("투표가 마감됐어요. 결과를 지켜봐 주세요!");
+  board();if(phone&&mine!==undefined)teams();renderPick(x)}catch(e){}}
+async function check(){
+  phone=$("vPhone").value.replace(/\D/g,"");if(!/^01\d{8,9}$/.test(phone)){msg("휴대폰 번호를 확인해 주세요","err");return}
+  $("vCheck").disabled=true;
+  try{const j=await post(API,{action:"worlds_my_vote",phone});
+    if(j.need_join){mine=null;$("jBox").style.display="block";$("vTeams").innerHTML="";msg("아직 N CREW 멤버가 아니에요. 아래에서 가입하면 바로 투표할 수 있어요.","err");return}
+    if(!j.ok){msg(j.error||"잠시 후 다시 시도해 주세요","err");return}
+    st.set("pn_phone",phone);$("jBox").style.display="none";mine=j.team;teams();
+    msg(j.team?`${j.name}님은 ${j.team}에 투표했어요. ${locked?"":"다른 팀을 누르면 바꿀 수 있어요."}`:`${j.name}님, 우승할 것 같은 팀을 눌러 주세요!`,"ok");
+  }catch(e){msg("네트워크 오류예요. 잠시 후 다시 시도해 주세요","err")}finally{$("vCheck").disabled=false}
+}
+async function vote(t){
+  if(locked)return;msg(`${t}에 투표하는 중…`);
+  try{const j=await post(API,{action:"worlds_vote",phone,team:t});
+    if(j.need_join){$("jBox").style.display="block";msg(j.error,"err");return}
+    if(!j.ok){msg(j.error||"투표하지 못했어요","err");return}
+    mine=j.team;teams();msg(j.changed?`${j.team}(으)로 바꿨어요!`:`${j.team}에 투표 완료! 친구한테도 투표하라고 공유해 보세요 🔥`,"ok");load();
+  }catch(e){msg("네트워크 오류예요. 잠시 후 다시 시도해 주세요","err")}
+}
+$("vCheck").onclick=check;$("vPhone").addEventListener("keydown",e=>{if(e.key==="Enter")check()});
+$("jGo").onclick=async()=>{
+  const name=$("jName").value.trim();if(!name){msg("이름을 적어 주세요","err");return}
+  if(!$("jAgree").checked){msg("필수 동의에 체크해 주세요","err");return}
+  $("jGo").disabled=true;
+  try{const j=await post(SITE,{action:"join",name,phone,branch:$("jBranch").value,agree:true,night_agree:$("jNight").checked,source:"worlds_vote"});
+    if(!j.ok){msg(j.error||"가입하지 못했어요","err");return}
+    await check();if(!mine)msg(`${name}님, N CREW 가입 완료! 이제 우승할 팀을 눌러 주세요 🏆`,"ok");
+  }catch(e){msg("네트워크 오류예요. 잠시 후 다시 시도해 주세요","err")}finally{$("jGo").disabled=false}
+};
+function renderPick(x){const E=$("lv");
   const el=new Set(x.eliminated||[]),T=Object.entries(x.tally).sort((a,b)=>b[1]-a[1]);
-  let h=`<div style="margin-bottom:8px">${x.stage?`<b>${x.stage}</b> · `:""}참여 ${x.total}팀${x.playn_pick?` · 플레이앤 사장님 픽 <b style="color:#FF4FA3">${x.playn_pick}</b>`:""}</div>`;
-  if(!T.length)h+=`<div>첫 픽의 주인공이 되어 보세요! (10/12 이용부터)</div>`;
-  T.forEach(([t,n])=>{const pc=Math.round(n/x.total*100);h+=`<div style="display:grid;grid-template-columns:120px 1fr 40px;gap:8px;align-items:center;margin:6px 0;${el.has(t)?"opacity:.45;text-decoration:line-through":""}"><span>${t}</span><span style="height:10px;border-radius:9px;background:#2A2650;overflow:hidden"><i style="display:block;height:100%;width:${pc}%;background:#FFC83D"></i></span><span>${pc}%</span></div>`});
+  let h=`<div style="margin-bottom:8px">${x.stage?`<b>${esc(x.stage)}</b> · `:""}참여 ${x.total}팀${x.playn_pick?` · 플레이앤 사장님 픽 <b style="color:#FF4FA3">${esc(x.playn_pick)}</b>`:""}</div>`;
+  if(!T.length)h+=`<div>10/12 이용 팀부터 집계돼요. 첫 페이백 픽의 주인공이 되어 보세요!</div>`;
+  T.forEach(([t,n])=>{const pc=Math.round(n/x.total*100);h+=`<div style="display:grid;grid-template-columns:120px 1fr 40px;gap:8px;align-items:center;margin:6px 0;${el.has(t)?"opacity:.45;text-decoration:line-through":""}"><span>${esc(t)}</span><span style="height:10px;border-radius:9px;background:#2A2650;overflow:hidden"><i style="display:block;height:100%;width:${pc}%;background:#FFC83D"></i></span><span>${pc}%</span></div>`});
   if(el.size)h+=`<div style="margin-top:6px;font-size:12.5px">줄 그은 팀은 탈락했어요.</div>`;
-  if(x.winner)h+=`<div style="margin-top:8px"><b>🏆 우승: ${x.winner}</b></div>`;
-  E.innerHTML=h}).catch(()=>{});
+  if(x.winner)h+=`<div style="margin-top:8px"><b>🏆 우승: ${esc(x.winner)}</b></div>`;
+  E.innerHTML=h}
+load().then(()=>{if(phone)check()});setInterval(load,15000);
+})();
 </script>
 </body></html>
