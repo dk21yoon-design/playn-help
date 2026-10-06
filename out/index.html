@@ -86,11 +86,13 @@
     </div>
     <div id="bbqBox" hidden>
       <label class="t">바베큐 (1인 1만원)</label>
-      <div class="ch"><label><input type="radio" name="bp" value="platform">이미 결제</label><label><input type="radio" name="bp" value="deposit" checked>보증금에서 차감</label></div>
-      <div class="it"><div><b>바베큐 인원</b><small>1인 10,000원</small></div><div class="st" data-id="__bbq"><button type="button">−</button><span>0</span><button type="button">+</button></div></div>
+      <div class="it"><div><b>바베큐 먹은 인원</b><small>실제 이용 인원 전체</small></div><div class="st" data-id="__bbq"><button type="button">−</button><span>0</span><button type="button">+</button></div></div>
+      <div class="ch"><label><input type="radio" name="bp" value="platform">스페이스클라우드에서 결제함</label><label><input type="radio" name="bp" value="deposit" checked>결제 안 함 (보증금 차감)</label></div>
+      <div class="it" id="bbqPaidRow" hidden><div><b>스클에서 결제한 인원</b><small>예약 내역의 바베큐 인원 · 호스트가 확인해요</small></div><div class="st" data-id="__bbqpaid"><button type="button">−</button><span>0</span><button type="button">+</button></div></div>
+      <p class="hint" id="bbqWarn" hidden></p>
     </div>
     <div id="rvBox" hidden>
-      <label class="t" for="rvf">후기 캡처</label>
+      <label class="t" for="rvf">사진 후기 캡처 (필수)</label>
       <input id="rvf" type="file" accept="image/*"><div class="pv" id="rvp"></div>
     </div>
     <div class="sum" id="sum"></div>
@@ -160,14 +162,21 @@ function renderOut(){
 function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
   R.items.forEach(it=>{if(Q[it.id])L.push([`${it.name.replace(/\s*\(.*\)/,"")} ${Q[it.id]}${it.unit}`,Q[it.id]*it.price])});
   const ex=D.checkin.headcount-R.base_people;if(ex>0&&document.querySelector("[name=ex]:checked").value==="deposit")L.push([`인원 추가 ${ex}명`,ex*R.extra_person]);
-  if(D.checkin.bbq&&document.querySelector("[name=bp]:checked").value==="deposit"&&Q.__bbq)L.push([`바베큐 ${Q.__bbq}인`,Q.__bbq*R.bbq_per_person]);
+  const pl=document.querySelector("[name=bp]:checked").value==="platform";$("bbqPaidRow").hidden=!pl;
+  if(Q.__bbqpaid>(Q.__bbq||0)){Q.__bbqpaid=Q.__bbq||0;document.querySelector('[data-id=__bbqpaid] span').textContent=Q.__bbqpaid}
+  if(D.checkin.bbq&&Q.__bbq){const paid=pl?(Q.__bbqpaid||0):0,un=Q.__bbq-paid;
+    $("bbqWarn").hidden=!(pl&&un>0);$("bbqWarn").textContent=`${Q.__bbq}명 중 ${paid}명만 결제 → 미결제 ${un}명은 보증금에서 차감돼요`;
+    if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person])}
   const t=L.reduce((a,l)=>a+l[1],0);
   $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>− ${l[0]}</span><span>${won(l[1])}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`}
 $("rvf").onchange=async e=>{const f=e.target.files[0];if(!f)return;img=await shrink(f);$("rvp").innerHTML=`<img src="${img}">`};
 function shrink(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const s=Math.min(1,1400/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",.82))};i.src=URL.createObjectURL(f)})}
-$("goOut").onclick=async()=>{$("goOut").disabled=true;$("goOut").textContent="보내는 중…";
+$("goOut").onclick=async()=>{
+  if(D.checkin.review!=="none"&&!img&&!D.review_ok)return msg("mOut","후기 이벤트 참여하셨으면 사진 후기 캡처를 꼭 올려주세요 (환급 신청 필수)");
+  if(D.checkin.bbq&&!Q.__bbq&&!confirm("바베큐 인원이 0명이에요. 바베큐를 안 하셨나요?"))return;
+  $("goOut").disabled=true;$("goOut").textContent="보내는 중…";
   const items={};D.rules.items.forEach(it=>items[it.id]=Q[it.id]||0);
-  const r=await post({action:"checkout",items,extra_paid:(document.querySelector("[name=ex]:checked")||{}).value,bbq_paid:D.checkin.bbq?document.querySelector("[name=bp]:checked").value:"none",bbq_people:Q.__bbq||0,review_image:img}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
+  const r=await post({action:"checkout",items,extra_paid:(document.querySelector("[name=ex]:checked")||{}).value,bbq_paid:D.checkin.bbq?document.querySelector("[name=bp]:checked").value:"none",bbq_people:Q.__bbq||0,bbq_paid_people:Q.__bbqpaid||0,review_image:img}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("goOut").disabled=false;$("goOut").textContent="정산 요청하기";
   if(!r.ok)return msg("mOut",r.error||"다시 시도해 주세요");
   D=await post({action:"info"});renderDone()};
@@ -175,7 +184,10 @@ function renderDone(){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidde
   const c=D.calc||{};const paid=D.status==="paid";
   $("lead").textContent=paid?"환급이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 확인 후 1~2일 안에 환급해 드리고 문자로 알려드려요.";
   $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">${paid?"환급 완료":"환급 예정"}</div><div class="n">${won(c.refund)}</div></div>`+(c.lines?`<div class="sum"><div class="l"><span>보증금</span><span>${won(c.deposit)}</span></div>${c.lines.map(l=>`<div class="l"><span>− ${l.name}</span><span>${won(l.amount)}</span></div>`).join("")}<div class="big"><span>환급</span><em>${won(c.refund)}</em></div></div>`:"")+
-  (D.member?"":`<a class="btn lamp go" href="/crew/?src=settle" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`)}
+  (D.deposit_ok?`<p class="hint">✅ 보증금 입금 확인됨</p>`:`<div class="msg er">보증금 입금이 아직 확인되지 않았어요. 입금 전에는 환급할 수 없어요.<br><b>${D.account}</b> · ${won(D.rules.deposit)}<br>입금자명: 체크인 때 적은 이름</div>`)+
+  (paid?"":`<button class="btn go" id="reEdit" type="button" style="display:flex;margin-top:10px">사용 내역 수정해서 다시 보내기</button>`)+
+  (D.member?"":`<a class="btn lamp go" href="/crew/?src=settle" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`);
+  if($("reEdit"))$("reEdit").onclick=()=>{$("fdone").hidden=true;$("tabs").hidden=false;show("out")}}
 load();
 </script>
 </body></html>

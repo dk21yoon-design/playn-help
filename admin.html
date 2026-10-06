@@ -213,6 +213,15 @@ async function loadSettle(){const x=await spost({action:"admin_settle_list"});if
    (k?`<div class="meta" style="margin-top:6px">${k.lines.map(l=>`${H(l.name)} ${W(l.amount)}`).join(" · ")}<br><b style="font-size:17px">환급 ${W(k.refund)}</b> (차감 ${W(k.total)})</div>`:`<div class="meta">퇴실 정산 전</div>`)+
    ((s.flags||[]).length?`<div class="tip" style="margin-top:6px">⚠️ ${s.flags.map(H).join("<br>⚠️ ")}</div>`:"")+
    (s.proof_url?`<a href="${s.proof_url}" target="_blank" rel="noopener"><img src="${s.proof_url}" style="width:90px;border-radius:8px;margin-top:6px"></a>`:"");
+  // 보증금 입금 상태
+  if(s.status!=="paid"){const dp=document.createElement("div");dp.className="act";dp.style.flexWrap="wrap";
+   dp.innerHTML=s.deposit_ok?`<span class="meta">💰 보증금 입금 확인됨${s.deposit_at?" ("+new Date(s.deposit_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})+")":""}</span><button class="no">입금 취소</button>`:`<span class="meta" style="color:#ff6b6b">💸 보증금 미입금 (토스 알림 대기${s.deposit_reminded_at?" · 독촉문자 보냄":""})</span><button class="ok">입금 확인</button>`;
+   dp.lastElementChild.onclick=async()=>{const r=await spost({action:"admin_deposit_set",id:s.id,ok:!s.deposit_ok});if(!r.ok)alert0(dp,r.error||"실패");loadSettle()};d.appendChild(dp)}
+  // 바베큐 결제 인원 확인
+  if(k&&k.bbq&&k.bbq.people&&s.status!=="paid"){const bq=document.createElement("div");bq.className="act";bq.style.flexWrap="wrap";
+   const sc=/^\d+$/.test(String(s.res_id||""))?`<a class="no" href="https://partner.spacecloud.kr/reservation/${s.res_id}" target="_blank" rel="noopener" style="padding:10px;border-radius:10px;text-decoration:none">스클 예약 보기</a>`:"";
+   bq.innerHTML=`<span class="meta">🍖 바베큐 ${k.bbq.people}명 · 손님 신고 결제 ${k.bbq.paid}명 ${k.bbq.verified!=null?"✅ 확인됨":"(미확인)"} → 스클 결제 인원:</span>`+[...Array(k.bbq.people+1).keys()].map(n=>`<button class="${k.bbq.verified===n?"ok":"no"}" data-n="${n}" style="min-width:40px">${n}</button>`).join("")+sc;
+   bq.querySelectorAll("[data-n]").forEach(b=>b.onclick=async()=>{const r=await spost({action:"admin_bbq_verify",id:s.id,paid:+b.dataset.n});if(!r.ok)alert0(bq,r.error||"실패");loadSettle()});d.appendChild(bq)}
   if(k&&s.status!=="paid"){const acc=`${c.bank||""} ${c.account||""}`;
    const a=document.createElement("div");a.className="act";a.style.flexWrap="wrap";
    a.innerHTML=`<button class="no">계좌 복사</button><button class="no">금액 복사</button><a class="no" href="supertoss://" style="padding:10px;border-radius:10px;text-decoration:none">토스 열기</a><input type="number" step="1000" placeholder="추가 차감(원)"><input type="text" placeholder="사유 (예: 실내화 오염)"><button class="no">차감 반영</button><button class="ok">송금 완료</button>`;
@@ -220,9 +229,19 @@ async function loadSettle(){const x=await spost({action:"admin_settle_list"});if
    ca.onclick=async()=>{try{await navigator.clipboard.writeText(acc.trim());ca.textContent="복사됨"}catch(e){}};
    cm.onclick=async()=>{try{await navigator.clipboard.writeText(String(k.refund));cm.textContent="복사됨"}catch(e){}};
    ad.onclick=async()=>{const r=await spost({action:"admin_settle_adjust",id:s.id,extra:ex.value,reason:rs.value});if(!r.ok)alert0(a,r.error||"실패");loadSettle()};
-   pd.onclick=async()=>{pd.disabled=true;pd.textContent="처리 중";const r=await spost({action:"admin_settle_paid",id:s.id});if(!r.ok)alert0(a,r.error||"실패");loadSettle()};
+   pd.onclick=async()=>{pd.disabled=true;pd.textContent="처리 중";let force=false;if(!s.deposit_ok){if(!confirm("보증금 입금이 확인 안 됐어요. 그래도 송금 완료 처리할까요?")){pd.disabled=false;pd.textContent="송금 완료";return}force=true}
+     const r=await spost({action:"admin_settle_paid",id:s.id,force});if(!r.ok)alert0(a,r.error||"실패");loadSettle()};
    d.appendChild(a)}
-  E.appendChild(d)})}
+  E.appendChild(d)});
+ if((x.deposits||[]).length){const U=document.createElement("div");U.className="card";
+  U.innerHTML=`<b>🔎 자동 연결 안 된 입금 ${x.deposits.length}건</b><div class="meta">이름이 다르거나 후보가 여러 명이에요. 맞는 정산 건을 골라 연결하세요.</div>`;
+  const open=x.items.filter(s=>!s.deposit_ok&&s.status!=="paid");
+  x.deposits.forEach(dp=>{const r=document.createElement("div");r.className="act";r.style.flexWrap="wrap";
+   r.innerHTML=`<span class="meta">${new Date(dp.at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})} · <b>${H(dp.name||"?")}</b> ${W(dp.amount)} ${dp.status==="ambiguous"?"(후보 여러 명)":""}</span><select><option value="">정산 건 선택</option>${open.map(s=>`<option value="${s.id}">${H(s.branch)} ${H(String(s.use_date).slice(5))} ${H((s.checkin||{}).depositor||s.guest||"")}</option>`).join("")}</select><button class="ok">연결</button><button class="no">무시</button>`;
+   const [,sel,ln,ig]=r.children;
+   ln.onclick=async()=>{if(!sel.value)return;const q=await spost({action:"admin_deposit_set",id:+sel.value,ok:true,deposit_id:dp.id});if(!q.ok)alert0(r,q.error||"실패");loadSettle()};
+   ig.onclick=async()=>{await spost({action:"admin_deposit_dismiss",deposit_id:dp.id});loadSettle()};U.appendChild(r)});
+  E.prepend(U)}}
 const EXS={requested:"⏳ 대기",confirmed:"✅ 확정",rejected:"거절"};
 async function loadExt(){const x=await apost({action:"admin_ext_list"});if(!x.ok)return;
  const st=x.settings||{};$("extHr").value=st.hourly??"";$("extAuto").checked=!!st.auto;
