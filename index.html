@@ -8,7 +8,7 @@
 <meta name="description" content="홍대·연남 루프탑 게임파티룸 플레이앤. 게이밍 PC 5대와 프로 무선 기어, 노래방, 루프탑 바베큐. 평점 4.9, 후기 284개. N CREW 멤버는 매주 빈 날짜를 특가로 받아요.">
 <meta property="og:title" content="플레이앤 N CREW | 이번 주 빈자리 특가">
 <meta property="og:description" content="홍대·연남 루프탑 게임파티룸. 멤버에게만 이번 주 공실을 특가로 열어요.">
-<meta name="theme-color" content="#16133F">
+<meta name="theme-color" content="#0E0C2C">
 <meta name="naver-site-verification" content="3be739a87e3c5301a4aba0a5cf95370185a2ede1">
 <meta name="google-site-verification" content="6EOE_ZTyF6w4SBmeP3id1bvhz8t3195xlStVlj3iCek">
 <link rel="canonical" href="https://playn.kr/">
@@ -18,182 +18,322 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preload" as="image" href="assets/home/hero.webp">
 <style>
+/* 플레이앤 홈 v2: 루프탑 밤 + 스트링 전구 무드. 다크 고정(브랜드가 '밤'), 강조색은 전구 앰버 1개, 핑크는 '특가' 의미에만 사용 */
 :root{
-  --night:#16133F;      /* 루프탑 밤하늘 */
-  --deep:#0E0C2C;
-  --panel:#211D57;
-  --line:#3A3580;
-  --lamp:#FFB547;       /* 스트링 전구 */
-  --brand:#FF2E6E;      /* 플레이앤 핑크 = 특가 */
-  --ink:#F1EFFF;
-  --mute:#A6A2D6;
-  --dim:#6F6AAB;
-  --r-sm:8px;--r-md:14px;--r-lg:22px;
+  --night:#16133F;--deep:#0E0C2C;--panel:#1C1850;--panel2:#241F63;--line:rgba(166,162,214,.16);--line2:rgba(166,162,214,.28);
+  --lamp:#FFB547;--lamp2:#FFC977;--brand:#FF2E6E;--ink:#F3F1FF;--mute:#B3AFDF;--dim:#8682BE;
+  --r:18px;--r-sm:10px;--pill:999px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(16px,4vw,32px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{background:var(--night);color:var(--ink);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;font-size:16px;line-height:1.6;word-break:keep-all;overflow-x:hidden}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px}
+body{background:var(--deep);color:var(--ink);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;font-size:16px;line-height:1.6;word-break:keep-all;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(1200px 600px at 85% -10%,rgba(255,181,71,.10),transparent 60%),radial-gradient(900px 600px at -10% 20%,rgba(91,72,214,.20),transparent 60%),var(--deep)}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--lamp);outline-offset:2px;border-radius:4px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
-.disp{font-family:"Black Han Sans",Pretendard,sans-serif;font-weight:400;letter-spacing:-.01em;line-height:1.15}
+img{display:block;max-width:100%}
+:focus-visible{outline:3px solid var(--lamp);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--pad)}
+.disp{font-family:"Black Han Sans",Pretendard,sans-serif;font-weight:400;letter-spacing:-.01em;line-height:1.12}
+.lamp{color:var(--lamp)}
 
-/* 상단 */
-.top{position:sticky;top:0;z-index:20;background:rgba(22,19,63,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(58,53,128,.6)}
-.top .wrap{display:flex;align-items:center;height:58px;gap:14px}
-.logo{font-family:"Black Han Sans",sans-serif;font-size:22px;text-decoration:none;letter-spacing:.01em}
-.logo b{color:var(--brand);font-weight:400}
-.top nav{margin-left:auto;display:flex;gap:4px}
-.top nav a{text-decoration:none;color:var(--mute);font-size:14px;padding:8px 10px;border-radius:var(--r-sm)}
-.top nav a:hover{color:var(--ink)}
-.top nav a.join{color:var(--night);background:var(--lamp);font-weight:700}
-@media(max-width:560px){.top nav a:not(.join){display:none}}
-
-/* 히어로: 스트링 전구 + 헤드라인 */
-.hero{position:relative;padding:44px 0 28px;overflow:hidden}
-.bulbs{position:absolute;inset:0 0 auto 0;height:90px;pointer-events:none}
-.bulbs svg{width:100%;height:100%}
-.hero h1{font-size:clamp(40px,9vw,84px);margin-top:28px}
-.hero h1 span{display:block}
-.hero p.lead{color:var(--mute);font-size:clamp(16px,2.2vw,19px);max-width:34em;margin-top:16px}
-.hero .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--r-md);padding:14px 20px;font:700 16px/1 Pretendard,sans-serif;text-decoration:none;cursor:pointer}
-.btn.lamp{background:var(--lamp);color:var(--night)}
-.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+/* 버튼: 전부 pill 규칙 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--pill);padding:15px 24px;font:700 16px/1 Pretendard,sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .25s var(--ease),background .2s,box-shadow .25s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn.lamp{background:var(--lamp);color:#1B1640;box-shadow:0 10px 30px -10px rgba(255,181,71,.6)}
+.btn.lamp:hover{background:var(--lamp2);transform:translateY(-2px)}
+.btn.ghost{background:rgba(255,255,255,.04);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line2)}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
 .btn.pink{background:var(--brand);color:#fff}
 .btn:disabled{opacity:.5;cursor:default}
+.btn .ar{transition:transform .25s var(--ease)}.btn:hover .ar{transform:translateX(3px)}
+
+/* 상단 */
+.top{position:sticky;top:0;z-index:40;background:rgba(14,12,44,.72);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;height:64px;gap:18px}
+.logo{font-family:"Black Han Sans",sans-serif;font-size:24px;text-decoration:none;letter-spacing:.01em}
+.logo b{color:var(--brand);font-weight:400}
+.top nav{margin-left:auto;display:flex;align-items:center;gap:2px}
+.top nav a{text-decoration:none;color:var(--mute);font-size:14.5px;font-weight:600;padding:9px 12px;border-radius:var(--pill);transition:color .2s,background .2s}
+.top nav a:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.top nav a.join{color:#1B1640;background:var(--lamp);font-weight:800;margin-left:6px}
+.top nav a.join:hover{background:var(--lamp2)}
+.menu-btn{display:none;margin-left:auto;width:44px;height:44px;border:0;border-radius:var(--pill);background:rgba(255,255,255,.06);color:var(--ink);cursor:pointer;align-items:center;justify-content:center}
+.menu-btn span,.menu-btn span::before,.menu-btn span::after{display:block;width:18px;height:2px;background:currentColor;border-radius:2px;position:relative;transition:transform .3s var(--ease),opacity .2s}
+.menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0}
+.menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
+.menu-btn[aria-expanded=true] span{background:transparent}
+.menu-btn[aria-expanded=true] span::before{transform:translateY(6px) rotate(45deg)}
+.menu-btn[aria-expanded=true] span::after{transform:translateY(-6px) rotate(-45deg)}
+.drawer{position:fixed;inset:64px 0 auto 0;z-index:39;background:rgba(14,12,44,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:10px var(--pad) 22px;display:grid;grid-template-columns:1fr 1fr;gap:6px;transform:translateY(-8px);opacity:0;pointer-events:none;transition:opacity .25s,transform .3s var(--ease)}
+.drawer.open{opacity:1;transform:none;pointer-events:auto}
+.drawer a{text-decoration:none;padding:14px 14px;border-radius:14px;background:rgba(255,255,255,.04);font-weight:700;font-size:15.5px}
+.drawer a.join{grid-column:1/-1;background:var(--lamp);color:#1B1640;text-align:center}
+@media(max-width:980px){.top nav{display:none}.menu-btn{display:inline-flex}}
+@media(min-width:981px){.drawer{display:none}}
+
+/* 히어로 */
+.hero{position:relative;padding:56px 0 40px;overflow:hidden}
+.bulbs{position:absolute;inset:0 0 auto 0;height:96px;pointer-events:none}
+.bulbs svg{width:100%;height:100%}
+.bulbs circle{animation:tw 3.6s ease-in-out infinite}
+.bulbs circle:nth-child(3n){animation-delay:-1.2s}.bulbs circle:nth-child(3n+1){animation-delay:-2.4s}
+@keyframes tw{50%{opacity:.35}}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,5vw,64px);align-items:center;position:relative}
+.hero h1{font-size:clamp(42px,6.6vw,84px);margin-top:18px}
+.hero h1 span{display:block}
+.hero p.lead{color:var(--mute);font-size:clamp(16px,1.6vw,19px);max-width:30em;margin-top:20px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.shots{position:relative;aspect-ratio:1/1.02;max-width:560px;justify-self:end;width:100%}
+.shots .a{position:absolute;inset:0 0 14% 10%;border-radius:28px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.7)}
+.shots .b{position:absolute;left:0;bottom:0;width:48%;aspect-ratio:4/3;border-radius:22px;overflow:hidden;border:4px solid var(--deep);box-shadow:0 30px 60px -20px rgba(0,0,0,.8)}
+.shots img{width:100%;height:100%;object-fit:cover}
+.shots .a img{transform:scale(1.04);transition:transform 1.4s var(--ease)}
+.shots:hover .a img{transform:scale(1.08)}
+.rating{position:absolute;right:-6px;bottom:4%;background:rgba(14,12,44,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line2);border-radius:20px;padding:14px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.rating b{display:block;font-family:"Black Han Sans",sans-serif;font-weight:400;font-size:30px;color:var(--lamp);line-height:1}
+.rating span{font-size:13px;color:var(--mute)}
+@media(max-width:860px){.rating{right:8px;padding:10px 14px}.rating b{font-size:24px}.hero{padding:40px 0 28px}.hero-grid{grid-template-columns:1fr}.shots{justify-self:stretch;max-width:none;aspect-ratio:4/3.3}}
+.event{display:flex;align-items:center;gap:14px;margin-top:34px;padding:16px 20px;border-radius:var(--r);text-decoration:none;color:#fff;background:linear-gradient(110deg,rgba(255,46,110,.22),rgba(91,72,214,.18));border:1px solid rgba(255,46,110,.35);transition:transform .3s var(--ease),border-color .2s}
+.event:hover{transform:translateY(-2px);border-color:rgba(255,46,110,.7)}
+.event b{font-weight:800}.event span{color:#E9DFFF;opacity:.85}
+.event .go{margin-left:auto;flex:none;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center}
+@media(max-width:560px){.event{flex-wrap:wrap}.event .go{display:none}}
+
+/* 팩트 마퀴 (페이지에 1개) */
+.ticker{border-block:1px solid var(--line);overflow:hidden;background:rgba(255,255,255,.02)}
+.ticker .track{display:flex;gap:44px;width:max-content;padding:16px 0;animation:mq 38s linear infinite}
+.ticker:hover .track{animation-play-state:paused}
+.ticker span{white-space:nowrap;font-weight:700;color:var(--mute);font-size:15px}
+.ticker span b{color:var(--ink);font-weight:800}
+.ticker span::before{content:"✦";color:var(--lamp);margin-right:14px;font-size:12px;vertical-align:2px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* 공통 섹션 */
+section.blk{padding:clamp(64px,9vw,112px) 0 0}
+.sh2{font-size:clamp(30px,4.6vw,48px)}
+p.sub{color:var(--mute);margin-top:12px;max-width:36em;font-size:16.5px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px;justify-content:space-between}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
 
 /* 빈자리 보드 */
-.board{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 14px 14px}
-.board-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 16px;padding:0 4px 14px}
-.board-head h2{font-size:26px}
-.board-head .sub{color:var(--mute);font-size:14px}
-.tabs{display:flex;gap:6px;margin-left:auto;background:var(--panel);padding:4px;border-radius:12px}
-.tabs button{border:0;background:none;color:var(--mute);font:600 14px Pretendard,sans-serif;padding:9px 12px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.board{margin-top:40px;background:linear-gradient(180deg,rgba(36,31,99,.6),rgba(22,19,63,.6));border:1px solid var(--line2);border-radius:28px;padding:22px 18px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 40px 80px -40px rgba(0,0,0,.6)}
+.board-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 16px;padding:0 4px 18px}
+.board-head h2{font-size:clamp(26px,3.2vw,34px)}
+.board-head .sub{color:var(--mute);font-size:14px;margin-top:4px}
+.tabs{display:flex;gap:4px;margin-left:auto;background:rgba(14,12,44,.7);padding:4px;border-radius:var(--pill);border:1px solid var(--line)}
+.tabs button{border:0;background:none;color:var(--mute);font:700 14px Pretendard,sans-serif;padding:10px 16px;border-radius:var(--pill);cursor:pointer;white-space:nowrap;transition:background .25s,color .25s}
 .tabs button[aria-selected=true]{background:var(--ink);color:var(--night)}
-@media(max-width:560px){.tabs{margin-left:0;width:100%}.tabs button{flex:1;padding:9px 4px;font-size:13px}}
-.grid{display:grid;grid-template-columns:78px repeat(3,1fr);gap:6px}
-.grid .h{color:var(--dim);font-size:13px;text-align:center;padding:2px 0 4px}
-.grid .h small{display:block;font-size:11px;color:var(--dim);opacity:.85}
-.day{display:flex;flex-direction:column;justify-content:center;padding:0 6px;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+@media(max-width:600px){.tabs{margin-left:0;width:100%}.tabs button{flex:1;padding:10px 4px;font-size:13.5px}}
+.grid{display:grid;grid-template-columns:84px repeat(3,1fr);gap:7px}
+.grid .h{color:var(--dim);font-size:13px;font-weight:700;text-align:center;padding:2px 0 6px}
+.grid .h small{display:block;font-size:11px;font-weight:500;color:var(--dim);opacity:.85}
+.day{display:flex;flex-direction:column;justify-content:center;padding:0 8px;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
 .day small{font-weight:500;font-size:11.5px;color:var(--dim)}
 .day.wk{color:var(--lamp)}
-.cell{min-height:62px;border-radius:12px;border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--dim);background:rgba(58,53,128,.25)}
-button.cell{cursor:pointer;font-family:inherit;background:linear-gradient(180deg,#2A2470,#231E5E);border-color:#4B44A6;color:var(--ink)}
-button.cell:hover{border-color:var(--lamp)}
-button.cell .p{font-weight:800;font-size:15.5px;color:#fff}
+.cell{min-height:64px;border-radius:14px;border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--dim);background:rgba(58,53,128,.18)}
+button.cell{cursor:pointer;font-family:inherit;background:linear-gradient(180deg,#2C2675,#221D5E);border-color:rgba(120,110,230,.45);color:var(--ink);transition:transform .2s var(--ease),border-color .2s,box-shadow .25s}
+button.cell:hover{border-color:var(--lamp);transform:translateY(-2px);box-shadow:0 12px 26px -12px rgba(255,181,71,.55)}
+button.cell .p{font-weight:800;font-size:16px;color:#fff}
 button.cell s{font-size:11px;color:var(--mute)}
 button.cell .t{font-size:11px;color:var(--lamp);font-weight:700}
-button.cell.lit{box-shadow:0 0 0 1px rgba(255,181,71,.25),0 0 22px -6px rgba(255,181,71,.55)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--dim);font-size:12.5px;padding:12px 4px 2px}
+button.cell.lit{box-shadow:0 0 0 1px rgba(255,181,71,.25),0 0 24px -8px rgba(255,181,71,.55)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--dim);font-size:12.5px;padding:14px 4px 2px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-.empty{padding:26px 8px;text-align:center;color:var(--mute)}
-@media(max-width:420px){.grid{grid-template-columns:62px repeat(3,1fr);gap:5px}.cell{min-height:58px}button.cell .p{font-size:14px}}
+.empty{padding:28px 8px;text-align:center;color:var(--mute)}
+.skel{display:grid;grid-template-columns:84px repeat(3,1fr);gap:7px}
+.skel i{height:64px;border-radius:14px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.09),rgba(255,255,255,.04));background-size:200% 100%;animation:sh 1.4s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:420px){.grid,.skel{grid-template-columns:62px repeat(3,1fr);gap:5px}.cell{min-height:58px}button.cell .p{font-size:14px}}
 
-/* 섹션 공통 */
-section.blk{padding:64px 0 8px}
-section.blk>.wrap>h2{font-size:clamp(28px,5vw,40px)}
-section.blk>.wrap>p.sub{color:var(--mute);margin-top:8px;max-width:36em}
+/* 공간 벤토 (실제 지점 사진) */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:260px 260px;grid-template-areas:"gear roof roof tv" "gear kara games tv";gap:12px;margin-top:36px}
+.tile{position:relative;border-radius:var(--r);overflow:hidden;background:var(--panel);isolation:isolate}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.tile:hover img{transform:scale(1.05)}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(10,8,34,.88));z-index:0}
+.tile figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:1}
+.tile figcaption b{display:block;font-family:"Black Han Sans",sans-serif;font-weight:400;font-size:clamp(20px,2vw,26px)}
+.tile figcaption span{font-size:14px;color:#D9D5FF}
+.t-gear{grid-area:gear}.t-roof{grid-area:roof}.t-tv{grid-area:tv}.t-kara{grid-area:kara}.t-games{grid-area:games}
+@media(max-width:860px){.bento{grid-template-columns:1fr 1fr;grid-template-rows:220px 230px 230px 200px;grid-template-areas:"roof roof" "gear tv" "gear tv" "kara games"}}
+@media(max-width:480px){.bento{grid-template-rows:200px 200px 200px 180px}.tile figcaption span{display:none}}
+
+/* 플레이앤에만 있는 것: 번호 없는 리스트형 링크 */
+.only{margin-top:30px;border-top:1px solid var(--line)}
+.only .o{display:grid;grid-template-columns:200px 1fr auto;gap:8px 28px;align-items:center;text-decoration:none;padding:24px 4px;border-bottom:1px solid var(--line);transition:background .25s,padding .3s var(--ease)}
+.only .o:hover{background:rgba(255,255,255,.03);padding-left:14px}
+.only .o-k{color:var(--lamp);font-size:14px;font-weight:800}
+.only .o b{font-size:clamp(22px,2.4vw,30px);font-family:"Black Han Sans",sans-serif;font-weight:400;line-height:1.2}
+.only .o .d{grid-column:2;color:var(--mute);font-size:15px;max-width:40em}
+.only .o .go{grid-row:1/3;grid-column:3;width:46px;height:46px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line2);display:grid;place-items:center;transition:background .25s,color .25s}
+.only .o:hover .go{background:var(--lamp);color:#1B1640;box-shadow:none}
+@media(max-width:720px){.only .o{grid-template-columns:1fr auto}.only .o .d{grid-column:1}.only .o .go{grid-row:1/4;grid-column:2;width:40px;height:40px}}
+.for-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:22px}
+.for-row span{color:var(--dim);font-size:14px;margin-right:4px}
+.for-row a{text-decoration:none;border:1.5px solid var(--line2);border-radius:var(--pill);padding:9px 15px;font-size:14px;font-weight:700;transition:border-color .2s,background .2s}
+.for-row a:hover{border-color:var(--lamp);background:rgba(255,181,71,.08)}
+
+/* 매거진 */
+.mag-tabs{display:flex;gap:8px;overflow-x:auto;margin-top:26px;padding-bottom:6px;scrollbar-width:none}
+.mag-tabs::-webkit-scrollbar{display:none}
+.mag-tabs button{flex:none;border:1.5px solid var(--line2);background:none;color:var(--mute);font:700 14px Pretendard,sans-serif;padding:10px 16px;border-radius:var(--pill);cursor:pointer;transition:all .2s}
+.mag-tabs button[aria-pressed=true]{background:var(--lamp);border-color:var(--lamp);color:#1B1640}
+.mag-tabs button small{font-weight:500;opacity:.75;margin-left:4px}
+.mag{display:grid;grid-template-columns:repeat(4,1fr);gap:24px 16px;margin-top:20px}
+@media(max-width:900px){.mag{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.mag{grid-template-columns:repeat(2,1fr);gap:18px 10px}}
+.post{all:unset;cursor:pointer;display:block;min-width:0}
+.post:focus-visible{outline:3px solid var(--lamp);outline-offset:3px;border-radius:14px}
+.post .th{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:var(--panel)}
+.post img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.post:hover img{transform:scale(1.05)}
+.post .kind{position:absolute;left:10px;top:10px;font-size:11.5px;font-weight:700;background:rgba(14,12,44,.78);backdrop-filter:blur(6px);color:var(--ink);padding:5px 9px;border-radius:var(--pill)}
+.post .ser{display:block;color:var(--lamp);font-size:12.5px;font-weight:700;margin-top:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post .hl{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15.5px;font-weight:700;line-height:1.4;margin-top:3px}
+.mag-more{display:flex;justify-content:center;margin-top:26px}
 
 /* N CREW */
-.crew{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;margin-top:28px;align-items:start}
-@media(max-width:820px){.crew{grid-template-columns:1fr}}
+.crew-wrap{margin-top:36px;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,56px);align-items:start}
+@media(max-width:900px){.crew-wrap{grid-template-columns:1fr}}
 .steps{list-style:none;counter-reset:s}
-.perks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
-@media(max-width:900px){.perks{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.perks{grid-template-columns:1fr}}
-.perks div{background:var(--deep);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px}
-.perks .k{font-size:13px;font-weight:800;color:var(--lamp)}.perks b{display:block;font-size:18px;margin:4px 0 6px}.perks span{font-size:14.5px;color:var(--mute);line-height:1.55;display:block}
-.perks div.hot{background:linear-gradient(135deg,#2B1D5E,#4A1A55);border-color:var(--brand)}
-.steps li{counter-increment:s;position:relative;padding:0 0 22px 52px}
-.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--panel);border:1.5px solid var(--lamp);color:var(--lamp);display:grid;place-items:center;font:800 15px Pretendard,sans-serif}
-.steps li:not(:last-child)::after{content:"";position:absolute;left:17.5px;top:40px;bottom:4px;width:1.5px;background:var(--line)}
-.steps b{display:block;font-size:17px}
+.steps li{counter-increment:s;position:relative;padding:0 0 26px 58px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:40px;height:40px;border-radius:50%;background:rgba(255,181,71,.1);border:1.5px solid var(--lamp);color:var(--lamp);display:grid;place-items:center;font:800 15px Pretendard,sans-serif}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:19.5px;top:44px;bottom:6px;width:1.5px;background:linear-gradient(var(--lamp),transparent)}
+.steps b{display:block;font-size:18px}
 .steps span{color:var(--mute);font-size:15px}
-.form{background:var(--ink);color:var(--night);border-radius:var(--r-lg);padding:22px}
-.form h3{font-size:24px}
-.form p.note{font-size:13.5px;color:#5A5690;margin-top:4px}
+.steps span b{display:inline;font-size:inherit;color:var(--ink)}
+.steps a{color:var(--lamp)}
+.form{background:var(--ink);color:var(--night);border-radius:28px;padding:26px;position:sticky;top:84px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+.form h3{font-size:28px}
+.form p.note{font-size:14px;color:#4F4B86;margin-top:4px}
 .field{margin-top:14px}
-.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
-.field input,.field select,.field textarea{width:100%;border:1.5px solid #CFCBF0;border-radius:12px;padding:12px 13px;font:16px Pretendard,sans-serif;color:var(--night);background:#fff}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand)}
-.chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;line-height:1.45}
+.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px;color:#2A2660}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid #C9C5EE;border-radius:14px;padding:13px 14px;font:16px Pretendard,sans-serif;color:var(--night);background:#fff;transition:border-color .2s,box-shadow .2s}
+.field input::placeholder,.field textarea::placeholder{color:#7C78AE}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--night);box-shadow:0 0 0 4px rgba(22,19,63,.12)}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;line-height:1.45;color:#2A2660}
 .chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--brand);flex:none}
-.chk em{font-style:normal;color:var(--brand);font-weight:700}
-details.terms{margin-top:10px;font-size:12.5px;color:#5A5690}
+.chk em{font-style:normal;color:#D1124F;font-weight:700}
+details.terms{margin-top:10px;font-size:12.5px;color:#4F4B86}
 details.terms summary{cursor:pointer}
 details.terms div{padding:6px 0 0}
-.form .btn{width:100%;margin-top:16px}
+.form .btn{width:100%;margin-top:18px}
 .msg{margin-top:12px;font-size:14px;font-weight:600}
-.msg.err{color:#D1124F}.msg.ok{color:#1F7A4D}
-.kakao{margin-top:10px;width:100%;background:#FEE500;color:#191919}
+.msg.err{color:#C40F49}.msg.ok{color:#1A7047}
+.kakao{margin-top:10px;width:100%;background:#FEE500!important;color:#191919!important}
+.perk-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:56px}
+.perk-head h3{font-size:clamp(24px,3vw,32px)}
+.perk-nav{display:flex;gap:8px}
+.perk-nav button{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.06);color:var(--ink);font-size:18px;cursor:pointer;transition:background .2s}
+.perk-nav button:hover{background:rgba(255,255,255,.14)}
+.perks{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);grid-auto-columns:minmax(250px,1fr);gap:12px;margin-top:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
+@media(min-width:1100px){.perks{grid-auto-columns:calc((100% - 36px)/4)}}
+.perks>div{scroll-snap-align:start;background:linear-gradient(180deg,rgba(36,31,99,.55),rgba(28,24,80,.55));border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:border-color .25s,transform .3s var(--ease)}
+.perks>div:hover{border-color:var(--line2);transform:translateY(-3px)}
+.perks .k{font-size:13px;font-weight:800;color:var(--lamp)}
+.perks b{display:block;font-size:18.5px;margin:6px 0 6px;line-height:1.35}
+.perks span{font-size:14.5px;color:var(--mute);line-height:1.55;display:block}
+.perks span b{display:inline;font-size:inherit;color:var(--lamp);margin:0}
+.perks a{color:var(--lamp)}
+.perks>div.hot{background:linear-gradient(140deg,rgba(255,46,110,.20),rgba(91,72,214,.22));border-color:rgba(255,46,110,.45)}
+.fine{font-size:13.5px;color:var(--mute);margin-top:14px;max-width:60em}
+.fine a{color:var(--lamp)}
 
 /* 지점 */
-.branches{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-@media(max-width:820px){.branches{grid-template-columns:1fr}}
-.br{border-top:3px solid var(--lamp);background:var(--panel);border-radius:0 0 var(--r-md) var(--r-md);padding:18px}
-.br h3{font-size:24px}
+.branches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+@media(max-width:900px){.branches{grid-template-columns:1fr}}
+.br{background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s var(--ease),border-color .25s}
+.br:hover{transform:translateY(-4px);border-color:var(--line2)}
+.br .ph{aspect-ratio:4/3;overflow:hidden}
+.br .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.br:hover .ph img{transform:scale(1.05)}
+.br .bd{padding:20px;display:flex;flex-direction:column;flex:1}
+.br h3{font-size:26px}
+.br h3 a{text-decoration:none}
 .br .addr{color:var(--mute);font-size:14.5px;margin-top:4px}
-.br ul{list-style:none;margin-top:12px;font-size:14.5px}
-.br li{padding:6px 0;border-top:1px solid var(--line)}
-.br .links{display:flex;gap:8px;margin-top:14px}
-.br .links a{flex:1;text-align:center;text-decoration:none;font-size:14px;font-weight:700;padding:11px 8px;border-radius:10px;box-shadow:inset 0 0 0 1.5px var(--line)}
-.br .links a.ai{background:var(--ink);color:var(--night);box-shadow:none}
+.br .rate{color:var(--lamp);font-weight:800;font-size:14px;margin-top:6px}
+.br ul{list-style:none;margin-top:14px;font-size:14.5px;display:grid;gap:7px;flex:1}
+.br li{padding-left:18px;position:relative;color:#DDD9FF}
+.br li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--lamp)}
+.br .links{display:flex;gap:8px;margin-top:18px}
+.br .links a{flex:1;text-align:center;text-decoration:none;font-size:14px;font-weight:800;padding:12px 8px;border-radius:var(--pill);background:var(--ink);color:var(--night);transition:background .2s}
+.br .links a:hover{background:#fff}
+.br .more-link{display:block;text-align:center;margin-top:12px;font-size:14px;font-weight:700;color:var(--lamp);text-decoration:none}
+.br .more-link:hover{text-decoration:underline}
+@media(max-width:900px){.br{display:grid;grid-template-columns:42% 1fr}.br .ph{aspect-ratio:auto;height:100%}}
+@media(max-width:560px){.br{display:flex}.br .ph{aspect-ratio:16/10}}
 
-/* 패키지 */
-.pk{width:100%;border-collapse:collapse;margin-top:22px;font-size:15px}
-.pk th,.pk td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line)}
-.pk th{color:var(--mute);font-weight:600;font-size:13.5px}
-.pk td:first-child{font-weight:800}
+/* 요금 계산기 */
+.calc{margin-top:20px;background:linear-gradient(180deg,rgba(36,31,99,.6),rgba(22,19,63,.6));border:1px solid var(--line2);border-radius:28px;padding:24px}
+.calc h3{font-size:28px}
+.calc-row{display:grid;grid-template-columns:1.2fr 1.2fr 1.4fr .7fr;gap:10px;margin-top:16px}
+@media(max-width:760px){.calc-row{grid-template-columns:1fr 1fr}}
+.calc-row label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--mute);font-weight:700}
+.calc-row select,.calc-row input{background:rgba(14,12,44,.7);color:var(--ink);border:1.5px solid var(--line2);border-radius:14px;padding:12px;font:15px Pretendard,sans-serif;width:100%;color-scheme:dark}
+.calc-row select:focus,.calc-row input:focus{outline:none;border-color:var(--lamp)}
+.calc-out{margin-top:16px;padding:18px;border-radius:18px;background:rgba(14,12,44,.6);font-size:15px;line-height:1.65}
+.calc-out b{font-family:"Black Han Sans",sans-serif;font-weight:400;font-size:34px;color:var(--lamp);font-variant-numeric:tabular-nums}
+.calc-out a{color:var(--lamp)}
+.calc-out .tier{display:inline-block;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:var(--pill);background:rgba(255,255,255,.08);margin-left:6px;vertical-align:4px}
 
-/* 커뮤니티 */
-.ig{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:22px;padding:22px;border-radius:var(--r-lg);background:linear-gradient(120deg,#2B1D5E,#4A1A55)}
-.ig p{flex:1;min-width:240px;color:#E3DCFF}
-.ig strong{display:block;font-size:22px;color:#fff;font-family:"Black Han Sans",sans-serif;font-weight:400}
+/* 후기: 가로 스냅 */
+.rvs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);gap:14px;margin-top:30px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none}
+.rvs::-webkit-scrollbar{display:none}
+@media(min-width:1100px){.rvs{grid-auto-columns:calc((100% - 28px)/3)}}
+.rvs blockquote{scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;font-size:16.5px;line-height:1.6;display:flex;flex-direction:column}
+.rvs blockquote .st{color:var(--lamp);letter-spacing:2px;font-size:14px;margin-bottom:10px}
+.rvs cite{display:block;font-style:normal;color:var(--dim);font-size:13px;margin-top:auto;padding-top:14px}
+.big-score{display:flex;align-items:baseline;gap:10px}
+.big-score b{font-family:"Black Han Sans",sans-serif;font-weight:400;font-size:clamp(54px,7vw,88px);color:var(--lamp);line-height:1}
+.big-score span{color:var(--mute)}
 
-footer{margin-top:72px;padding:28px 0 40px;border-top:1px solid var(--line);color:var(--dim);font-size:13.5px}
+/* FAQ */
+.faq-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(24px,5vw,72px);align-items:start}
+@media(max-width:900px){.faq-wrap{grid-template-columns:1fr}}
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 40px 18px 0;font-weight:700;font-size:16.5px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:12px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:20px;color:var(--lamp);background:rgba(255,181,71,.08);transition:transform .3s var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--mute);padding:0 0 18px;font-size:15px}
+.faq-wrap .sub a{color:var(--lamp)}
+
+/* 인스타 밴드 */
+.ig{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px;padding:clamp(28px,5vw,48px);border-radius:32px;background:linear-gradient(120deg,rgba(255,46,110,.25),rgba(91,72,214,.30));border:1px solid rgba(255,46,110,.3)}
+.ig strong{display:block;font-size:clamp(28px,4vw,44px);color:#fff;font-family:"Black Han Sans",sans-serif;font-weight:400;line-height:1.1}
+.ig p{color:#E3DCFF;margin-top:8px}
+@media(max-width:640px){.ig{grid-template-columns:1fr}}
+
+footer{margin-top:clamp(64px,9vw,112px);padding:32px 0 120px;border-top:1px solid var(--line);color:var(--dim);font-size:13.5px}
 footer .row{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer .logo{font-size:28px;color:var(--ink);display:inline-block;margin-bottom:12px}
 footer button{background:none;border:0;color:var(--mute);text-decoration:underline;font:inherit;cursor:pointer;padding:0}
 
-/* 신청 시트 */
-.sheet-bg{position:fixed;inset:0;background:rgba(8,6,30,.66);z-index:50;display:flex;align-items:flex-end;justify-content:center}
-.sheet{width:100%;max-width:520px;background:var(--ink);color:var(--night);border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;animation:up .22s ease-out}
-@media(min-width:620px){.sheet-bg{align-items:center}.sheet{border-radius:22px}}
-@keyframes up{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
-.sheet .slot{background:var(--night);color:var(--ink);border-radius:14px;padding:14px 16px;margin-top:12px}
+/* 시트 */
+.sheet-bg{position:fixed;inset:0;background:rgba(8,6,30,.66);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:520px;background:var(--ink);color:var(--night);border-radius:26px 26px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;animation:up .32s var(--ease)}
+@media(min-width:620px){.sheet-bg{align-items:center}.sheet{border-radius:26px}}
+@keyframes up{from{transform:translateY(30px);opacity:.3}to{transform:none;opacity:1}}
+.sheet .slot{background:var(--night);color:var(--ink);border-radius:16px;padding:14px 16px;margin-top:12px}
 .sheet .slot b{font-size:18px}
 .sheet .slot .price{margin-top:6px;font-variant-numeric:tabular-nums}
 .sheet .slot .price s{color:var(--mute);margin-right:8px;font-size:14px}
 .sheet .slot .price strong{color:var(--lamp);font-size:22px}
-.sheet .x{float:right;border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:var(--night)}
-.sheet h3{font-size:22px}
-
-/* 게임 매거진 */
-.mag-tabs{display:flex;gap:8px;overflow-x:auto;margin-top:22px;padding-bottom:6px;scrollbar-width:none}
-.mag-tabs::-webkit-scrollbar{display:none}
-.mag-tabs button{flex:none;border:1.5px solid var(--line);background:none;color:var(--mute);font:600 14px Pretendard,sans-serif;padding:9px 14px;border-radius:999px;cursor:pointer}
-.mag-tabs button[aria-pressed=true]{background:var(--lamp);border-color:var(--lamp);color:var(--night)}
-.mag-tabs button small{font-weight:500;opacity:.75;margin-left:4px}
-.mag{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 14px;margin-top:18px}
-@media(max-width:900px){.mag{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.mag{grid-template-columns:repeat(2,1fr);gap:16px 10px}}
-.post{all:unset;cursor:pointer;display:block;min-width:0}
-.post:focus-visible{outline:3px solid var(--lamp);outline-offset:3px;border-radius:12px}
-.post .th{position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:var(--panel)}
-.post img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-.post:hover img{transform:scale(1.03)}
-.post .kind{position:absolute;left:8px;top:8px;font-size:11.5px;font-weight:700;background:rgba(14,12,44,.78);color:var(--ink);padding:4px 8px;border-radius:6px}
-.post .ser{display:block;color:var(--lamp);font-size:12.5px;font-weight:700;margin-top:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.post .hl{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15px;font-weight:700;line-height:1.4;margin-top:3px}
-.mag-more{display:flex;justify-content:center;margin-top:22px}
+.sheet .x{float:right;border:0;background:rgba(22,19,63,.08);width:36px;height:36px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;color:var(--night)}
+.sheet h3{font-size:24px}
 .viewer{max-width:560px}
-.viewer .media{margin:12px -18px 0;background:#000}
-.viewer video{display:block;width:100%;max-height:62vh;background:#000}
+.viewer .media{margin:12px -20px 0;background:#0B0A1E}
+.viewer video{display:block;width:100%;max-height:62vh;background:#0B0A1E}
 .viewer .cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:0}
 .viewer .cards img{flex:none;width:100%;scroll-snap-align:center;display:block}
-.viewer .cnt{font-size:12.5px;color:#5A5690;text-align:center;margin-top:6px}
-.viewer .ser{color:#B0570A;font-weight:800;font-size:13px;margin-top:14px}
+.viewer .cnt{font-size:12.5px;color:#4F4B86;text-align:center;margin-top:6px}
+.viewer .ser{color:#9A4A06;font-weight:800;font-size:13px;margin-top:14px}
 .viewer h4{font-size:20px;line-height:1.35;margin-top:4px}
 .viewer .txt{white-space:pre-wrap;font-size:15px;line-height:1.7;margin-top:10px;color:#2A2660}
 .viewer .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
@@ -201,104 +341,111 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 .viewer .acts{display:flex;gap:8px;margin-top:16px}
 .viewer .acts a,.viewer .acts button{flex:1}
 
-.br h3 a{text-decoration:none}
-.br .more-link{display:block;text-align:center;margin-top:10px;font-size:14px;font-weight:700;color:var(--lamp)}
-.br .rate{color:var(--lamp);font-weight:800;font-size:14px;margin-top:4px}
-.calc{margin-top:28px;background:var(--deep);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
-.calc h3{font-size:24px}
-.calc-row{display:grid;grid-template-columns:1.2fr 1.2fr 1.4fr .7fr;gap:10px;margin-top:14px}
-@media(max-width:720px){.calc-row{grid-template-columns:1fr 1fr}}
-.calc-row label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--mute);font-weight:600}
-.calc-row select,.calc-row input{background:var(--panel);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:11px 10px;font:15px Pretendard,sans-serif;width:100%;color-scheme:dark}
-.calc-out{margin-top:16px;padding:16px;border-radius:14px;background:var(--panel);font-size:15px;line-height:1.6}
-.calc-out b{font-size:26px;color:var(--lamp);font-variant-numeric:tabular-nums}
-.calc-out .tier{display:inline-block;font-size:12.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--line);margin-left:6px;vertical-align:4px}
-.rvs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
-@media(max-width:820px){.rvs{grid-template-columns:1fr}}
-.rvs blockquote{background:var(--panel);border-radius:var(--r-md);padding:18px;font-size:15.5px;line-height:1.6}
-.rvs cite{display:block;font-style:normal;color:var(--dim);font-size:13px;margin-top:10px}
-.faq{margin-top:18px;border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
-.faq summary{cursor:pointer;list-style:none;padding:16px 30px 16px 0;font-weight:700;position:relative}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:22px;color:var(--lamp)}
-.faq details[open] summary::after{content:"−"}
-.faq details p{color:var(--mute);padding:0 0 16px;font-size:15px}
-.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--night);text-decoration:none;font-weight:800;font-size:14.5px;padding:12px 16px;border-radius:999px;box-shadow:0 8px 24px -6px rgba(0,0,0,.55)}
+/* 플로팅: 데스크톱은 AI 상담사 버튼, 모바일은 하단 액션 바 */
+.fab{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--night);text-decoration:none;font-weight:800;font-size:14.5px;padding:13px 18px;border-radius:var(--pill);box-shadow:0 12px 30px -8px rgba(0,0,0,.6);transition:transform .25s var(--ease)}
+.fab:hover{transform:translateY(-2px)}
 .fab i{width:9px;height:9px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 3px rgba(61,220,151,.25)}
+.dock{display:none}
+@media(max-width:760px){
+  .fab{display:none}
+  .dock{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:6px;padding:6px;border-radius:var(--pill);background:rgba(14,12,44,.86);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border:1px solid var(--line2);box-shadow:0 18px 40px -12px rgba(0,0,0,.7);transition:transform .35s var(--ease)}
+  .dock.hide{transform:translateY(140%)}
+  .dock a{text-decoration:none;text-align:center;font-weight:800;font-size:14px;padding:13px 6px;border-radius:var(--pill);color:var(--ink)}
+  .dock a.p{background:var(--lamp);color:#1B1640}
+}
 
-.only{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
-@media(max-width:820px){.only{grid-template-columns:1fr}}
-.only .o{display:flex;flex-direction:column;gap:6px;text-decoration:none;background:var(--panel);border-radius:var(--r-md);padding:18px;border-top:3px solid var(--brand)}
-.only .o:hover{background:#2A2470}
-.only .o-k{color:var(--lamp);font-size:13px;font-weight:800}
-.only .o b{font-size:21px;font-family:"Black Han Sans",sans-serif;font-weight:400}
-.only .o span:last-child{color:var(--mute);font-size:14.5px}
-.for-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px}
-.for-row span{color:var(--dim);font-size:14px;margin-right:4px}
-.for-row a{text-decoration:none;border:1.5px solid var(--line);border-radius:999px;padding:8px 13px;font-size:14px;font-weight:600}
-.for-row a:hover{border-color:var(--lamp)}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+@media(prefers-reduced-transparency:reduce){.top,.drawer,.dock,.rating{background:var(--deep);backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="#">PLAY <b>N</b></a>
-  <nav><a href="#deals">공실특가</a><a href="worlds/">롤드컵 이벤트</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="me/">내 N CREW</a><a href="#branches">지점·요금</a><a href="#faq">FAQ</a><a href="#crew" class="join">N CREW 가입</a></nav>
+  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/">롤드컵 이벤트</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer"><span></span></button>
 </div></header>
+<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/">롤드컵 이벤트</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
 
 <main>
 <section class="hero"><div class="wrap">
   <div class="bulbs" aria-hidden="true"><svg viewBox="0 0 1000 90" preserveAspectRatio="none" id="bulbs"></svg></div>
-  <h1 class="disp"><span>이번 주,</span><span>비어있는 밤을</span><span>먼저 드려요</span></h1>
-  <p class="lead">홍대·연남 루프탑 게임파티룸 플레이앤. 고사양 PC와 프로급 키보드·헤드셋, 루프탑 바베큐까지. N CREW 멤버에게는 이번 주 빈 날짜를 특가로 먼저 열어요.</p>
-  <div class="cta"><a class="btn lamp" href="#deals">이번 주 빈자리 보기</a><a class="btn ghost" href="#crew">N CREW 가입하기</a></div>
-  <a href="worlds/" style="display:block;margin-top:14px;border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#FF4FA3,#3B1F6E);color:#fff;text-decoration:none;font-weight:800;line-height:1.45">🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백 <span style="opacity:.85;font-weight:600">· 10/12~ 나이트·통대관 →</span></a>
+  <div class="hero-grid">
+    <div>
+      <h1 class="disp rv"><span>이번 주,</span><span>비어있는 밤을</span><span class="lamp">먼저 드려요</span></h1>
+      <p class="lead rv">홍대·연남 루프탑 게임파티룸. 고사양 PC와 프로 기어, 루프탑 바베큐까지. N&nbsp;CREW에게는 빈 날짜를 특가로 먼저 열어요.</p>
+      <div class="cta rv"><a class="btn lamp" href="#deals">이번 주 빈자리 보기 <span class="ar">→</span></a><a class="btn ghost" href="#crew">N CREW 가입하기</a></div>
+    </div>
+    <div class="shots rv" aria-hidden="true">
+      <div class="a"><img src="assets/home/hero.webp" alt="" width="900" height="675" fetchpriority="high"></div>
+      <div class="b"><img src="assets/home/neon.webp" alt="" width="900" height="675" loading="lazy"></div>
+      <div class="rating"><b>★ 4.9</b><span>후기 284개</span></div>
+    </div>
+  </div>
+  <a class="event rv" href="worlds/"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span>10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
+</div></section>
 
-  <div class="board" id="deals" aria-live="polite">
+<div class="ticker" aria-label="플레이앤 한눈에"><div class="track">
+  <span><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span><b>루프탑 바베큐</b> 장작·숯 무제한</span><span><b>최대 16명</b> 최소 인원 없음</span><span><b>배달·주류 반입</b> 자유롭게</span><span><b>평점 4.9</b> 스페이스클라우드 후기 284개</span><span><b>N CREW 특가</b> 빈자리 최대 35%</span>
+  <span aria-hidden="true"><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span aria-hidden="true"><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span aria-hidden="true"><b>루프탑 바베큐</b> 장작·숯 무제한</span><span aria-hidden="true"><b>최대 16명</b> 최소 인원 없음</span><span aria-hidden="true"><b>배달·주류 반입</b> 자유롭게</span><span aria-hidden="true"><b>평점 4.9</b> 스페이스클라우드 후기 284개</span><span aria-hidden="true"><b>N CREW 특가</b> 빈자리 최대 35%</span>
+</div></div>
+
+<section class="blk" style="padding-top:clamp(40px,6vw,72px)"><div class="wrap">
+  <div class="board rv" id="deals" aria-live="polite">
     <div class="board-head">
       <div><h2 class="disp">이번 주 빈자리</h2><div class="sub" id="boardSub">빈자리를 불러오는 중이에요</div></div>
       <div class="tabs" role="tablist" id="tabs"></div>
     </div>
-    <div id="grid"></div>
-    <div class="legend"><span><i style="background:#2A2470;box-shadow:0 0 0 1px #4B44A6 inset"></i>예약 가능(멤버 특가)</span><span><i style="background:rgba(58,53,128,.25)"></i>마감</span><span><i style="background:var(--lamp)"></i>주말·연휴 요금</span></div>
+    <div id="grid"><div class="skel" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="legend"><span><i style="background:#2C2675;box-shadow:0 0 0 1px rgba(120,110,230,.6) inset"></i>예약 가능(멤버 특가)</span><span><i style="background:rgba(58,53,128,.25)"></i>마감</span><span><i style="background:var(--lamp)"></i>주말·연휴 요금</span></div>
+  </div>
+</div></section>
+
+<section class="blk" id="space"><div class="wrap">
+  <h2 class="disp sh2 rv">들어서는 순간, 오늘 밤 계획 끝</h2>
+  <p class="sub rv">실제 지점 사진이에요. 게임, 노래, 바베큐까지 한 공간에서.</p>
+  <div class="bento">
+    <figure class="tile t-gear rv"><img src="assets/home/gearwall.webp" alt="연트럴파크점 기어 월, 마우스와 키보드가 벽 가득 진열된 모습" loading="lazy" width="675" height="900"><figcaption><b>기어 월</b><span>마우스 11종, 키보드 8종 골라 쓰기</span></figcaption></figure>
+    <figure class="tile t-roof rv"><img src="assets/home/rooftop.webp" alt="연남루프탑점 루프탑, 잔디와 캠핑 의자" loading="lazy" width="900" height="675"><figcaption><b>루프탑 바베큐</b><span>장작·숯·불판 무제한, 1인 1만원</span></figcaption></figure>
+    <figure class="tile t-tv rv"><img src="assets/home/lounge.webp" alt="연트럴파크점 눕는 좌식 의자와 게이밍 데스크" loading="lazy" width="675" height="900"><figcaption><b>눕는 좌식 의자</b><span>밤새 게임해도 편하게</span></figcaption></figure>
+    <figure class="tile t-kara rv"><img src="assets/home/karaoke.webp" alt="연남루프탑점 빔프로젝터 노래방과 아케이드 스틱" loading="lazy" width="900" height="654"><figcaption><b>빔프로젝터 노래방</b><span>PS5·스위치·아케이드 스틱</span></figcaption></figure>
+    <figure class="tile t-games rv"><img src="assets/home/games.webp" alt="홍대루프탑점 보드게임 선반" loading="lazy" width="900" height="900"><figcaption><b>보드게임 15종+</b><span>PC 쉬는 시간에</span></figcaption></figure>
   </div>
 </div></section>
 
 <section class="blk" id="only"><div class="wrap">
-  <h2 class="disp">플레이앤에만 있는 것</h2>
-  <div class="only">
-    <a class="o" href="gear/"><span class="o-k">기어 라이브러리</span><b>사기 전에 써보는 곳</b><span>데스에더 V3 프로, 지슈라, 닌자87 PRO, GSP 670… 지점별 장비 전부 공개. 다음에 들일 장비 투표도 해요.</span></a>
-    <a class="o" href="plan/"><span class="o-k">파티 플래너</span><b>오늘 뭐 하지?</b><span>인원과 분위기만 고르면 같이 할 게임, 맞는 지점, 예상 요금까지 정리해 드려요.</span></a>
-    <a class="o" href="league/"><span class="o-k">플레이앤 리그</span><b>다섯 명이서 몇 연승까지?</b><span>매달 열리는 롤 5인 자유랭크 연승전. 지점별 1위는 명예의 전당에 영구히 남아요.</span></a>
-    <a class="o" href="#magazine"><span class="o-k">게임 매거진</span><b>매일 올라오는 게임 정보</b><span>친구랑 할 게임, 신작, 세일, 롤드컵 소식을 주제별로 모았어요.</span></a>
+  <h2 class="disp sh2 rv">플레이앤에만 있는 것</h2>
+  <div class="only rv">
+    <a class="o" href="gear/"><span class="o-k">기어 라이브러리</span><b>사기 전에 써보는 곳</b><span class="d">데스에더 V3 프로, 지슈라, 닌자87 PRO, GSP 670… 지점별 장비 전부 공개. 다음에 들일 장비 투표도 해요.</span><span class="go" aria-hidden="true">→</span></a>
+    <a class="o" href="plan/"><span class="o-k">파티 플래너</span><b>오늘 뭐 하지?</b><span class="d">인원과 분위기만 고르면 같이 할 게임, 맞는 지점, 예상 요금까지 정리해 드려요.</span><span class="go" aria-hidden="true">→</span></a>
+    <a class="o" href="league/"><span class="o-k">플레이앤 리그</span><b>다섯 명이서 몇 연승까지?</b><span class="d">매달 열리는 롤 5인 자유랭크 연승전. 지점별 1위는 명예의 전당에 영구히 남아요.</span><span class="go" aria-hidden="true">→</span></a>
+    <a class="o" href="#magazine"><span class="o-k">게임 매거진</span><b>매일 올라오는 게임 정보</b><span class="d">친구랑 할 게임, 신작, 세일, 롤드컵 소식을 주제별로 모았어요.</span><span class="go" aria-hidden="true">→</span></a>
   </div>
-  <div class="for-row"><span>이럴 때 플레이앤</span><a href="for/military/">나라사랑 애국자 (군인)</a><a href="for/worlds/">롤드컵 단체 관람</a><a href="for/birthday/">생일 파티</a><a href="for/club/">동아리·회사 내전</a></div>
+  <div class="for-row rv"><span>이럴 때 플레이앤</span><a href="for/military/">나라사랑 애국자 (군인)</a><a href="for/worlds/">롤드컵 단체 관람</a><a href="for/birthday/">생일 파티</a><a href="for/club/">동아리·회사 내전</a></div>
 </div></section>
 
 <section class="blk" id="magazine"><div class="wrap">
-  <h2 class="disp">게임 매거진</h2>
-  <p class="sub">@playn_no.1에 올린 게임 추천, 신작, 기어, e스포츠 소식을 주제별로 모아뒀어요. 친구들이랑 뭐 할지 고를 때 열어보세요.</p>
+  <h2 class="disp sh2 rv">게임 매거진</h2>
+  <p class="sub rv">@playn_no.1에 올린 게임 추천, 신작, 기어, e스포츠 소식을 주제별로 모아뒀어요.</p>
   <div class="mag-tabs" id="magTabs" role="toolbar" aria-label="매거진 주제"></div>
   <div class="mag" id="mag"><p class="sub">불러오는 중이에요</p></div>
   <div class="mag-more"><button class="btn ghost" id="magMore" hidden>더 보기</button></div>
 </div></section>
 
 <section class="blk" id="crew"><div class="wrap">
-  <h2 class="disp">N CREW, 플레이앤 단골 모임</h2>
-  <p class="sub">한 번 놀러 온 친구들이 다음에도 편하게 다시 모일 수 있게. 가입비는 없어요.</p>
-  <div class="crew">
-    <ol class="steps">
+  <h2 class="disp sh2 rv">N CREW, 플레이앤 단골 모임</h2>
+  <p class="sub rv">한 번 놀러 온 친구들이 다음에도 편하게 다시 모일 수 있게. 가입비는 없어요.</p>
+  <div class="crew-wrap">
+    <ol class="steps rv">
       <li><b>가입</b><span>이름과 번호만 남기면 끝. 특가 알림 수신에 동의해 주세요.</span></li>
       <li><b>매주 빈자리 알림</b><span>그 주에 비어있는 날짜를 카카오톡·문자로 먼저 알려드려요.</span></li>
       <li><b>멤버 특가로 신청</b><span>이 페이지에서 날짜를 고르면 호스트가 확인 후 문자로 확정해 드려요.</span></li>
       <li><b>입금하면 예약 완료</b><span>확정 문자에 적힌 계좌로 입금하면 끝. 선착순이라 빠를수록 유리해요.</span></li>
       <li><b>올수록 레벨업</b><span>방문할수록 루키 → 레귤러 → 에이스 → 레전드. 10번이면 모든 예약 20% 할인. 쿠폰은 자동으로 들어오고, <b>내 N CREW에서 예약하면 할인이 바로 적용</b>돼요. <a href="me/">내 N CREW 보기</a></span></li>
     </ol>
-    <form class="form" id="joinForm" novalidate>
+    <form class="form rv" id="joinForm" novalidate>
       <h3 class="disp">N CREW 가입</h3>
       <p class="note">가입하면 바로 이번 주 특가를 신청할 수 있어요.</p>
-      <p class="note" id="refNote" hidden style="background:#FFE9C2;color:#5A3A00;border-radius:10px;padding:8px 10px;margin-top:8px;font-weight:700"></p>
+      <p class="note" id="refNote" hidden style="background:#FFE9C2;color:#5A3A00;border-radius:12px;padding:8px 10px;margin-top:8px;font-weight:700"></p>
       <div class="field"><label for="jName">이름</label><input id="jName" autocomplete="name" maxlength="20" required></div>
       <div class="field"><label for="jPhone">휴대폰 번호</label><input id="jPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" required></div>
       <div class="field"><label for="jBranch">자주 가는 지점</label><select id="jBranch"><option value="">상관없어요</option><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></div>
@@ -310,9 +457,10 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
       <a class="btn kakao" id="kakaoBtn" target="_blank" rel="noopener" hidden>카카오톡 채널 친구 추가</a>
     </form>
   </div>
-  <h3 class="disp" style="font-size:24px;margin-top:34px">N CREW 혜택 한눈에</h3>
-  <div class="perks">
-    <div><span class="k">가입하면 · 루키</span><b>빈자리 특가 20%</b><span>이번 주 빈자리를 멤버가로. <b style="display:inline;font-size:inherit;color:var(--lamp)">당일 예약은 35%</b></span></div>
+
+  <div class="perk-head"><h3 class="disp">N CREW 혜택 한눈에</h3><div class="perk-nav"><button type="button" data-dir="-1" aria-label="이전 혜택">←</button><button type="button" data-dir="1" aria-label="다음 혜택">→</button></div></div>
+  <div class="perks" id="perks">
+    <div><span class="k">가입하면 · 루키</span><b>빈자리 특가 20%</b><span>이번 주 빈자리를 멤버가로. <b>당일 예약은 35%</b></span></div>
     <div><span class="k">2번 방문 · 레귤러</span><b>음료 2 + 물 2</b><span>올 때마다 1.5L 음료 2병과 물 2병 무료</span></div>
     <div><span class="k">5번 방문 · 에이스</span><b>3시간 연장권</b><span>입실 전이나 퇴실 후로 3시간 더. 앞뒤 예약 때문에 못 쓰면 4만원 할인</span></div>
     <div class="hot"><span class="k">10번 방문 · 레전드</span><b>모든 예약 20% + 통대관 무료</b><span>통대관 1회 무료 (금·토 제외, 금·토는 야간 예약하면 통대관으로 업그레이드) + 보증금 면제</span></div>
@@ -320,8 +468,6 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <div class="hot"><span class="k">초대왕 · VIP</span><b>10만원 할인권 + 매번 10%</b><span>내가 초대한 친구들이 5번 이상 이용하면 VIP로 승급</span></div>
     <div><span class="k">나라사랑 애국자</span><b>군인 첫 예약 5만원 할인</b><span>사진 한 장으로 온라인 인증(AI 자동 확인)하면 배지 + 방문마다 음료·물 2병. <a href="for/military/">인증 방법</a></span></div>
     <div><span class="k">플레이앤 리그</span><b>1위 평일 야간 무료</b><span>5명이 롤 자유랭크 연승 도전. 지점별 1위 팀은 평일 야간 패키지 무료 (5인). <a href="league/">순위 보기</a></span></div>
-  </div>
-  <div class="perks" style="margin-top:12px">
     <div><span class="k">크루장</span><b>음료 4병 + 1시간 연장</b><span>같이 온 친구 3명이 그날 내 초대 링크로 가입하면</span></div>
     <div><span class="k">14일 재방문</span><b>3만원 할인권</b><span>다녀간 날부터 14일 안에 다시 예약하면 자동으로 들어와요</span></div>
     <div><span class="k">평일 주간 스탬프</span><b>3번 오면 1번 무료</b><span>평일 주간 패키지 3번 이용할 때마다 무료권 1장</span></div>
@@ -331,25 +477,25 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <div><span class="k">리그 도전</span><b>5연승이면 음료 2병</b><span>순위와 상관없이 5연승 이상 기록한 팀원 모두</span></div>
     <div><span class="k">친구 초대 · VIP</span><b>초대할수록 커져요</b><span>친구 첫 예약 → 둘 다 2시간 연장권, 친구들 5번 이용 → VIP</span></div>
   </div>
-  <p class="sub" style="font-size:13.5px;margin-top:10px"><b style="color:var(--lamp)">할인·쿠폰은 playn.kr 홈페이지 예약에서만 적용돼요</b> (<a href="me/">내 N CREW → 멤버 예약하기</a> 또는 위 빈자리 보드). 할인은 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물·연장권 같은 서비스는 네이버·스페이스클라우드 예약이어도 받을 수 있어요. 쿠폰은 받은 날부터 6개월 동안 쓸 수 있고, <a href="me/">내 N CREW</a>에서 확인할 수 있어요.</p>
+  <p class="fine"><b style="color:var(--lamp)">할인·쿠폰은 playn.kr 홈페이지 예약에서만 적용돼요</b> (<a href="me/">내 N CREW → 멤버 예약하기</a> 또는 위 빈자리 보드). 할인은 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물·연장권 같은 서비스는 네이버·스페이스클라우드 예약이어도 받을 수 있어요. 쿠폰은 받은 날부터 6개월 동안 쓸 수 있고, <a href="me/">내 N CREW</a>에서 확인할 수 있어요.</p>
 </div></section>
 
 <section class="blk" id="branches"><div class="wrap">
-  <h2 class="disp">지점</h2>
-  <p class="sub">세 곳 모두 게이밍 PC 5대와 프로 무선 기어, 노래방, 루프탑 바베큐가 있어요. 홍대입구역에서 걸어서 1~5분이에요.</p>
+  <h2 class="disp sh2 rv">지점</h2>
+  <p class="sub rv">세 곳 모두 게이밍 PC 5대와 프로 무선 기어, 노래방, 루프탑 바베큐가 있어요. 홍대입구역에서 걸어서 1~5분이에요.</p>
   <div class="branches">
-    <article class="br"><h3 class="disp"><a href="hongdae/">홍대루프탑점</a></h3><div class="addr">홍대입구역 1번 출구 · 4층 단독 · 최대 16명</div><div class="rate">★ 4.91 · 후기 172개</div>
+    <article class="br rv"><div class="ph"><img src="assets/home/hd.webp" alt="홍대루프탑점 PC 좌석" loading="lazy" width="861" height="900"></div><div class="bd"><h3 class="disp"><a href="hongdae/">홍대루프탑점</a></h3><div class="addr">홍대입구역 1번 출구 · 4층 단독 · 최대 16명</div><div class="rate">★ 4.91 · 후기 172개</div>
       <ul><li>전 좌석 더블모니터 PC 5대</li><li>75인치 TV · PS5 · 스위치 · 보드게임 15종+</li><li>루프탑 바베큐·불멍</li></ul>
-      <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/9434661597" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/43667" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="hongdae/">장비·요금·후기 자세히 보기</a></article>
-    <article class="br"><h3 class="disp"><a href="yeonnam/">연남루프탑점</a></h3><div class="addr">홍대입구역 3번 출구 1분 · 3층 단독 · 최대 16명</div><div class="rate">★ 4.90 · 후기 99개</div>
+      <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/9434661597" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/43667" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="hongdae/">장비·요금·후기 자세히 보기</a></div></article>
+    <article class="br rv"><div class="ph"><img src="assets/home/yn.webp" alt="연남루프탑점 게이밍 데스크" loading="lazy" width="900" height="551"></div><div class="bd"><h3 class="disp"><a href="yeonnam/">연남루프탑점</a></h3><div class="addr">홍대입구역 3번 출구 1분 · 3층 단독 · 최대 16명</div><div class="rate">★ 4.90 · 후기 99개</div>
       <ul><li>RTX 4070 더블모니터 PC 5대</li><li>데스에더 V3 프로·닌자87 PRO 등 전체 무선 기어</li><li>빔프로젝터 노래방 · 루프탑 바베큐</li></ul>
-      <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/9430485644" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/55750" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="yeonnam/">장비·요금·후기 자세히 보기</a></article>
-    <article class="br"><h3 class="disp"><a href="yeontral/">연트럴파크점</a></h3><div class="addr">홍대입구역 3번 출구 5분 · 5층 · 5명 최적</div><div class="rate">★ 4.85 · 후기 13개</div>
+      <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/9430485644" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/55750" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="yeonnam/">장비·요금·후기 자세히 보기</a></div></article>
+    <article class="br rv"><div class="ph"><img src="assets/home/yt.webp" alt="연트럴파크점 네온 게이밍 룸" loading="lazy" width="675" height="900"></div><div class="bd"><h3 class="disp"><a href="yeontral/">연트럴파크점</a></h3><div class="addr">홍대입구역 3번 출구 5분 · 5층 · 5명 최적</div><div class="rate">★ 4.85 · 후기 13개</div>
       <ul><li>RTX 5070 · 320Hz 더블모니터 PC 5대</li><li>8K 마우스 11종 · 자석축 키보드 8종</li><li>눕는 좌식 의자 · 루프탑 바베큐</li></ul>
-      <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/12071850850" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/72605" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="yeontral/">장비·요금·후기 자세히 보기</a></article>
+      <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/12071850850" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/72605" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="yeontral/">장비·요금·후기 자세히 보기</a></div></article>
   </div>
 
-  <div class="calc" id="calc">
+  <div class="calc rv" id="calc">
     <h3 class="disp">요금 계산기</h3>
     <p class="sub" style="margin-top:4px">날짜와 패키지를 고르면 바로 계산돼요. 보증금 20만원은 별도이고 퇴실 후 돌려드려요.</p>
     <div class="calc-row">
@@ -363,21 +509,20 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 </div></section>
 
 <section class="blk" id="reviews"><div class="wrap">
-  <h2 class="disp">다녀간 친구들</h2>
-  <p class="sub">스페이스클라우드 기준 세 지점 후기 284개, 평균 평점 4.9점이에요.</p>
-  <div class="rvs">
-    <blockquote>“시설도 깨끗하고 컴퓨터도 웬만한 pc방정도로 좋아서 정말 즐겁게 놀고갑니다!”<cite>Sno** · 홍대루프탑점</cite></blockquote>
-    <blockquote>“컴퓨터 사양도 좋고 친구들이랑 추억 쌓기 너무 좋은 곳입니다!!”<cite>승* · 연남루프탑점</cite></blockquote>
-    <blockquote>“인터넷도 빨라서 게임을 까는데 지장이 없어서 좋았어요”<cite>soso · 연트럴파크점</cite></blockquote>
-    <blockquote>“보드게임 종류가 정말 다양해서 시간 가는 줄 모르고 놀았습니다”<cite>임** · 홍대루프탑점</cite></blockquote>
-    <blockquote>“밖에 테라스에서 멍 때리기 좋아요”<cite>seunghun · 연남루프탑점</cite></blockquote>
-    <blockquote>“컴퓨터 사양 좋고 장비도 좋았습니다. 게임 좋아하시는 분들 추천합니다”<cite>노** · 연트럴파크점</cite></blockquote>
+  <div class="head rv"><div><h2 class="disp sh2">다녀간 친구들</h2><p class="sub">스페이스클라우드 기준 세 지점 후기 284개예요.</p></div><div class="big-score"><b>4.9</b><span>/ 5.0</span></div></div>
+  <div class="rvs rv">
+    <blockquote><span class="st">★★★★★</span>“시설도 깨끗하고 컴퓨터도 웬만한 pc방정도로 좋아서 정말 즐겁게 놀고갑니다!”<cite>Sno** · 홍대루프탑점</cite></blockquote>
+    <blockquote><span class="st">★★★★★</span>“컴퓨터 사양도 좋고 친구들이랑 추억 쌓기 너무 좋은 곳입니다!!”<cite>승* · 연남루프탑점</cite></blockquote>
+    <blockquote><span class="st">★★★★★</span>“인터넷도 빨라서 게임을 까는데 지장이 없어서 좋았어요”<cite>soso · 연트럴파크점</cite></blockquote>
+    <blockquote><span class="st">★★★★★</span>“보드게임 종류가 정말 다양해서 시간 가는 줄 모르고 놀았습니다”<cite>임** · 홍대루프탑점</cite></blockquote>
+    <blockquote><span class="st">★★★★★</span>“밖에 테라스에서 멍 때리기 좋아요”<cite>seunghun · 연남루프탑점</cite></blockquote>
+    <blockquote><span class="st">★★★★★</span>“컴퓨터 사양 좋고 장비도 좋았습니다. 게임 좋아하시는 분들 추천합니다”<cite>노** · 연트럴파크점</cite></blockquote>
   </div>
 </div></section>
 
-<section class="blk" id="faq"><div class="wrap">
-  <h2 class="disp">자주 묻는 질문</h2>
-  <div class="faq">
+<section class="blk" id="faq"><div class="wrap faq-wrap">
+  <div class="rv"><h2 class="disp sh2">자주 묻는 질문</h2><p class="sub">더 궁금한 건 <a href="help/">AI 상담사</a>에게 24시간 물어볼 수 있어요. 급한 일은 010-8339-5818로 연락 주세요.</p></div>
+  <div class="faq rv">
     <details><summary>몇 명까지 갈 수 있어요? 최소 인원이 있나요?</summary><p>최소 인원은 없어요. 홍대·연남은 최대 16명, 연트럴파크점은 최대 7명(5명 최적)이에요. 5명까지는 기본 요금이고, 6번째 사람부터 1명당 2만원이 붙어요.</p></details>
     <details><summary>보증금은 어떻게 하나요?</summary><p>20만원을 입실 후 입금하고, 퇴실 1~2일 뒤 돌려드려요. 기본 쓰레기봉투 4,000원은 차감되고, 정리가 안 돼 있으면 청소비가 차감될 수 있어요.</p></details>
     <details><summary>음식이나 술을 가져가도 돼요?</summary><p>네, 배달 음식과 주류 반입 모두 가능해요. 일회용품과 술잔도 구비돼 있어요.</p></details>
@@ -393,15 +538,15 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <details><summary>군인 인증은 어떻게 해요?</summary><p>N CREW 가입 → 내 N CREW에서 인증 코드를 받아 종이에 적고, 밀리패스 화면(다른 폰으로 촬영)이나 군 신분증 옆에 두고 찍어 올리면 돼요. AI가 바로 확인해서 배지와 5만원 할인권을 드려요. 애매하면 호스트가 하루 안에 확인해요. 사진은 확인이 끝나면 자동으로 지워져요.</p></details>
     <details><summary>반려동물과 함께 가도 되나요?</summary><p>반려동물은 함께 올 수 없어요.</p></details>
   </div>
-  <p class="sub" style="margin-top:14px">더 궁금한 건 <a href="help/">AI 상담사</a>에게 24시간 물어볼 수 있어요.</p>
 </div></section>
 
 <section class="blk"><div class="wrap">
-  <div class="ig"><p><strong>@playn_no.1</strong>e스포츠 일정, 게임 패치, 기어 소식을 매일 올려요. 팔로우하고 같이 봐요.</p><a class="btn lamp" href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">인스타그램 열기</a></div>
+  <div class="ig rv"><div><strong>@playn_no.1</strong><p>e스포츠 일정, 게임 패치, 기어 소식을 매일 올려요. 팔로우하고 같이 봐요.</p></div><a class="btn lamp" href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">인스타그램 열기 <span class="ar">→</span></a></div>
 </div></section>
 </main>
 
 <footer><div class="wrap">
+  <a class="logo" href="#">PLAY <b>N</b></a>
   <div class="row"><span>플레이앤 Play N</span><span>문의 010-8339-5818</span><span>카카오톡 채널 playn</span><span>협찬·가맹 dk21yoon@gmail.com</span></div>
   <div class="row" style="margin-top:10px"><button id="leaveBtn" type="button">특가 알림 수신 거부</button></div>
 </div></footer>
@@ -417,7 +562,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
       <div class="field"><label for="rMemo">요청 사항 (선택)</label><textarea id="rMemo" rows="2" maxlength="200" placeholder="예: 바베큐도 하고 싶어요"></textarea></div>
       <button class="btn pink" id="rBtn" style="width:100%;margin-top:16px">특가 신청하기</button>
       <div class="msg" id="rMsg" role="status"></div>
-      <p style="font-size:12.5px;color:#5A5690;margin-top:10px">신청은 선착순이에요. 호스트가 확인한 뒤 확정 문자와 입금 계좌를 보내드려요. 보증금(20만원)은 입실 후 별도예요.</p>
+      <p style="font-size:12.5px;color:#4F4B86;margin-top:10px">신청은 선착순이에요. 호스트가 확인한 뒤 확정 문자와 입금 계좌를 보내드려요. 보증금(20만원)은 입실 후 별도예요.</p>
     </form>
   </div>
 </div>
@@ -428,7 +573,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <h3 class="disp" id="lTitle">특가 알림 수신 거부</h3>
     <p style="margin-top:6px;font-size:14.5px">번호를 입력하면 더 이상 특가·이벤트 알림을 보내지 않아요.</p>
     <div class="field"><label for="lPhone">휴대폰 번호</label><input id="lPhone" type="tel" inputmode="numeric" placeholder="010-0000-0000"></div>
-    <button class="btn ghost" id="lBtn" style="width:100%;margin-top:14px;color:var(--night);box-shadow:inset 0 0 0 1.5px #CFCBF0">수신 거부하기</button>
+    <button class="btn ghost" id="lBtn" style="width:100%;margin-top:14px;color:var(--night);box-shadow:inset 0 0 0 1.5px #C9C5EE">수신 거부하기</button>
     <div class="msg" id="lMsg" role="status"></div>
   </div>
 </div>
@@ -443,7 +588,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <h4 id="pvTitle"></h4>
     <div class="txt" id="pvText"></div>
     <div class="tags" id="pvTags"></div>
-    <div class="acts"><a class="btn pink" id="pvInsta" target="_blank" rel="noopener">인스타그램에서 보기</a><button class="btn ghost" id="pvShare" type="button" style="color:var(--night);box-shadow:inset 0 0 0 1.5px #CFCBF0">링크 복사</button></div>
+    <div class="acts"><a class="btn pink" id="pvInsta" target="_blank" rel="noopener">인스타그램에서 보기</a><button class="btn ghost" id="pvShare" type="button" style="color:var(--night);box-shadow:inset 0 0 0 1.5px #C9C5EE">링크 복사</button></div>
   </div>
 </div>
 
@@ -560,6 +705,27 @@ const t0=new Date(Date.now()+9*36e5);$("cDate").value=ymd(t0);$("cDate").min=ymd
 ["cBr","cDate","cPk","cPpl"].forEach(id=>$(id).addEventListener("input",calc));
 fetch(POSTS_API+"?meta=1").then(r=>r.json()).then(j=>{M=j;calc()}).catch(()=>{$("cOut").textContent="요금을 불러오지 못했어요. 지점 페이지에서 요금표를 확인해 주세요."})})();
 </script>
+<script>
+/* v2 UI: 모바일 메뉴, 스크롤 등장, 혜택 넘기기 */
+(function(){
+const mb=document.getElementById("menuBtn"),dr=document.getElementById("drawer");
+const setM=o=>{mb.setAttribute("aria-expanded",o);mb.setAttribute("aria-label",o?"메뉴 닫기":"메뉴 열기");dr.classList.toggle("open",o)};
+mb.onclick=()=>setM(mb.getAttribute("aria-expanded")!=="true");
+dr.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>setM(false)));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setM(false)});
+const rv=[...document.querySelectorAll(".rv")];
+if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{rootMargin:"0px 0px -8% 0px",threshold:.08});
+  rv.forEach((el,i)=>{const sib=[...el.parentNode.children].filter(x=>x.classList.contains("rv"));el.style.transitionDelay=Math.min(sib.indexOf(el),5)*70+"ms";io.observe(el)});
+}else rv.forEach(el=>el.classList.add("in"));
+const pk=document.getElementById("perks");
+document.querySelectorAll(".perk-nav button").forEach(b=>b.onclick=()=>pk.scrollBy({left:+b.dataset.dir*pk.clientWidth*.8,behavior:"smooth"}));
+/* 모바일 하단 바: 가입 폼이 보이면 숨김 */
+const dock=document.getElementById("dock"),form=document.getElementById("joinForm");
+if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.classList.toggle("hide",es[0].isIntersecting),{threshold:.15}).observe(form);
+})();
+</script>
 <a class="fab" href="help/"><i></i>AI 상담사</a>
+<nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
 </body>
 </html>
