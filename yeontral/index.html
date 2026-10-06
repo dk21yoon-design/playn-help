@@ -36,6 +36,7 @@
 .rv{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
 @media(max-width:820px){.rv{grid-template-columns:1fr}}
 .rv blockquote{background:var(--deep);border:1px solid var(--line);border-radius:var(--r-md);padding:16px;font-size:15px}
+.rv blockquote p{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}.rv .st{color:var(--lamp,#FFB547);letter-spacing:2px;font-size:13px;display:block;margin-bottom:6px}.rvmore{font:inherit;font-weight:700;background:none;border:1px solid var(--line);color:inherit;border-radius:999px;padding:8px 14px;margin-right:8px;cursor:pointer}
 .rv cite{display:block;font-style:normal;color:var(--dim);font-size:13px;margin-top:10px}
 .price{width:100%;min-width:560px;border-collapse:collapse;margin-top:16px;font-size:15px;font-variant-numeric:tabular-nums}
 .price th,.price td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:right}
@@ -77,9 +78,9 @@
     <div class="card"><h3>편의 시설</h3><p style="font-size:15px">냉난방기·선풍기 · 실내 소변기 + 2층 전용 화장실 · 일회용품·음료 구비</p><p class="note">배달 음식·주류 반입 가능 · 주차는 없어요 (모두의주차장 앱 추천)</p></div></div>
   </section>
 
-  <section class="s"><h2 class="disp">이용 후기</h2><p class="sub">스페이스클라우드 평점 4.85, 후기 13개 중 최근 후기예요.</p>
-    <div class="rv"><blockquote>“방과 컴터 관리가 잘되있어요, 인터넷도 빨라서 게임을 까는데 지장이 없어서 좋았어요”<cite>soso · 2026.09 · 스페이스클라우드 후기</cite></blockquote><blockquote>“컴퓨터가 성능이 좋고 기본적인 음료나 일회용품 구비가 되어있어서 너무 편하게 이용하고 왔습니다”<cite>리어맬릭스 · 2026.09 · 스페이스클라우드 후기</cite></blockquote><blockquote>“컴퓨터 사양 좋고 장비도 좋았습니다. 게임 좋아하시는 분들 추천합니다”<cite>노** · 2026.08 · 스페이스클라우드 후기</cite></blockquote></div>
-    <p class="note"><a href="https://www.spacecloud.kr/space/72605" target="_blank" rel="noopener">후기 전체 보기</a></p>
+  <section class="s"><h2 class="disp">이용 후기</h2><p class="sub" id="rvSub">스페이스클라우드 평점 4.85, 후기 13개 중 최근 후기예요.</p>
+    <div class="rv" id="rvList"><blockquote>“방과 컴터 관리가 잘되있어요, 인터넷도 빨라서 게임을 까는데 지장이 없어서 좋았어요”<cite>soso · 2026.09 · 스페이스클라우드 후기</cite></blockquote><blockquote>“컴퓨터가 성능이 좋고 기본적인 음료나 일회용품 구비가 되어있어서 너무 편하게 이용하고 왔습니다”<cite>리어맬릭스 · 2026.09 · 스페이스클라우드 후기</cite></blockquote><blockquote>“컴퓨터 사양 좋고 장비도 좋았습니다. 게임 좋아하시는 분들 추천합니다”<cite>노** · 2026.08 · 스페이스클라우드 후기</cite></blockquote></div>
+    <p class="note"><button type="button" id="rvMoreBtn" class="rvmore" hidden>후기 더 보기</button> <a href="https://www.spacecloud.kr/space/72605" target="_blank" rel="noopener">후기 전체 보기</a></p>
   </section>
 
   <section class="s"><h2 class="disp">요금</h2><p class="sub">패키지 요금이에요. 보증금 20만원은 별도이고 퇴실 후 돌려드려요.</p>
@@ -100,4 +101,12 @@
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
 <div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">나라사랑 애국자 (군인)</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div></div></footer>
 <a class="fab" href="/help/?b=yeontral"><i></i>AI 상담사</a>
+<script>
+(function(){const B="연트럴파크점",e=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+fetch("/assets/reviews.json",{cache:"no-cache"}).then(r=>r.json()).then(R=>{const c=R.branches[B];if(!c||!c.items.length)return;let n=6;
+ const L=document.getElementById("rvList"),M=document.getElementById("rvMoreBtn");
+ document.getElementById("rvSub").textContent=`스페이스클라우드 평점 ${c.avg.toFixed(2)}, 후기 ${c.count}개 중 최근 ${c.items.length}개를 그대로 옮겼어요 (닉네임 일부 가림).`;
+ const draw=()=>{L.innerHTML=c.items.slice(0,n).map(x=>`<blockquote><p>“${e(x.body)}”</p><cite>${e(x.name)} · ${e(x.date.slice(0,7).replace("-","."))} · 스페이스클라우드 후기</cite></blockquote>`).join("");M.hidden=n>=c.items.length};
+ M.onclick=()=>{n+=6;draw()};draw()}).catch(()=>{})})();
+</script>
 </body></html>

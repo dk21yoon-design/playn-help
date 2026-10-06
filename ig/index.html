@@ -62,7 +62,7 @@ h2{font-size:13.5px;color:var(--mute);font-weight:700;margin:24px 4px 0}
   <p class="f">플레이앤 Play N · 문의 010-8339-5818</p>
 </div>
 <script>
-fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site").then(r=>r.json()).then(j=>{if(j.kakao){const k=document.getElementById("kakao");k.href=j.kakao;k.target="_blank";k.rel="noopener";k.hidden=false}}).catch(()=>{});
+fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site").then(r=>r.json()).then(j=>{const k=document.getElementById("kakao");if(j.kakao){k.href=j.kakao;k.target="_blank";k.rel="noopener"}else{k.href="#";k.querySelector(".s").textContent="카카오톡에서 'playn' 검색 · 눌러서 ID 복사";k.onclick=async e=>{e.preventDefault();try{await navigator.clipboard.writeText("playn")}catch(_){}k.querySelector(".s").textContent="복사됨 · 카카오톡 검색창에 붙여넣기"}}k.hidden=false}).catch(()=>{});
 </script>
 </body>
 </html>

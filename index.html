@@ -282,6 +282,23 @@ details.terms div{padding:6px 0 0}
 .calc-out .tier{display:inline-block;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:var(--pill);background:rgba(255,255,255,.08);margin-left:6px;vertical-align:4px}
 
 /* 후기: 가로 스냅 */
+/* reviews wall */
+.rv-tabs{display:flex;gap:8px;margin-top:22px;overflow-x:auto;scrollbar-width:none}.rv-tabs::-webkit-scrollbar{display:none}
+.rv-tabs button{flex:none;font:inherit;font-weight:700;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:9px 15px;cursor:pointer}
+.rv-tabs button small{color:var(--lamp);font-weight:800;margin-left:6px}
+.rv-tabs button.on{background:var(--lamp);color:#1B1640;border-color:var(--lamp)}.rv-tabs button.on small{color:#1B1640}
+.rv-wall{margin-top:22px;display:grid;gap:14px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.rv-row{display:flex;gap:14px;width:max-content;animation:rvmove var(--dur,60s) linear infinite}
+.rv-row.rev{animation-direction:reverse}
+.rv-wall:hover .rv-row{animation-play-state:paused}
+@keyframes rvmove{to{transform:translateX(-50%)}}
+.rv-row blockquote{width:300px;flex:none;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;font-size:15.5px;line-height:1.6;display:flex;flex-direction:column}
+.rv-row blockquote .st{color:var(--lamp);letter-spacing:2px;font-size:13px;margin-bottom:8px}
+.rv-row blockquote p{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.rv-row cite{display:flex;justify-content:space-between;gap:8px;font-style:normal;color:var(--dim);font-size:12.5px;margin-top:auto;padding-top:12px}
+.rv-row cite b{color:var(--ink);font-weight:700}
+.rv-src{color:var(--dim);font-size:12.5px;margin-top:14px}.rv-src a{color:var(--lamp)}
+@media(prefers-reduced-motion:reduce){.rv-wall{-webkit-mask:none;mask:none;overflow-x:auto}.rv-row{animation:none}}
 .rvs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);gap:14px;margin-top:30px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none}
 .rvs::-webkit-scrollbar{display:none}
 @media(min-width:1100px){.rvs{grid-auto-columns:calc((100% - 28px)/3)}}
@@ -509,16 +526,18 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 </div></section>
 
 <section class="blk" id="reviews"><div class="wrap">
-  <div class="head rv"><div><h2 class="disp sh2">다녀간 친구들</h2><p class="sub">스페이스클라우드 기준 세 지점 후기 284개예요.</p></div><div class="big-score"><b>4.9</b><span>/ 5.0</span></div></div>
-  <div class="rvs rv">
-    <blockquote><span class="st">★★★★★</span>“시설도 깨끗하고 컴퓨터도 웬만한 pc방정도로 좋아서 정말 즐겁게 놀고갑니다!”<cite>Sno** · 홍대루프탑점</cite></blockquote>
-    <blockquote><span class="st">★★★★★</span>“컴퓨터 사양도 좋고 친구들이랑 추억 쌓기 너무 좋은 곳입니다!!”<cite>승* · 연남루프탑점</cite></blockquote>
-    <blockquote><span class="st">★★★★★</span>“인터넷도 빨라서 게임을 까는데 지장이 없어서 좋았어요”<cite>soso · 연트럴파크점</cite></blockquote>
-    <blockquote><span class="st">★★★★★</span>“보드게임 종류가 정말 다양해서 시간 가는 줄 모르고 놀았습니다”<cite>임** · 홍대루프탑점</cite></blockquote>
-    <blockquote><span class="st">★★★★★</span>“밖에 테라스에서 멍 때리기 좋아요”<cite>seunghun · 연남루프탑점</cite></blockquote>
-    <blockquote><span class="st">★★★★★</span>“컴퓨터 사양 좋고 장비도 좋았습니다. 게임 좋아하시는 분들 추천합니다”<cite>노** · 연트럴파크점</cite></blockquote>
+  <div class="head rv"><div><h2 class="disp sh2">다녀간 친구들</h2><p class="sub" id="rvSub">스페이스클라우드 기준 세 지점 후기 287개예요.</p></div><div class="big-score"><b id="rvAvg">4.9</b><span>/ 5.0</span></div></div>
+  <div class="rv-tabs rv" id="rvTabs" role="tablist"></div>
+</div>
+  <div class="rv-wall rv" id="rvWall">
+    <div class="rvs">
+    <blockquote>“시설도 깨끗하고 컴퓨터도 웬만한 pc방정도로 좋아서 정말 즐겁게 놀고갑니다!”<cite>S* · 홍대루프탑점</cite></blockquote>
+    <blockquote>“컴퓨터 사양도 좋고 친구들이랑 추억 쌓기 너무 좋은 곳입니다!!”<cite>승* · 연남루프탑점</cite></blockquote>
+    <blockquote>“인터넷도 빨라서 게임을 까는데 지장이 없어서 좋았어요”<cite>s* · 연트럴파크점</cite></blockquote>
+    </div>
   </div>
-</div></section>
+<div class="wrap"><p class="rv-src">실제 스페이스클라우드 이용후기를 그대로 옮겼어요 (닉네임 일부 가림) · <a id="rvMore" href="https://www.spacecloud.kr/space/43667" target="_blank" rel="noopener">후기 전체 보기 →</a></p></div>
+</section>
 
 <section class="blk" id="faq"><div class="wrap faq-wrap">
   <div class="rv"><h2 class="disp sh2">자주 묻는 질문</h2><p class="sub">더 궁금한 건 <a href="help/">AI 상담사</a>에게 24시간 물어볼 수 있어요. 급한 일은 010-8339-5818로 연락 주세요.</p></div>
@@ -557,12 +576,12 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <h3 class="disp" id="sTitle">멤버 특가 신청</h3>
     <div class="slot" id="sSlot"></div>
     <form id="reqForm" novalidate>
-      <div class="field"><label for="rPhone">N CREW 가입 번호</label><input id="rPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000"></div>
+      <input id="rPhone" type="hidden">
       <div class="field"><label for="rPeople">예상 인원</label><input id="rPeople" type="number" inputmode="numeric" min="1" max="30" placeholder="예: 6"></div>
       <div class="field"><label for="rMemo">요청 사항 (선택)</label><textarea id="rMemo" rows="2" maxlength="200" placeholder="예: 바베큐도 하고 싶어요"></textarea></div>
-      <button class="btn pink" id="rBtn" style="width:100%;margin-top:16px">특가 신청하기</button>
+      <button class="btn pink" id="rBtn" style="width:100%;margin-top:16px">이 날짜로 예약 신청 →</button>
       <div class="msg" id="rMsg" role="status"></div>
-      <p style="font-size:12.5px;color:#4F4B86;margin-top:10px">신청은 선착순이에요. 호스트가 확인한 뒤 확정 문자와 입금 계좌를 보내드려요. 보증금(20만원)은 입실 후 별도예요.</p>
+      <p style="font-size:12.5px;color:#4F4B86;margin-top:10px">내 N CREW에서 문자 인증 한 번 하면 특가·레벨 할인·쿠폰 중 가장 싼 가격으로 바로 신청돼요. 선착순이고, 호스트가 확인한 뒤 확정 문자와 입금 계좌를 보내드려요. 보증금(20만원)은 입실 후 별도예요.</p>
     </form>
   </div>
 </div>
@@ -623,7 +642,7 @@ function grid(){const g=$("grid");if(!D){return}
         b.onclick=()=>openSheet(d,k,s);el.appendChild(b)}
       else{const c=document.createElement("div");c.className="cell";c.textContent="마감";el.appendChild(c)}})});
   g.innerHTML="";if(!free){g.innerHTML='<div class="empty">이번 주 '+SHORT[cur]+'은 빈자리가 없어요. 다른 지점을 확인해 보세요.</div>'}else g.appendChild(el);
-  $("boardSub").textContent=`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 신청돼요`;}
+  $("boardSub").textContent=`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 예약 신청`;}
 fetch(API+"?deals=1").then(r=>r.json()).then(j=>{D=j;tabs();grid()}).catch(()=>{$("boardSub").textContent="빈자리를 불러오지 못했어요. 새로고침하거나 010-8339-5818로 문의해 주세요."});
 tabs();
 
@@ -631,18 +650,14 @@ tabs();
 let sel=null,lastFocus=null;
 function openSheet(d,k,s){sel={d,k,s};lastFocus=document.activeElement;const p=PK.find(x=>x[0]===k);
   $("sSlot").innerHTML=`<b>${cur} · ${d.label} ${p[1]}</b><div style="font-size:13.5px;color:var(--mute)">${p[2]}</div><div class="price">${s.deal?`<s>${won(s.regular)}</s><strong>${won(s.deal)}</strong>`:`<strong>가격은 호스트가 문자로 안내해요</strong>`}</div>`;
-  $("rPhone").value=store.get("pn_phone")||"";$("rMsg").textContent="";$("rMsg").className="msg";$("rBtn").disabled=false;$("sheetBg").hidden=false;setTimeout(()=>($("rPhone").value?$("rPeople"):$("rPhone")).focus(),50)}
+  $("rPhone").value=store.get("pn_phone")||"";$("rMsg").textContent="";$("rMsg").className="msg";$("rBtn").disabled=false;$("sheetBg").hidden=false;setTimeout(()=>$("rPeople").focus(),50)}
 function closeAll(){$("sheetBg").hidden=true;$("leaveBg").hidden=true;const pb=$("postBg");if(pb&&!pb.hidden){pb.hidden=true;$("pvMedia").innerHTML="";if(location.hash.startsWith("#m-"))history.replaceState(null,"",location.pathname+location.search)}lastFocus&&lastFocus.focus()}
 $("sClose").onclick=closeAll;document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeAll);
 ["sheetBg","leaveBg"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target.id===id)closeAll()}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});
-$("reqForm").onsubmit=async e=>{e.preventDefault();const m=$("rMsg");m.className="msg";m.textContent="신청하는 중…";$("rBtn").disabled=true;
-  try{const j=await post({action:"request",phone:$("rPhone").value,branch:cur,date:sel.d.date,pkg:sel.k,people:$("rPeople").value,memo:$("rMemo").value});
-    if(j.ok){store.set("pn_phone",$("rPhone").value);m.className="msg ok";m.textContent=`신청 완료! ${j.label} ${j.pkg}. 호스트가 확인하고 확정 문자를 보내드릴게요.`;
-      fetch(API+"?deals=1").then(r=>r.json()).then(x=>{D=x;grid()})}
-    else{m.className="msg err";m.textContent=j.error||"신청하지 못했어요. 다시 시도해 주세요.";$("rBtn").disabled=false;
-      if(j.need_join){m.innerHTML=j.error+' <a href="#crew" id="goJoin">가입하러 가기</a>';$("goJoin").onclick=()=>{closeAll();$("jPhone").value=$("rPhone").value}}}}
-  catch(_){m.className="msg err";m.textContent="네트워크가 불안정해요. 잠시 후 다시 시도해 주세요.";$("rBtn").disabled=false}};
+$("reqForm").onsubmit=e=>{e.preventDefault();
+  const q=new URLSearchParams({book:"1",branch:cur,date:sel.d.date,pkg:sel.k,people:$("rPeople").value||"5",memo:$("rMemo").value||""});
+  location.href="/me/?"+q.toString()+"#book"};
 
 /* 친구 초대 코드 */
 const REF=(()=>{const q=new URLSearchParams(location.search).get("ref");if(q&&/^N[A-Z0-9]{5}$/i.test(q)){store.set("pn_ref",q.toUpperCase());return q.toUpperCase()}return store.get("pn_ref")})();
@@ -664,7 +679,7 @@ $("lBtn").onclick=async()=>{const m=$("lMsg");if($("lPhone").value.replace(/\D/g
   await post({action:"leave",phone:$("lPhone").value});m.className="msg ok";m.textContent="수신 거부됐어요. 더 이상 알림을 보내지 않아요."};
 
 /* 카카오 채널 */
-fetch(API).then(r=>r.json()).then(j=>{if(j.kakao){$("kakaoBtn").href=j.kakao;$("kakaoBtn").hidden=false}}).catch(()=>{});
+fetch(API).then(r=>r.json()).then(j=>{const k=$("kakaoBtn");if(j.kakao){k.href=j.kakao}else{k.removeAttribute("target");k.href="#";k.textContent="카카오톡 채널 'playn' 검색 (ID 복사)";k.onclick=async e=>{e.preventDefault();try{await navigator.clipboard.writeText("playn")}catch(_){}k.textContent="복사됨 · 카카오톡 검색창에 붙여넣기 하세요"}}k.hidden=false}).catch(()=>{});
 /* 게임 매거진 */
 const POSTS_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-posts";
 let MAG={posts:[],categories:[]},magCat="all",magShown=8;
@@ -724,6 +739,21 @@ document.querySelectorAll(".perk-nav button").forEach(b=>b.onclick=()=>pk.scroll
 const dock=document.getElementById("dock"),form=document.getElementById("joinForm");
 if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.classList.toggle("hide",es[0].isIntersecting),{threshold:.15}).observe(form);
 })();
+
+/* 후기 벽: 실제 스페이스클라우드 후기 (assets/reviews.json) */
+(function(){const SH={"홍대루프탑점":"홍대","연남루프탑점":"연남","연트럴파크점":"연트럴"};
+ const e=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+ fetch("/assets/reviews.json",{cache:"no-cache"}).then(r=>r.json()).then(R=>{const B=R.branches,names=Object.keys(B);
+  const total=names.reduce((a,b)=>a+B[b].count,0),avg=names.reduce((a,b)=>a+B[b].avg*B[b].count,0)/total;
+  const card=(b,x)=>`<blockquote><p>“${e(x.body)}”</p><cite><b>${e(x.name)} · ${SH[b]}</b><span>${e(x.date.slice(0,7).replace("-","."))}</span></cite></blockquote>`;
+  function draw(sel){const list=sel?B[sel].items.map(x=>[sel,x]):names.flatMap(b=>B[b].items.map(x=>[b,x])).sort((a,z)=>z[1].date.localeCompare(a[1].date));
+   const half=Math.ceil(list.length/2),rows=[list.slice(0,half),list.slice(half)].filter(r=>r.length);
+   $("rvWall").innerHTML=rows.map((r,i)=>{const h=r.map(([b,x])=>card(b,x)).join("");return `<div class="rv-row${i?" rev":""}" style="--dur:${Math.max(30,r.length*7)}s">${h}${h}</div>`}).join("");
+   const c=sel?B[sel]:null;$("rvSub").textContent=sel?`${sel} 후기 ${c.count}개 · 평점 ${c.avg.toFixed(2)}`:`스페이스클라우드 기준 세 지점 후기 ${total}개예요.`;
+   $("rvAvg").textContent=(sel?c.avg:avg).toFixed(2);$("rvMore").href=sel?c.url:B[names[0]].url;
+   [...$("rvTabs").children].forEach(t=>t.classList.toggle("on",t.dataset.b===(sel||"")))}
+  $("rvTabs").innerHTML=`<button data-b="">전체<small>${total}</small></button>`+names.map(b=>`<button data-b="${b}">${SH[b]}<small>★${B[b].avg.toFixed(2)} · ${B[b].count}</small></button>`).join("");
+  [...$("rvTabs").children].forEach(t=>t.onclick=()=>draw(t.dataset.b||null));draw(null)}).catch(()=>{})})();
 </script>
 <a class="fab" href="help/"><i></i>AI 상담사</a>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>

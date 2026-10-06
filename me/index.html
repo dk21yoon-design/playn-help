@@ -81,7 +81,7 @@
     <div class="card"><div class="lv" id="lvTag"></div><h2 class="disp" id="lvName"></h2><div class="nm" id="nm"></div>
       <div class="bar"><i id="bar"></i></div><div class="nx" id="nx"></div><div class="perk" id="perk"></div><div class="rate" id="rate"></div></div>
     <section class="s"><h2 class="disp">내 쿠폰</h2><div class="cp" id="cp"></div><p class="sub" id="stack" style="font-size:13px;margin-top:10px"></p></section>
-    <section class="s"><h2 class="disp">멤버 예약하기</h2>
+    <section class="s" id="book"><h2 class="disp">멤버 예약하기</h2>
       <p class="sub">할인·쿠폰은 여기(홈페이지 예약)에서만 적용돼요. 날짜를 고르면 내 혜택 중 가장 좋은 가격을 바로 계산해 드려요.</p>
       <div class="book">
         <div class="row2"><div><label for="bBr">지점</label><select id="bBr"><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></div>
@@ -160,7 +160,12 @@ async function load(){const t=st.get("pn_token");if(!t)return;const p=await post
 /* 멤버 예약 */
 let P=null;const won=n=>Number(n).toLocaleString()+"원";
 function today(){const d=new Date(Date.now()+9*3600e3);return d.toISOString().slice(0,10)}
-function initBook(p){P=p;const d=$("bDate");d.min=today();const mx=new Date(Date.now()+9*3600e3+90*86400e3);d.max=mx.toISOString().slice(0,10);
+// 홈페이지 빈자리 보드에서 넘어온 예약 (로그인 전이면 저장해 뒀다가 로그인 후 채움)
+const BK=(()=>{const u=new URLSearchParams(location.search);if(u.get("book")){const o={branch:u.get("branch"),date:u.get("date"),pkg:u.get("pkg"),people:u.get("people"),memo:u.get("memo")};try{sessionStorage.setItem("pn_book",JSON.stringify(o))}catch(e){}history.replaceState(null,"",location.pathname);return o}try{return JSON.parse(sessionStorage.getItem("pn_book")||"null")}catch(e){return null}})();
+if(BK&&!st.get("pn_token")){const n=document.createElement("p");n.className="sub";n.style.cssText="margin-top:10px;color:#D1124F;font-weight:700";n.textContent=`${BK.branch} ${BK.date} 예약을 이어서 신청하려면 문자 인증을 해주세요.`;$("send").insertAdjacentElement("beforebegin",n)}
+function initBook(p){P=p;setTimeout(()=>{if(!BK)return;try{sessionStorage.removeItem("pn_book")}catch(e){}
+  if(BK.branch)$("bBr").value=BK.branch;if(BK.date)$("bDate").value=BK.date;if(BK.pkg)$("bPkg").value=BK.pkg;if(BK.people)$("bPpl").value=BK.people;if(BK.memo)$("bMemo").value=BK.memo;
+  q();$("book").scrollIntoView({behavior:"smooth",block:"start"})},0);const d=$("bDate");d.min=today();const mx=new Date(Date.now()+9*3600e3+90*86400e3);d.max=mx.toISOString().slice(0,10);
  const cs=p.coupons.filter(c=>c.status==="active"&&["won","full_free","day_free"].includes(c.kind));
  $("bCp").innerHTML='<option value="">할인율 자동 적용 (가장 큰 할인)</option>'+cs.map(c=>`<option value="${c.id}">${esc(c.title)} (${c.expires_at}까지)</option>`).join("");
  if(p.pass_balance>0){$("bPassWrap").hidden=false;$("bPassBal").textContent="잔액 "+won(p.pass_balance)}

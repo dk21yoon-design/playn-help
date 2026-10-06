@@ -30,8 +30,13 @@
 </div></main>
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span></div></div></footer>
 <script>
-const k=new URLSearchParams(location.search).get("k");
-if(k)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto?t="+encodeURIComponent(k)).then(r=>r.json()).then(j=>{if(!j.ok)return;
+const U=new URLSearchParams(location.search),k=U.get("k"),sk=U.get("s");
+const E=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// 정산 링크 토큰(s)으로 오면: 예약한 플랫폼에 맞는 후기 안내 하나만
+if(sk)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"info",k:sk})}).then(r=>r.json()).then(j=>{if(!j.ok||!j.review)return;const g=j.review;
+ document.getElementById("lead").textContent=j.branch+"을 이용해 주셔서 감사해요. "+g.name+"에 남겨주시는 후기 한 줄이 다음 손님에게 큰 도움이 되고, 저희에겐 정말 큰 힘이 돼요.";
+ document.getElementById("rv").innerHTML='<a class="btn lamp" href="'+E(g.url)+'" target="_blank" rel="noopener">'+E(g.name)+'에 후기 쓰기</a><p style="font-size:14px;color:var(--mute);margin-top:4px">'+E(g.how)+'</p>'+(g.pf==="site"?'':'<a class="btn ghost" href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">인스타에 @playn_no.1 태그하기</a>')}).catch(()=>{});
+if(k&&!sk)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto?t="+encodeURIComponent(k)).then(r=>r.json()).then(j=>{if(!j.ok)return;
  document.getElementById("lead").textContent=j.branch+"을 이용해 주셔서 감사해요. 짧은 후기 한 줄이 다음 손님에게 큰 도움이 되고, 저희에겐 정말 큰 힘이 돼요.";
  document.getElementById("rv").innerHTML='<a class="btn lamp" href="'+j.spacecloud+'" target="_blank" rel="noopener">스페이스클라우드로 예약했다면 → 후기 쓰기</a><a class="btn ghost" href="'+j.store+'" target="_blank" rel="noopener">네이버로 예약했다면 → 리뷰 쓰기</a>'}).catch(()=>{});
 </script>

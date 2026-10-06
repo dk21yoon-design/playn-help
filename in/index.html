@@ -49,7 +49,8 @@
     <label class="t" for="dp">보증금 입금자명</label>
     <input id="dp" type="text" placeholder="입금하신 분 이름" required>
     <div class="acc" style="margin-top:8px"><span id="accTxt"></span><button type="button" id="accCp">복사</button></div>
-    <p class="hint">보증금은 <b id="depAmt">20만원</b>이고 입실 후 입금해 주세요. 퇴실 후 1~2일 안에 돌려드려요.</p>
+    <p class="hint" id="depHint">보증금은 <b id="depAmt">20만원</b>이고 입실 후 입금해 주세요. 퇴실 후 1~2일 안에 돌려드려요.</p>
+    <div class="msg ok" id="exemptBox" hidden></div>
     <label class="t">사진 후기 이벤트</label>
     <div class="ch"><label><input type="radio" name="rv" value="early">조기입실 1시간</label><label><input type="radio" name="rv" value="drink">음료 2병</label><label><input type="radio" name="rv" value="none" checked>참여 안 함</label></div>
     <p class="hint">참여하시면 퇴실 후 예약하신 플랫폼에 사진 후기를 남기고, 정산 화면에서 후기 캡처를 올려주세요.</p>
@@ -123,6 +124,9 @@ async function load(){
   if(!D||!D.ok){$("lead").textContent=(D&&D.error)||"잠시 후 다시 시도해 주세요.";return}
   const dt=new Date(D.date+"T00:00:00");$("meta").textContent=`${D.branch} · ${dt.getMonth()+1}/${dt.getDate()} ${D.pkg}`;$("meta").hidden=false;
   $("accTxt").textContent=D.account;$("depAmt").textContent=won(D.rules.deposit);
+  if(D.exempt){$("depHint").hidden=true;$("exemptBox").hidden=false;$("exemptBox").innerHTML="👑 N CREW 레전드 멤버라 <b>보증금 없이</b> 이용하세요. 입금자명 칸엔 이름만 적어주시면 돼요. 퇴실 후 쓰신 물품 금액만 정산해요."}
+  else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent="N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}
+  if(D.platform&&!D.checkin){const v={naver:"네이버",site:"홈페이지·기타",spacecloud:"스페이스클라우드"}[D.platform];const r=document.querySelector(`[name=pf][value="${v}"]`);if(r)r.checked=true}
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
   $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people;$("hcHint").textContent=n>b?`기본 ${b}명 + 추가 ${n-b}명 (1인 ${won(D.rules.extra_person)}, 예약 때 결제 안 하셨으면 보증금에서 차감)`:""};
   if(D.worlds){$("wBox").hidden=false;$("wTitle").textContent=D.worlds.title;$("wPay").textContent=won(D.pick?D.pick_payout:D.worlds.payout);$("wTier").textContent=D.worlds.tier||"";const f=new Date(D.worlds.final+"T00:00:00");$("wFinal").textContent=`${f.getMonth()+1}/${f.getDate()}`;
@@ -167,8 +171,10 @@ function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
   if(D.checkin.bbq&&Q.__bbq){const paid=pl?(Q.__bbqpaid||0):0,un=Q.__bbq-paid;
     $("bbqWarn").hidden=!(pl&&un>0);$("bbqWarn").textContent=`${Q.__bbq}명 중 ${paid}명만 결제 → 미결제 ${un}명은 보증금에서 차감돼요`;
     if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person])}
-  const t=L.reduce((a,l)=>a+l[1],0);
-  $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>− ${l[0]}</span><span>${won(l[1])}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`}
+  if((D.crew&&D.crew.lv>=2)||(D.checkin&&D.exempt)){const it=id=>R.items.find(x=>x.id===id)||{price:0};const f=Math.min(2,Q.drink||0)*it("drink").price+Math.min(2,Q.water||0)*it("water").price;if(f)L.push(["N CREW 혜택 (음료·물 2개씩 무료)",-f])}
+  const t=Math.max(0,L.reduce((a,l)=>a+l[1],0));
+  if(D.exempt){$("sum").innerHTML=L.map(l=>`<div class="l"><span>${l[1]<0?"+":"·"} ${l[0]}</span><span>${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>정산할 금액 (보증금 면제)</span><em>${won(t)}</em></div><p class="hint">제출 후 ${D.account}로 입금해 주세요.</p>`;return}
+  $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>${l[1]<0?"+ ":"− "}${l[0]}</span><span>${l[1]<0?"+":""}${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`}
 $("rvf").onchange=async e=>{const f=e.target.files[0];if(!f)return;img=await shrink(f);$("rvp").innerHTML=`<img src="${img}">`};
 function shrink(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const s=Math.min(1,1400/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",.82))};i.src=URL.createObjectURL(f)})}
 $("goOut").onclick=async()=>{
@@ -182,8 +188,10 @@ $("goOut").onclick=async()=>{
   D=await post({action:"info"});renderDone()};
 function renderDone(){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="보증금 정산";
   const c={...(D.calc||{})};const paid=D.status==="paid";if(!D.deposit_ok&&c.expect!=null)c.refund=c.expect;
+  if(c.exempt){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="이용 정산";$("lead").textContent=paid?"정산이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 아래 금액만 입금해 주시면 끝이에요.";
+   $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">👑 레전드 · 보증금 면제 · ${paid?"정산 완료":"입금할 금액"}</div><div class="n">${won(c.owed)}</div></div><div class="sum">${c.lines.map(l=>`<div class="l"><span>${l.amount<0?"+":"·"} ${l.name}</span><span>${won(Math.abs(l.amount))}</span></div>`).join("")}</div>`+(paid?"":`<div class="acc" style="margin-top:10px"><span>${D.account}</span></div>`);return}
   $("lead").textContent=paid?"환급이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 확인 후 1~2일 안에 환급해 드리고 문자로 알려드려요.";
-  $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">${paid?"환급 완료":D.deposit_ok?"환급 예정":"보증금 입금 확인 후 환급 예정"}</div><div class="n">${won(c.refund)}</div></div>`+(c.lines?`<div class="sum"><div class="l"><span>보증금</span><span>${won(c.deposit)}</span></div>${c.lines.map(l=>`<div class="l"><span>− ${l.name}</span><span>${won(l.amount)}</span></div>`).join("")}<div class="big"><span>환급</span><em>${won(c.refund)}</em></div></div>`:"")+
+  $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">${paid?"환급 완료":D.deposit_ok?"환급 예정":"보증금 입금 확인 후 환급 예정"}</div><div class="n">${won(c.refund)}</div></div>`+(c.lines?`<div class="sum"><div class="l"><span>보증금</span><span>${won(c.deposit)}</span></div>${c.lines.map(l=>`<div class="l"><span>${l.amount<0?"+ ":"− "}${l.name}</span><span>${l.amount<0?"+":""}${won(Math.abs(l.amount))}</span></div>`).join("")}<div class="big"><span>환급</span><em>${won(c.refund)}</em></div></div>`:"")+
   (D.deposit_ok?`<p class="hint">✅ 보증금 입금 확인됨</p>`:`<div class="msg er">보증금 입금이 아직 확인되지 않았어요. 입금 전에는 환급할 수 없어요.<br><b>${D.account}</b> · ${won(D.rules.deposit)}<br>입금자명: 체크인 때 적은 이름</div>`)+
   (paid?"":`<button class="btn go" id="reEdit" type="button" style="display:flex;margin-top:10px">사용 내역 수정해서 다시 보내기</button>`)+
   (D.member?"":`<a class="btn lamp go" href="/?from=settle#crew" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`);
