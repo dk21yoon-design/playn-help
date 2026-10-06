@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <title>N CREW 관리</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{--night:#16133F;--panel:#211D57;--line:#3A3580;--lamp:#FFB547;--brand:#FF2E6E;--ink:#F1EFFF;--mute:#A6A2D6}
@@ -115,7 +116,7 @@ async function load(){const j=await post({action:"admin_list"});
   $("sum").textContent=`멤버 ${j.members}명 · 대기 중인 신청 ${pend}건`;$("disc").value=j.discount;$("discT").value=j.discount_today;
   const L=$("list");L.innerHTML=j.requests.length?"":'<p class="sub" style="margin-top:14px">아직 신청이 없어요.</p>';
   j.requests.forEach(r=>{const c=document.createElement("div");c.className="card "+r.status;
-    c.innerHTML=`<b>#${r.id} ${r.branch} ${lab(r.use_date)} ${PK[r.pkg]}</b><div class="meta">${r.name} · <a href="tel:${r.phone}">${tel(r.phone)}</a> · ${r.people?r.people+"명":"인원 미정"}${r.memo?"<br>메모: "+r.memo.replace(/</g,"&lt;"):""}<br>${r.kind==="member"?"<b style=\"color:#3DDC97\">멤버 예약</b> · ":""}정가 ${r.regular_price?r.regular_price.toLocaleString()+"원":"-"} → ${r.deal_price!=null?r.deal_price.toLocaleString()+"원":"미정"}${r.discount_note?" ("+r.discount_note+")":""}${r.upgrade_full?" · <b>통대관 업그레이드</b>":""}${r.pay_pass?" · <b>패스 결제</b>":""} · ${r.status==="pending"?"대기 중":r.status==="confirmed"?"확정":"마감 처리"}</div>`;
+    c.innerHTML=`<b>#${r.id} ${r.branch} ${lab(r.use_date)} ${PK[r.pkg]}</b><div class="meta">${H(r.name)} · <a href="tel:${r.phone}">${tel(r.phone)}</a> · ${r.people?r.people+"명":"인원 미정"}${r.memo?"<br>메모: "+H(r.memo):""}<br>${r.kind==="member"?"<b style=\"color:#3DDC97\">멤버 예약</b> · ":""}정가 ${r.regular_price?r.regular_price.toLocaleString()+"원":"-"} → ${r.deal_price!=null?r.deal_price.toLocaleString()+"원":"미정"}${r.discount_note?" ("+H(r.discount_note)+")":""}${r.upgrade_full?" · <b>통대관 업그레이드</b>":""}${r.pay_pass?" · <b>패스 결제</b>":""} · ${r.status==="pending"?"대기 중":r.status==="confirmed"?"확정":"마감 처리"}</div>`;
     if(r.status==="pending"){const a=document.createElement("div");a.className="act";
       a.innerHTML=`<input type="number" placeholder="금액" value="${r.deal_price!=null?r.deal_price:""}"><button class="ok">확정 + 문자</button><button class="no">마감 + 문자</button>`;
       const [inp,ok,no]=a.children;

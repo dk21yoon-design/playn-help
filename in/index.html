@@ -181,12 +181,12 @@ $("goOut").onclick=async()=>{
   if(!r.ok)return msg("mOut",r.error||"다시 시도해 주세요");
   D=await post({action:"info"});renderDone()};
 function renderDone(){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="보증금 정산";
-  const c=D.calc||{};const paid=D.status==="paid";
+  const c={...(D.calc||{})};const paid=D.status==="paid";if(!D.deposit_ok&&c.expect!=null)c.refund=c.expect;
   $("lead").textContent=paid?"환급이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 확인 후 1~2일 안에 환급해 드리고 문자로 알려드려요.";
-  $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">${paid?"환급 완료":"환급 예정"}</div><div class="n">${won(c.refund)}</div></div>`+(c.lines?`<div class="sum"><div class="l"><span>보증금</span><span>${won(c.deposit)}</span></div>${c.lines.map(l=>`<div class="l"><span>− ${l.name}</span><span>${won(l.amount)}</span></div>`).join("")}<div class="big"><span>환급</span><em>${won(c.refund)}</em></div></div>`:"")+
+  $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">${paid?"환급 완료":D.deposit_ok?"환급 예정":"보증금 입금 확인 후 환급 예정"}</div><div class="n">${won(c.refund)}</div></div>`+(c.lines?`<div class="sum"><div class="l"><span>보증금</span><span>${won(c.deposit)}</span></div>${c.lines.map(l=>`<div class="l"><span>− ${l.name}</span><span>${won(l.amount)}</span></div>`).join("")}<div class="big"><span>환급</span><em>${won(c.refund)}</em></div></div>`:"")+
   (D.deposit_ok?`<p class="hint">✅ 보증금 입금 확인됨</p>`:`<div class="msg er">보증금 입금이 아직 확인되지 않았어요. 입금 전에는 환급할 수 없어요.<br><b>${D.account}</b> · ${won(D.rules.deposit)}<br>입금자명: 체크인 때 적은 이름</div>`)+
   (paid?"":`<button class="btn go" id="reEdit" type="button" style="display:flex;margin-top:10px">사용 내역 수정해서 다시 보내기</button>`)+
-  (D.member?"":`<a class="btn lamp go" href="/crew/?src=settle" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`);
+  (D.member?"":`<a class="btn lamp go" href="/?from=settle#crew" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`);
   if($("reEdit"))$("reEdit").onclick=()=>{$("fdone").hidden=true;$("tabs").hidden=false;show("out")}}
 load();
 </script>
