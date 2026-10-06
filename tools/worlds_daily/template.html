@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:Pretendard,sans-serif;color:#fff;word-break:keep-all}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;background:#0B0A10;margin-bottom:20px}
+.s::before{content:"";position:absolute;width:900px;height:900px;right:-260px;top:-300px;border-radius:50%;background:radial-gradient(circle,rgba(255,46,110,.55),transparent 62%)}
+.s::after{content:"";position:absolute;width:900px;height:900px;left:-320px;bottom:-380px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.6),transparent 62%)}
+.s.alt::before{background:radial-gradient(circle,rgba(43,224,122,.38),transparent 62%)}
+.in{position:absolute;inset:0;padding:96px 96px 0;z-index:2}
+.pill{display:inline-block;border:2.5px solid #FF2E6E;color:#FF5C8D;border-radius:999px;padding:12px 26px;font-weight:800;font-size:30px}
+.dday{position:absolute;right:96px;top:90px;z-index:3;background:#FF2E6E;color:#fff;font-weight:900;font-size:34px;border-radius:18px;padding:10px 20px}
+h1{font-size:112px;line-height:1.12;font-weight:900;letter-spacing:-3px;margin-top:44px}
+h2{font-size:84px;line-height:1.16;font-weight:900;letter-spacing:-2px;margin-top:40px}
+g{background:#2BE07A;color:#0B0A10;padding:0 18px;border-radius:16px;display:inline-block;line-height:1.1}
+c{color:#2BE07A}
+p.l{font-size:38px;line-height:1.6;color:#E6E3F5;margin-top:36px;font-weight:600}
+.foot{position:absolute;left:96px;right:96px;bottom:88px;display:flex;justify-content:space-between;align-items:center;z-index:3;font-size:30px;font-weight:700;color:#D9D6EA}
+.logo{font-weight:900;font-size:40px;letter-spacing:-1px}.logo b{color:#FF2E6E}
+.ph{border-radius:36px;overflow:hidden;border:2px solid rgba(255,255,255,.12);position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph i{position:absolute;left:20px;bottom:18px;font-style:normal;font-weight:800;font-size:28px;background:rgba(11,10,16,.75);padding:8px 16px;border-radius:12px}
+.steps{margin-top:56px;display:grid;gap:28px}
+.st{display:flex;gap:32px;align-items:flex-start;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);border-radius:32px;padding:34px 40px}
+.st .n{flex:none;width:84px;height:84px;border-radius:24px;background:#2BE07A;color:#0B0A10;font-weight:900;font-size:44px;display:grid;place-items:center}
+.st b{display:block;font-size:44px;font-weight:900;letter-spacing:-1px}
+.st span{display:block;font-size:31px;color:#C9C5DE;margin-top:10px;font-weight:600;line-height:1.45}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:60px}
+.box{border-radius:36px;padding:44px 40px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12)}
+.box.hot{background:#2BE07A;color:#0B0A10;border-color:#2BE07A}
+.box small{display:block;font-size:30px;font-weight:800;opacity:.85}
+.box b{display:block;font-size:92px;font-weight:900;letter-spacing:-3px;margin-top:14px}
+.box span{display:block;font-size:30px;font-weight:700;margin-top:10px;opacity:.85}
+.note{font-size:28px;color:#A9A5C2;line-height:1.6;font-weight:600}
+.tbl{margin-top:52px;display:grid;gap:18px}
+.row{display:grid;grid-template-columns:230px 1fr auto;align-items:center;gap:26px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);border-radius:26px;padding:26px 34px;font-size:38px;font-weight:800}
+.row .t{color:#2BE07A;font-weight:900}
+.row .x{font-size:28px;color:#C9C5DE;font-weight:700}
+.row.out{opacity:.38;text-decoration:line-through}
+.bars{margin-top:52px;display:grid;gap:22px}
+.bar{position:relative;height:96px;border-radius:24px;background:rgba(255,255,255,.07);overflow:hidden}
+.bar .f{position:absolute;inset:0 auto 0 0;border-radius:24px}
+.bar .lb{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 34px;font-size:40px;font-weight:900}
+.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:310px 310px;gap:20px;margin-top:52px}
+.grid .ph:first-child{grid-row:1/3}
+.url{display:inline-block;margin-top:44px;font-size:56px;font-weight:900;background:#fff;color:#0B0A10;border-radius:24px;padding:18px 34px;letter-spacing:-1px}
+.gb{height:10px;border-radius:5px;background:linear-gradient(90deg,#FF2E6E,#7C3AED);margin-top:22px}
+.big{font-size:260px;font-weight:900;letter-spacing:-10px;line-height:1;margin-top:40px;color:#2BE07A}
+</style></head><body><div id="root"></div>
+<script>
+// SPEC is injected by build.mjs as window.SPEC
+const E=s=>String(s??"");
+const foot=(t)=>`<div class="foot"><span class="logo">PLAY <b>N</b></span><span>${E(t)}</span></div>`;
+const DISC=`이 이벤트는 플레이앤이 자체 진행합니다.<br>이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며<br>Riot Games와 관련이 없습니다. 대회 일정: LoL Esports 공식 일정 기준.`;
+const R={
+ cover:s=>`<span class="pill">${E(s.pill)}</span><h1 style="${s.size?`font-size:${s.size}px`:""}">${E(s.h)}</h1>${s.photo?`<div class="ph" style="height:${s.ph||470}px;margin-top:52px"><img src="img/${s.photo}" style="object-position:${s.pos||"50% 45%"}"></div>`:""}${s.p?`<p class="l">${E(s.p)}</p>`:""}`,
+ steps:s=>`<span class="pill">${E(s.pill)}</span><h2>${E(s.h)}</h2><div class="steps">${s.items.map((x,i)=>`<div class="st"><div class="n">${E(x.n??i+1)}</div><div><b>${E(x.b)}</b>${x.s?`<span>${E(x.s)}</span>`:""}</div></div>`).join("")}</div>${s.note?`<p class="note" style="margin-top:28px">${E(s.note)}</p>`:""}`,
+ two:s=>`<span class="pill">${E(s.pill)}</span><h2>${E(s.h)}</h2><div class="two">${s.boxes.map(b=>`<div class="box ${b.hot?"hot":""}"><small>${E(b.small)}</small><b>${E(b.b)}</b><span>${E(b.s)}</span></div>`).join("")}</div>${s.p?`<p class="l">${E(s.p)}</p>`:""}${s.note?`<p class="note" style="margin-top:28px">${E(s.note)}</p>`:""}`,
+ table:s=>`<span class="pill">${E(s.pill)}</span><h2>${E(s.h)}</h2><div class="tbl">${s.rows.map(r=>`<div class="row ${r.out?"out":""}"><span class="t">${E(r.t)}</span><span>${E(r.m)}</span><span class="x">${E(r.x)}</span></div>`).join("")}</div>${s.note?`<p class="note" style="margin-top:30px">${E(s.note)}</p>`:""}`,
+ bars:s=>{const mx=Math.max(1,...s.rows.map(r=>r.v));return `<span class="pill">${E(s.pill)}</span><h2>${E(s.h)}</h2><div class="bars">${s.rows.map((r,i)=>`<div class="bar"><div class="f" style="width:${Math.max(8,r.v/mx*100)}%;background:${i==0?"#2BE07A":"rgba(124,58,237,.75)"}"></div><div class="lb" style="color:${i==0?"#0B0A10":"#fff"}"><span>${E(r.t)}</span><span>${E(r.l??r.v)}</span></div></div>`).join("")}</div>${s.note?`<p class="note" style="margin-top:30px">${E(s.note)}</p>`:""}`},
+ photos:s=>`<span class="pill">${E(s.pill)}</span><h2>${E(s.h)}</h2><div class="grid">${s.photos.map(p=>`<div class="ph"><img src="img/${p.src}" style="object-position:${p.pos||"50% 50%"}"><i>${E(p.cap)}</i></div>`).join("")}</div>${s.note?`<p class="note" style="margin-top:30px">${E(s.note)}</p>`:""}`,
+ count:s=>`<span class="pill">${E(s.pill)}</span><h2>${E(s.h)}</h2><div class="big">${E(s.big)}</div>${s.p?`<p class="l">${E(s.p)}</p>`:""}${s.note?`<p class="note" style="margin-top:28px">${E(s.note)}</p>`:""}`,
+ cta:s=>`<span class="pill">${E(s.pill)}</span><h1 style="font-size:${s.size||100}px">${E(s.h)}</h1><div class="url">${E(s.url||"playn.kr/worlds")}</div><div class="gb"></div><p class="l" style="font-size:34px">${E(s.p)}</p><p class="note" style="margin-top:56px">${DISC}</p>`
+};
+document.getElementById("root").innerHTML=SPEC.slides.map((s,i)=>`<section class="s ${s.alt?"alt":""}">${s.dday?`<div class="dday">${E(s.dday)}</div>`:""}<div class="in">${R[s.type](s)}</div>${foot(s.foot||(i==SPEC.slides.length-1?"홍대·연남 게임파티룸":"넘겨보기 →"))}</section>`).join("");
+</script></body></html>
