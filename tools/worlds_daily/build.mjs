@@ -26,7 +26,7 @@ if (noUp) { console.log(JSON.stringify({ files })); process.exit(0); }
 const KEY = process.env.PLAYN_KEY; if (!KEY) { console.error("PLAYN_KEY missing"); process.exit(1); }
 const urls = [];
 for (const f of files) {
-  const p = `promo/worlds_daily/${spec.date}/${path.basename(f)}`;
+  const p = `${spec.folder || "promo/worlds_daily/" + spec.date}/${path.basename(f)}`;
   const r = await fetch(`https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-publish?mode=upload&path=${encodeURIComponent(p)}`, { method: "POST", headers: { "x-playand-key": KEY, "content-type": "image/jpeg" }, body: fs.readFileSync(f) });
   const j = await r.json(); if (!j.ok) { console.error("upload fail", f, j); process.exit(3); } urls.push(j.url);
 }
