@@ -61,5 +61,6 @@ async function go(ch){const m=$("m-"+ch);m.className="msg";m.textContent="확인
  const b={ch};if(ch==="fb")b.token=$("fb-token").value;if(ch==="th")b.token=$("th-token").value;if(ch==="yt"){b.cid=$("yt-cid").value;b.cs=$("yt-cs").value}
  try{const r=await call(b);m.className="msg "+(r.ok?"ok":"err");m.textContent=r.msg||"";if(r.ok&&r.go){location.href=r.go;return}if(r.ok){["fb-token","th-token"].forEach(i=>$(i).value="");status()}}catch(e){m.className="msg err";m.textContent="연결 실패: "+e}}
 const q=new URLSearchParams(location.search);if(q.get("yt")){const m=$("m-yt");m.className="msg "+(q.get("yt")==="ok"?"ok":"err");m.textContent=q.get("m")||"";$("yt").scrollIntoView()}
+const S=q.get("s");if(S&&$(S)){for(const id of["fb","th","yt"])if(id!==S)$(id).style.display="none";$(S).scrollIntoView()}
 status();
 </script></body></html>
