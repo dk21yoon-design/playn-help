@@ -22,15 +22,18 @@
 <main class="wrap"><div class="ty">
   <h1 class="disp">오늘 즐거우셨나요?</h1>
   <p id="lead">플레이앤을 이용해 주셔서 감사해요. 짧은 후기 한 줄이 다음 손님에게 큰 도움이 되고, 저희에겐 정말 큰 힘이 돼요.</p>
+  <p class="tip" style="font-size:14.5px;color:#E3DCFF;margin-top:10px">💡 어떤 게임을 했는지, PC·키보드·헤드셋은 어땠는지, 루프탑·바베큐는 어땠는지, 몇 명이 무슨 모임으로 왔는지 적어주시면 다음 손님이 고르기 정말 쉬워져요.</p>
   <div class="rv" id="rv"><a class="btn lamp" href="https://www.spacecloud.kr/" target="_blank" rel="noopener">스페이스클라우드에 후기 쓰기</a></div>
-  <div class="ev"><b>📸 사진 후기 이벤트</b><br>이번에 후기 이벤트에 참여하셨다면 사진 후기 캡처는 퇴실 정산 링크에서 올려주시면 돼요. 다음 방문 땐 입실 체크인에서 후기 이벤트를 고르면 조기입실 1시간 또는 음료 2병을 바로 드려요.</div>
+  <div class="ev"><b>📸 사진 후기 이벤트</b><br>이번에 후기 이벤트에 참여하셨다면 후기 첫 줄에 <b>"플레이앤 후기 이벤트 참여(혜택 제공)"</b>를 꼭 적어주시고(법에 따른 표시), 캡처는 퇴실 정산 링크에서 올려주세요. 다음 방문 땐 입실 체크인에서 후기 이벤트를 고르면 조기입실 1시간 또는 음료 2병을 바로 드려요.</div>
   <div class="cr"><h2 class="disp">다음엔 N CREW로 더 싸게</h2>
-    <ul><li>✔ 이번 주 빈자리 멤버 특가 20%, 당일 35%</li><li>✔ 2번 오면 음료 2병 + 물 2병 무료</li><li>✔ 다녀간 날부터 14일 안에 다시 예약하면 3만원 할인</li><li>✔ 친구 초대하면 둘 다 2시간 연장권</li></ul>
+    <ul><li>✔ 3일 뒤부터 빈자리 멤버 특가 20% · 당일 번개 1자리 35%</li><li>✔ 2번 오면 음료 2병 + 물 2병 무료</li><li>✔ 다녀간 날부터 14일 안에 다시 예약하면 3만원 할인</li><li>✔ 친구 초대하면 둘 다 2시간 연장권</li></ul>
     <a class="btn pink" href="/?from=thanks#crew" style="width:100%;margin-top:14px">30초 만에 N CREW 가입하기</a></div>
 </div></main>
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span></div></div></footer>
 <script>
 const U=new URLSearchParams(location.search),k=U.get("k"),sk=U.get("s");
+// 구글 리뷰 링크: 구글 비즈니스 프로필 인증 후 지점별로 채움
+const GR={};
 const E=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 // 정산 링크 토큰(s)으로 오면: 예약한 플랫폼에 맞는 후기 안내 하나만
 if(sk)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"info",k:sk})}).then(r=>r.json()).then(j=>{if(!j.ok||!j.review)return;const g=j.review;
@@ -38,6 +41,6 @@ if(sk)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle"
  document.getElementById("rv").innerHTML='<a class="btn lamp" href="'+E(g.url)+'" target="_blank" rel="noopener">'+E(g.name)+'에 후기 쓰기</a><p style="font-size:14px;color:var(--mute);margin-top:4px">'+E(g.how)+'</p>'+(g.pf==="site"?'':'<a class="btn ghost" href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">인스타에 @playn_no.1 태그하기</a>')}).catch(()=>{});
 if(k&&!sk)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto?t="+encodeURIComponent(k)).then(r=>r.json()).then(j=>{if(!j.ok)return;
  document.getElementById("lead").textContent=j.branch+"을 이용해 주셔서 감사해요. 짧은 후기 한 줄이 다음 손님에게 큰 도움이 되고, 저희에겐 정말 큰 힘이 돼요.";
- document.getElementById("rv").innerHTML='<a class="btn lamp" href="'+j.spacecloud+'" target="_blank" rel="noopener">스페이스클라우드로 예약했다면 → 후기 쓰기</a><a class="btn ghost" href="'+j.store+'" target="_blank" rel="noopener">네이버로 예약했다면 → 리뷰 쓰기</a>'}).catch(()=>{});
+ document.getElementById("rv").innerHTML='<a class="btn lamp" href="'+j.spacecloud+'" target="_blank" rel="noopener">스페이스클라우드로 예약했다면 → 후기 쓰기</a><a class="btn ghost" href="'+j.store+'" target="_blank" rel="noopener">네이버로 예약했다면 → 리뷰 쓰기</a>'+'<a class="btn ghost" href="https://map.naver.com/p/search/'+encodeURIComponent('게임파티룸 플레이앤 '+j.branch)+'" target="_blank" rel="noopener">네이버 지도 방문자 리뷰 쓰기</a>'+(GR[j.branch]?'<a class="btn ghost" href="'+GR[j.branch]+'" target="_blank" rel="noopener">Google review (English)</a>':'')}).catch(()=>{});
 </script>
 </body></html>

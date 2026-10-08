@@ -477,7 +477,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 
   <div class="perk-head"><h3 class="disp">N CREW 혜택 한눈에</h3><div class="perk-nav"><button type="button" data-dir="-1" aria-label="이전 혜택">←</button><button type="button" data-dir="1" aria-label="다음 혜택">→</button></div></div>
   <div class="perks" id="perks">
-    <div><span class="k">가입하면 · 루키</span><b>빈자리 특가 20%</b><span>이번 주 빈자리를 멤버가로. <b>당일 예약은 35%</b></span></div>
+    <div><span class="k">가입하면 · 루키</span><b>빈자리 특가 20%</b><span>3일 뒤부터 빈자리를 멤버가로. <b>당일엔 ⚡번개 1자리 35%</b></span></div>
     <div><span class="k">2번 방문 · 레귤러</span><b>음료 2 + 물 2</b><span>올 때마다 1.5L 음료 2병과 물 2병 무료</span></div>
     <div><span class="k">5번 방문 · 에이스</span><b>3시간 연장권</b><span>입실 전이나 퇴실 후로 3시간 더. 앞뒤 예약 때문에 못 쓰면 4만원 할인</span></div>
     <div class="hot"><span class="k">10번 방문 · 레전드</span><b>모든 예약 20% + 통대관 무료</b><span>통대관 1회 무료 (금·토 제외, 금·토는 야간 예약하면 통대관으로 업그레이드) + 보증금 면제</span></div>
@@ -638,18 +638,18 @@ function grid(){const g=$("grid");if(!D){return}
     PK.forEach(([k])=>{const s=d.branches[cur][k];
       if(s.free){free++;const b=document.createElement("button");b.className="cell"+(d.weekend?" lit":"");b.type="button";
         b.setAttribute("aria-label",`${d.label} ${PK.find(p=>p[0]===k)[1]} ${s.deal?won(s.deal):"가격 문의"} 신청`);
-        b.innerHTML=s.deal?`<s>${won(s.regular)}</s><span class="p">${(s.deal/10000).toLocaleString()}만</span>`:`<span class="p">빈자리</span><span class="t">가격 문의</span>`;
+        b.innerHTML=!s.deal?`<span class="p">빈자리</span><span class="t">가격 문의</span>`:s.rate>0?`<s>${won(s.regular)}</s><span class="p">${(s.deal/10000).toLocaleString()}만</span>${s.kind==="flash"?'<span class="t">⚡오늘 1자리</span>':""}`:`<span class="p">${(s.deal/10000).toLocaleString()}만</span><span class="t" style="color:var(--mute)">정가</span>`;
         b.onclick=()=>openSheet(d,k,s);el.appendChild(b)}
       else{const c=document.createElement("div");c.className="cell";c.textContent="마감";el.appendChild(c)}})});
   g.innerHTML="";if(!free){g.innerHTML='<div class="empty">이번 주 '+SHORT[cur]+'은 빈자리가 없어요. 다른 지점을 확인해 보세요.</div>'}else g.appendChild(el);
-  $("boardSub").textContent=`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 예약 신청`;}
+  $("boardSub").textContent=D.rules&&D.rules.mode!=="classic"?`N CREW 멤버 특가: ${D.rules.early_from}일 뒤부터 빈자리 ${D.discount}% · 오늘은 ⚡번개 ${D.rules.flash_per_day}자리만 ${D.discount_today}% · 칸을 누르면 바로 예약 신청`:`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 예약 신청`;}
 fetch(API+"?deals=1").then(r=>r.json()).then(j=>{D=j;tabs();grid()}).catch(()=>{$("boardSub").textContent="빈자리를 불러오지 못했어요. 새로고침하거나 010-8339-5818로 문의해 주세요."});
 tabs();
 
 /* 신청 시트 */
 let sel=null,lastFocus=null;
 function openSheet(d,k,s){sel={d,k,s};lastFocus=document.activeElement;const p=PK.find(x=>x[0]===k);
-  $("sSlot").innerHTML=`<b>${cur} · ${d.label} ${p[1]}</b><div style="font-size:13.5px;color:var(--mute)">${p[2]}</div><div class="price">${s.deal?`<s>${won(s.regular)}</s><strong>${won(s.deal)}</strong>`:`<strong>가격은 호스트가 문자로 안내해요</strong>`}</div>`;
+  $("sSlot").innerHTML=`<b>${cur} · ${d.label} ${p[1]}</b><div style="font-size:13.5px;color:var(--mute)">${p[2]}</div><div class="price">${!s.deal?`<strong>가격은 호스트가 문자로 안내해요</strong>`:s.rate>0?`<s>${won(s.regular)}</s><strong>${won(s.deal)}</strong>`:`<strong>${won(s.deal)}</strong> <span style="font-size:13px;color:var(--mute)">정가 · 멤버 쿠폰·등급 할인은 신청 화면에서 적용</span>`}</div>`;
   $("rPhone").value=store.get("pn_phone")||"";$("rMsg").textContent="";$("rMsg").className="msg";$("rBtn").disabled=false;$("sheetBg").hidden=false;setTimeout(()=>$("rPeople").focus(),50)}
 function closeAll(){$("sheetBg").hidden=true;$("leaveBg").hidden=true;const pb=$("postBg");if(pb&&!pb.hidden){pb.hidden=true;$("pvMedia").innerHTML="";if(location.hash.startsWith("#m-"))history.replaceState(null,"",location.pathname+location.search)}lastFocus&&lastFocus.focus()}
 $("sClose").onclick=closeAll;document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeAll);
@@ -715,7 +715,7 @@ function calc(){if(!M)return;const br=$("cBr").value,d=$("cDate").value,pk=$("cP
   if(!base){o.innerHTML="이 지점 요금은 호스트에게 문의해 주세요 (010-8339-5818).";return}
   const extra=Math.max(0,ppl-5)*20000,total=base+extra,deal=Math.round(base*(100-M.discount)/100/1000)*1000+extra;
   const dt=new Date(d+"T00:00:00");const lab=`${dt.getMonth()+1}/${dt.getDate()}(${"일월화수목금토"[dt.getDay()]})`;
-  o.innerHTML=`${lab} ${$("cPk").selectedOptions[0].text.split(" ")[0]}<span class="tier">${tierName[t]} 요금</span><br><b>${total.toLocaleString()}원</b>${extra?` <span style="color:var(--mute)">(기본 ${base.toLocaleString()}원 + 인원 추가 ${extra.toLocaleString()}원)</span>`:""}<br><span style="color:var(--mute)">이번 주 빈 날짜라면 N CREW 멤버 특가 약 ${deal.toLocaleString()}원 · <a href="#deals">빈자리 보기</a></span>`}
+  o.innerHTML=`${lab} ${$("cPk").selectedOptions[0].text.split(" ")[0]}<span class="tier">${tierName[t]} 요금</span><br><b>${total.toLocaleString()}원</b>${extra?` <span style="color:var(--mute)">(기본 ${base.toLocaleString()}원 + 인원 추가 ${extra.toLocaleString()}원)</span>`:""}<br><span style="color:var(--mute)">3일 이상 남은 평일 빈자리라면 N CREW 멤버 특가 약 ${deal.toLocaleString()}원 · <a href="#deals">빈자리 보기</a></span>`}
 const t0=new Date(Date.now()+9*36e5);$("cDate").value=ymd(t0);$("cDate").min=ymd(t0);
 ["cBr","cDate","cPk","cPpl"].forEach(id=>$(id).addEventListener("input",calc));
 fetch(POSTS_API+"?meta=1").then(r=>r.json()).then(j=>{M=j;calc()}).catch(()=>{$("cOut").textContent="요금을 불러오지 못했어요. 지점 페이지에서 요금표를 확인해 주세요."})})();
