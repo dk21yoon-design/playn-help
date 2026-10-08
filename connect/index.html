@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Play N 채널 연결</title>
+<style>
+:root{--bg:#0B0B10;--card:#16161f;--line:#2a2a36;--pink:#FF2E6E;--green:#2BE07A;--mute:#a6a3b8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:-apple-system,"Pretendard",sans-serif;line-height:1.6}
+main{max-width:620px;margin:0 auto;padding:28px 16px 60px}h1{font-size:24px;margin:0 0 6px}h1 b{color:var(--pink)}
+p.s{color:var(--mute);margin:0 0 20px;font-size:14px}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:16px 0}
+h2{font-size:18px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center}
+.st{font-size:12px;padding:3px 10px;border-radius:999px;background:#333;color:#ccc}.st.on{background:var(--green);color:#0B0B10}
+ol{padding-left:20px;margin:8px 0 12px;font-size:14px;color:#ddd}li{margin:4px 0}a{color:#7cc7ff}
+code{background:#000;padding:2px 6px;border-radius:6px;font-size:12px;word-break:break-all}
+label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+textarea,input{width:100%;background:#000;color:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px}
+button{margin-top:12px;background:var(--pink);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer}
+.msg{margin-top:10px;font-size:14px;min-height:1em}.ok{color:var(--green)}.err{color:#ff8a8a}
+</style></head><body><main>
+<h1>PLAY <b>N</b> 릴스 동시 발행 연결</h1>
+<p class="s">입력한 값은 플레이앤 서버에만 저장되고 이 화면·채팅에 남지 않아요. 이 링크는 사장님만 쓰세요.</p>
+<p class="msg" id="top"></p>
+
+<section id="fb"><h2>① 페이스북 페이지 릴스 <span class="st" id="st-facebook">확인 중</span></h2>
+<ol>
+<li><a href="https://developers.facebook.com/tools/explorer" target="_blank">Graph API 탐색기</a> 열기 → 오른쪽 <b>Meta 앱</b>: NSL Auto Post</li>
+<li><b>권한 추가</b>에 이 6개가 있는지 확인: <code>instagram_basic</code> <code>instagram_content_publish</code> <code>pages_show_list</code> <code>pages_read_engagement</code> <code>business_management</code> + 새로 <code>pages_manage_posts</code></li>
+<li><b>Generate Access Token</b> → 「게임파티룸 플레이앤」 페이지와 @playn_no.1 선택 → 허용</li>
+<li>나온 토큰을 아래에 붙여넣기 (앱 시크릿은 저장돼 있어서 비워도 돼요)</li></ol>
+<label>사용자 액세스 토큰</label><textarea id="fb-token" rows="3"></textarea>
+<button onclick="go('fb')">저장하고 연결</button><div class="msg" id="m-fb"></div></section>
+
+<section id="th"><h2>② 스레드 <span class="st" id="st-threads">확인 중</span></h2>
+<ol>
+<li><a href="https://developers.facebook.com/apps/1730706071252388/use_cases/" target="_blank">앱 이용 사례</a> → <b>이용 사례 추가</b> → <b>Threads API 액세스</b> → 권한 <code>threads_basic</code> <code>threads_content_publish</code></li>
+<li>앱 역할 → <b>Threads 테스터</b>에 스레드 계정 추가 → 스레드 앱 설정 → 계정 → 웹사이트 권한 → 초대 수락</li>
+<li>Threads API 설정 → <b>사용자 토큰 생성기</b> → 토큰 생성 → 아래에 붙여넣기</li></ol>
+<label>스레드 액세스 토큰</label><textarea id="th-token" rows="3"></textarea>
+<button onclick="go('th')">저장하고 연결</button><div class="msg" id="m-th"></div></section>
+
+<section id="yt"><h2>③ 유튜브 쇼츠 <span class="st" id="st-youtube">확인 중</span></h2>
+<ol>
+<li>플레이앤 유튜브 채널 만들기 (없으면)</li>
+<li><a href="https://console.cloud.google.com/projectcreate" target="_blank">구글 클라우드 새 프로젝트</a> → <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank">YouTube Data API v3 사용</a></li>
+<li><a href="https://console.cloud.google.com/apis/credentials/consent" target="_blank">OAuth 동의 화면</a>: 외부, 앱 이름 Play N → 저장 후 <b>앱 게시(프로덕션)</b></li>
+<li><a href="https://console.cloud.google.com/apis/credentials" target="_blank">사용자 인증 정보</a> → OAuth 클라이언트 ID → 웹 애플리케이션 → 승인된 리디렉션 URI:<br><code>https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-publish/ytcb</code></li>
+<li>나온 클라이언트 ID·보안 비밀번호를 아래에 넣고 → 구글 로그인 → 채널 선택</li></ol>
+<label>클라이언트 ID</label><input id="yt-cid">
+<label>클라이언트 보안 비밀번호</label><input id="yt-cs" type="password">
+<button onclick="go('yt')">저장하고 구글 로그인</button><div class="msg" id="m-yt"></div>
+<p class="s" style="margin-top:12px">구글 심사 전에는 올린 쇼츠가 '비공개'로 잠길 수 있어요. 그땐 유튜브 스튜디오에서 공개로 바꾸면 돼요.</p></section>
+</main>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-publish?mode=connect";
+const K=new URLSearchParams(location.hash.slice(1)).get("k")||sessionStorage.getItem("pk")||"";
+if(K){try{sessionStorage.setItem("pk",K)}catch(e){} history.replaceState(null,"",location.pathname+location.search)}
+const $=id=>document.getElementById(id);
+async function call(b){const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json","x-playand-key":K},body:JSON.stringify(b)});if(r.status===404)return{ok:false,msg:"링크가 올바르지 않아요. 문자로 받은 링크로 다시 열어 주세요."};return r.json()}
+async function status(){if(!K){$("top").innerHTML='<span class="err">문자로 받은 연결 링크로 열어 주세요.</span>';return}
+ const s=await call({ch:"status"});for(const c of["facebook","threads","youtube"]){const e=$("st-"+c);const on=s.ready&&s.ready[c];e.textContent=on?"연결됨":"미연결";e.className="st"+(on?" on":"")}}
+async function go(ch){const m=$("m-"+ch);m.className="msg";m.textContent="확인 중…";
+ const b={ch};if(ch==="fb")b.token=$("fb-token").value;if(ch==="th")b.token=$("th-token").value;if(ch==="yt"){b.cid=$("yt-cid").value;b.cs=$("yt-cs").value}
+ try{const r=await call(b);m.className="msg "+(r.ok?"ok":"err");m.textContent=r.msg||"";if(r.ok&&r.go){location.href=r.go;return}if(r.ok){["fb-token","th-token"].forEach(i=>$(i).value="");status()}}catch(e){m.className="msg err";m.textContent="연결 실패: "+e}}
+const q=new URLSearchParams(location.search);if(q.get("yt")){const m=$("m-yt");m.className="msg "+(q.get("yt")==="ok"?"ok":"err");m.textContent=q.get("m")||"";$("yt").scrollIntoView()}
+status();
+</script></body></html>
