@@ -39,6 +39,24 @@ import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil
 FPS = 30
 specf, out = sys.argv[1], sys.argv[2]
 spec = json.load(open(specf, encoding='utf-8'))
+# ---- 채널별 버전 (2026-10-09): python3 playn_reel_v3.py spec.json R46_yt.mp4 --variant=yt
+# spec["variants"]["yt"|"fb"|"th"] = {"title": [...], "kicker": "...", "music": {...}, "cover_scene": n,
+#   "scenes": {"5": {"line": "..."}, "6": {새 장면}}, "drop_scenes": [3]}  → 같은 원본·같은 길이 틀에서 채널별 CTA·문구·음악만 바꿈
+VARIANT = next((a.split('=', 1)[1] for a in sys.argv[3:] if a.startswith('--variant=')), None)
+if VARIANT:
+    _v = (spec.get('variants') or {}).get(VARIANT)
+    if _v is None: raise SystemExit(f'spec에 variants.{VARIANT} 가 없어요')
+    for _k, _val in _v.items():
+        if _k == 'scenes':
+            for _i, _o in sorted(_val.items(), key=lambda x: int(x[0])):
+                _i = int(_i)
+                if _i >= len(spec['scenes']): spec['scenes'].append(_o)
+                else: spec['scenes'][_i] = {**spec['scenes'][_i], **_o}
+        elif _k == 'drop_scenes':
+            spec['scenes'] = [sc for i, sc in enumerate(spec['scenes']) if i not in set(_val)]
+        else:
+            spec[_k] = _val
+    if 'preview_music' not in _v: spec.pop('preview_music', None)  # 인스타 음악 미리보기는 인스타 버전에만
 base = os.path.splitext(out)[0]
 W = os.path.abspath(os.path.dirname(out) or '.') + '/_v3work'
 shutil.rmtree(W, ignore_errors=True); os.makedirs(W)
@@ -378,6 +396,10 @@ def clip_check(spec, scenes):
         print('❌ 클립 재사용 검사 실패\n- ' + '\n- '.join(errs), file=sys.stderr); sys.exit(3)
     return reg, rows, rid
 def clip_commit(reg, rows, rid):
+    if VARIANT:  # 채널 버전은 기본 버전 기록에 새 구간만 더함
+        base = [{'reel': r['reel'], 'key': r['key'], 'name': r.get('name'), 'start': r['start'], 'end': r['end']} for r in reg if r['reel'] == rid]
+        have = {(r['key'], r['start'], r['end']) for r in base}
+        rows = base + [r for r in rows if (r['key'], r['start'], r['end']) not in have]
     _reg_save(rid, rows)
 
 
