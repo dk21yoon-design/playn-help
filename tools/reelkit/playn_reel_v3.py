@@ -46,7 +46,12 @@ VARIANT = next((a.split('=', 1)[1] for a in sys.argv[3:] if a.startswith('--vari
 if VARIANT:
     _v = (spec.get('variants') or {}).get(VARIANT)
     if _v is None: raise SystemExit(f'spec에 variants.{VARIANT} 가 없어요')
+    # order: 장면 구성 자체를 바꿈 (숫자=기본 장면 번호, dict=새 장면) — 유튜브 롱버전 등
+    if _v.get('order'):
+        _base = spec['scenes']
+        spec['scenes'] = [dict(_base[x]) if isinstance(x, int) else x for x in _v['order']]
     for _k, _val in _v.items():
+        if _k == 'order': continue
         if _k == 'scenes':
             for _i, _o in sorted(_val.items(), key=lambda x: int(x[0])):
                 _i = int(_i)
@@ -57,6 +62,11 @@ if VARIANT:
         else:
             spec[_k] = _val
     if 'preview_music' not in _v: spec.pop('preview_music', None)  # 인스타 음악 미리보기는 인스타 버전에만
+# pace: CTA 빼고 장면마다 초 더하기(페북 +0.5 천천히, 음수면 빠르게)
+if spec.get('pace'):
+    for _sc in spec['scenes']:
+        if not _sc.get('cta') and not _sc.get('fixed'): _sc['dur'] = round(max(1.2, float(_sc.get('dur', 3.0)) + float(spec['pace'])), 2)
+ASPECT = spec.get('aspect', '9:16')   # '3:4' = 1080x1440 (스레드 피드에서 크게 보임)
 base = os.path.splitext(out)[0]
 W = os.path.abspath(os.path.dirname(out) or '.') + '/_v3work'
 shutil.rmtree(W, ignore_errors=True); os.makedirs(W)
@@ -297,11 +307,12 @@ def overlay_html(sc):
     # 넘치면 글자 크기 자동 축소 (겹침 방지)
     h.append("""<script>
 function fitW(el,max){let f=parseFloat(getComputedStyle(el).fontSize);while(el.scrollWidth>max&&f>40){f-=2;el.style.fontSize=f+'px'}}
+const TS=__TS__;if(TS!==1){document.querySelectorAll('.say,.sub,.name,.cta,.chip,.pill,.review .q,.center .c,.react span').forEach(e=>{e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*TS)+'px'})}
 const T=document.getElementById('ttl');[...T.children].forEach(d=>fitW(d,888));
 const L=document.getElementById('low');let k=1;while(L.scrollHeight>L.clientHeight+1&&k>0.6){k-=0.04;[...L.querySelectorAll('.name,.say,.sub,.cta,.chip,.pill')].forEach(e=>{e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*0.96)+'px'})}
 document.querySelectorAll('.center .c').forEach(c=>fitW(c,940));
 </script></body></html>""")
-    return ''.join(h)
+    return ''.join(h).replace('__TS__', str(float(spec.get('text_scale', 1))))
 
 
 async def render_overlays(scenes):
@@ -430,7 +441,8 @@ total = sum(d for _, d in parts)
 lst = f'{W}/list.txt'
 open(lst, 'w').write(''.join(f"file '{p}'\n" for p, _ in parts))
 vid = f'{W}/video.mp4'
-run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', str(FPS), vid])
+_vf = ['-vf', f"crop=1080:1440:0:{int(spec.get('crop_y', 170))}"] if ASPECT == '3:4' else []
+run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, *_vf, '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', str(FPS), vid])
 # 보이스 트랙 (mic 장면만 소리, 나머지 무음)
 alst = f'{W}/alist.txt'
 open(alst, 'w').write(''.join(f"file '{W}/a{i}.wav'\n" for i in range(len(parts))))
