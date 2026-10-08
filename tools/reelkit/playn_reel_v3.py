@@ -169,6 +169,15 @@ em{font-style:normal;color:#FF3D7F}
 .cta{font-size:58px;font-weight:900;line-height:1.26;letter-spacing:-1.5px}
 .pill{display:inline-block;font-size:28px;font-weight:800;background:#3DF2FF;color:#08080E;border-radius:999px;padding:9px 26px}
 .ai{position:absolute;right:28px;top:652px;font-size:20px;color:rgba(255,255,255,.7)}
+.react{position:absolute;left:60px;right:60px;top:668px;display:flex;justify-content:center;text-align:center}
+.react span{font-size:84px;font-weight:900;letter-spacing:-2px;line-height:1.1;color:#fff;-webkit-text-stroke:12px #08080E;paint-order:stroke fill;transform:rotate(-3deg);display:inline-block}
+.react span em{color:#FFE45C}
+.cnt{position:absolute;right:32px;top:652px;display:flex;gap:8px;align-items:center;background:rgba(8,8,14,.78);border:1.5px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 18px}
+.cnt .k{font-size:36px;font-weight:700;color:#fff;line-height:1}
+.cnt .d{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.3)}
+.cnt .d.on{background:#3DF2FF;box-shadow:0 0 10px #3DF2FF}
+.stroke .say,.stroke .sub,.stroke .name,.stroke .cta,.stroke .center .c,.stroke .title{-webkit-text-stroke:9px #08080E;paint-order:stroke fill}
+.stroke .gb,.react .gb{-webkit-text-stroke:0}
 '''
 
 KIDS_CSS = '''
@@ -216,6 +225,8 @@ def overlay_html(sc):
     t = spec.get('title', [])
     t = t if isinstance(t, list) else [t]
     head = HEAD.replace('</style>', KIDS_CSS + '</style>').replace('<link href="https://fonts.googleapis.com/css2?family=Chakra', '<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Chakra') if kids else HEAD
+    if spec.get('stroke'):
+        head = head.replace('<body>', '<body class="stroke">')
     h = [head, '<div class="scrimT"></div><div class="scrimB"></div>']
     if kids:
         h.append('<div class="kframe"></div>')
@@ -236,6 +247,14 @@ def overlay_html(sc):
             h.append(('<div class="rank big">' if re.fullmatch(r'\d', b) else '<div class="rank">') + (f'<span class="l">{H.escape(pre)}</span>' if pre else '') + f'<span class="n num">{m.group(2)}</span>' + (f'<span class="l">{H.escape(suf)}</span>' if suf else '') + '</div>')
         else:
             h.append(f'<div class="rank txt"><span class="l">{H.escape(b)}</span></div>')
+    # 진행 카운터 (상위 쇼츠 학습 10/9: 몇 개 남았는지 보여주면 끝까지 봄)
+    if spec.get('counter') and sc.get('name'):
+        named = [x for x in spec['scenes'] if x.get('name')]
+        k = next((j for j, x in enumerate(named) if x is sc), 0)
+        h.append('<div class="cnt"><span class="k num">' + f'{k + 1}/{len(named)}</span>' + ''.join(f'<span class="d{" on" if j <= k else ""}"></span>' for j in range(len(named))) + '</div>')
+    # 리액션 자막 (밈형 굵은 외곽선 글자)
+    if sc.get('react'):
+        h.append(f'<div class="react"><span>{mark(sc["react"])}</span></div>')
     if sc.get('mic'):
         h.append(f'<div class="mic">🎙 {H.escape(sc["mic"] if isinstance(sc["mic"], str) else "실제 팀 보이스")}</div>')
     if sc.get('center'):
