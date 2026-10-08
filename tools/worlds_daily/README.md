@@ -10,6 +10,8 @@
    - `publish_at`: `<date>T09:50:00Z` (18:50 KST)
    - `title`: `W<번호> [롤드컵 데일리] ...`. 번호는 큐에서 마지막 W 번호에 1을 더한다.
    - `caption`: 아래 형식을 지킨다. hook 1줄, ✔ 4줄, `👉 playn.kr/worlds (프로필 링크)`, 디스클레이머, `사진: 플레이앤 매장`, 해시태그.
+     - 해시태그는 **5개까지**(인스타 제한, 캡션+첫 댓글 합계). 기본: `#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸`. 넘치면 발행 함수가 6번째부터 자동으로 지운다.
+     - hook 1줄에 검색어(롤드컵·LCK·팀명 등)를 넣는다. 인스타 검색은 캡션 키워드를 읽는다.
 4. 빌드와 업로드: `PLAYN_KEY=<playand_config.intake_key> node tools/worlds_daily/build.mjs tools/worlds_daily/specs/<date>.json`
    - 넘침 오류가 나면 문구를 줄여 다시 빌드한다.
    - 출력된 `out/<date>/insert.sql`을 Supabase에서 실행한다.
