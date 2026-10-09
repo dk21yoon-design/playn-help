@@ -235,7 +235,7 @@ def overlay_html(sc):
     t = spec.get('title', [])
     t = t if isinstance(t, list) else [t]
     head = HEAD.replace('</style>', KIDS_CSS + '</style>').replace('<link href="https://fonts.googleapis.com/css2?family=Chakra', '<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Chakra') if kids else HEAD
-    if spec.get('stroke'):
+    if spec.get('stroke', True):  # 10/9 학습: 외곽선 자막 기본값
         head = head.replace('<body>', '<body class="stroke">')
     h = [head, '<div class="scrimT"></div><div class="scrimB"></div>']
     if kids:
@@ -258,7 +258,7 @@ def overlay_html(sc):
         else:
             h.append(f'<div class="rank txt"><span class="l">{H.escape(b)}</span></div>')
     # 진행 카운터 (상위 쇼츠 학습 10/9: 몇 개 남았는지 보여주면 끝까지 봄)
-    if spec.get('counter') and sc.get('name'):
+    if spec.get('counter', True) and sc.get('name') and sum(1 for x in spec['scenes'] if x.get('name')) >= 2:
         named = [x for x in spec['scenes'] if x.get('name')]
         k = next((j for j, x in enumerate(named) if x is sc), 0)
         h.append('<div class="cnt"><span class="k num">' + f'{k + 1}/{len(named)}</span>' + ''.join(f'<span class="d{" on" if j <= k else ""}"></span>' for j in range(len(named))) + '</div>')
