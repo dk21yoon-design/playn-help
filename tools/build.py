@@ -21,7 +21,8 @@ HEAD_COMMON = """<meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="/assets/base.css">"""
+<link rel="stylesheet" href="/assets/base.css">
+<script src="/assets/pv.js" defer></script>"""
 
 TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
 <nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
