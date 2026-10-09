@@ -256,6 +256,8 @@ details.terms div{padding:6px 0 0}
 .br h3{font-size:26px}
 .br h3 a{text-decoration:none}
 .br .addr{color:var(--mute);font-size:14.5px;margin-top:4px}
+#dealNote{margin:0 0 12px;font-size:14px;line-height:1.5;color:var(--ink)}#dealNote span{color:var(--mute);font-size:12.5px}#dealNote b{color:var(--lamp)}
+.cell.reg{opacity:.62}.cell.deal{box-shadow:inset 0 0 0 2px var(--lamp)}
 .br .rate{color:var(--lamp);font-weight:800;font-size:14px;margin-top:6px}
 .br ul{list-style:none;margin-top:14px;font-size:14.5px;display:grid;gap:7px;flex:1}
 .br li{padding-left:18px;position:relative;color:#DDD9FF}
@@ -413,7 +415,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
       <div><h2 class="disp">이번 주 빈자리</h2><div class="sub" id="boardSub">빈자리를 불러오는 중이에요</div></div>
       <div class="tabs" role="tablist" id="tabs"></div>
     </div>
-    <div id="grid"><div class="skel" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <p id="dealNote" role="status"></p><div id="grid"><div class="skel" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
     <div class="legend"><span><i style="background:#2C2675;box-shadow:0 0 0 1px rgba(120,110,230,.6) inset"></i>예약 가능(멤버 특가)</span><span><i style="background:rgba(58,53,128,.25)"></i>마감</span><span><i style="background:var(--lamp)"></i>주말·연휴 요금</span></div>
   </div>
 </div></section>
@@ -637,11 +639,13 @@ function grid(){const g=$("grid");if(!D){return}
   D.days.forEach(d=>{const day=document.createElement("div");day.className="day"+(d.weekend?" wk":"");
     const [md,w]=d.label.split("(");day.innerHTML=`${md}<small>${w.replace(")","")}${d.date===D.days[0].date?" 오늘":""}</small>`;el.appendChild(day);
     PK.forEach(([k])=>{const s=d.branches[cur][k];
-      if(s.free){free++;const b=document.createElement("button");b.className="cell"+(d.weekend?" lit":"");b.type="button";
+      if(s.free){free++;const b=document.createElement("button");b.className="cell"+(d.weekend?" lit":"")+(s.rate>0?" deal":" reg");b.type="button";
         b.setAttribute("aria-label",`${d.label} ${PK.find(p=>p[0]===k)[1]} ${s.deal?won(s.deal):"가격 문의"} 신청`);
         b.innerHTML=!s.deal?`<span class="p">빈자리</span><span class="t">가격 문의</span>`:s.rate>0?`<s>${won(s.regular)}</s><span class="p">${(s.deal/10000).toLocaleString()}만</span>${s.kind==="flash"?'<span class="t">⚡오늘 1자리</span>':""}`:`<span class="p">${(s.deal/10000).toLocaleString()}만</span><span class="t" style="color:var(--mute)">정가</span>`;
         b.onclick=()=>openSheet(d,k,s);el.appendChild(b)}
       else{const c=document.createElement("div");c.className="cell";c.textContent="마감";el.appendChild(c)}})});
+  const dd=D.days.filter(d=>PK.some(([k])=>{const s=d.branches[cur][k];return s.free&&s.rate>0}));
+  const note=$("dealNote");if(note){note.innerHTML=dd.length?`🔥 이번 주 ${SHORT[cur]} 특가 날짜: <b>${dd.map(d=>d.label).join(" · ")}</b> <span>(오늘~모레·토요일·금요일 밤은 정가)</span>`:`이번 주 ${SHORT[cur]}은 특가 칸이 없어요 <span>(오늘~모레·토요일·금요일 밤은 정가 · 다른 지점도 확인해 보세요)</span>`}
   g.innerHTML="";if(!free){g.innerHTML='<div class="empty">이번 주 '+SHORT[cur]+'은 빈자리가 없어요. 다른 지점을 확인해 보세요.</div>'}else g.appendChild(el);
   $("boardSub").textContent=D.rules&&D.rules.mode!=="classic"?`N CREW 멤버 특가: ${D.rules.early_from}일 뒤부터 빈자리 ${D.discount}% · 오늘은 ⚡번개 ${D.rules.flash_per_day}자리만 ${D.discount_today}% · 칸을 누르면 바로 예약 신청`:`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 예약 신청`;}
 fetch(API+"?deals=1").then(r=>r.json()).then(j=>{D=j;tabs();grid()}).catch(()=>{$("boardSub").textContent="빈자리를 불러오지 못했어요. 새로고침하거나 010-8339-5818로 문의해 주세요."});
