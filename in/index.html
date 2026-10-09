@@ -58,6 +58,8 @@
     <div class="ch"><label><input type="radio" name="bq" value="1">사용해요</label><label><input type="radio" name="bq" value="0" checked>안 써요</label></div>
     <label class="t">예약하신 곳</label>
     <div class="ch"><label><input type="radio" name="pf" value="스페이스클라우드" checked>스페이스클라우드</label><label><input type="radio" name="pf" value="네이버">네이버</label><label><input type="radio" name="pf" value="홈페이지·기타">홈페이지·기타</label></div>
+    <label class="t">플레이앤은 어떻게 알게 되셨어요? <small style="font-weight:600;color:#5B5790">(선택 · 한 번만 눌러주세요)</small></label>
+    <div class="ch" id="fvBox"><label><input type="radio" name="fv" value="인스타그램">인스타그램</label><label><input type="radio" name="fv" value="유튜브">유튜브</label><label><input type="radio" name="fv" value="스레드">스레드</label><label><input type="radio" name="fv" value="페이스북">페이스북</label><label><input type="radio" name="fv" value="네이버 검색·지도">네이버 검색·지도</label><label><input type="radio" name="fv" value="구글 지도">구글 지도</label><label><input type="radio" name="fv" value="스페이스클라우드 등 예약앱">스페이스클라우드 등 예약앱</label><label><input type="radio" name="fv" value="친구 추천">친구 추천</label><label><input type="radio" name="fv" value="재방문">재방문</label><label><input type="radio" name="fv" value="기타">기타</label></div>
     <label class="t" for="bk">보증금 환급받을 계좌</label>
     <div class="row2"><select id="bk" required><option value="">은행</option></select><input id="ac" type="text" inputmode="numeric" placeholder="계좌번호" required></div>
     <input id="ho" type="text" placeholder="예금주 (입금자명과 같으면 비워두세요)" style="margin-top:8px">
@@ -146,6 +148,7 @@ $("fin").onsubmit=async e=>{e.preventDefault();
   if($("wp").value&&!$("wp").disabled&&!D.member&&!$("crJ").checked)return msg("mIn","롤드컵 이벤트는 N CREW 가입 팀만 참여할 수 있어요. 'N CREW 가입하기'를 체크해 주세요.");
   $("goIn").disabled=true;
   const acc=$("ac").value.trim();
+  const fv=document.querySelector("[name=fv]:checked");if(fv)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-growth",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"found",k,found_via:fv.value})}).catch(()=>null);
   const r=await post({action:"checkin",headcount:$("hc").value,depositor:$("dp").value,review:document.querySelector("[name=rv]:checked").value,bbq:document.querySelector("[name=bq]:checked").value==="1",platform:document.querySelector("[name=pf]:checked").value,bank:$("bk").value,account:acc||(D.checkin?"keep":""),holder:$("ho").value||$("dp").value,companions:$("cp").value,worlds_pick:$("wp").disabled?"":$("wp").value,crew_join:$("crJ").checked,crew_night:$("crN").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("goIn").disabled=false;
   if(!r.ok)return msg("mIn",r.error||"다시 시도해 주세요");
