@@ -37,6 +37,9 @@ button.send:disabled{opacity:.4}
 .pick button{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);color:var(--fg);border-radius:14px;padding:16px;margin-bottom:10px;font-size:17px;font-weight:700;font-family:inherit}
 .pick button span{display:block;font-size:13px;color:var(--mute);font-weight:500;margin-top:3px}
 .note{font-size:12px;color:#6E6E7E;text-align:center;padding:4px 0 2px}
+.sos{display:block;width:100%;margin:10px 0 4px;background:#2A0D14;border:1px solid #7A1F36;color:#FFB3C8;border-radius:14px;padding:12px 14px;font-size:14.5px;font-weight:700;text-align:left;font-family:inherit}
+.sos span{display:block;font-size:12.5px;font-weight:500;color:#C98A9B;margin-top:2px}
+.esc a.f{background:#C8102E}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head>
@@ -47,26 +50,31 @@ button.send:disabled{opacity:.4}
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-chat";
 const BR={hongdae:{n:"홍대루프탑점",a:"동교동 · 몽달건물 4층"},yeonnam:{n:"연남루프탑점",a:"동교동 · 꼬꼬순이건물 3층"},yeontral:{n:"연트럴파크점",a:"연남동 · 계림빌딩 5층"}};
-const CHIPS={common:["에어컨이 안 켜져요","모니터 화면이 안 나와요","헤드셋 소리가 안 나요","노래방은 어떻게 해요?","셀프결제 물품 가격","퇴실 전 체크리스트"],
+const CHIPS={common:["도어락 경보가 울려요","에어컨이 안 켜져요","모니터 화면이 안 나와요","헤드셋 소리가 안 나요","노래방은 어떻게 해요?","셀프결제 물품 가격","퇴실 전 체크리스트"],
 hongdae:["루프탑 조명 켜는 법","가스레인지가 안 켜져요"],yeonnam:["빔프로젝터 켜는 법","콘솔 연결 방법"],yeontral:["화장실은 어디예요?","빔프로젝터 켜는 법"]};
+const HOST='010-8339-5818';
 const log=document.getElementById('log'),f=document.getElementById('f'),q=document.getElementById('q'),sendBtn=document.getElementById('sendBtn'),brBtn=document.getElementById('brBtn');
-let b=new URLSearchParams(location.search).get('b');let msgs=[];let sid=Math.random().toString(36).slice(2,10);let busy=false;
+const P=new URLSearchParams(location.search);let b=P.get('b');const Q0=(P.get('q')||'').slice(0,100);let msgs=[];let sid=Math.random().toString(36).slice(2,10);let busy=false;
 function el(t,c,txt){const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
 function scroll(){log.scrollTop=log.scrollHeight}
 function add(role,text){log.appendChild(el('div','msg '+(role==='user'?'me':'bot'),text));scroll()}
 function escCard(host){const d=el('div','esc');d.appendChild(el('p',null,'호스트에게 바로 연결할 수 있어요'));const t=host.replace(/-/g,'');
 const a=el('a',null,'📞 전화하기');a.href='tel:'+t;const s=el('a','s','💬 문자 보내기');s.href='sms:'+t;d.append(a,s);log.appendChild(d);scroll()}
+function sosCard(){const d=el('div','esc');d.appendChild(el('p',null,'불꽃·연기가 보이면 바로 밖으로 나간 뒤 119에 신고해 주세요. 타는 냄새만 나도 전원·가스를 끄고 호스트에게 바로 연락해 주세요.'));const t=HOST.replace(/-/g,'');
+const f=el('a','f','🚒 119 신고');f.href='tel:119';const a=el('a',null,'📞 호스트 전화');a.href='tel:'+t;const s=el('a','s','💬 문자');s.href='sms:'+t;d.append(f,a,s);log.appendChild(d);scroll()}
 function chips(){const d=el('div','chips');[...CHIPS.common,...(CHIPS[b]||[])].forEach(c=>{const x=el('button','chip',c);x.type='button';x.onclick=()=>send(c);d.appendChild(x)});log.appendChild(d);scroll()}
 function pick(){f.hidden=true;brBtn.hidden=true;log.innerHTML='';const p=el('div','pick');p.appendChild(el('h1',null,'어느 지점을 이용 중이세요?'));p.appendChild(el('p',null,'지점을 고르면 그 지점 안내에 맞춰 답변해 드려요.'));
 Object.entries(BR).forEach(([k,v])=>{const x=el('button',null,v.n);x.appendChild(el('span',null,v.a));x.onclick=()=>{history.replaceState(null,'','?b='+k);b=k;start()};p.appendChild(x)});log.appendChild(p)}
 function start(){if(!BR[b])return pick();log.innerHTML='';msgs=[];f.hidden=false;brBtn.hidden=false;brBtn.textContent=BR[b].n+' ▾';
 add('assistant','안녕하세요! 플레이앤 '+BR[b].n+' AI 상담사예요 🎮\n이용 방법이나 장비 문제를 물어보시면 바로 도와드릴게요.\n해결이 안 되면 호스트에게 연결해 드려요.');chips();
-log.appendChild(el('div','note','AI가 안내사항을 바탕으로 답해요. 보증금·환불·연장은 호스트가 확정해요.'))}
+const sb=el('button','sos','🚨 타는 냄새·연기·가스 냄새가 나요');sb.type='button';sb.appendChild(el('span',null,'AI를 거치지 않고 바로 연결해요'));sb.onclick=sosCard;log.appendChild(sb);
+log.appendChild(el('div','note','AI가 안내사항을 바탕으로 답해요. 보증금·환불·연장은 호스트가 확정해요.'));
+if(Q0&&!start.used){start.used=1;history.replaceState(null,'','?b='+b);send(Q0)}}
 async function send(text){text=(text||'').trim();if(!text||busy)return;busy=true;sendBtn.disabled=true;q.value='';q.style.height='';
 add('user',text);msgs.push({role:'user',content:text});const t=el('div','typing','답변 작성 중…');log.appendChild(t);scroll();
 try{const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({b,sid,messages:msgs})});const j=await r.json();t.remove();
-const ans=j.answer||'잠시 연결이 원활하지 않아요. 호스트에게 연락 주세요.';add('assistant',ans);msgs.push({role:'assistant',content:ans});if(j.escalate)escCard(j.host||'010-8339-5818')}
-catch(e){t.remove();add('assistant','네트워크가 불안정해요. 잠시 후 다시 시도하시거나 호스트에게 연락 주세요.');escCard('010-8339-5818')}
+const ans=j.answer||'잠시 연결이 원활하지 않아요. 호스트에게 연락 주세요.';add('assistant',ans);msgs.push({role:'assistant',content:ans});if(j.escalate)escCard(j.host||HOST)}
+catch(e){t.remove();add('assistant','네트워크가 불안정해요. 잠시 후 다시 시도하시거나 호스트에게 연락 주세요.');escCard(HOST)}
 busy=false;sendBtn.disabled=false}
 f.onsubmit=e=>{e.preventDefault();send(q.value)};
 q.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();send(q.value)}});
