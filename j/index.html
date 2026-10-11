@@ -59,7 +59,7 @@ function paint(r){
   const pct=Math.min(100,Math.round(r.joined/Math.max(1,r.need)*100));$("bar").style.width=pct+"%";
   if(r.status==="done"){$("h").innerHTML=r.result==="ext"?`🎉 <b>무료 연장 확정!</b><br>퇴실 ${hm(r.new_end)}`:`🎉 <b>전원 가입 완료!</b>`;$("pg").innerHTML=r.result==="ext"?"대표님 휴대폰으로 확정 문자가 갔어요. 즐거운 시간 보내세요!":`${r.alt}<br>퇴실 정산 때 자동으로 빠져요.`;$("fm").hidden=true;return}
   if(r.status==="completing"){$("h").innerHTML="⏳ 전원 가입 완료!<br>연장 처리 중이에요";$("pg").textContent="1분 안에 대표님께 확정 문자가 가요.";$("fm").hidden=true;return}
-  $("h").innerHTML=r.mode==="ext"?`다 같이 가입하면<br>퇴실 <b>${hm(r.orig_end)} → ${hm(r.new_end)}</b> 무료 연장`:`다 같이 가입하면<br><b>음료·봉투비·일회용품</b> 무료`;
+  $("h").innerHTML=r.mode==="ext"?`다 같이 가입하면<br>퇴실 <b>${hm(r.orig_end)} → ${hm(r.new_end)}</b> 무료 연장`:`다 같이 가입하면<br><b>봉투비·일회용품 무료</b><br>+ 다음 방문 1시간 연장권`;
   $("pg").innerHTML=`${r.branch} · <b>${r.joined}/${r.need}명</b> 가입 완료${done?" · 나는 가입 완료 ✅":""}<br>${r.mode==="ext"?"마지막 한 명까지 가입하면 자동으로 연장돼요.":r.alt}`;
   $("fm").hidden=done}
 async function load(){

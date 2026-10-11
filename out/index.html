@@ -131,7 +131,7 @@ async function load(){
   const dt=new Date(D.date+"T00:00:00");$("meta").textContent=`${D.branch} · ${dt.getMonth()+1}/${dt.getDate()} ${D.pkg}`;$("meta").hidden=false;
   $("accTxt").textContent=D.account;$("depAmt").textContent=won(D.rules.deposit);
   if(D.exempt){$("depHint").hidden=true;$("exemptBox").hidden=false;$("exemptBox").innerHTML="👑 N CREW 레전드 멤버라 <b>보증금 없이</b> 이용하세요. 입금자명 칸엔 이름만 적어주시면 돼요. 퇴실 후 쓰신 물품 금액만 정산해요."}
-  else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent="N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}
+  else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent=(D.checkin&&D.checkin.review==="drink")?"N CREW 혜택: 물 2병 무료 (음료는 후기 이벤트로 받아서 1회 방문 음료 2병 한도 적용)":"N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}
   if(D.platform&&!D.checkin){const v={naver:"네이버",site:"홈페이지·기타",spacecloud:"스페이스클라우드"}[D.platform];const r=document.querySelector(`[name=pf][value="${v}"]`);if(r)r.checked=true}
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
   $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people;$("hcHint").textContent=n>b?`기본 ${b}명 + 추가 ${n-b}명 (1인 ${won(D.rules.extra_person)}, 예약 때 결제 안 하셨으면 보증금에서 차감)`:""};
@@ -178,8 +178,8 @@ function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
   if(D.checkin.bbq&&Q.__bbq){const paid=pl?(Q.__bbqpaid||0):0,un=Q.__bbq-paid;
     $("bbqWarn").hidden=!(pl&&un>0);$("bbqWarn").textContent=`${Q.__bbq}명 중 ${paid}명만 결제 → 미결제 ${un}명은 보증금에서 차감돼요`;
     if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person])}
-  if((D.crew&&D.crew.lv>=2)||(D.checkin&&D.exempt)){const it=id=>R.items.find(x=>x.id===id)||{price:0};const f=Math.min(2,Q.drink||0)*it("drink").price+Math.min(2,Q.water||0)*it("water").price;if(f)L.push(["N CREW 혜택 (음료·물 2개씩 무료)",-f])}
-  if(D.fx_perk==="alt"){const it=id=>R.items.find(x=>x.id===id)||{price:0};const used=((D.crew&&D.crew.lv>=2)?2:0);L.push(["N CREW 전원 가입 혜택 (봉투비·음료 2병·일회용품)",-(R.bag_base+Math.min(2,Math.max(0,(Q.drink||0)-used))*it("drink").price+(Q.disposable||0)*it("disposable").price)])}
+  if((D.crew&&D.crew.lv>=2)||(D.checkin&&D.exempt)){const it=id=>R.items.find(x=>x.id===id)||{price:0};const dF=(D.checkin&&D.checkin.review==="drink")?0:2;const f=Math.min(dF,Q.drink||0)*it("drink").price+Math.min(2,Q.water||0)*it("water").price;if(f)L.push([dF?"N CREW 혜택 (음료·물 2개씩 무료)":"N CREW 혜택 (물 2개 무료 · 음료는 후기 이벤트로 받음)",-f])}
+  if(D.fx_perk==="alt"){const it=id=>R.items.find(x=>x.id===id)||{price:0};L.push(["N CREW 전원 가입 혜택 (기본 봉투비·일회용품 무료)",-(R.bag_base+(Q.disposable||0)*it("disposable").price)])}
   const t=Math.max(0,L.reduce((a,l)=>a+l[1],0));
   if(D.exempt){$("sum").innerHTML=L.map(l=>`<div class="l"><span>${l[1]<0?"+":"·"} ${l[0]}</span><span>${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>정산할 금액 (보증금 면제)</span><em>${won(t)}</em></div><p class="hint">제출 후 ${D.account}로 입금해 주세요.</p>`;return}
   $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>${l[1]<0?"+ ":"− "}${l[0]}</span><span>${l[1]<0?"+":""}${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`}
