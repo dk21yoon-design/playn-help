@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /pick/
 
 Sitemap: https://playn.kr/sitemap.xml

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>생활공략집 영상 속 제품</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="생활공략집 쇼츠에 나온 제품을 번호로 찾아보세요.">
+<style>
+:root{--navy:#1E2A47;--orange:#FF8A3D;--bg:#F6F4EF;--card:#fff;--ink:#1E2A47;--sub:#5B647A;--line:#E4E0D6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12182A;--card:#1B2338;--ink:#F2F0EA;--sub:#A9B0C2;--line:#2A3450}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.5}
+header{background:var(--navy);color:#fff;padding:22px 16px 18px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+header .wrap{padding:0}
+.logo{font-size:26px;font-weight:800;letter-spacing:-.5px}.logo b{color:var(--orange)}
+header p{margin:4px 0 0;font-size:14px;opacity:.85}
+.notice{font-size:12.5px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:14px 0}
+.find{display:flex;gap:8px;margin:0 0 14px}
+.find input{flex:1;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.find button{font-size:16px;padding:0 16px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:700}
+.item{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;scroll-margin-top:12px}
+.item.hit{outline:3px solid var(--orange)}
+.no{flex:none;width:52px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}
+.thumb{flex:none;width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--line)}
+.txt{flex:1;min-width:0}.name{font-weight:700;font-size:16px}.ben{font-size:13.5px;color:var(--sub)}
+.go{flex:none;text-decoration:none;background:var(--navy);color:#fff;font-weight:700;font-size:14px;padding:10px 12px;border-radius:10px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .go{background:var(--orange)}}
+footer{font-size:12px;color:var(--sub);text-align:center;padding:20px 16px 36px}
+footer a{color:var(--sub)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="logo">생활<b>공략집</b></div><p>영상 끝에 나온 <b>#번호</b>로 제품을 찾아보세요</p></div></header>
+<main class="wrap">
+<div class="notice">이 페이지의 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+<form class="find" onsubmit="go(event)"><input id="q" inputmode="numeric" placeholder="번호 입력 (예: 3)" aria-label="제품 번호"><button>찾기</button></form>
+<div id="list"><p class="notice">불러오는 중…</p></div>
+</main>
+<footer>생활공략집 · <a href="https://www.youtube.com/channel/UCPVlaD7mWbGT8o_60rupIdA">YouTube</a> · <a href="https://www.instagram.com/saenghwal.gongryak">Instagram</a></footer>
+<script>
+function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(P){
+  const L=document.getElementById("list");
+  if(!P.length){L.innerHTML='<p class="notice">곧 첫 제품이 올라와요.</p>';return}
+  L.innerHTML=P.map(p=>`<div class="item" id="n${+p.no}"><div class="no">#${+p.no}</div>${p.image?`<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy">`:""}<div class="txt"><div class="name">${esc(p.name)}</div><div class="ben">${esc(p.benefit)}</div></div><a class="go" href="${esc(p.link)}" target="_blank" rel="sponsored nofollow noopener">보러가기</a></div>`).join("");
+  const h=(location.hash.match(/\d+/)||[])[0]; if(h) mark(h);
+}
+function mark(n){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const e=document.getElementById("n"+n);if(e){e.classList.add("hit");e.scrollIntoView({behavior:"smooth"})}}
+function go(ev){ev.preventDefault();const n=(document.getElementById("q").value.match(/\d+/)||[])[0];if(n){history.replaceState(null,"","#"+n);mark(n)}}
+fetch("picks.json?"+Date.now()).then(r=>r.json()).then(P=>render(P.sort((a,b)=>b.no-a.no))).catch(()=>{document.getElementById("list").innerHTML='<p class="notice">목록을 불러오지 못했어요. 잠시 후 다시 열어주세요.</p>'});
+</script>
+</body>
+</html>
