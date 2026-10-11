@@ -33,14 +33,17 @@
 .pv img{width:90px;border-radius:8px;margin-top:8px}
 .ev{margin-top:18px;border-radius:16px;padding:14px;background:linear-gradient(135deg,#16133F,#3B1F6E);color:#fff}.ev b{color:#7CF5B8}.ev .t{color:#fff;margin-top:0}.ev select{width:100%;margin-top:8px;color:#16133F;background:#fff}.ev p{margin:6px 0 0;font-size:13px;line-height:1.5;opacity:.85}
 .crew{margin-top:18px;border:2px solid #FF4FA3;border-radius:16px;padding:14px}.crew label{display:flex;gap:8px;align-items:flex-start;font-weight:700;line-height:1.45;margin-top:6px}.crew small{display:block;font-weight:500;color:#5B5790}
+.fx{margin-top:14px;border-radius:16px;padding:16px;background:linear-gradient(135deg,#16133F,#3B1F6E);color:#fff}.fx h3{margin:0;font-size:18px;line-height:1.35}.fx h3 b{color:#7CF5B8}.fx p{margin:8px 0 0;font-size:14px;line-height:1.55;opacity:.92}.fx .btn{margin-top:12px;width:100%;display:flex}.fx .res{margin-top:10px;background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.55}.fx .qr{background:#fff;border-radius:12px;padding:12px;width:fit-content;margin:12px auto 0}.fx .bar{height:10px;background:rgba(255,255,255,.18);border-radius:99px;margin-top:10px;overflow:hidden}.fx .bar i{display:block;height:100%;background:#7CF5B8;border-radius:99px;transition:width .4s}.fx .url{font-size:12.5px;word-break:break-all;opacity:.8;margin-top:6px;text-align:center}
 </style>
 <script src="/assets/pv.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a></div></header>
 <main class="wrap"><div class="cw">
   <h1 class="disp" id="h1">체크인</h1>
   <p class="sub" id="lead">불러오는 중…</p>
   <span class="meta" id="meta" hidden></span>
+  <div class="fx" id="fxBox" hidden></div>
   <div class="tabs" id="tabs" hidden><button data-m="in">① 입실 전 체크인</button><button data-m="out">② 퇴실 후 정산</button></div>
 
   <form class="cb" id="fin" hidden autocomplete="on">
@@ -154,7 +157,7 @@ $("fin").onsubmit=async e=>{e.preventDefault();
   $("goIn").disabled=false;
   if(!r.ok)return msg("mIn",r.error||"다시 시도해 주세요");
   msg("mIn","체크인 완료! 보증금 입금 부탁드려요 🙏<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
-  D=await post({action:"info"});if(D.member)$("crBox").hidden=true;if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}};
+  D=await post({action:"info"});fxRender();if(D.member)$("crBox").hidden=true;if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}};
 function stepper(id,max=99){return `<div class="st" data-id="${id}"><button type="button">−</button><span>${Q[id]||0}</span><button type="button">+</button></div>`}
 function renderOut(){
   const no=!D.checkin;["extraBox","bbqBox","rvBox","sum","goOut"].forEach(i=>$(i).hidden=no);
@@ -176,6 +179,7 @@ function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
     $("bbqWarn").hidden=!(pl&&un>0);$("bbqWarn").textContent=`${Q.__bbq}명 중 ${paid}명만 결제 → 미결제 ${un}명은 보증금에서 차감돼요`;
     if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person])}
   if((D.crew&&D.crew.lv>=2)||(D.checkin&&D.exempt)){const it=id=>R.items.find(x=>x.id===id)||{price:0};const f=Math.min(2,Q.drink||0)*it("drink").price+Math.min(2,Q.water||0)*it("water").price;if(f)L.push(["N CREW 혜택 (음료·물 2개씩 무료)",-f])}
+  if(D.fx_perk==="alt"){const it=id=>R.items.find(x=>x.id===id)||{price:0};const used=((D.crew&&D.crew.lv>=2)?2:0);L.push(["N CREW 전원 가입 혜택 (봉투비·음료 2병·일회용품)",-(R.bag_base+Math.min(2,Math.max(0,(Q.drink||0)-used))*it("drink").price+(Q.disposable||0)*it("disposable").price)])}
   const t=Math.max(0,L.reduce((a,l)=>a+l[1],0));
   if(D.exempt){$("sum").innerHTML=L.map(l=>`<div class="l"><span>${l[1]<0?"+":"·"} ${l[0]}</span><span>${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>정산할 금액 (보증금 면제)</span><em>${won(t)}</em></div><p class="hint">제출 후 ${D.account}로 입금해 주세요.</p>`;return}
   $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>${l[1]<0?"+ ":"− "}${l[0]}</span><span>${l[1]<0?"+":""}${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`}
@@ -200,6 +204,31 @@ function renderDone(){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidde
   (paid?"":`<button class="btn go" id="reEdit" type="button" style="display:flex;margin-top:10px">사용 내역 수정해서 다시 보내기</button>`)+
   (D.member?"":`<a class="btn lamp go" href="/?from=settle#crew" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`);
   if($("reEdit"))$("reEdit").onclick=()=>{$("fdone").hidden=true;$("tabs").hidden=false;show("out")}}
-load();
+
+// ── N CREW 전원 가입 → 퇴실 1시간 무료 연장 ──
+const hm=t=>t?t.slice(11,16):"";
+let fxT=null;
+async function fxRender(){
+  const b=$("fxBox");if(!D||!D.checkin||["submitted","hold","paid"].includes(D.status)){b.hidden=true;return}
+  const r=await post({action:"fx_status"}).catch(()=>null);if(!r||!r.ok){b.hidden=true;return}
+  b.hidden=false;
+  if(!r.started){
+    b.innerHTML=`<h3>🎁 같이 온 친구 <b>전원 N CREW 가입</b>하면<br>퇴실 1시간 무료 연장</h3><p>대표님이 신청하면 QR이 나와요. 친구들이 QR을 찍고 1분 가입하면, 인원이 다 차는 순간 자동으로 연장돼요.</p><div id="fxRes"></div><button class="btn lamp" id="fxChk" type="button">무료 연장 가능한지 확인하기</button>`;
+    $("fxChk").onclick=async()=>{$("fxChk").disabled=true;const c=await post({action:"fx_check"}).catch(()=>({ok:false,error:"연결이 불안정해요"}));$("fxChk").disabled=false;
+      if(!c.ok){$("fxRes").innerHTML=`<div class="res">${c.error||"다시 시도해 주세요"}</div>`;return}
+      $("fxRes").innerHTML=c.possible?`<div class="res">✅ <b>연장 가능해요!</b><br>퇴실 ${hm(c.orig_end)} → <b>${hm(c.new_end)}</b><br>조건: ${c.need}명 전원 N CREW 가입 (퇴실 30분 전까지)</div>`
+        :`<div class="res">⏰ ${c.reason||"다음 예약이 있어요"} — 연장은 어려워요.<br>대신 ${c.need}명 전원 가입하면 <b>${c.alt}</b></div>`;
+      $("fxChk").textContent="신청하고 QR 받기";$("fxChk").onclick=async()=>{$("fxChk").disabled=true;const s=await post({action:"fx_start"}).catch(()=>({ok:false}));if(!s.ok){$("fxChk").disabled=false;$("fxRes").innerHTML=`<div class="res">${s.error||"다시 시도해 주세요"}</div>`;return}fxRender()}};
+    return}
+  const url=`https://playn.kr/j/?g=${r.code}`,pct=Math.min(100,Math.round(r.joined/Math.max(1,r.need)*100));
+  const head=r.status==="done"?(r.result==="ext"?`🎉 <b>무료 연장 확정!</b> 퇴실 ${hm(r.new_end)}`:`🎉 <b>전원 가입 완료!</b> ${r.alt} — 정산 때 자동으로 빠져요`)
+    :r.status==="completing"?"⏳ 전원 가입 완료! 연장 처리 중이에요 (1분 정도)":(r.mode==="ext"?`친구들이 QR 찍고 가입하면 퇴실 ${hm(r.orig_end)} → <b>${hm(r.new_end)}</b>`:`전원 가입하면 <b>${r.alt}</b>`);
+  b.innerHTML=`<h3>${head}</h3><div class="bar"><i style="width:${pct}%"></i></div><p><b>${r.joined}/${r.need}명</b> 가입 완료 ${r.joined>=r.need?"":"· 대표님도 아직이면 같이 찍어주세요"}</p>`+
+    (r.status==="open"?`<div class="qr" id="fxQr"></div><div class="url">${url}</div><button class="btn lamp" id="fxShare" type="button">단톡방에 링크 보내기</button>`:"");
+  if(r.status==="open"){const draw=()=>{if(window.QRCode)new QRCode($("fxQr"),{text:url,width:180,height:180});else setTimeout(draw,300)};draw();
+    $("fxShare").onclick=async()=>{const t="플레이앤 N CREW 가입하고 우리 퇴실 1시간 무료로 연장하자! 1분이면 돼 👉 "+url;try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);$("fxShare").textContent="복사됨"}}catch(e){}}}
+  clearTimeout(fxT);if(r.status==="open"||r.status==="completing")fxT=setTimeout(fxPoll,8000)}
+async function fxPoll(){const r=await post({action:"fx_status"}).catch(()=>null);if(r&&r.ok&&r.started){const t=$("fxBox").querySelector("p b");if(r.status!=="open"||!t||t.textContent!==`${r.joined}/${r.need}명`)return fxRender()}fxT=setTimeout(fxPoll,8000)}
+load().catch(()=>{}).finally(fxRender);
 </script>
 </body></html>
