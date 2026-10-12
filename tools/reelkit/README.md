@@ -63,3 +63,6 @@ variant 안에 넣는다.
 ## 기본값 변경 (2026-10-09 성과 학습)
 - `stroke`, `counter`는 이제 기본 켜짐 (끄려면 spec에 `false`). R46(외곽선+진행 표시+VS) 평균 시청 9.3초 vs 다른 편 3~5초
 - 채널 성과 비교는 Supabase 뷰 `playn_channel_compare` (인스타 도달·공유 + 유튜브·스레드·페북 조회, 매일 06:30 수집)
+
+## 문체 규칙 — AI 티 제거 (2026-10-12)
+- 자막·캡션은 업로드 직전 playand_config key='humanize_rules'로 점검해 고친다.
