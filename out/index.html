@@ -90,10 +90,11 @@
 
   <div class="cb" id="fout" hidden>
     <p class="hint" style="margin-top:0">쓰신 물품만 + 눌러주세요. 안 쓰신 건 그대로 두시면 돼요. <b id="drinkNote" hidden>후기 이벤트 음료 2병은 빼고 적어주세요.</b></p>
+    <p class="hint" id="hcSum" style="margin:0 0 6px;font-weight:700"></p>
     <div id="items"></div>
     <div id="extraBox" hidden>
       <label class="t">인원 추가 요금 (<span id="exN"></span>명 × 2만원)</label>
-      <div class="ch"><label><input type="radio" name="ex" value="platform">예약할 때 이미 결제</label><label><input type="radio" name="ex" value="deposit" checked>보증금에서 차감</label></div>
+      <div class="ch"><label><input type="radio" name="ex" value="platform">예약할 때 이미 결제 (사장님이 예약 내역 확인)</label><label><input type="radio" name="ex" value="deposit" checked>보증금에서 차감</label></div>
     </div>
     <div id="bbqBox" hidden>
       <label class="t">바베큐 (1인 1만원)</label>
@@ -146,7 +147,8 @@ async function load(){
   else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent=(D.checkin&&D.checkin.review==="drink")?"N CREW 혜택: 물 2병 무료 (음료는 후기 이벤트로 받아서 1회 방문 음료 2병 한도 적용)":"N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}
   if(D.platform&&!D.checkin){const v={naver:"네이버",site:"홈페이지·기타",spacecloud:"스페이스클라우드"}[D.platform];const r=document.querySelector(`[name=pf][value="${v}"]`);if(r)r.checked=true}
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
-  $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people;$("hcHint").textContent=n>b?`기본 ${b}명 + 추가 ${n-b}명 (1인 ${won(D.rules.extra_person)}, 예약 때 결제 안 하셨으면 보증금에서 차감)`:""};
+  $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people,ex=Math.max(0,n-b),dp=(D.rules.items.find(x=>x.id==="disposable")||{price:0}).price;
+    $("hcHint").innerHTML=n>0?`인원수대로 정산돼요: ${ex?`기본 ${b}명 + <b>추가 ${ex}명 × ${won(D.rules.extra_person)} = ${won(ex*D.rules.extra_person)}</b> (예약 때 안 냈으면 보증금에서 차감)`:`기본 ${b}명 안이라 인원 추가 요금 없음`} · 일회용품 쓰면 ${n}명 × ${won(dp)}<br><span style="color:#B42318">실제 이용 인원이 더 많으면 CCTV 확인 후 1인당 ${won(D.rules.extra_person)}이 보증금에서 차감돼요.</span>`:""};
   if(D.worlds){$("wBox").hidden=false;$("wTitle").textContent=D.worlds.title;$("wPay").textContent=won(D.pick?D.pick_payout:D.worlds.payout);$("wTier").textContent=D.worlds.tier||"";const f=new Date(D.worlds.final+"T00:00:00");$("wFinal").textContent=`${f.getMonth()+1}/${f.getDate()}`;
     if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}
     else if(!D.worlds.open){$("wp").innerHTML="<option>예측 마감됐어요</option>";$("wp").disabled=true}
@@ -177,6 +179,7 @@ function renderOut(){
   if(no){$("items").innerHTML='<p class="hint" style="margin:0">① 입실 전 체크인을 먼저 해주세요.</p>';return}
   $("sum").hidden=false;$("goOut").hidden=false;
   const hc=Number(D.checkin.headcount)||1;
+  $("hcSum").innerHTML=`👥 체크인 인원 <b>${hc}명</b> 기준으로 정산해요. 인원이 바뀌었으면 ① 탭에서 고친 뒤 정산해 주세요.`;
   // 일회용품은 인원수 단위: 썼으면 체크인 인원 전원 × 단가 (2026-10-12)
   $("items").innerHTML=D.rules.items.map(it=>it.id==="disposable"
     ?`<div class="it"><div><b>일회용품 (컵·접시·수저 등)</b><small>썼으면 인원수대로 ${hc}명 × ${won(it.price)} = ${won(hc*it.price)}</small></div><div class="tg" id="dispTg"><button type="button" data-v="0">안 씀</button><button type="button" data-v="1">썼어요</button></div></div>`
