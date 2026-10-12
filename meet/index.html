@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<script src="/assets/pv.js" defer></script>
+<title>롤드컵 밤샘 소셜링 · 남녀 내전 | 플레이앤 연남루프탑점</title>
+<meta name="description" content="10/24(토) 밤 연남 루프탑에서 바베큐 먹고 남녀 팀 내전, 새벽엔 롤드컵 같이 보기. 여 5 · 남 5, 1인 70,000원, 다음날 12시 퇴실.">
+<link rel="canonical" href="https://playn.kr/meet/">
+<meta property="og:type" content="website"><meta property="og:url" content="https://playn.kr/meet/">
+<meta property="og:title" content="롤드컵 밤샘 소셜링 · 여 5 vs 남 5 내전"><meta property="og:description" content="바베큐 + 남녀 내전 + 새벽 롤드컵 같이 보기 · 연남루프탑점 10/24(토)">
+<meta property="og:image" content="https://playn.kr/assets/home/rooftop.webp">
+<style>
+.hero{position:relative;border-radius:var(--r);overflow:hidden;margin-top:18px;background:#000}
+.hero img{width:100%;height:clamp(220px,46vw,420px);object-fit:cover;display:block;opacity:.62}
+.hero .tx{position:absolute;inset:auto 0 0 0;padding:22px 20px 20px;background:linear-gradient(transparent,rgba(10,8,30,.92))}
+.hero .tag{display:inline-block;background:#FF2E6E;color:#fff;font-weight:800;font-size:13px;border-radius:999px;padding:4px 10px}
+.hero h1{font-size:clamp(30px,7vw,54px);line-height:1.12;margin-top:10px}
+.hero p{color:#E6E3FF;margin-top:6px;font-size:16px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
+.facts div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.facts small{display:block;color:var(--mute);font-size:13px}
+.facts b{display:block;font-size:18px;margin-top:4px}
+.seat{display:flex;gap:10px;margin-top:12px}
+.seat div{flex:1;border-radius:14px;padding:14px;text-align:center;font-weight:800}
+.seat .f{background:rgba(255,46,110,.14);border:1px solid #FF2E6E}
+.seat .m{background:rgba(61,242,255,.12);border:1px solid #3DF2FF}
+.seat b{display:block;font:400 34px/1.1 "Black Han Sans",sans-serif;margin-top:4px}
+section.blk{margin-top:30px}
+section.blk h2{font-size:24px}
+.inc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px}
+.inc div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;line-height:1.6}
+.inc b{display:block;font-size:16px}
+.tl{list-style:none;padding:0;margin-top:12px;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:0 0 14px 18px;line-height:1.6}
+.tl li:before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--lamp)}
+.tl b{color:var(--lamp);margin-right:6px}
+.note{color:var(--mute);font-size:14px;line-height:1.7;margin-top:8px}
+form.ap{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:12px;display:grid;gap:12px}
+form.ap label{font-weight:700;font-size:14px;display:block;margin-bottom:6px}
+form.ap input,form.ap select,form.ap textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+.gsel{display:flex;gap:8px}.gsel button{flex:1;font:inherit;font-weight:800;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.gsel button.on[data-g=f]{background:#FF2E6E;border-color:#FF2E6E;color:#fff}.gsel button.on[data-g=m]{background:#3DF2FF;border-color:#3DF2FF;color:#10102A}
+.chk{display:flex!important;gap:8px;align-items:flex-start;font-size:14px;line-height:1.6;color:var(--mute)}.chk input{width:auto;margin-top:4px}
+.msg{font-weight:700;min-height:1em}.msg.err{color:#FF7A9C}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:16px;line-height:1.7}
+.card .acc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:10px;padding:10px 12px;margin:8px 0}
+.st{display:inline-block;border-radius:999px;padding:3px 10px;font-weight:800;font-size:13px;background:var(--lamp);color:#1B1640}
+.disc{color:var(--mute);font-size:12px;line-height:1.6;margin:26px 0 10px}
+#adm table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}#adm td,#adm th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+#adm button{font:inherit;font-size:12px;padding:4px 8px;margin:2px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+#adm img{width:60px;border-radius:6px}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
+<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/reviews/">후기</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>
+<main class="wrap">
+<div id="meView"></div>
+<div id="evView">
+<div class="hero"><img src="/assets/home/rooftop.webp" alt="연남루프탑점 루프탑, 잔디와 캠핑 의자" width="900" height="675">
+  <div class="tx"><span class="tag">여 5 · 남 5 모집</span><h1 class="disp">롤드컵 밤샘 소셜링<br>남녀 내전</h1><p>바베큐 굽고, 여자팀 vs 남자팀 칼바람 붙고, 새벽엔 롤드컵 같이 봐요.</p></div></div>
+<div class="facts">
+  <div><small>일시</small><b>10/24(토) 19:00</b><span class="note">다음날 일요일 12:00 퇴실</span></div>
+  <div><small>장소</small><b>연남루프탑점</b><span class="note">홍대입구역 걸어서 5분 안쪽</span></div>
+  <div><small>참가비</small><b id="price">70,000원</b><span class="note">바베큐·새벽 라면 포함</span></div>
+  <div><small>정원</small><b>10명</b><span class="note">성인만 (신분증 확인)</span></div>
+</div>
+<div class="seat"><div class="f">여자 남은 자리<b id="lf">5</b></div><div class="m">남자 남은 자리<b id="lm">5</b></div></div>
+
+<section class="blk"><h2 class="disp">참가비에 들어 있는 것</h2>
+<div class="inc">
+  <div><b>🌙 나이트 통째로</b>토요일 19시부터 일요일 12시까지 연남 루프탑 전체를 10명이 써요</div>
+  <div><b>🔥 루프탑 바베큐</b>고기·소시지·쌈 준비해 둬요. 장작·숯·불판 무제한</div>
+  <div><b>🍜 새벽 라면</b>경기 보기 전에 다 같이 끓여 먹어요</div>
+  <div><b>🎮 게이밍 PC 5대</b>RTX 4070 더블모니터, 프로 무선 기어 그대로</div>
+  <div><b>📺 빔프로젝터 큰 화면</b>새벽 롤드컵을 큰 화면으로 같이 봐요</div>
+  <div><b>🏆 우승 상품</b>내전 우승팀 전원 다음 방문 바베큐 무료권</div>
+</div>
+<p class="note">음료·주류는 자유롭게 가져오셔도 돼요.</p></section>
+
+<section class="blk"><h2 class="disp">이렇게 놀아요</h2>
+<ol class="tl">
+  <li><b>19:00</b>입실 · 신분증 확인 · 이름표 받고 바베큐 시작</li>
+  <li><b>21:00</b>1부 <b style="color:#FF2E6E">여자팀</b> vs <b style="color:#3DF2FF">남자팀</b> — 미드 1:1 릴레이 + 칼바람 2:2. 신청 때 적은 티어 차이만큼 핸디캡 점수를 줘서 끝까지 붙어요</li>
+  <li><b>23:00</b>2부 혼성 2:2 칼바람 토너먼트 — 여 1 + 남 1이 한 팀, 판마다 짝 바꾸기</li>
+  <li><b>자정 넘어</b>야식 · 쉬는 시간 · 노래방</li>
+  <li><b>새벽</b>새벽 라면 끓이고 롤드컵 스위스 스테이지 같이 보기 (LCK 4팀 모두 출전하는 1라운드)</li>
+  <li><b>12:00</b>일요일 정오 퇴실</li>
+</ol>
+<p class="note">롤드컵이 미국에서 열려 한국 시간 새벽에 경기해요. 정확한 경기 시각과 대진은 플레이-인(10/16~19)이 끝나면 확정자에게 문자로 알려드려요. 롤 안 해봐도 괜찮아요. 칼바람은 처음 해도 금방 배워요.</p></section>
+
+<section class="blk"><h2 class="disp">신청하기</h2>
+<form class="ap" id="ap">
+  <div><label>성별</label><div class="gsel"><button type="button" data-g="f">여자</button><button type="button" data-g="m">남자</button></div></div>
+  <div><label for="nm">이름</label><input id="nm" maxlength="20" autocomplete="name" required></div>
+  <div><label for="ph">연락처</label><input id="ph" inputmode="numeric" maxlength="13" placeholder="01012345678" autocomplete="tel" required></div>
+  <div><label for="by">태어난 해</label><input id="by" inputmode="numeric" maxlength="4" placeholder="예: 1998" required></div>
+  <div><label for="tr">롤 티어</label><select id="tr"><option value="">선택</option><option>안 해봄</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option><option>칼바람만 함</option></select></div>
+  <div><label for="nk">롤 닉네임 (선택)</label><input id="nk" maxlength="30" placeholder="팀 나눌 때만 봐요"></div>
+  <div><label for="dp">입금자명 (이름과 다르면)</label><input id="dp" maxlength="20"></div>
+  <div><label for="mm">하고 싶은 말 (선택)</label><textarea id="mm" rows="2" maxlength="200" placeholder="예: 친구랑 둘이 신청했어요"></textarea></div>
+  <label class="chk"><input type="checkbox" id="ag"> <span>성인이고 입실 때 신분증을 보여줄게요. 신청 후 24시간 안에 입금 캡처를 올려야 자리가 확정되고, 아래 환불 기준을 확인했어요.</span></label>
+  <button class="btn" type="submit" id="sb">신청하고 입금 안내 받기</button>
+  <div class="msg" id="msg"></div>
+</form>
+<p class="note" id="refund"></p>
+<p class="note">연락처는 이 행사 안내에만 쓰고, 다른 참가자에게 알려주지 않아요. 연락처 교환은 자유예요.</p></section>
+</div>
+
+<div id="adm" hidden><h2 class="disp">신청 관리</h2><p class="note" id="admSum"></p><div id="admList"></div>
+<p style="margin-top:12px"><textarea id="admMsg" rows="2" style="width:100%" placeholder="확정자 전체에게 보낼 안내 문자"></textarea><button id="admSend">확정자 전체 문자</button></p></div>
+
+<p class="disc">이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다. 대회 일정: LoL Esports 공식 일정 기준. 참가비는 공간·바베큐·음식 이용료예요.</p>
+</main>
+<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div></div></footer>
+<script>
+const F="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup",E="worlds1024";
+const $=id=>document.getElementById(id),e=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const won=n=>Number(n).toLocaleString("ko-KR")+"원",qs=new URLSearchParams(location.search);
+let G="",EV=null;
+function paint(ev){EV=ev;$("lf").textContent=ev.left_f;$("lm").textContent=ev.left_m;$("price").textContent=won(ev.price);$("refund").textContent="환불 기준: "+(ev.info?.refund||"");
+  document.querySelectorAll(".gsel button").forEach(b=>{const left=b.dataset.g==="f"?ev.left_f:ev.left_m;b.textContent=(b.dataset.g==="f"?"여자":"남자")+(left?` (${left}자리)`:" (대기 신청)")});
+  if(ev.status!=="open"){$("sb").disabled=true;$("sb").textContent="신청이 마감됐어요"}}
+document.querySelectorAll(".gsel button").forEach(b=>b.onclick=()=>{G=b.dataset.g;document.querySelectorAll(".gsel button").forEach(x=>x.classList.toggle("on",x===b))});
+$("ap").onsubmit=async ev=>{ev.preventDefault();const m=$("msg");m.className="msg";
+  if(!G){m.className="msg err";m.textContent="성별을 골라주세요";return}
+  if(!$("ag").checked){m.className="msg err";m.textContent="안내 사항에 동의해 주세요";return}
+  $("sb").disabled=true;m.textContent="신청 중…";
+  try{const r=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"apply",e:E,gender:G,name:$("nm").value,phone:$("ph").value,birth_year:$("by").value,tier:$("tr").value,lol_nick:$("nk").value,depositor:$("dp").value||$("nm").value,memo:$("mm").value,agree:true})})).json();
+    if(!r.ok){m.className="msg err";m.textContent=r.err||"신청하지 못했어요";$("sb").disabled=false;return}
+    if(window.pnTrack)pnTrack("meet_apply",{e:E,g:G,w:r.waitlist?1:0});location.href="?t="+r.token}
+  catch{m.className="msg err";m.textContent="연결이 불안정해요. 다시 눌러주세요";$("sb").disabled=false}};
+async function shrink(file){const img=await createImageBitmap(file);const s=Math.min(1,1600/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85)}
+async function me(t){const r=await(await fetch(F+"?t="+encodeURIComponent(t))).json();if(!r.ok){$("meView").innerHTML=`<div class="card">${e(r.err||"신청 정보를 찾지 못했어요")}</div>`;return}
+  paint(r.ev);const M=r.me,ST={applied:"입금 대기",proof:"입금 확인 중",confirmed:"참가 확정",waitlist:"대기",cancelled:"취소됨",refunded:"환불됨"};
+  let body="";
+  if(M.status==="applied")body=`<p>참가비 <b>${won(r.ev.price)}</b>을 아래 계좌로 보내고 캡처를 올려주세요.<br><b>${new Date(M.hold_until).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})}</b>까지 안 올리면 자리가 다음 분께 넘어가요.</p>
+    <div class="acc"><span>${e(r.account)}</span><button class="btn" id="cp" type="button" style="padding:6px 12px;font-size:14px">계좌 복사</button></div>
+    <label style="font-weight:700;display:block;margin-top:8px">입금 캡처</label><input type="file" id="pf" accept="image/*"><div class="msg" id="pm"></div>`;
+  else if(M.status==="proof")body="<p>캡처 잘 받았어요. 사장님이 입금 확인하면 확정 문자를 보내드려요.</p>";
+  else if(M.status==="confirmed")body="<p>참가 확정이에요 🎉 입실 전날 주소와 입실 안내를 문자로 보내드려요. 신분증 꼭 챙겨주세요.</p>";
+  else if(M.status==="waitlist")body="<p>지금은 자리가 다 찼어요. 자리가 나면 바로 문자 드릴게요. 대기 중에는 입금하지 마세요.</p>";
+  else body="<p>문의는 010-8339-5818로 주세요.</p>";
+  $("meView").innerHTML=`<div class="card"><span class="st">${ST[M.status]||M.status}</span><h2 class="disp" style="font-size:24px;margin-top:8px">${e(M.name)}님 신청 현황</h2>${body}</div>`;
+  if($("cp"))$("cp").onclick=()=>{navigator.clipboard?.writeText(r.account.replace(/\s*\(.*\)/,""));$("cp").textContent="복사됐어요"};
+  if($("pf"))$("pf").onchange=async()=>{const pm=$("pm");pm.className="msg";pm.textContent="올리는 중…";
+    try{const img=await shrink($("pf").files[0]);const x=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"proof",t,img})})).json();
+      if(!x.ok){pm.className="msg err";pm.textContent=x.err||"실패했어요";return}if(window.pnTrack)pnTrack("meet_proof",{e:E});me(t)}catch{pm.className="msg err";pm.textContent="사진을 다시 골라주세요"}};
+  $("ap").closest("section").hidden=true}
+async function admin(){let k="";try{k=localStorage.getItem("pn_admin")||""}catch{}if(!k){k=prompt("관리자 키");try{localStorage.setItem("pn_admin",k)}catch{}}
+  const call=b=>fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,e:E,...b})}).then(r=>r.json());
+  const load=async()=>{const r=await call({action:"list"});if(!r.ok){$("admSum").textContent="키가 맞지 않아요";return}
+    $("adm").hidden=false;$("evView").hidden=true;const ST={applied:"입금대기",proof:"캡처옴",confirmed:"확정",waitlist:"대기",cancelled:"취소",refunded:"환불"};
+    const c={f:0,m:0};r.rows.forEach(x=>{if(x.status==="confirmed")c[x.gender]++});
+    $("admSum").textContent=`확정 여 ${c.f}/${r.ev.cap_f} · 남 ${c.m}/${r.ev.cap_m} · 자리 잡힌 인원 ${r.ev.taken}명`;
+    $("admList").innerHTML=`<table><tr><th>상태</th><th>이름</th><th>성별·나이·티어</th><th>캡처</th><th></th></tr>${r.rows.map(x=>`<tr><td>${ST[x.status]||x.status}${x.status==="applied"&&!x.hold?" (24h 지남)":""}</td><td>${e(x.name)}<br>${e(x.phone)}<br>입금자 ${e(x.depositor)}</td><td>${x.gender==="f"?"여":"남"} · ${x.birth_year} · ${e(x.tier)}<br>${e(x.lol_nick)}<br>${e(x.memo)}</td><td>${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img src="${x.proof_url}" alt="입금 캡처"></a>`:""}</td><td>${["confirmed","applied","waitlist","cancelled","refunded"].filter(s=>s!==x.status).map(s=>`<button data-id="${x.id}" data-s="${s}">${ST[s]}</button>`).join("")}</td></tr>`).join("")}</table>`;
+    $("admList").querySelectorAll("button").forEach(b=>b.onclick=async()=>{b.disabled=true;await call({action:"set",id:b.dataset.id,status:b.dataset.s,notify:b.dataset.s==="cancelled"});load()})};
+  $("admSend").onclick=async()=>{const m=$("admMsg").value.trim();if(!m)return;const r=await call({action:"notify",msg:m});$("admSend").textContent=`${r.sent??0}명에게 보냈어요`};load()}
+if(location.hash==="#admin")admin();
+else if(qs.get("t"))me(qs.get("t"));
+else fetch(F+"?e="+E).then(r=>r.json()).then(r=>{if(r.ok)paint(r.ev)});
+if(window.pnTrack)pnTrack("meet_view",{e:E});
+</script>
+</body></html>
