@@ -60,6 +60,7 @@
     <p class="hint">참여하시면 퇴실 후 예약하신 플랫폼에 사진 후기를 남기고, 정산 화면에서 후기 캡처를 올려주세요. <b>후기 첫 줄에 "플레이앤 후기 이벤트 참여(혜택 제공)"라고 꼭 적어주세요</b> — 혜택을 받은 후기는 법에 따라 표시해야 해요. 좋은 말만 써달라는 게 아니에요, 솔직하게 써주세요.</p>
     <label class="t">바베큐 사용</label>
     <div class="ch"><label><input type="radio" name="bq" value="1">사용해요</label><label><input type="radio" name="bq" value="0" checked>안 써요</label></div>
+    <p class="hint" id="bbqCpHint" hidden></p>
     <label class="t">예약하신 곳</label>
     <div class="ch"><label><input type="radio" name="pf" value="스페이스클라우드" checked>스페이스클라우드</label><label><input type="radio" name="pf" value="네이버">네이버</label><label><input type="radio" name="pf" value="홈페이지·기타">홈페이지·기타</label></div>
     <label class="t">플레이앤은 어떻게 알게 되셨어요? <small style="font-weight:600;color:#5B5790">(선택 · 한 번만 눌러주세요)</small></label>
@@ -139,6 +140,7 @@ async function load(){
     if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}
     else if(!D.worlds.open){$("wp").innerHTML="<option>예측 마감됐어요</option>";$("wp").disabled=true}
     else D.worlds.teams.forEach(t=>{const o=document.createElement("option");o.textContent=t;$("wp").appendChild(o)})}
+  if(D.bbq_coupon){$("bbqCpHint").hidden=false;$("bbqCpHint").innerHTML=`🍖 <b>N CREW 스탬프 바베큐 ${D.bbq_coupon.people}인분 무료권</b>이 있어요. '사용해요'를 고르면 퇴실 정산에서 자동으로 빠져요.`}
   if(!D.member){$("crBox").hidden=false;$("crJ").onchange=()=>$("crNl").hidden=!$("crJ").checked}
   if(D.status==="paid"||D.status==="submitted"||D.status==="hold"){return renderDone()}
   if(D.checkin){const c=D.checkin;$("hc").value=c.headcount;$("dp").value=c.depositor;$("bk").value=c.bank;$("ac").placeholder=c.account+" (다시 입력하면 바뀌어요)";$("ac").required=false;
@@ -177,7 +179,8 @@ function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
   if(Q.__bbqpaid>(Q.__bbq||0)){Q.__bbqpaid=Q.__bbq||0;document.querySelector('[data-id=__bbqpaid] span').textContent=Q.__bbqpaid}
   if(D.checkin.bbq&&Q.__bbq){const paid=pl?(Q.__bbqpaid||0):0,un=Q.__bbq-paid;
     $("bbqWarn").hidden=!(pl&&un>0);$("bbqWarn").textContent=`${Q.__bbq}명 중 ${paid}명만 결제 → 미결제 ${un}명은 보증금에서 차감돼요`;
-    if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person])}
+    if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person]);
+    const fr=D.bbq_coupon?Math.min(un,D.bbq_coupon.people):0;if(fr)L.push([`N CREW 스탬프 바베큐 무료권 (${fr}인)`,-fr*R.bbq_per_person])}
   if((D.crew&&D.crew.lv>=2)||(D.checkin&&D.exempt)){const it=id=>R.items.find(x=>x.id===id)||{price:0};const dF=(D.checkin&&D.checkin.review==="drink")?0:2;const f=Math.min(dF,Q.drink||0)*it("drink").price+Math.min(2,Q.water||0)*it("water").price;if(f)L.push([dF?"N CREW 혜택 (음료·물 2개씩 무료)":"N CREW 혜택 (물 2개 무료 · 음료는 후기 이벤트로 받음)",-f])}
   if(D.fx_perk==="alt"){const it=id=>R.items.find(x=>x.id===id)||{price:0};L.push(["N CREW 전원 가입 혜택 (기본 봉투비·일회용품 무료)",-(R.bag_base+(Q.disposable||0)*it("disposable").price)])}
   const t=Math.max(0,L.reduce((a,l)=>a+l[1],0));
