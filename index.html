@@ -421,6 +421,15 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
  footer .row{gap:10px 16px;line-height:1.8}
  .faq-wrap summary,.faq summary{padding-top:16px;padding-bottom:16px}
 }
+.only-h{font-size:clamp(24px,4vw,34px);margin-top:clamp(48px,7vw,80px)}
+.faq-more{display:block;margin:18px auto 0}
+.faq.fold details:nth-of-type(n+6){display:none}
+@media(max-width:600px){
+ .only{display:grid;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;border-top:0;margin-left:-16px;margin-right:-16px;padding:0 16px 6px;scrollbar-width:none}
+ .only::-webkit-scrollbar{display:none}
+ .only .o{scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;grid-template-columns:1fr;align-content:start}
+ .only .o .go{display:none}
+}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head>
@@ -450,7 +459,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
   <a class="event rv" href="worlds/"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span>10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
 </div></section>
 <nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
-  <a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
+  <a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
 </div></nav>
 
 
@@ -472,7 +481,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 
 <section class="blk" id="space"><div class="wrap">
   <h2 class="disp sh2 rv">들어서는 순간, 오늘 밤 계획 끝</h2>
-  <p class="sub rv">실제 지점 사진이에요. 게임, 노래, 바베큐까지 한 공간에서.</p>
+  <p class="sub rv">실제 지점 사진이에요. 게임, 노래, 바베큐까지 한 공간에서. 아래에서 플레이앤에만 있는 것도 둘러보세요.</p>
   <div class="bento">
     <figure class="tile t-gear rv"><img src="assets/home/gearwall.webp" alt="연트럴파크점 기어 월, 마우스와 키보드가 벽 가득 진열된 모습" loading="lazy" width="675" height="900"><figcaption><b>기어 월</b><span>마우스 11종, 키보드 8종 골라 쓰기</span></figcaption></figure>
     <figure class="tile t-roof rv"><img src="assets/home/rooftop.webp" alt="연남루프탑점 루프탑, 잔디와 캠핑 의자" loading="lazy" width="900" height="675"><figcaption><b>루프탑 바베큐</b><span>장작·숯·불판 무제한, 1인 1만원</span></figcaption></figure>
@@ -480,10 +489,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
     <figure class="tile t-kara rv"><img src="assets/home/karaoke.webp" alt="연남루프탑점 빔프로젝터 노래방과 아케이드 스틱" loading="lazy" width="900" height="654"><figcaption><b>빔프로젝터 노래방</b><span>PS5·스위치·아케이드 스틱</span></figcaption></figure>
     <figure class="tile t-games rv"><img src="assets/home/games.webp" alt="홍대루프탑점 보드게임 선반" loading="lazy" width="900" height="900"><figcaption><b>보드게임 15종+</b><span>PC 쉬는 시간에</span></figcaption></figure>
   </div>
-</div></section>
-
-<section class="blk" id="only"><div class="wrap">
-  <h2 class="disp sh2 rv">플레이앤에만 있는 것</h2>
+  <h3 class="disp only-h rv" id="only">플레이앤에만 있는 것</h3>
   <div class="only rv">
     <a class="o" href="gear/"><span class="o-k">기어 라이브러리</span><b>사기 전에 써보는 곳</b><span class="d">데스에더 V3 프로, 지슈라, 닌자87 PRO, GSP 670… 지점별 장비 전부 공개. 다음에 들일 장비 투표도 해요.</span><span class="go" aria-hidden="true">→</span></a>
     <a class="o" href="plan/"><span class="o-k">파티 플래너</span><b>오늘 뭐 하지?</b><span class="d">인원과 분위기만 고르면 같이 할 게임, 맞는 지점, 예상 요금까지 정리해 드려요.</span><span class="go" aria-hidden="true">→</span></a>
@@ -597,15 +603,16 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 
 <section class="blk" id="faq"><div class="wrap faq-wrap">
   <div class="rv"><h2 class="disp sh2">자주 묻는 질문</h2><p class="sub">더 궁금한 건 <a href="help/">AI 상담사</a>에게 24시간 물어볼 수 있어요. 급한 일은 010-8339-5818로 연락 주세요.</p></div>
-  <div class="faq rv">
+  <div class="faq rv" id="faqList">
     <details><summary>몇 명까지 갈 수 있어요? 최소 인원이 있나요?</summary><p>최소 인원은 없어요. 홍대·연남은 최대 16명, 연트럴파크점은 최대 7명(5명 최적)이에요. 5명까지는 기본 요금이고, 6번째 사람부터 1명당 2만원이 붙어요.</p></details>
-    <details><summary>보증금은 어떻게 하나요?</summary><p>20만원을 입실 후 입금하고, 퇴실 1~2일 뒤 돌려드려요. 기본 쓰레기봉투 4,000원은 차감되고, 정리가 안 돼 있으면 청소비가 차감될 수 있어요.</p></details>
-    <details><summary>음식이나 술을 가져가도 돼요?</summary><p>네, 배달 음식과 주류 반입 모두 가능해요. 일회용품과 술잔도 구비돼 있어요.</p></details>
+    <details><summary>입실은 어떻게 해요? 비밀번호는요?</summary><p>예약 확정 문자에 있는 체크인 링크에서 1분 체크인(인원·입금자명·환급 계좌)을 하고 보증금 입금 캡처를 올리면, 입실 3시간 전부터 화면과 문자로 비밀번호가 나와요.</p></details>
+    <details><summary>보증금은 어떻게 하나요?</summary><p>20만원을 <b>입실 전에</b> 입금하고 체크인 링크에 이체 화면 캡처를 올리면 입실 비밀번호가 나와요. 퇴실 전에 같은 링크에서 쓴 물품을 체크하면 1~2일 안에 돌려드려요. 기본 쓰레기봉투 4,000원은 차감되고, 정리가 안 돼 있으면 청소비가 차감될 수 있어요.</p></details>
+    <details><summary>음식이나 술을 가져가도 돼요?</summary><p>네, 배달 음식과 주류 반입 모두 가능해요. 술잔은 있고, 일회용품(접시·컵·수저)은 쓰면 인원당 1,000원이에요.</p></details>
     <details><summary>바베큐는 어떻게 해요?</summary><p>1인 1만원이고 당일 신청도 돼요. 장작·숯·불판을 무제한으로 드리니 구워 드실 음식만 챙겨오세요.</p></details>
     <details><summary>게임은 어떻게 하나요?</summary><p>본인 계정으로 로그인해서 하고, 이용 후 꼭 로그아웃해 주세요. 스팀·라이엇·배틀넷 등 원하는 게임을 1기가 인터넷으로 바로 받을 수 있어요.</p></details>
     <details><summary>미성년자도 이용할 수 있나요?</summary><p>홍대·연남루프탑점은 부모님과 함께 오는 경우만 가능해요. 연트럴파크점은 부모님 동의를 연락처로 확인한 뒤 이용할 수 있고, 음주·흡연은 엄격히 금지돼요.</p></details>
     <details><summary>주차할 수 있나요?</summary><p>전용 주차 공간은 없어요. 근처 공영주차장이나 모두의주차장 앱을 이용하면 더 저렴해요.</p></details>
-    <details><summary>시간 연장이나 짐을 미리 맡길 수 있나요?</summary><p>다음 예약을 확인해야 해서 호스트에게 먼저 연락 주세요 (010-8339-5818).</p></details>
+    <details><summary>시간 연장이나 짐을 미리 맡길 수 있나요?</summary><p>연장은 1시간 2만원이고, 같이 온 친구 전원이 N CREW에 가입하면 1시간 무료예요(체크인 화면에서 QR로 신청). 짐 보관은 다음 예약을 확인해야 해서 호스트에게 먼저 연락 주세요 (010-8339-5818).</p></details>
     <details><summary>환불은 어떻게 돼요?</summary><p>이용 8일 전까지 취소하면 100% 환불되고, 7일 전부터는 환불이 어려워요. 스페이스클라우드는 결제 후 2시간 안에 취소하면 100% 환불돼요.</p></details>
     <details><summary>N CREW 할인끼리 같이 쓸 수 있어요?</summary><p>할인과 쿠폰은 playn.kr 홈페이지 예약(내 N CREW → 멤버 예약하기, 빈자리 보드)에서만 적용되고, 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물 서비스와 연장권은 어느 예약이든 받을 수 있어요.</p></details>
     <details><summary>왜 홈페이지 예약만 할인돼요?</summary><p>예약 플랫폼 수수료가 들지 않는 직접 예약이라, 그만큼을 멤버 할인으로 돌려드리는 거예요. 날짜를 고르면 내 레벨·쿠폰 중 가장 좋은 가격을 바로 계산해 드려요.</p></details>
@@ -613,6 +620,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
     <details><summary>군인 인증은 어떻게 해요?</summary><p>N CREW 가입 → 내 N CREW에서 인증 코드를 받아 종이에 적고, 밀리패스 화면(다른 폰으로 촬영)이나 군 신분증 옆에 두고 찍어 올리면 돼요. AI가 바로 확인해서 배지와 5만원 할인권을 드려요. 애매하면 호스트가 하루 안에 확인해요. 사진은 확인이 끝나면 자동으로 지워져요.</p></details>
     <details><summary>반려동물과 함께 가도 되나요?</summary><p>반려동물은 함께 올 수 없어요.</p></details>
   </div>
+  <button type="button" class="btn ghost faq-more" id="faqMore">질문 더 보기</button>
 </div></section>
 
 <section class="blk"><div class="wrap">
@@ -828,6 +836,7 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
  links.forEach(a=>a.addEventListener("click",()=>{set(a.dataset.s);if(window.pnTrack)pnTrack("catbar_"+a.dataset.s)}))})();
 </script>
 <script>(function(){const b=document.getElementById("stepsTg");if(b)b.onclick=()=>{const w=b.parentNode,o=w.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"이용 방법 접기 ▴":"이용 방법 5단계 보기 ▾"}})();</script>
+<script>(function(){const l=document.getElementById("faqList"),b=document.getElementById("faqMore");if(!l||!b)return;const n=l.querySelectorAll("details").length;if(n<=5){b.hidden=true;return}l.classList.add("fold");b.textContent=`질문 ${n-5}개 더 보기`;b.onclick=()=>{const f=l.classList.toggle("fold");b.textContent=f?`질문 ${n-5}개 더 보기`:"접기"}})();</script>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
 <script>(function(){const d=document.getElementById("dock");if(!d)return;document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea"))d.classList.add("typing")});document.addEventListener("focusout",()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches("input,select,textarea"))d.classList.remove("typing")},120))})();</script>
 <script src="/assets/chat.js" defer></script>
