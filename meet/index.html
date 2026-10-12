@@ -9,11 +9,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="/assets/base.css">
 <script src="/assets/pv.js" defer></script>
-<title>롤드컵 밤샘 소셜링 · 남녀 내전 | 플레이앤 연남루프탑점</title>
-<meta name="description" content="10/24(토) 밤 연남 루프탑에서 바베큐 먹고 남녀 팀 내전, 새벽엔 롤드컵 같이 보기. 여 5 · 남 5, 1인 70,000원, 다음날 12시 퇴실.">
+<title>롤드컵 밤샘 소셜링 · 혼성 칼바람 | 플레이앤 연남루프탑점</title>
+<meta name="description" content="10/24(토) 밤 연남 루프탑에서 바베큐 먹고 혼성 2인 7팀 칼바람 토너먼트, 새벽엔 롤드컵 같이 보기. 14명(여 7 · 남 7) 프로필 승인제, 1인 70,000원, 다음날 12시 퇴실.">
 <link rel="canonical" href="https://playn.kr/meet/">
 <meta property="og:type" content="website"><meta property="og:url" content="https://playn.kr/meet/">
-<meta property="og:title" content="롤드컵 밤샘 소셜링 · 여 5 vs 남 5 내전"><meta property="og:description" content="바베큐 + 남녀 내전 + 새벽 롤드컵 같이 보기 · 연남루프탑점 10/24(토)">
+<meta property="og:title" content="롤드컵 밤샘 소셜링 · 혼성 7팀 칼바람"><meta property="og:description" content="바베큐 + 프리드링크 + 혼성 칼바람 토너먼트 + 새벽 롤드컵 같이 보기 · 연남루프탑점 10/24(토)">
 <meta property="og:image" content="https://playn.kr/assets/home/rooftop.webp">
 <style>
 .hero{position:relative;border-radius:var(--r);overflow:hidden;margin-top:18px;background:#000}
@@ -46,7 +46,7 @@ form.ap label{font-weight:700;font-size:14px;display:block;margin-bottom:6px}
 form.ap input,form.ap select,form.ap textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
 .gsel{display:flex;gap:8px}.gsel button{flex:1;font:inherit;font-weight:800;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .gsel button.on[data-g=f]{background:#FF2E6E;border-color:#FF2E6E;color:#fff}.gsel button.on[data-g=m]{background:#3DF2FF;border-color:#3DF2FF;color:#10102A}
-.chk{display:flex!important;gap:8px;align-items:flex-start;font-size:14px;line-height:1.6;color:var(--mute)}.chk input{width:auto;margin-top:4px}
+.chk{display:flex!important;gap:8px;align-items:flex-start;font-size:14px;line-height:1.6;color:var(--mute)}form.ap .chk input{width:auto;flex:none;margin-top:4px}
 .msg{font-weight:700;min-height:1em}.msg.err{color:#FF7A9C}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:16px;line-height:1.7}
 .card .acc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:10px;padding:10px 12px;margin:8px 0}
@@ -63,32 +63,32 @@ form.ap input,form.ap select,form.ap textarea{width:100%;font:inherit;font-size:
 <div id="meView"></div>
 <div id="evView">
 <div class="hero"><img src="/assets/home/rooftop.webp" alt="연남루프탑점 루프탑, 잔디와 캠핑 의자" width="900" height="675">
-  <div class="tx"><span class="tag">여 5 · 남 5 모집</span><h1 class="disp">롤드컵 밤샘 소셜링<br>남녀 내전</h1><p>바베큐 굽고, 여자팀 vs 남자팀 칼바람 붙고, 새벽엔 롤드컵 같이 봐요.</p></div></div>
+  <div class="tx"><span class="tag">14명 · 프로필 승인제</span><h1 class="disp">롤드컵 밤샘 소셜링<br>혼성 칼바람 7팀</h1><p>바베큐 굽고, 남녀 2인 1팀으로 칼바람 붙고, 새벽엔 롤드컵 같이 봐요.</p></div></div>
 <div class="facts">
   <div><small>일시</small><b>10/24(토) 19:00</b><span class="note">다음날 일요일 12:00 퇴실</span></div>
   <div><small>장소</small><b>연남루프탑점</b><span class="note">홍대입구역 걸어서 5분 안쪽</span></div>
   <div><small>참가비</small><b id="price">70,000원</b><span class="note">바베큐·새벽 라면 포함</span></div>
-  <div><small>정원</small><b>10명</b><span class="note">성인만 (신분증 확인)</span></div>
+  <div><small>정원</small><b>14명 (여 7 · 남 7)</b><span class="note">프로필 보고 승인 · 성인만</span></div>
 </div>
-<div class="seat"><div class="f">여자 남은 자리<b id="lf">5</b></div><div class="m">남자 남은 자리<b id="lm">5</b></div></div>
+<div class="seat"><div class="f">여자 남은 자리<b id="lf">7</b></div><div class="m">남자 남은 자리<b id="lm">7</b></div></div>
 
 <section class="blk"><h2 class="disp">참가비에 들어 있는 것</h2>
 <div class="inc">
-  <div><b>🌙 나이트 통째로</b>토요일 19시부터 일요일 12시까지 연남 루프탑 전체를 10명이 써요</div>
+  <div><b>🌙 나이트 통째로</b>토요일 19시부터 일요일 12시까지 연남 루프탑 전체를 14명이 써요</div>
   <div><b>🔥 루프탑 바베큐</b>고기·소시지·쌈 준비해 둬요. 장작·숯·불판 무제한</div>
   <div><b>🍜 새벽 라면</b>경기 보기 전에 다 같이 끓여 먹어요</div>
   <div><b>🎮 게이밍 PC 5대</b>RTX 4070 더블모니터, 프로 무선 기어 그대로</div>
   <div><b>📺 빔프로젝터 큰 화면</b>새벽 롤드컵을 큰 화면으로 같이 봐요</div>
   <div><b>🏆 우승 상품</b>내전 우승팀 전원 다음 방문 바베큐 무료권</div>
 </div>
-<p class="note">음료·주류는 자유롭게 가져오셔도 돼요.</p></section>
+<div class="card" style="margin-top:10px"><b>🍾 프리드링크</b><br>마시고 싶은 술을 한 병씩 챙겨 와요. 14병이 모이면 다 같이 나눠 마셔요. 신청할 때 적은 술이 아래에 모여요 (겹치지 않게 골라주세요).<div id="drinks" class="note"></div></div></section>
 
 <section class="blk"><h2 class="disp">이렇게 놀아요</h2>
 <ol class="tl">
-  <li><b>19:00</b>입실 · 신분증 확인 · 이름표 받고 바베큐 시작</li>
-  <li><b>21:00</b>1부 <b style="color:#FF2E6E">여자팀</b> vs <b style="color:#3DF2FF">남자팀</b> — 미드 1:1 릴레이 + 칼바람 2:2. 신청 때 적은 티어 차이만큼 핸디캡 점수를 줘서 끝까지 붙어요</li>
-  <li><b>23:00</b>2부 혼성 2:2 칼바람 토너먼트 — 여 1 + 남 1이 한 팀, 판마다 짝 바꾸기</li>
-  <li><b>자정 넘어</b>야식 · 쉬는 시간 · 노래방</li>
+  <li><b>19:00</b>입실 · 신분증 확인 · 이름표 받고 바베큐 시작 · 프리드링크 오픈</li>
+  <li><b>20:30</b>팀 뽑기 — 여 1 + 남 1, 2인 1팀으로 7팀 (신청 때 적은 티어로 실력 맞춰 섞어요)</li>
+  <li><b>21:00</b>혼성 2:2 칼바람 토너먼트 7팀 · 기다리는 팀은 바베큐·노래방·빔프로젝터</li>
+  <li><b>자정 넘어</b>결승 · 시상 · 야식</li>
   <li><b>새벽</b>새벽 라면 끓이고 롤드컵 스위스 스테이지 같이 보기 (LCK 4팀 모두 출전하는 1라운드)</li>
   <li><b>12:00</b>일요일 정오 퇴실</li>
 </ol>
@@ -96,16 +96,26 @@ form.ap input,form.ap select,form.ap textarea{width:100%;font:inherit;font-size:
 
 <section class="blk"><h2 class="disp">신청하기</h2>
 <form class="ap" id="ap">
+  <p class="note" style="margin:0">프로필을 보고 사장님이 승인한 분만 함께해요. 승인되면 문자로 입금 안내를 드려요. 승인 전에는 입금하지 마세요.</p>
   <div><label>성별</label><div class="gsel"><button type="button" data-g="f">여자</button><button type="button" data-g="m">남자</button></div></div>
-  <div><label for="nm">이름</label><input id="nm" maxlength="20" autocomplete="name" required></div>
+  <div><label for="pf0">프로필 사진 (얼굴 나온 사진 1장)</label><input type="file" id="pf0" accept="image/*" required><img id="pv" alt="" style="display:none;width:96px;height:96px;object-fit:cover;border-radius:12px;margin-top:8px"><p class="note">본인 확인과 승인에만 쓰고, 다른 참가자나 SNS에 공개하지 않아요.</p></div>
+  <div><label for="nm">이름 (실명, 입금 확인용)</label><input id="nm" maxlength="20" autocomplete="name" required></div>
+  <div><label for="nk">닉네임 (현장 이름표)</label><input id="nk" maxlength="12" required></div>
   <div><label for="ph">연락처</label><input id="ph" inputmode="numeric" maxlength="13" placeholder="01012345678" autocomplete="tel" required></div>
   <div><label for="by">태어난 해</label><input id="by" inputmode="numeric" maxlength="4" placeholder="예: 1998" required></div>
-  <div><label for="tr">롤 티어</label><select id="tr"><option value="">선택</option><option>안 해봄</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option><option>칼바람만 함</option></select></div>
-  <div><label for="nk">롤 닉네임 (선택)</label><input id="nk" maxlength="30" placeholder="팀 나눌 때만 봐요"></div>
+  <div><label for="tr">롤 티어</label><select id="tr" required><option value="">선택</option><option>안 해봄</option><option>칼바람만 함</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option></select></div>
+  <div><label for="po">주 포지션·최애 챔프 (선택)</label><input id="po" maxlength="30" placeholder="예: 서폿 · 럭스"></div>
+  <div><label for="dk">가져올 술 한 병</label><input id="dk" maxlength="40" placeholder="예: 하이볼용 위스키, 막걸리, 와인" required></div>
+  <div><label for="mb">MBTI (선택)</label><input id="mb" maxlength="4" placeholder="ENFP"></div>
+  <div><label for="it">자기소개 한 줄</label><textarea id="it" rows="2" maxlength="300" placeholder="예: 칼바람 하루 3판, 이번 롤드컵은 젠지 응원해요" required></textarea></div>
+  <div><label for="ig">인스타 아이디 (선택, 본인 확인용)</label><input id="ig" maxlength="40" placeholder="@"></div>
+  <div><label for="jb">하는 일 (선택)</label><input id="jb" maxlength="30" placeholder="예: 대학생, 직장인(IT)"></div>
+  <div><label for="cp0">같이 신청한 친구 (선택)</label><input id="cp0" maxlength="40" placeholder="친구 닉네임"></div>
   <div><label for="dp">입금자명 (이름과 다르면)</label><input id="dp" maxlength="20"></div>
-  <div><label for="mm">하고 싶은 말 (선택)</label><textarea id="mm" rows="2" maxlength="200" placeholder="예: 친구랑 둘이 신청했어요"></textarea></div>
-  <label class="chk"><input type="checkbox" id="ag"> <span>성인이고 입실 때 신분증을 보여줄게요. 신청 후 24시간 안에 입금 캡처를 올려야 자리가 확정되고, 아래 환불 기준을 확인했어요.</span></label>
-  <button class="btn" type="submit" id="sb">신청하고 입금 안내 받기</button>
+  <label class="chk"><input type="checkbox" id="pv_ok"> <span>[필수] 개인정보 수집·이용 동의: 이름·연락처·태어난 해·사진·위 프로필을 참가 승인과 행사 안내에만 써요. 행사 종료 후 30일 안에 사진과 연락처를 파기해요.</span></label>
+  <label class="chk"><input type="checkbox" id="ag"> <span>[필수] 성인이고 입실 때 신분증을 보여줄게요. 승인 후 24시간 안에 입금 캡처를 올려야 확정되고, 아래 환불 기준을 확인했어요.</span></label>
+  <label class="chk"><input type="checkbox" id="pm_ok"> <span>[선택] 행사 현장 사진(얼굴 가림)을 플레이앤 홍보에 써도 괜찮아요.</span></label>
+  <button class="btn" type="submit" id="sb">프로필 보내기</button>
   <div class="msg" id="msg"></div>
 </form>
 <p class="note" id="refund"></p>
@@ -124,26 +134,31 @@ const $=id=>document.getElementById(id),e=t=>String(t??"").replace(/[&<>"]/g,c=>
 const won=n=>Number(n).toLocaleString("ko-KR")+"원",qs=new URLSearchParams(location.search);
 let G="",EV=null;
 function paint(ev){EV=ev;$("lf").textContent=ev.left_f;$("lm").textContent=ev.left_m;$("price").textContent=won(ev.price);$("refund").textContent="환불 기준: "+(ev.info?.refund||"");
-  document.querySelectorAll(".gsel button").forEach(b=>{const left=b.dataset.g==="f"?ev.left_f:ev.left_m;b.textContent=(b.dataset.g==="f"?"여자":"남자")+(left?` (${left}자리)`:" (대기 신청)")});
+  document.querySelectorAll(".gsel button").forEach(b=>{const left=b.dataset.g==="f"?ev.left_f:ev.left_m;b.textContent=(b.dataset.g==="f"?"여자":"남자")+(left?` (${left}자리)`:" (마감 · 대기)")});
+  $("drinks").textContent=ev.drinks?.length?"지금까지 모인 술: "+ev.drinks.join(" · "):"아직 모인 술이 없어요. 첫 병을 정해주세요!";
   if(ev.status!=="open"){$("sb").disabled=true;$("sb").textContent="신청이 마감됐어요"}}
 document.querySelectorAll(".gsel button").forEach(b=>b.onclick=()=>{G=b.dataset.g;document.querySelectorAll(".gsel button").forEach(x=>x.classList.toggle("on",x===b))});
 $("ap").onsubmit=async ev=>{ev.preventDefault();const m=$("msg");m.className="msg";
   if(!G){m.className="msg err";m.textContent="성별을 골라주세요";return}
-  if(!$("ag").checked){m.className="msg err";m.textContent="안내 사항에 동의해 주세요";return}
-  $("sb").disabled=true;m.textContent="신청 중…";
-  try{const r=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"apply",e:E,gender:G,name:$("nm").value,phone:$("ph").value,birth_year:$("by").value,tier:$("tr").value,lol_nick:$("nk").value,depositor:$("dp").value||$("nm").value,memo:$("mm").value,agree:true})})).json();
+  if(!$("pf0").files[0]){m.className="msg err";m.textContent="프로필 사진을 올려주세요";return}
+  if(!$("ag").checked||!$("pv_ok").checked){m.className="msg err";m.textContent="필수 동의 두 개를 체크해 주세요";return}
+  $("sb").disabled=true;m.textContent="보내는 중…";
+  try{const photo=await shrink($("pf0").files[0],900);const r=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"apply",e:E,gender:G,photo,name:$("nm").value,nick:$("nk").value,phone:$("ph").value,birth_year:$("by").value,tier:$("tr").value,position:$("po").value,drink:$("dk").value,mbti:$("mb").value,intro:$("it").value,insta:$("ig").value,job:$("jb").value,companion:$("cp0").value,depositor:$("dp").value||$("nm").value,agree:true,privacy_ok:true,promo_photo_ok:$("pm_ok").checked})})).json();
     if(!r.ok){m.className="msg err";m.textContent=r.err||"신청하지 못했어요";$("sb").disabled=false;return}
     if(window.pnTrack)pnTrack("meet_apply",{e:E,g:G,w:r.waitlist?1:0});location.href="?t="+r.token}
   catch{m.className="msg err";m.textContent="연결이 불안정해요. 다시 눌러주세요";$("sb").disabled=false}};
-async function shrink(file){const img=await createImageBitmap(file);const s=Math.min(1,1600/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85)}
+$("pf0").onchange=()=>{const f=$("pf0").files[0];if(f){$("pv").src=URL.createObjectURL(f);$("pv").style.display="block"}};
+async function shrink(file,mx=1600){const img=await createImageBitmap(file);const s=Math.min(1,mx/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85)}
 async function me(t){const r=await(await fetch(F+"?t="+encodeURIComponent(t))).json();if(!r.ok){$("meView").innerHTML=`<div class="card">${e(r.err||"신청 정보를 찾지 못했어요")}</div>`;return}
-  paint(r.ev);const M=r.me,ST={applied:"입금 대기",proof:"입금 확인 중",confirmed:"참가 확정",waitlist:"대기",cancelled:"취소됨",refunded:"환불됨"};
+  paint(r.ev);const M=r.me,ST={review:"프로필 검토 중",rejected:"이번 회차 마감",applied:"승인 · 입금 대기",proof:"입금 확인 중",confirmed:"참가 확정",waitlist:"대기",cancelled:"취소됨",refunded:"환불됨"};
   let body="";
   if(M.status==="applied")body=`<p>참가비 <b>${won(r.ev.price)}</b>을 아래 계좌로 보내고 캡처를 올려주세요.<br><b>${new Date(M.hold_until).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})}</b>까지 안 올리면 자리가 다음 분께 넘어가요.</p>
     <div class="acc"><span>${e(r.account)}</span><button class="btn" id="cp" type="button" style="padding:6px 12px;font-size:14px">계좌 복사</button></div>
     <label style="font-weight:700;display:block;margin-top:8px">입금 캡처</label><input type="file" id="pf" accept="image/*"><div class="msg" id="pm"></div>`;
   else if(M.status==="proof")body="<p>캡처 잘 받았어요. 사장님이 입금 확인하면 확정 문자를 보내드려요.</p>";
   else if(M.status==="confirmed")body="<p>참가 확정이에요 🎉 입실 전날 주소와 입실 안내를 문자로 보내드려요. 신분증 꼭 챙겨주세요.</p>";
+  else if(M.status==="review")body="<p>프로필 잘 받았어요. 사장님이 확인하고 1~2일 안에 문자로 알려드려요. 승인 전에는 입금하지 마세요.</p>";
+  else if(M.status==="rejected")body="<p>이번 회차는 성비·인원 구성상 함께하기 어렵게 됐어요. 다음 소셜링을 열면 먼저 알려드릴게요.</p>";
   else if(M.status==="waitlist")body="<p>지금은 자리가 다 찼어요. 자리가 나면 바로 문자 드릴게요. 대기 중에는 입금하지 마세요.</p>";
   else body="<p>문의는 010-8339-5818로 주세요.</p>";
   $("meView").innerHTML=`<div class="card"><span class="st">${ST[M.status]||M.status}</span><h2 class="disp" style="font-size:24px;margin-top:8px">${e(M.name)}님 신청 현황</h2>${body}</div>`;
@@ -155,11 +170,13 @@ async function me(t){const r=await(await fetch(F+"?t="+encodeURIComponent(t))).j
 async function admin(){let k="";try{k=localStorage.getItem("pn_admin")||""}catch{}if(!k){k=prompt("관리자 키");try{localStorage.setItem("pn_admin",k)}catch{}}
   const call=b=>fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,e:E,...b})}).then(r=>r.json());
   const load=async()=>{const r=await call({action:"list"});if(!r.ok){$("admSum").textContent="키가 맞지 않아요";return}
-    $("adm").hidden=false;$("evView").hidden=true;const ST={applied:"입금대기",proof:"캡처옴",confirmed:"확정",waitlist:"대기",cancelled:"취소",refunded:"환불"};
+    $("adm").hidden=false;$("evView").hidden=true;const ST={review:"검토",applied:"승인(입금대기)",proof:"캡처옴",confirmed:"확정",waitlist:"대기",rejected:"거절",cancelled:"취소",refunded:"환불"};
     const c={f:0,m:0};r.rows.forEach(x=>{if(x.status==="confirmed")c[x.gender]++});
-    $("admSum").textContent=`확정 여 ${c.f}/${r.ev.cap_f} · 남 ${c.m}/${r.ev.cap_m} · 자리 잡힌 인원 ${r.ev.taken}명`;
-    $("admList").innerHTML=`<table><tr><th>상태</th><th>이름</th><th>성별·나이·티어</th><th>캡처</th><th></th></tr>${r.rows.map(x=>`<tr><td>${ST[x.status]||x.status}${x.status==="applied"&&!x.hold?" (24h 지남)":""}</td><td>${e(x.name)}<br>${e(x.phone)}<br>입금자 ${e(x.depositor)}</td><td>${x.gender==="f"?"여":"남"} · ${x.birth_year} · ${e(x.tier)}<br>${e(x.lol_nick)}<br>${e(x.memo)}</td><td>${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img src="${x.proof_url}" alt="입금 캡처"></a>`:""}</td><td>${["confirmed","applied","waitlist","cancelled","refunded"].filter(s=>s!==x.status).map(s=>`<button data-id="${x.id}" data-s="${s}">${ST[s]}</button>`).join("")}</td></tr>`).join("")}</table>`;
-    $("admList").querySelectorAll("button").forEach(b=>b.onclick=async()=>{b.disabled=true;await call({action:"set",id:b.dataset.id,status:b.dataset.s,notify:b.dataset.s==="cancelled"});load()})};
+    $("admSum").textContent=`확정 여 ${c.f}/${r.ev.cap_f} · 남 ${c.m}/${r.ev.cap_m} · 자리 잡힌 인원(승인+캡처+확정) ${r.ev.taken}명 · 검토 대기 ${r.rows.filter(x=>x.status==="review").length}명`;
+    const NEXT={review:["applied","waitlist","rejected"],waitlist:["applied","rejected"],applied:["confirmed","cancelled"],proof:["confirmed","cancelled"],confirmed:["cancelled","refunded"],cancelled:["review"],rejected:["review"],refunded:[]},LB={applied:"승인",confirmed:"확정",waitlist:"대기",rejected:"거절",cancelled:"취소",refunded:"환불됨",review:"검토로"};
+    const age=y=>new Date().getFullYear()-y+1;
+    $("admList").innerHTML=`<table><tr><th>사진</th><th>프로필</th><th>상태·캡처</th></tr>${r.rows.map(x=>`<tr><td>${x.photo_url?`<a href="${x.photo_url}" target="_blank"><img src="${x.photo_url}" alt="프로필" style="width:84px;height:84px;object-fit:cover"></a>`:""}</td><td><b>${x.gender==="f"?"여":"남"} · ${e(x.nick)}</b> (${e(x.name)}, ${age(x.birth_year)}세)<br>${e(x.tier)} · ${e(x.position)} · ${e(x.mbti)}<br>🍾 ${e(x.drink)}<br>“${e(x.intro)}”<br>${x.insta?`<a href="https://instagram.com/${encodeURIComponent(x.insta)}" target="_blank">@${e(x.insta)}</a> · `:""}${e(x.job)}${x.companion?` · 친구 ${e(x.companion)}`:""}<br>${e(x.phone)} · 입금자 ${e(x.depositor)}${x.promo_photo_ok?" · 사진 홍보 OK":""}</td><td><b>${ST[x.status]||x.status}</b>${x.status==="applied"&&!x.hold?" (24h 지남)":""}<br>${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img src="${x.proof_url}" alt="입금 캡처"></a><br>`:""}${(NEXT[x.status]||[]).map(s=>`<button data-id="${x.id}" data-s="${s}">${LB[s]}</button>`).join("")}</td></tr>`).join("")}</table>`;
+    $("admList").querySelectorAll("button").forEach(b=>b.onclick=async()=>{b.disabled=true;const x=await call({action:"set",id:b.dataset.id,status:b.dataset.s,notify:b.dataset.s==="cancelled"});if(!x.ok&&x.err)$("admSum").textContent="⚠ "+x.err;else load()})};
   $("admSend").onclick=async()=>{const m=$("admMsg").value.trim();if(!m)return;const r=await call({action:"notify",msg:m});$("admSend").textContent=`${r.sent??0}명에게 보냈어요`};load()}
 if(location.hash==="#admin")admin();
 else if(qs.get("t"))me(qs.get("t"));
