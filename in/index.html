@@ -24,6 +24,7 @@
 .row2{display:grid;grid-template-columns:120px 1fr;gap:8px}
 .it{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #E2DFF7}
 .it b{display:block;font-size:15px}.it small{color:#5B5790;font-size:13px}
+.tg{display:flex;gap:4px}.tg button{border:0;border-radius:10px;padding:9px 12px;font:700 14px Pretendard,sans-serif;background:#E7E4FB;color:#5B5790;cursor:pointer}.tg button.on{background:#16133F;color:#fff}
 .st{display:flex;align-items:center;gap:4px}.st button{width:38px;height:38px;border-radius:10px;border:0;background:#E7E4FB;font:800 20px Pretendard;color:#16133F;cursor:pointer}.st span{min-width:30px;text-align:center;font-weight:800;font-size:17px}
 .sum{margin-top:14px;background:#16133F;color:#fff;border-radius:14px;padding:14px 16px}
 .sum .l{display:flex;justify-content:space-between;font-size:14px;color:#C9C5F0;padding:2px 0}.sum .big{display:flex;justify-content:space-between;font-size:20px;font-weight:800;margin-top:8px;padding-top:8px;border-top:1px solid #3A3580}.sum .big em{font-style:normal;color:var(--lamp)}
@@ -175,8 +176,14 @@ function renderOut(){
   const no=!D.checkin;["extraBox","bbqBox","rvBox","sum","goOut"].forEach(i=>$(i).hidden=no);
   if(no){$("items").innerHTML='<p class="hint" style="margin:0">① 입실 전 체크인을 먼저 해주세요.</p>';return}
   $("sum").hidden=false;$("goOut").hidden=false;
-  $("items").innerHTML=D.rules.items.map(it=>`<div class="it"><div><b>${it.name}</b><small>${won(it.price)} / ${it.unit}</small></div>${stepper(it.id)}</div>`).join("");
-  if(Q.disposable===undefined)Q.disposable=0;
+  const hc=Number(D.checkin.headcount)||1;
+  // 일회용품은 인원수 단위: 썼으면 체크인 인원 전원 × 단가 (2026-10-12)
+  $("items").innerHTML=D.rules.items.map(it=>it.id==="disposable"
+    ?`<div class="it"><div><b>일회용품 (컵·접시·수저 등)</b><small>썼으면 인원수대로 ${hc}명 × ${won(it.price)} = ${won(hc*it.price)}</small></div><div class="tg" id="dispTg"><button type="button" data-v="0">안 씀</button><button type="button" data-v="1">썼어요</button></div></div>`
+    :`<div class="it"><div><b>${it.name}</b><small>${won(it.price)} / ${it.unit}</small></div>${stepper(it.id)}</div>`).join("");
+  if(Q.disposable===undefined)Q.disposable=0;else if(Q.disposable)Q.disposable=hc;
+  const dsync=()=>document.querySelectorAll("#dispTg button").forEach(b=>b.classList.toggle("on",(b.dataset.v==="1")===!!Q.disposable));dsync();
+  document.querySelectorAll("#dispTg button").forEach(b=>b.onclick=()=>{Q.disposable=b.dataset.v==="1"?hc:0;dsync();calc()});
   const ex=D.checkin.headcount-D.rules.base_people;$("extraBox").hidden=ex<=0;$("exN").textContent=ex;
   $("bbqBox").hidden=!D.checkin.bbq;$("rvBox").hidden=D.checkin.review==="none";$("drinkNote").hidden=D.checkin.review!=="drink";
   document.querySelectorAll("#fout .st").forEach(s=>{const id=s.dataset.id,[m,v,p]=s.children;
@@ -195,7 +202,7 @@ function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
   if(D.fx_perk==="alt"){const it=id=>R.items.find(x=>x.id===id)||{price:0};L.push(["N CREW 전원 가입 혜택 (기본 봉투비·일회용품 무료)",-(R.bag_base+(Q.disposable||0)*it("disposable").price)])}
   const t=Math.max(0,L.reduce((a,l)=>a+l[1],0));
   if(D.exempt){$("sum").innerHTML=L.map(l=>`<div class="l"><span>${l[1]<0?"+":"·"} ${l[0]}</span><span>${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>정산할 금액 (보증금 면제)</span><em>${won(t)}</em></div><p class="hint">제출 후 ${D.account}로 입금해 주세요.</p>`;return}
-  $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>${l[1]<0?"+ ":"− "}${l[0]}</span><span>${l[1]<0?"+":""}${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`}
+  $("sum").innerHTML=`<div class="l"><span>보증금</span><span>${won(R.deposit)}</span></div>`+L.map(l=>`<div class="l"><span>${l[1]<0?"+ ":"− "}${l[0]}</span><span>${l[1]<0?"+":""}${won(Math.abs(l[1]))}</span></div>`).join("")+`<div class="big"><span>환급 예정</span><em>${won(Math.max(0,R.deposit-t))}</em></div>`+(t>R.deposit?`<p class="hint" style="color:#ff8a8a">차감액이 보증금보다 ${won(t-R.deposit)} 많아요. 제출 후 ${D.account}로 추가 입금 부탁드려요.</p>`:"")}
 $("rvf").onchange=async e=>{const f=e.target.files[0];if(!f)return;img=await shrink(f);$("rvp").innerHTML=`<img src="${img}">`};
 function shrink(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const s=Math.min(1,1400/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",.82))};i.src=URL.createObjectURL(f)})}
 $("goOut").onclick=async()=>{
