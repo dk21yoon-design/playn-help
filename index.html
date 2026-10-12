@@ -30,7 +30,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:122px}@media(min-width:901px){html{scroll-padding-top:76px}}
 body{background:var(--deep);color:var(--ink);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;font-size:16px;line-height:1.6;word-break:keep-all;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(1200px 600px at 85% -10%,rgba(255,181,71,.10),transparent 60%),radial-gradient(900px 600px at -10% 20%,rgba(91,72,214,.20),transparent 60%),var(--deep)}
 a{color:inherit}
@@ -245,6 +245,15 @@ details.terms div{padding:6px 0 0}
 .fine a{color:var(--lamp)}
 
 /* 지점 */
+
+/* 카테고리 바 (2026-10-12): 긴 페이지를 위에서 바로 이동 */
+.catbar{position:sticky;top:64px;z-index:35;background:rgba(14,12,44,.86);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);border-bottom:1px solid var(--line)}
+.catbar .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:9px;padding-bottom:9px}
+.catbar .wrap::-webkit-scrollbar{display:none}
+.catbar a{flex:none;text-decoration:none;color:var(--mute);font:700 14px Pretendard,sans-serif;padding:8px 14px;border-radius:999px;border:1px solid transparent;transition:background .2s,color .2s}
+.catbar a.on{background:var(--lamp);color:#1B1640}
+.catbar a:not(.on):hover{color:var(--ink);border-color:var(--line)}
+@media(min-width:901px){.catbar{display:none}}
 .branches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
 @media(max-width:900px){.branches{grid-template-columns:1fr}}
 .br{background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s var(--ease),border-color .25s}
@@ -376,6 +385,17 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
 @media(prefers-reduced-transparency:reduce){.top,.drawer,.dock,.rating{background:var(--deep);backdrop-filter:none;-webkit-backdrop-filter:none}}
+@media(max-width:600px){
+ .branches{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:84%;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-left:-16px;margin-right:-16px;padding:0 16px 8px;scrollbar-width:none}
+ .branches::-webkit-scrollbar{display:none}.branches .br{scroll-snap-align:start}
+ .branches .br .ph{aspect-ratio:16/10!important;height:auto!important}
+ .branches .br .ph img{height:100%!important}
+ .swipe-hint{display:block;color:var(--mute);font-size:13px;margin-top:10px}
+}
+.swipe-hint{display:none}
+.steps-tg{display:none}
+@media(max-width:600px){.steps-tg{display:block;width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);font:700 15px Pretendard,sans-serif;border-radius:14px;padding:13px;margin:18px 0 0;cursor:pointer}
+ .crew-wrap .steps{display:none}.crew-wrap.open .steps{display:block}}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head>
@@ -404,6 +424,10 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
   </div>
   <a class="event rv" href="worlds/"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span>10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
 </div></section>
+<nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
+  <a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
+</div></nav>
+
 
 <div class="ticker" aria-label="플레이앤 한눈에"><div class="track">
   <span><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span><b>루프탑 바베큐</b> 장작·숯 무제한</span><span><b>최대 16명</b> 최소 인원 없음</span><span><b>배달·주류 반입</b> 자유롭게</span><span><b>평점 4.9</b> 스페이스클라우드 후기 287개</span><span><b>N CREW 특가</b> 빈자리 최대 35%</span>
@@ -456,6 +480,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
   <h2 class="disp sh2 rv">N CREW, 플레이앤 단골 모임</h2>
   <p class="sub rv">한 번 놀러 온 친구들이 다음에도 편하게 다시 모일 수 있게. 가입비는 없어요.</p>
   <div class="crew-wrap">
+    <button type="button" class="steps-tg" id="stepsTg" aria-expanded="false">이용 방법 5단계 보기 ▾</button>
     <ol class="steps rv">
       <li><b>가입</b><span>이름과 번호만 남기면 끝. 특가 알림 수신에 동의해 주세요.</span></li>
       <li><b>매주 빈자리 알림</b><span>그 주에 비어있는 날짜를 카카오톡·문자로 먼저 알려드려요.</span></li>
@@ -516,6 +541,7 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
       <ul><li>RTX 5070 · 320Hz 더블모니터 PC 5대</li><li>8K 마우스 11종 · 자석축 키보드 8종</li><li>눕는 좌식 의자 · 루프탑 바베큐</li></ul>
       <div class="links"><a class="ai" href="https://smartstore.naver.com/playn_/products/12071850850" target="_blank" rel="noopener">네이버 예약</a><a class="ai" href="https://www.spacecloud.kr/space/72605" target="_blank" rel="noopener">스페이스클라우드</a></div><a class="more-link" href="yeontral/">장비·요금·후기 자세히 보기</a></div></article>
   </div>
+  <span class="swipe-hint">← 옆으로 넘기면 다른 지점이 나와요</span>
 
   <div class="calc rv" id="calc">
     <h3 class="disp">요금 계산기</h3>
@@ -691,7 +717,7 @@ fetch(API).then(r=>r.json()).then(j=>{const k=$("kakaoBtn");if(j.kakao){k.href=j
 function kicker(p){const t=String(p.series||"").replace(/\[데일리\]\s*/g,"");const m=t.match(/^\[([^\]]{1,14})\]/);if(m)return m[1];const c=MAG.categories.find(c=>c.id===p.cat);return c?c.name:t.slice(0,16)}
 /* 게임 매거진 */
 const POSTS_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-posts";
-let MAG={posts:[],categories:[]},magCat="all",magShown=8;
+const MAGN=matchMedia("(max-width:600px)").matches?4:8;let MAG={posts:[],categories:[]},magCat="all",magShown=MAGN;
 function magRender(){const list=MAG.posts.filter(p=>magCat==="all"||p.cat===magCat);const g=$("mag");g.innerHTML="";
   if(!list.length){g.innerHTML='<p class="sub">아직 이 주제 글이 없어요.</p>';$("magMore").hidden=true;return}
   list.slice(0,magShown).forEach(p=>{const b=document.createElement("a");b.className="post";b.href="m/"+p.id+"/";
@@ -701,7 +727,7 @@ function magRender(){const list=MAG.posts.filter(p=>magCat==="all"||p.cat===magC
   $("magMore").hidden=list.length<=magShown}
 function magTabs(){const t=$("magTabs");t.innerHTML="";[{id:"all",name:"전체"},...MAG.categories].forEach(c=>{const n=c.id==="all"?MAG.posts.length:MAG.posts.filter(p=>p.cat===c.id).length;
   const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",c.id===magCat);b.innerHTML=`${c.name}<small>${n}</small>`;
-  b.onclick=()=>{magCat=c.id;magShown=8;magTabs();magRender()};t.appendChild(b)})}
+  b.onclick=()=>{magCat=c.id;magShown=MAGN;magTabs();magRender()};t.appendChild(b)})}
 $("magMore").onclick=()=>{magShown+=8;magRender()};
 function openPost(p){lastFocus=document.activeElement;const m=$("pvMedia");m.innerHTML="";$("pvCnt").textContent="";
   if(p.video){const v=document.createElement("video");v.src=p.video;v.poster=p.cover||"";v.controls=true;v.playsInline=true;v.setAttribute("playsinline","");v.preload="metadata";m.appendChild(v)}
@@ -767,6 +793,16 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
   [...$("rvTabs").children].forEach(t=>t.onclick=()=>draw(t.dataset.b||null));draw(null)}).catch(()=>{})})();
 </script>
 <a class="fab" href="help/"><i></i>AI 상담사</a>
+<script>
+/* 카테고리 바: 지금 보는 구역 표시 + 눌러서 이동 */
+(function(){const bar=document.getElementById("catbar");if(!bar)return;const links=[...bar.querySelectorAll("a")];
+ const secs=links.map(a=>document.getElementById(a.dataset.s)).filter(Boolean);
+ const set=id=>links.forEach(a=>{const on=a.dataset.s===id;a.classList.toggle("on",on);if(on){const w=bar.querySelector(".wrap");const l=a.offsetLeft-w.clientWidth/2+a.clientWidth/2;w.scrollTo({left:l,behavior:"smooth"})}});
+ const io=new IntersectionObserver(es=>{const v=es.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top)[0];if(v)set(v.target.id)},{rootMargin:"-130px 0px -55% 0px"});
+ secs.forEach(s=>io.observe(s));
+ links.forEach(a=>a.addEventListener("click",()=>{set(a.dataset.s);if(window.pnTrack)pnTrack("catbar_"+a.dataset.s)}))})();
+</script>
+<script>(function(){const b=document.getElementById("stepsTg");if(b)b.onclick=()=>{const w=b.parentNode,o=w.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"이용 방법 접기 ▴":"이용 방법 5단계 보기 ▾"}})();</script>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
 <script src="/assets/chat.js" defer></script>
 </body>
