@@ -28,6 +28,7 @@
 .sum{margin-top:14px;background:#16133F;color:#fff;border-radius:14px;padding:14px 16px}
 .sum .l{display:flex;justify-content:space-between;font-size:14px;color:#C9C5F0;padding:2px 0}.sum .big{display:flex;justify-content:space-between;font-size:20px;font-weight:800;margin-top:8px;padding-top:8px;border-top:1px solid #3A3580}.sum .big em{font-style:normal;color:var(--lamp)}
 .go{width:100%;margin-top:16px}
+.door{margin-top:14px;border-radius:16px;padding:16px 18px;line-height:1.55;font-weight:700}.door.lk{background:#2A2560;color:#E9E6FF;border:1.5px dashed var(--lamp)}.door.op{background:var(--lamp);color:var(--night)}.door .c{display:block;font:800 26px/1.3 Pretendard,sans-serif;letter-spacing:.04em;margin-top:6px}.door small{display:block;font-weight:500;opacity:.8;margin-top:6px;font-size:13px}
 .msg{margin-top:12px;border-radius:12px;padding:12px 14px;font-weight:700;line-height:1.55}.msg.ok{background:#DDF7EA;color:#14532D}.msg.er{background:#FFE1E6;color:#8A1030}
 .done{text-align:center;padding:10px 0}.done .n{font-size:34px;font-weight:900;color:#16133F}
 .pv img{width:90px;border-radius:8px;margin-top:8px}
@@ -43,6 +44,7 @@
   <h1 class="disp" id="h1">체크인</h1>
   <p class="sub" id="lead">불러오는 중…</p>
   <span class="meta" id="meta" hidden></span>
+  <div class="door" id="door" hidden></div>
   <div class="fx" id="fxBox" hidden></div>
   <div class="tabs" id="tabs" hidden><button data-m="in">① 입실 전 체크인</button><button data-m="out">② 퇴실 후 정산</button></div>
 
@@ -60,6 +62,7 @@
     <p class="hint">참여하시면 퇴실 후 예약하신 플랫폼에 사진 후기를 남기고, 정산 화면에서 후기 캡처를 올려주세요. <b>후기 첫 줄에 "플레이앤 후기 이벤트 참여(혜택 제공)"라고 꼭 적어주세요</b> — 혜택을 받은 후기는 법에 따라 표시해야 해요. 좋은 말만 써달라는 게 아니에요, 솔직하게 써주세요.</p>
     <label class="t">바베큐 사용</label>
     <div class="ch"><label><input type="radio" name="bq" value="1">사용해요</label><label><input type="radio" name="bq" value="0" checked>안 써요</label></div>
+    <p class="hint" id="bbqCpHint" hidden></p>
     <label class="t">예약하신 곳</label>
     <div class="ch"><label><input type="radio" name="pf" value="스페이스클라우드" checked>스페이스클라우드</label><label><input type="radio" name="pf" value="네이버">네이버</label><label><input type="radio" name="pf" value="홈페이지·기타">홈페이지·기타</label></div>
     <label class="t">플레이앤은 어떻게 알게 되셨어요? <small style="font-weight:600;color:#5B5790">(선택 · 한 번만 눌러주세요)</small></label>
@@ -124,10 +127,14 @@ function show(m){mode=m;$("fin").hidden=m!=="in";$("fout").hidden=m!=="out";docu
   $("lead").textContent=m==="in"?"1분이면 끝나요. 문자로 하나하나 보내실 필요 없어요.":"쓰신 물품만 체크하면 차감·환급 금액이 바로 계산돼요.";
   if(m==="out")renderOut()}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>show(b.dataset.m));
+async function doorLoad(){try{const r=await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle-guard",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"door",k})}).then(x=>x.json());const el=$("door");if(!r.ok||r.reason==="ended"){el.hidden=true;return}el.hidden=false;
+  if(r.locked&&r.reason==="checkin"){el.className="door lk";el.innerHTML='🔒 입실 비밀번호는 <b>체크인을 마치면</b> 바로 여기와 문자로 나와요<small>아래 ① 체크인을 먼저 해주세요. 1분이면 끝나요.</small>'}
+  else if(r.locked){const t=new Date(r.open_at);el.className="door lk";el.innerHTML=`✅ 체크인 완료<br>입실 비밀번호는 <b>${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}</b>부터 여기서 보이고 문자로도 보내드려요`}
+  else{el.className="door op";el.innerHTML='🔐 입실 비밀번호'+r.codes.map(c=>`<span class="c">${c.replace(/</g,"&lt;")}</span>`).join("")+'<small>문자로도 보내드려요. 일행 외에는 공유하지 말아 주세요.</small>'}}catch(e){}}
 async function load(){
   if(!k){$("lead").innerHTML='체크인은 예약 확정 문자에 있는 <b>개인 링크</b>로 들어와야 열려요.<br>문자를 못 찾겠다면 아래로 바로 연락 주세요.<span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><a class="btn lamp" href="sms:01083395818">문자로 링크 다시 받기</a><a class="btn ghost" href="/help/">AI 상담</a><a class="btn ghost" href="/">홈으로</a></span>';return}
   D=await post({action:"info"}).catch(()=>null);
-  if(!D||!D.ok){$("lead").textContent=(D&&D.error)||"잠시 후 다시 시도해 주세요.";return}
+  if(!D||!D.ok){$("lead").textContent=(D&&D.error)||"잠시 후 다시 시도해 주세요.";return}doorLoad();
   const dt=new Date(D.date+"T00:00:00");$("meta").textContent=`${D.branch} · ${dt.getMonth()+1}/${dt.getDate()} ${D.pkg}`;$("meta").hidden=false;
   $("accTxt").textContent=D.account;$("depAmt").textContent=won(D.rules.deposit);
   if(D.exempt){$("depHint").hidden=true;$("exemptBox").hidden=false;$("exemptBox").innerHTML="👑 N CREW 레전드 멤버라 <b>보증금 없이</b> 이용하세요. 입금자명 칸엔 이름만 적어주시면 돼요. 퇴실 후 쓰신 물품 금액만 정산해요."}
@@ -139,6 +146,7 @@ async function load(){
     if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}
     else if(!D.worlds.open){$("wp").innerHTML="<option>예측 마감됐어요</option>";$("wp").disabled=true}
     else D.worlds.teams.forEach(t=>{const o=document.createElement("option");o.textContent=t;$("wp").appendChild(o)})}
+  if(D.bbq_coupon){$("bbqCpHint").hidden=false;$("bbqCpHint").innerHTML=`🍖 <b>N CREW 스탬프 바베큐 ${D.bbq_coupon.people}인분 무료권</b>이 있어요. '사용해요'를 고르면 퇴실 정산에서 자동으로 빠져요.`}
   if(!D.member){$("crBox").hidden=false;$("crJ").onchange=()=>$("crNl").hidden=!$("crJ").checked}
   if(D.status==="paid"||D.status==="submitted"||D.status==="hold"){return renderDone()}
   if(D.checkin){const c=D.checkin;$("hc").value=c.headcount;$("dp").value=c.depositor;$("bk").value=c.bank;$("ac").placeholder=c.account+" (다시 입력하면 바뀌어요)";$("ac").required=false;
@@ -156,7 +164,7 @@ $("fin").onsubmit=async e=>{e.preventDefault();
   const r=await post({action:"checkin",headcount:$("hc").value,depositor:$("dp").value,review:document.querySelector("[name=rv]:checked").value,bbq:document.querySelector("[name=bq]:checked").value==="1",platform:document.querySelector("[name=pf]:checked").value,bank:$("bk").value,account:acc||(D.checkin?"keep":""),holder:$("ho").value||$("dp").value,companions:$("cp").value,worlds_pick:$("wp").disabled?"":$("wp").value,crew_join:$("crJ").checked,crew_night:$("crN").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("goIn").disabled=false;
   if(!r.ok)return msg("mIn",r.error||"다시 시도해 주세요");
-  msg("mIn","체크인 완료! 보증금 입금 부탁드려요 🙏<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
+  doorLoad().then(()=>{if(!$("door").hidden)$("door").scrollIntoView({behavior:"smooth",block:"center"})});msg("mIn","체크인 완료! 입실 비밀번호는 위에 떠요 (문자로도 가요). 보증금 입금 부탁드려요 🙏<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
   D=await post({action:"info"});fxRender();if(D.member)$("crBox").hidden=true;if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}};
 function stepper(id,max=99){return `<div class="st" data-id="${id}"><button type="button">−</button><span>${Q[id]||0}</span><button type="button">+</button></div>`}
 function renderOut(){
@@ -177,7 +185,8 @@ function calc(){const R=D.rules,L=[["기본 쓰레기봉투",R.bag_base]];
   if(Q.__bbqpaid>(Q.__bbq||0)){Q.__bbqpaid=Q.__bbq||0;document.querySelector('[data-id=__bbqpaid] span').textContent=Q.__bbqpaid}
   if(D.checkin.bbq&&Q.__bbq){const paid=pl?(Q.__bbqpaid||0):0,un=Q.__bbq-paid;
     $("bbqWarn").hidden=!(pl&&un>0);$("bbqWarn").textContent=`${Q.__bbq}명 중 ${paid}명만 결제 → 미결제 ${un}명은 보증금에서 차감돼요`;
-    if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person])}
+    if(un)L.push([paid?`바베큐 미결제 ${un}인`:`바베큐 ${un}인`,un*R.bbq_per_person]);
+    const fr=D.bbq_coupon?Math.min(un,D.bbq_coupon.people):0;if(fr)L.push([`N CREW 스탬프 바베큐 무료권 (${fr}인)`,-fr*R.bbq_per_person])}
   if((D.crew&&D.crew.lv>=2)||(D.checkin&&D.exempt)){const it=id=>R.items.find(x=>x.id===id)||{price:0};const dF=(D.checkin&&D.checkin.review==="drink")?0:2;const f=Math.min(dF,Q.drink||0)*it("drink").price+Math.min(2,Q.water||0)*it("water").price;if(f)L.push([dF?"N CREW 혜택 (음료·물 2개씩 무료)":"N CREW 혜택 (물 2개 무료 · 음료는 후기 이벤트로 받음)",-f])}
   if(D.fx_perk==="alt"){const it=id=>R.items.find(x=>x.id===id)||{price:0};L.push(["N CREW 전원 가입 혜택 (기본 봉투비·일회용품 무료)",-(R.bag_base+(Q.disposable||0)*it("disposable").price)])}
   const t=Math.max(0,L.reduce((a,l)=>a+l[1],0));
