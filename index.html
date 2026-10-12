@@ -23,7 +23,7 @@
 /* 플레이앤 홈 v2: 루프탑 밤 + 스트링 전구 무드. 다크 고정(브랜드가 '밤'), 강조색은 전구 앰버 1개, 핑크는 '특가' 의미에만 사용 */
 :root{
   --night:#16133F;--deep:#0E0C2C;--panel:#1C1850;--panel2:#241F63;--line:rgba(166,162,214,.16);--line2:rgba(166,162,214,.28);
-  --lamp:#FFB547;--lamp2:#FFC977;--brand:#FF2E6E;--ink:#F3F1FF;--mute:#B3AFDF;--dim:#8682BE;
+  --lamp:#FFB547;--lamp2:#FFC977;--brand:#FF2E6E;--ink:#F3F1FF;--mute:#B3AFDF;--dim:#9E9AD6;
   --r:18px;--r-sm:10px;--pill:999px;
   --ease:cubic-bezier(.16,1,.3,1);
   --pad:clamp(16px,4vw,32px);
@@ -396,6 +396,31 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
 .steps-tg{display:none}
 @media(max-width:600px){.steps-tg{display:block;width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);font:700 15px Pretendard,sans-serif;border-radius:14px;padding:13px;margin:18px 0 0;cursor:pointer}
  .crew-wrap .steps{display:none}.crew-wrap.open .steps{display:block}}
+
+.catbar .wrap{-webkit-mask:linear-gradient(90deg,#000 88%,transparent);mask:linear-gradient(90deg,#000 88%,transparent)}
+.dock.typing{transform:translateY(160%)!important;opacity:0;pointer-events:none}
+.dock{transition:transform .25s,opacity .25s}
+/* 가독성·편의성 정리 (2026-10-12) */
+a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+.more-link{padding:12px 0;border:1px solid var(--line);border-radius:999px;margin-top:14px}
+.more-link::after{content:" →"}
+@media(max-width:600px){
+ body{font-size:16px;line-height:1.7}
+ .sub{font-size:16px;line-height:1.7}
+ h2.sh2{line-height:1.25}
+ .fine,.rv-src,.legend,#dealNote span,.rv-row cite,.rvs cite,.post .ser,.calc-row label,.swipe-hint{font-size:14px}
+ .perks .k{font-size:13.5px}
+ .perks>div span{font-size:15px;line-height:1.6}
+ .day small,.grid .h small{font-size:12px}
+ button.cell s,button.cell .t{font-size:12px}
+ .rv-row blockquote{font-size:16px;line-height:1.65}
+ .catbar a{padding:10px 15px;font-size:14.5px}
+ .rv-src a,.fine a,.sub a{display:inline-block;padding:4px 0;text-underline-offset:3px}
+ footer{font-size:14.5px}
+ footer .row{gap:10px 16px;line-height:1.8}
+ .faq-wrap summary,.faq summary{padding-top:16px;padding-bottom:16px}
+}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head>
@@ -803,6 +828,7 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
  links.forEach(a=>a.addEventListener("click",()=>{set(a.dataset.s);if(window.pnTrack)pnTrack("catbar_"+a.dataset.s)}))})();
 </script>
 <script>(function(){const b=document.getElementById("stepsTg");if(b)b.onclick=()=>{const w=b.parentNode,o=w.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"이용 방법 접기 ▴":"이용 방법 5단계 보기 ▾"}})();</script>
+<script>(function(){const d=document.getElementById("dock");if(!d)return;document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea"))d.classList.add("typing")});document.addEventListener("focusout",()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches("input,select,textarea"))d.classList.remove("typing")},120))})();</script>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
 <script src="/assets/chat.js" defer></script>
 </body>

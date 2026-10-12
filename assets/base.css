@@ -1,5 +1,5 @@
 /* 플레이앤 공통 스타일 (지점·매거진 페이지) */
-:root{--night:#16133F;--deep:#0E0C2C;--panel:#211D57;--line:#3A3580;--lamp:#FFB547;--brand:#FF2E6E;--ink:#F1EFFF;--mute:#A6A2D6;--dim:#6F6AAB;--r-sm:8px;--r-md:14px;--r-lg:22px}
+:root{--night:#16133F;--deep:#0E0C2C;--panel:#211D57;--line:#3A3580;--lamp:#FFB547;--brand:#FF2E6E;--ink:#F1EFFF;--mute:#B3AFDF;--dim:#9E9AD6;--r-sm:8px;--r-md:14px;--r-lg:22px}
 *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{background:var(--night);color:var(--ink);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;font-size:16px;line-height:1.65;word-break:keep-all;overflow-x:hidden}
@@ -36,3 +36,7 @@ footer a{color:var(--mute)}
 /* v2 공통 다듬기 (홈 리뉴얼과 톤 맞춤) */
 .btn:active{transform:scale(.97)}
 .btn.lamp:hover{transform:translateY(-2px)}
+/* 가독성·편의성 (2026-10-12) */
+a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+@media(max-width:600px){body{line-height:1.7}small,.note,.fine{font-size:14px}footer{font-size:14.5px}footer .row{gap:10px 16px;line-height:1.8}}
