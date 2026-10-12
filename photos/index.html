@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>후기 사진 라이브러리</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root{--night:#16133F;--panel:#211D57;--line:#3A3580;--lamp:#FFB547;--brand:#FF2E6E;--ink:#F1EFFF;--mute:#A6A2D6;--ok:#3DDC97}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{background:var(--night);color:var(--ink);font-family:Pretendard,sans-serif;padding:16px;word-break:keep-all}
+h1{font-size:22px}.sub{color:var(--mute);font-size:14px;margin-top:4px;line-height:1.5}
+input,button,select{font:inherit}input,select{background:#fff;color:var(--night);border:0;border-radius:10px;padding:9px}
+button{border:0;border-radius:10px;padding:9px 13px;font-weight:700;cursor:pointer;background:#3A3580;color:var(--ink)}
+.ok{background:var(--lamp);color:var(--night)}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0;background:var(--panel);border-radius:14px;padding:12px}
+.chips button.on{background:var(--lamp);color:var(--night)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:10px}
+.it{background:var(--panel);border-radius:12px;overflow:hidden;position:relative;border:2px solid transparent}
+.it.sel{border-color:var(--lamp)}
+.it img{width:100%;aspect-ratio:1;object-fit:cover;display:block;cursor:pointer;background:#2a2668}
+.it .bd{padding:8px;font-size:12px;color:var(--mute);line-height:1.4}
+.it .bd q{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.it .tg{position:absolute;top:6px;left:6px;display:flex;gap:4px;flex-wrap:wrap}
+.it .tg span{background:rgba(22,19,63,.85);border-radius:6px;padding:2px 6px;font-size:11px;font-weight:700}
+.it .tg .p{background:var(--ok);color:#06331f}.it .tg .s{background:var(--lamp);color:var(--night)}.it .tg .h{background:#666}
+.it .ac{display:flex;gap:4px;padding:0 8px 8px;flex-wrap:wrap}.it .ac button{padding:5px 8px;font-size:12px}
+.it .ac button.on{background:var(--lamp);color:var(--night)}.it .ac button.pon{background:var(--ok);color:#06331f}
+.tip{background:#2B1D5E;border-radius:12px;padding:12px;font-size:13.5px;color:#E3DCFF;margin-top:8px;line-height:1.6}
+.dlg{position:fixed;inset:0;background:rgba(8,6,24,.92);display:flex;align-items:center;justify-content:center;z-index:9;padding:16px}
+.box{background:var(--panel);border-radius:16px;padding:16px;max-width:960px;width:100%;max-height:94vh;overflow:auto}
+.cv{display:flex;gap:16px;flex-wrap:wrap}.cv canvas{width:min(360px,100%);border-radius:10px;background:#000}
+.cv .f{flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px}.cv textarea{width:100%;min-height:110px;border-radius:10px;padding:10px;font:inherit}
+#big{max-width:100%;max-height:70vh;border-radius:12px;display:block;margin:0 auto}
+a{color:var(--lamp)}
+</style>
+</head><body>
+<h1>후기 사진 라이브러리</h1>
+<p class="sub" id="sum">스페이스클라우드·네이버·퇴실 정산에서 손님이 올린 사진을 모았어요.</p>
+<div class="bar" id="login"><input id="key" type="password" placeholder="관리 키" style="flex:1"><button class="ok" id="go">열기</button></div>
+<div id="main" hidden>
+  <div class="tip"><b>사용 규칙</b> 사진 권리는 찍은 손님에게 있어요. 사이트 후기 모음에 출처와 함께 보여주는 건 괜찮지만, <b>인스타·카드뉴스·광고</b>에는 <b>✅ 홍보 OK</b>(손님 동의 받음) 사진만 쓰세요. 동의는 ① 퇴실 정산에서 손님이 직접 체크하거나 ② 후기 답글로 물어보고 "네" 받으면 여기서 ✅를 눌러요. 얼굴이 나온 사진은 동의를 받아도 모자이크를 권해요.</div>
+  <div class="bar chips" id="fb"></div>
+  <div class="bar chips" id="fo"><button data-o="" class="on">전체</button><button data-o="picked">⭐ 고른 사진</button><button data-o="promo">✅ 홍보 OK</button><button data-o="hidden">숨긴 사진</button></div>
+  <div class="bar"><span class="sub" id="selN">선택 0장</span><button id="dl">선택 원본 내려받기</button><button class="ok" id="mk">선택 사진으로 후기 카드 만들기</button><button id="ask">동의 요청 답글 문구 복사</button><button id="sync">지금 새로 불러오기</button></div>
+  <div class="grid" id="grid"></div>
+  <h2 style="font-size:18px;margin-top:26px">네이버 스마트스토어 후기 가져오기</h2>
+  <div class="tip">스마트스토어센터 → 리뷰 관리 → 엑셀 다운로드 한 파일을 여기에 올려주세요. 상품번호로 지점을 자동으로 나눠요 (홍대 9434661597 · 연남 9430485644 · 연트럴 12071850850). 엑셀에 사진 주소가 없으면 글만 들어와요.</div>
+  <div class="bar"><input type="file" id="xl" accept=".xlsx,.xls,.csv"><span class="sub" id="xlMsg"></span></div>
+</div>
+<div class="dlg" id="dlg" hidden><div class="box" id="dbox"></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-reviews";
+const $=id=>document.getElementById(id),H=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SH={"홍대루프탑점":"홍대","연남루프탑점":"연남","연트럴파크점":"연트럴"},SRC={spacecloud:"스클",naver:"네이버",site:"직접"};
+const TAGS=["공간","PC","바베큐","음식","야경","단체","파티","노래방"];
+let KEY="",P=[],BR="",ONLY="",SEL=new Set();
+const st={get(){try{return localStorage.getItem("pn_admin")||""}catch(e){return ""}},set(v){try{localStorage.setItem("pn_admin",v)}catch(e){}}};
+const api=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
+async function load(){const x=await api({action:"photos",limit:1000});if(!x.ok){$("login").hidden=false;$("main").hidden=true;$("sum").textContent="관리 키가 맞지 않아요";return}
+  st.set(KEY);$("login").hidden=true;$("main").hidden=false;P=x.photos;
+  const n=k=>P.filter(p=>p[k]).length;$("sum").textContent=`사진 ${P.length}장 · ⭐ 고른 사진 ${n("picked")} · ✅ 홍보 OK ${n("promo_ok")}`;
+  const br=[...new Set(P.map(p=>p.branch))];$("fb").innerHTML=`<button data-b="" class="${BR?"":"on"}">전 지점</button>`+br.map(b=>`<button data-b="${b}" class="${BR===b?"on":""}">${SH[b]||b} ${P.filter(p=>p.branch===b).length}</button>`).join("");
+  $("fb").querySelectorAll("button").forEach(b=>b.onclick=()=>{BR=b.dataset.b;load()});draw()}
+function list(){return P.filter(p=>(!BR||p.branch===BR)&&(ONLY==="hidden"?p.hidden:!p.hidden)&&(!ONLY||ONLY==="hidden"||p[ONLY==="promo"?"promo_ok":"picked"]))}
+function src(p){return p.public_url||p.thumb||p.url}
+function draw(){const L=list();$("selN").textContent=`선택 ${SEL.size}장`;
+  $("grid").innerHTML=L.map(p=>`<div class="it${SEL.has(p.id)?" sel":""}" data-id="${H(p.id)}"><div class="tg">${p.promo_ok?'<span class="p">✅ 홍보 OK</span>':""}${p.picked?'<span class="s">⭐</span>':""}${p.hidden?'<span class="h">숨김</span>':""}<span>${SH[p.branch]||""} · ${SRC[p.source]||p.source}</span></div>
+   <img src="${H(src(p))}" loading="lazy" alt="" onerror="this.style.opacity=.2">
+   <div class="bd"><q>${H(p.review?.body||"")}</q><div>${H(p.review?.author||"")} · ${(p.posted_at||"").slice(0,10)}${(p.tags||[]).length?" · #"+p.tags.join(" #"):""}</div></div>
+   <div class="ac"><button data-a="sel">${SEL.has(p.id)?"선택됨":"선택"}</button><button data-a="picked" class="${p.picked?"on":""}">⭐</button><button data-a="promo_ok" class="${p.promo_ok?"pon":""}">✅ 홍보</button><button data-a="hidden">${p.hidden?"보이기":"숨김"}</button><button data-a="tag">#태그</button></div></div>`).join("")||'<p class="sub">사진이 없어요</p>';
+  $("grid").querySelectorAll(".it").forEach(el=>{const p=P.find(x=>x.id===el.dataset.id);
+    el.querySelector("img").onclick=()=>big(p);
+    el.querySelectorAll("button").forEach(b=>b.onclick=async()=>{const a=b.dataset.a;
+      if(a==="sel"){SEL.has(p.id)?SEL.delete(p.id):SEL.add(p.id);return draw()}
+      if(a==="tag"){const t=prompt("태그 (쉼표로): "+TAGS.join(", "),(p.tags||[]).join(","));if(t===null)return;p.tags=t.split(",").map(s=>s.trim()).filter(Boolean);await api({action:"photo_set",id:p.id,tags:p.tags});return draw()}
+      if(a==="promo_ok"&&!p.promo_ok&&!confirm("이 손님에게 홍보 사용 동의를 받았나요?\n(퇴실 정산에서 동의했거나, 답글로 허락받은 경우만)"))return;
+      b.disabled=true;p[a]=!p[a];await api({action:"photo_set",id:p.id,[a]:p[a]});
+      if(a==="picked"||a==="promo_ok"){const x=await api({action:"photos",limit:1000});if(x.ok)P=x.photos}draw()})})}
+function big(p){$("dlg").hidden=false;$("dbox").innerHTML=`<img id="big" src="${H(src(p))}"><p class="sub" style="margin-top:10px">“${H(p.review?.body||"")}” — ${H(p.review?.author||"")} · ${SH[p.branch]||""} · ${SRC[p.source]}</p><div class="bar"><a href="${H(p.url)}" target="_blank" rel="noopener">원본 열기</a><button id="cl">닫기</button></div>`;$("cl").onclick=()=>$("dlg").hidden=true}
+$("dlg").onclick=e=>{if(e.target.id==="dlg")$("dlg").hidden=true};
+document.querySelectorAll("#fo button").forEach(b=>b.onclick=()=>{ONLY=b.dataset.o;document.querySelectorAll("#fo button").forEach(x=>x.classList.toggle("on",x===b));draw()});
+$("go").onclick=()=>{KEY=$("key").value.trim();load()};$("key").onkeydown=e=>{if(e.key==="Enter")$("go").click()};
+$("sync").onclick=async()=>{$("sync").textContent="불러오는 중…";const r=await api({action:"sync"});$("sync").textContent=r.ok?`새로 불러옴 (${r.spacecloud.reviews}개 확인)`:"실패";load()};
+$("ask").onclick=async()=>{const t="소중한 후기 정말 감사해요! 남겨주신 사진이 너무 좋아서 그런데, 플레이앤 인스타그램과 소개 자료에 사진을 소개해도 괜찮을까요? 괜찮으시면 이 답글에 '네'라고만 남겨주세요. 얼굴은 가려서 올릴게요 🙏";try{await navigator.clipboard.writeText(t);$("ask").textContent="복사됨"}catch(e){prompt("복사해서 쓰세요",t)}};
+$("dl").onclick=async()=>{const L=P.filter(p=>SEL.has(p.id));if(!L.length)return alert("사진을 먼저 선택해 주세요");if(L.some(p=>!p.promo_ok)&&!confirm("✅ 홍보 OK가 아닌 사진이 섞여 있어요. 내부 참고용으로만 쓸 거면 계속하세요."))return;
+  $("dl").textContent="묶는 중…";const z=new JSZip();for(const [i,p] of L.entries()){try{const r=await fetch(p.public_url||p.url);if(!r.ok)continue;z.file(`${SH[p.branch]||"playn"}_${String(i+1).padStart(2,"0")}${p.promo_ok?"_promoOK":""}.jpg`,await r.blob())}catch(e){}}
+  const blob=await z.generateAsync({type:"blob"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`playn_후기사진_${new Date().toISOString().slice(0,10)}.zip`;a.click();$("dl").textContent="선택 원본 내려받기"};
+// 후기 카드 (1080×1350): 손님 사진 + 후기 한 줄. 홍보 OK 사진만 (캔버스는 우리 저장소 사본으로만 그려짐)
+$("mk").onclick=()=>{const L=P.filter(p=>SEL.has(p.id));if(!L.length)return alert("사진을 먼저 선택해 주세요");const bad=L.filter(p=>!p.promo_ok||!p.public_url);if(bad.length)return alert(`✅ 홍보 OK가 아닌 사진 ${bad.length}장이 있어요. 동의 받은 사진만 카드로 만들 수 있어요.`);
+  let i=0;$("dlg").hidden=false;
+  const ui=()=>{const p=L[i];$("dbox").innerHTML=`<div class="cv"><canvas id="cv" width="1080" height="1350"></canvas><div class="f"><b>${i+1} / ${L.length}장</b><label class="sub">후기 문장 (짧게 다듬어도 돼요)</label><textarea id="tq">${H((p.review?.body||"").slice(0,90))}</textarea><label class="sub">아래 작은 글씨</label><input id="tc" value="${H((p.review?.author||"손님")+" · 플레이앤 "+(SH[p.branch]||"")+" 실제 후기")}"><div class="bar" style="margin:0"><button id="pv">◀</button><button id="nx">▶</button><button class="ok" id="sv">PNG 저장</button><button id="cl2">닫기</button></div><p class="sub">문구는 손님이 쓴 뜻이 바뀌지 않게만 다듬어 주세요.</p></div></div>`;
+   const draw2=()=>paint(p,$("tq").value,$("tc").value);$("tq").oninput=$("tc").oninput=draw2;draw2();
+   $("pv").onclick=()=>{i=(i-1+L.length)%L.length;ui()};$("nx").onclick=()=>{i=(i+1)%L.length;ui()};$("cl2").onclick=()=>$("dlg").hidden=true;
+   $("sv").onclick=()=>{const a=document.createElement("a");a.href=$("cv").toDataURL("image/png");a.download=`playn_review_${SH[p.branch]||""}_${i+1}.png`;a.click()}};ui()};
+function wrap(c,t,x,y,w,lh,max){const words=t.split("");let line="",lines=[];for(const ch of words){const test=line+ch;if(c.measureText(test).width>w&&line){lines.push(line);line=ch}else line=test}lines.push(line);if(lines.length>max){lines=lines.slice(0,max);lines[max-1]=lines[max-1].slice(0,-1)+"…”"}lines.forEach((l,k)=>c.fillText(l,x,y+k*lh));return lines.length}
+async function paint(p,q,cap){try{await Promise.all([document.fonts.load("46px 'Black Han Sans'"),document.fonts.load("700 50px Pretendard")])}catch(e){}const cv=$("cv"),c=cv.getContext("2d"),im=new Image();im.crossOrigin="anonymous";im.onload=()=>{c.fillStyle="#16133F";c.fillRect(0,0,1080,1350);
+  const s=Math.max(1080/im.width,1000/im.height),w=im.width*s,h=im.height*s;c.save();c.beginPath();c.rect(0,0,1080,1000);c.clip();c.drawImage(im,(1080-w)/2,(1000-h)/2,w,h);c.restore();
+  const g=c.createLinearGradient(0,700,0,1000);g.addColorStop(0,"rgba(22,19,63,0)");g.addColorStop(1,"rgba(22,19,63,1)");c.fillStyle=g;c.fillRect(0,700,1080,300);
+  c.fillStyle="#FFB547";c.font="900 44px Pretendard";c.fillText("★★★★★",72,1010);
+  c.fillStyle="#F1EFFF";c.font="700 50px Pretendard";wrap(c,"“"+q.trim()+"”",72,1090,936,68,3);
+  c.fillStyle="#A6A2D6";c.font="500 30px Pretendard";c.fillText(cap,72,1300);
+  c.fillStyle="#FFFFFF";c.font="400 46px 'Black Han Sans'";c.textAlign="right";c.fillText("PLAY",948,1300);c.fillStyle="#FF2E6E";c.fillText(" N",1008,1300);c.textAlign="left";
+  c.fillStyle="rgba(22,19,63,.75)";c.fillRect(48,48,250,58);c.fillStyle="#FFB547";c.font="800 28px Pretendard";c.fillText("손님이 찍은 사진",66,87)};
+  im.onerror=()=>{c.fillStyle="#300";c.fillRect(0,0,1080,1350)};im.src=p.public_url}
+// 네이버 엑셀 가져오기
+const PROD={"9434661597":"홍대루프탑점","9430485644":"연남루프탑점","12071850850":"연트럴파크점"};
+$("xl").onchange=async e=>{const f=e.target.files[0];if(!f)return;$("xlMsg").textContent="읽는 중…";
+  const wb=XLSX.read(await f.arrayBuffer(),{type:"array"}),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""});
+  const col=(r,...ks)=>{for(const k of Object.keys(r))if(ks.some(x=>k.replace(/\s/g,"").includes(x)))return r[k];return ""};
+  const out=rows.map((r,i)=>{const prod=String(col(r,"상품번호","원상품번호")).replace(/\D/g,""),name=String(col(r,"상품명"));
+    const branch=PROD[prod]||(/홍대/.test(name)?"홍대루프탑점":/연남/.test(name)?"연남루프탑점":/연트럴/.test(name)?"연트럴파크점":"");
+    const photos=String(col(r,"사진","이미지","첨부")).split(/[\s,]+/).filter(u=>/^https?:\/\//.test(u));
+    return {id:String(col(r,"리뷰번호","리뷰글번호","리뷰ID"))||`${prod}-${i}-${String(col(r,"작성일","등록일"))}`,branch,author:String(col(r,"작성자","구매자","아이디")),rating:Number(col(r,"평점","별점"))||5,body:String(col(r,"리뷰내용","내용")),date:String(col(r,"작성일","등록일","리뷰등록일")).replace(/\./g,"-").trim()||null,product:name,photos}}).filter(x=>x.branch&&x.body);
+  if(!out.length){$("xlMsg").textContent="지점을 알 수 있는 후기를 못 찾았어요. 엑셀 첫 줄(제목줄)을 확인해 주세요.";return}
+  const r=await api({action:"naver_import",rows:out});$("xlMsg").textContent=r.ok?`${r.imported}개 가져왔어요`:"실패";load()};
+KEY=st.get();if(KEY)load();
+</script>
+</body></html>

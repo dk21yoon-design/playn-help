@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<script src="/assets/pv.js" defer></script>
+<title>플레이앤 후기 모아보기 | 손님이 찍은 사진 후기</title>
+<meta name="description" content="게임파티룸 플레이앤 세 지점 실제 이용 후기. 스페이스클라우드·네이버 후기와 손님이 직접 찍은 사진을 한곳에 모았어요.">
+<link rel="canonical" href="https://playn.kr/reviews/">
+<meta property="og:type" content="website"><meta property="og:url" content="https://playn.kr/reviews/">
+<meta property="og:title" content="플레이앤 후기 모아보기"><meta property="og:description" content="세 지점 실제 이용 후기와 손님이 찍은 사진">
+<meta property="og:image" content="https://playn.kr/assets/og.png">
+<style>
+.rh{padding:26px 0 6px}
+.rh h1{font-size:clamp(32px,7vw,56px)}
+.rh .sub{color:var(--mute);margin-top:8px}
+.score{display:flex;align-items:baseline;gap:8px;margin-top:14px}.score b{font:400 44px/1 "Black Han Sans",sans-serif;color:var(--lamp)}.score span{color:var(--mute)}
+.flt{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 6px}
+.flt button{font:inherit;font-weight:700;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
+.flt button small{color:var(--lamp);margin-left:5px;font-weight:800}
+.flt button.on{background:var(--lamp);color:#1B1640;border-color:var(--lamp)}.flt button.on small{color:#1B1640}
+.strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:18px}
+.strip button{border:0;padding:0;background:var(--panel);border-radius:12px;overflow:hidden;aspect-ratio:1;cursor:zoom-in}
+.strip img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}.strip button:hover img{transform:scale(1.04)}
+.list{columns:3 300px;column-gap:14px;margin-top:22px}
+.rc{break-inside:avoid;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.rc .st{color:var(--lamp);letter-spacing:2px;font-size:13px}
+.rc p{margin-top:8px;line-height:1.65;font-size:15.5px;white-space:pre-line}
+.rc .ph{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:10px}
+.rc .ph img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:zoom-in;display:block}
+.rc cite{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-style:normal;color:var(--mute);font-size:13px}
+.rc cite b{color:var(--ink);font-weight:700}
+.src{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:6px}
+.more{display:block;margin:6px auto 30px}
+.lb{position:fixed;inset:0;background:rgba(8,6,24,.92);display:none;align-items:center;justify-content:center;z-index:99;padding:20px}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:86vh;border-radius:12px}
+.lb .x{position:absolute;top:14px;right:16px;font-size:30px;color:#fff;background:none;border:0;cursor:pointer}
+.lb .cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#ddd;font-size:14px;padding:0 20px}
+.note{color:var(--mute);font-size:13px;margin-top:6px}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
+<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>
+<main class="wrap">
+<section class="rh">
+  <h1 class="disp">다녀간 친구들</h1>
+  <p class="sub" id="sub">후기를 불러오는 중…</p>
+  <div class="score"><b id="avg">4.9</b><span>/ 5.0 · <span id="cnt">-</span>개 후기</span></div>
+  <div class="flt" id="fb"></div>
+  <div class="flt" id="fk"><button data-k="all" class="on">모든 후기</button><button data-k="photo">사진 후기만</button></div>
+</section>
+<h2 class="disp" style="font-size:24px;margin-top:10px">손님이 찍은 사진</h2>
+<p class="note">사진을 누르면 크게 보고, 그 사진이 달린 후기를 볼 수 있어요.</p>
+<div class="strip" id="strip"></div>
+<div class="list" id="list"></div>
+<button class="btn more" id="more" hidden>후기 더 보기</button>
+<p class="note" id="srcNote">스페이스클라우드·네이버에 남겨주신 실제 이용 후기를 그대로 옮겼어요 (닉네임 일부 가림). 후기 사진은 작성하신 분께 권리가 있어요.</p>
+</main>
+<div class="lb" id="lb" role="dialog" aria-label="사진 크게 보기"><button class="x" id="lbx" aria-label="닫기">×</button><img id="lbi" alt=""><div class="cap" id="lbc"></div></div>
+<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
+<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/">홈</a></div></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+const SH={"홍대루프탑점":"홍대","연남루프탑점":"연남","연트럴파크점":"연트럴"},SRC={spacecloud:"스페이스클라우드",naver:"네이버",site:"플레이앤"};
+const e=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let R=null,B="",K="all",N=24;
+const qs=new URLSearchParams(location.search);if(qs.get("b"))B=qs.get("b");if(qs.get("photo"))K="photo";
+function list(){return R.items.filter(x=>(!B||x.b===B)&&(K!=="photo"||x.p.length))}
+function draw(){const L=list(),ph=L.flatMap(x=>x.p.map(p=>[p,x])).slice(0,24);
+  const tot=B?R.branches[B]:Object.values(R.branches).reduce((a,c)=>({count:a.count+c.count,s:a.s+c.avg*c.count}),{count:0,s:0});
+  const avg=B?tot.avg:tot.s/tot.count;$("avg").textContent=avg.toFixed(2);$("cnt").textContent=(B?tot.count:tot.count);
+  $("sub").textContent=B?`${B} 실제 이용 후기`:"홍대·연남·연트럴 세 지점 실제 이용 후기";
+  $("strip").innerHTML=ph.map(([p,x],i)=>`<button data-i="${i}" aria-label="${e(SH[x.b])} 후기 사진"><img src="${e(p.t)}" loading="lazy" alt="${e(SH[x.b])} 손님 사진" onerror="this.parentNode.remove()"></button>`).join("");
+  [...$("strip").children].forEach(b=>b.onclick=()=>{const [p,x]=ph[+b.dataset.i];lb(p.t,x)});
+  $("list").innerHTML=L.slice(0,N).map((x,i)=>`<article class="rc"><div class="st">${"★".repeat(x.r||5)}</div><p>${e(x.t||"")}</p>${x.p.length?`<div class="ph">${x.p.slice(0,3).map((p,j)=>`<img src="${e(p.t)}" loading="lazy" alt="후기 사진" data-r="${i}" data-j="${j}">`).join("")}</div>`:""}<cite><span><b>${e(x.n)}</b> · ${SH[x.b]||""}<span class="src">${SRC[x.s]||x.s}</span></span><span>${e((x.d||"").slice(0,7).replace("-","."))}</span></cite></article>`).join("");
+  $("list").querySelectorAll("img[data-r]").forEach(im=>im.onclick=()=>{const x=L[+im.dataset.r];lb(x.p[+im.dataset.j].t,x)});
+  $("more").hidden=L.length<=N;
+  [...$("fb").children].forEach(t=>t.classList.toggle("on",t.dataset.b===B));[...$("fk").children].forEach(t=>t.classList.toggle("on",t.dataset.k===K))}
+function lb(src,x){$("lbi").src=src;$("lbc").textContent=`“${(x.t||"").slice(0,90)}${(x.t||"").length>90?"…":""}” — ${x.n} · ${SH[x.b]}`;$("lb").classList.add("on")}
+$("lbx").onclick=$("lb").onclick=ev=>{if(ev.target.id!=="lbi")$("lb").classList.remove("on")};
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape")$("lb").classList.remove("on")});
+$("more").onclick=()=>{N+=24;draw()};
+document.querySelectorAll("#fk button").forEach(b=>b.onclick=()=>{K=b.dataset.k;N=24;draw()});
+fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-reviews?action=list").then(r=>r.json()).then(d=>{if(!d.ok)throw 0;R=d;
+  const names=Object.keys(R.branches),all=names.reduce((a,b)=>a+R.branches[b].count,0);
+  $("fb").innerHTML=`<button data-b="">전체<small>${all}</small></button>`+names.map(b=>`<button data-b="${b}">${SH[b]}<small>★${R.branches[b].avg.toFixed(2)} · ${R.branches[b].count}</small></button>`).join("");
+  [...$("fb").children].forEach(t=>t.onclick=()=>{B=t.dataset.b;N=24;draw()});draw();
+  if(window.pnTrack)pnTrack("reviews_view")}).catch(()=>{$("sub").textContent="후기를 불러오지 못했어요. 잠시 후 다시 열어주세요."});
+</script>
+<a class="fab" href="/help/"><i></i>AI 상담사</a>
+<script src="/assets/chat.js" defer></script>
+</body></html>

@@ -113,6 +113,13 @@
   </div>
 
   <div class="cb" id="fdone" hidden></div>
+  <div class="cb" id="ugcBox" hidden>
+    <label class="t">📸 오늘 찍은 사진 보내주실래요? (선택)</label>
+    <p class="hint" style="margin-top:0">공간·바베큐·게임하는 모습 등 마음에 드는 사진을 보내주시면 플레이앤 인스타·소개 자료에 소개할게요. 얼굴은 가려서 올려요.</p>
+    <input id="ugcF" type="file" accept="image/*" multiple><div class="pv" id="ugcP"></div>
+    <label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:14px"><input type="checkbox" id="ugcA" style="width:auto;margin-top:3px"> 보낸 사진을 플레이앤 SNS·홈페이지·홍보물에 써도 좋아요 (언제든 문자로 빼달라고 하시면 내려요)</label>
+    <button type="button" class="btn lamp" id="ugcGo" style="margin-top:10px">사진 보내기</button><div id="mUgc"></div>
+  </div>
 </div></main>
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle";
@@ -136,7 +143,7 @@ async function doorLoad(){try{const r=await fetch(GUARD,{method:"POST",headers:{
     $("dAcc").onclick=async()=>{try{await navigator.clipboard.writeText(r.account.replace(/\s*\(.*\)/,""));$("dAcc").textContent="복사됨"}catch(e){}};
     $("dFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;$("dMsg").textContent="올리는 중…";try{const image=await shrink(f);const x=await fetch(GUARD,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"dep_proof",k,image})}).then(y=>y.json());if(!x.ok){$("dMsg").textContent=x.error||"다시 시도해 주세요";return}doorLoad()}catch(err){$("dMsg").textContent="사진을 다시 골라주세요"}}}
   else if(r.locked){const t=new Date(r.open_at);el.className="door lk";el.innerHTML=`✅ 체크인 완료<br>입실 비밀번호는 <b>${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}</b>부터 여기서 보이고 문자로도 보내드려요`}
-  else{el.className="door op";el.innerHTML='🔐 입실 비밀번호'+r.codes.map(c=>`<span class="c">${c.replace(/</g,"&lt;")}</span>`).join("")+'<small>문자로도 보내드려요. 일행 외에는 공유하지 말아 주세요.<br>🧾 나가기 전에 ② 퇴실 후 정산 탭에서 쓰신 물·음료 등을 꼭 체크해 주세요. 체크해야 보증금이 환급돼요.</small>'}}catch(e){}}
+  else{el.className="door op";setTimeout(()=>{const f=$("dFx");if(f){f.hidden=$("fxBox").hidden;f.onclick=()=>{$("fxBox").scrollIntoView({behavior:"smooth",block:"start"});if(window.pnTrack)pnTrack("fx_from_door")}}},1500);el.innerHTML='🔐 입실 비밀번호'+r.codes.map(c=>`<span class="c">${c.replace(/</g,"&lt;")}</span>`).join("")+'<button type="button" class="btn lamp" id="dFx" style="margin-top:10px;padding:8px 14px;font-size:14px">🎁 친구들 전원 가입하고 1시간 무료 연장 →</button><small>문자로도 보내드려요. 일행 외에는 공유하지 말아 주세요.<br>🧾 나가기 전에 ② 퇴실 후 정산 탭에서 쓰신 물·음료 등을 꼭 체크해 주세요. 체크해야 보증금이 환급돼요.</small>'}}catch(e){}}
 async function load(){
   if(!k){$("lead").innerHTML='체크인은 예약 확정 문자에 있는 <b>개인 링크</b>로 들어와야 열려요.<br>문자를 못 찾겠다면 아래로 바로 연락 주세요.<span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><a class="btn lamp" href="sms:01083395818">문자로 링크 다시 받기</a><a class="btn ghost" href="/help/">AI 상담</a><a class="btn ghost" href="/">홈으로</a></span>';return}
   D=await post({action:"info"}).catch(()=>null);
@@ -148,7 +155,7 @@ async function load(){
   if(D.platform&&!D.checkin){const v={naver:"네이버",site:"홈페이지·기타",spacecloud:"스페이스클라우드"}[D.platform];const r=document.querySelector(`[name=pf][value="${v}"]`);if(r)r.checked=true}
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
   $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people,ex=Math.max(0,n-b),dp=(D.rules.items.find(x=>x.id==="disposable")||{price:0}).price;
-    $("hcHint").innerHTML=n>0?`인원수대로 정산돼요: ${ex?`기본 ${b}명 + <b>추가 ${ex}명 × ${won(D.rules.extra_person)} = ${won(ex*D.rules.extra_person)}</b> (예약 때 안 냈으면 보증금에서 차감)`:`기본 ${b}명 안이라 인원 추가 요금 없음`} · 일회용품 쓰면 ${n}명 × ${won(dp)}<br><span style="color:#B42318">실제 이용 인원이 더 많으면 CCTV 확인 후 1인당 ${won(D.rules.extra_person)}이 보증금에서 차감돼요.</span>`:""};
+    $("hcHint").innerHTML=n>0?`인원수대로 정산돼요: ${ex?`기본 ${b}명 + <b>추가 ${ex}명 × ${won(D.rules.extra_person)} = ${won(ex*D.rules.extra_person)}</b> (예약 때 안 냈으면 보증금에서 차감)`:`기본 ${b}명 안이라 인원 추가 요금 없음`} · 일회용품 쓰면 ${n}명 × ${won(dp)}${n>=2?`<br>🎁 ${n}명 전원 N CREW 가입하면 <b>퇴실 1시간 무료 연장</b> (체크인 후 위에서 QR로 1분)`:""}<br><span style="color:#B42318">실제 이용 인원이 더 많으면 CCTV 확인 후 1인당 ${won(D.rules.extra_person)}이 보증금에서 차감돼요.</span>`:""};
   if(D.worlds){$("wBox").hidden=false;$("wTitle").textContent=D.worlds.title;$("wPay").textContent=won(D.pick?D.pick_payout:D.worlds.payout);$("wTier").textContent=D.worlds.tier||"";const f=new Date(D.worlds.final+"T00:00:00");$("wFinal").textContent=`${f.getMonth()+1}/${f.getDate()}`;
     if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}
     else if(!D.worlds.open){$("wp").innerHTML="<option>예측 마감됐어요</option>";$("wp").disabled=true}
@@ -171,7 +178,7 @@ $("fin").onsubmit=async e=>{e.preventDefault();
   const r=await post({action:"checkin",headcount:$("hc").value,depositor:$("dp").value,review:document.querySelector("[name=rv]:checked").value,bbq:document.querySelector("[name=bq]:checked").value==="1",platform:document.querySelector("[name=pf]:checked").value,bank:$("bk").value,account:acc||(D.checkin?"keep":""),holder:$("ho").value||$("dp").value,companions:$("cp").value,worlds_pick:$("wp").disabled?"":$("wp").value,crew_join:$("crJ").checked,crew_night:$("crN").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("goIn").disabled=false;
   if(!r.ok)return msg("mIn",r.error||"다시 시도해 주세요");
-  doorLoad().then(()=>{if(!$("door").hidden)$("door").scrollIntoView({behavior:"smooth",block:"center"})});msg("mIn","체크인 완료! 위 카드에서 보증금 입금 캡처를 올리면 입실 비밀번호가 나와요 🙏<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
+  doorLoad().then(()=>{if(!$("door").hidden)$("door").scrollIntoView({behavior:"smooth",block:"center"})});msg("mIn","체크인 완료! 위 카드에서 보증금 입금 캡처를 올리면 입실 비밀번호가 나와요 🙏<br>🎁 맨 위에서 친구들 전원 N CREW 가입하면 퇴실 1시간 무료 연장돼요<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
   D=await post({action:"info"});fxRender();if(D.member)$("crBox").hidden=true;if(D.pick){$("wp").innerHTML=`<option>${D.pick} (제출 완료)</option>`;$("wp").disabled=true;teamBox()}};
 function stepper(id,max=99){return `<div class="st" data-id="${id}"><button type="button">−</button><span>${Q[id]||0}</span><button type="button">+</button></div>`}
 function renderOut(){
@@ -217,7 +224,11 @@ $("goOut").onclick=async()=>{
   $("goOut").disabled=false;$("goOut").textContent="정산 요청하기";
   if(!r.ok)return msg("mOut",r.error||"다시 시도해 주세요");
   D=await post({action:"info"});renderDone()};
-function renderDone(){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="보증금 정산";
+let UG=[];$("ugcF").onchange=async e=>{UG=[];$("ugcP").innerHTML="";for(const f of [...e.target.files].slice(0,6)){const d=await shrink(f);UG.push(d);$("ugcP").insertAdjacentHTML("beforeend",`<img src="${d}">`)}};
+$("ugcGo").onclick=async()=>{if(!UG.length)return msg("mUgc","사진을 먼저 골라주세요");if(!$("ugcA").checked)return msg("mUgc","홍보에 써도 된다는 동의에 체크해 주세요");$("ugcGo").disabled=true;$("ugcGo").textContent="보내는 중…";
+  const r=await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-reviews",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"consent",k,images:UG,agree:true})}).then(x=>x.json()).catch(()=>({ok:false}));
+  $("ugcGo").disabled=false;$("ugcGo").textContent="사진 보내기";if(!r.ok)return msg("mUgc",r.error||"다시 시도해 주세요");msg("mUgc",`사진 ${r.saved}장 받았어요. 고맙습니다 🙏`,true);UG=[];$("ugcP").innerHTML="";$("ugcF").value=""};
+function renderDone(){$("ugcBox").hidden=false;$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="보증금 정산";
   const c={...(D.calc||{})};const paid=D.status==="paid";if(!D.deposit_ok&&c.expect!=null)c.refund=c.expect;
   if(c.exempt){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="이용 정산";$("lead").textContent=paid?"정산이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 아래 금액만 입금해 주시면 끝이에요.";
    $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">👑 레전드 · 보증금 면제 · ${paid?"정산 완료":"입금할 금액"}</div><div class="n">${won(c.owed)}</div></div><div class="sum">${c.lines.map(l=>`<div class="l"><span>${l.amount<0?"+":"·"} ${l.name}</span><span>${won(Math.abs(l.amount))}</span></div>`).join("")}</div>`+(paid?"":`<div class="acc" style="margin-top:10px"><span>${D.account}</span></div>`);return}
