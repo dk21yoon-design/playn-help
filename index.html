@@ -828,8 +828,8 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
  links.forEach(a=>a.addEventListener("click",()=>{set(a.dataset.s);if(window.pnTrack)pnTrack("catbar_"+a.dataset.s)}))})();
 </script>
 <script>(function(){const b=document.getElementById("stepsTg");if(b)b.onclick=()=>{const w=b.parentNode,o=w.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"이용 방법 접기 ▴":"이용 방법 5단계 보기 ▾"}})();</script>
-<script>(function(){const d=document.getElementById("dock");if(!d)return;document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea"))d.classList.add("typing")});document.addEventListener("focusout",()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches("input,select,textarea"))d.classList.remove("typing")},120))})();</script>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
+<script>(function(){const d=document.getElementById("dock");if(!d)return;document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea"))d.classList.add("typing")});document.addEventListener("focusout",()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches("input,select,textarea"))d.classList.remove("typing")},120))})();</script>
 <script src="/assets/chat.js" defer></script>
 </body>
 </html>
