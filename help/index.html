@@ -39,6 +39,8 @@ button.send:disabled{opacity:.4}
 .note{font-size:12px;color:#6E6E7E;text-align:center;padding:4px 0 2px}
 </style>
 <script src="/assets/pv.js" defer></script>
+<script src="/assets/chat.js" defer></script>
+<style>.pnc-l,.pnc-tip{display:none!important}</style>
 </head>
 <body>
 <header><a class="logo" href="/" style="color:inherit;text-decoration:none">PLAY <b>N</b> · AI 상담사</a><button class="br" id="brBtn" hidden></button></header>
@@ -63,7 +65,8 @@ function start(){if(!BR[b])return pick();log.innerHTML='';msgs=[];f.hidden=false
 add('assistant','안녕하세요! 플레이앤 '+BR[b].n+' AI 상담사예요 🎮\n이용 방법이나 장비 문제를 물어보시면 바로 도와드릴게요.\n해결이 안 되면 호스트에게 연결해 드려요.');chips();
 log.appendChild(el('div','note','AI가 안내사항을 바탕으로 답해요. 보증금·환불·연장은 호스트가 확정해요.'))}
 async function send(text){text=(text||'').trim();if(!text||busy)return;busy=true;sendBtn.disabled=true;q.value='';q.style.height='';
-add('user',text);msgs.push({role:'user',content:text});const t=el('div','typing','답변 작성 중…');log.appendChild(t);scroll();
+add('user',text);
+if(window.pnVacancy&&window.pnVacancy.re.test(text)&&!/(환불|취소|연장)/.test(text)){try{const v=await window.pnVacancy.run(text);add('assistant',v.text);msgs.push({role:'user',content:text},{role:'assistant',content:v.text});const d=el('div','chips');v.brs.forEach(br=>{const x=el('a','chip',br.replace('점','')+' 표에서 신청 →');x.href='/?branch='+encodeURIComponent(br)+'#deals';x.style.textDecoration='none';d.appendChild(x)});log.appendChild(d);scroll()}catch(e){add('assistant','빈자리 표를 불러오지 못했어요. playn.kr 첫 화면에서 확인해 주세요.')}busy=false;sendBtn.disabled=false;return}msgs.push({role:'user',content:text});const t=el('div','typing','답변 작성 중…');log.appendChild(t);scroll();
 try{const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({b,sid,messages:msgs})});const j=await r.json();t.remove();
 const ans=j.answer||'잠시 연결이 원활하지 않아요. 호스트에게 연락 주세요.';add('assistant',ans);msgs.push({role:'assistant',content:ans});if(j.escalate)escCard(j.host||'010-8339-5818')}
 catch(e){t.remove();add('assistant','네트워크가 불안정해요. 잠시 후 다시 시도하시거나 호스트에게 연락 주세요.');escCard('010-8339-5818')}

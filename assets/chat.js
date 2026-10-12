@@ -90,6 +90,7 @@ async function vacancy(text){
   const foot=any?"\n\n가격은 5명 기준, ↓표시는 N CREW 멤버 특가예요. 6번째부터 1인 2만원 추가.\n아래 버튼으로 표에서 바로 신청할 수 있어요.":"\n\n다른 날짜나 지점도 물어보시면 바로 찾아드릴게요.";
   return {text:head+"\n\n"+out.join("\n\n")+foot,brs,any}}
 
+window.pnVacancy={re:VAC,run:vacancy};
 let box,log,ta,btn;
 function save(){ss.set("pn_chat",S)}
 function scroll(){log.scrollTop=log.scrollHeight}
