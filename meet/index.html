@@ -2,7 +2,7 @@
 <html lang="ko"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#16133F">
+<meta name="theme-color" content="#0E0C2C">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
@@ -10,174 +10,276 @@
 <link rel="stylesheet" href="/assets/base.css">
 <script src="/assets/pv.js" defer></script>
 <title>롤드컵 밤샘 소셜링 · 혼성 칼바람 | 플레이앤 연남루프탑점</title>
-<meta name="description" content="10/24(토) 밤 연남 루프탑에서 바베큐 먹고 혼성 2인 7팀 칼바람 토너먼트, 새벽엔 롤드컵 같이 보기. 14명(여 7 · 남 7) 프로필 승인제, 1인 70,000원, 다음날 12시 퇴실.">
+<meta name="description" content="10/24(토) 밤 연남 루프탑. 바베큐 굽고 프리드링크 나눠 마시고, 남녀 2인 1팀 칼바람 토너먼트. 새벽엔 롤드컵 같이 보기. 14명 프로필 승인제, 1인 70,000원.">
 <link rel="canonical" href="https://playn.kr/meet/">
 <meta property="og:type" content="website"><meta property="og:url" content="https://playn.kr/meet/">
-<meta property="og:title" content="롤드컵 밤샘 소셜링 · 혼성 7팀 칼바람"><meta property="og:description" content="바베큐 + 프리드링크 + 혼성 칼바람 토너먼트 + 새벽 롤드컵 같이 보기 · 연남루프탑점 10/24(토)">
-<meta property="og:image" content="https://playn.kr/assets/home/rooftop.webp">
+<meta property="og:title" content="롤드컵 밤샘 소셜링 · 혼성 칼바람 7팀"><meta property="og:description" content="바베큐 + 프리드링크 + 혼성 칼바람 토너먼트 + 새벽 롤드컵 · 연남루프탑점 10/24(토)">
+<meta property="og:image" content="https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1261339.jpg">
 <style>
-.hero{position:relative;border-radius:var(--r);overflow:hidden;margin-top:18px;background:#000}
-.hero img{width:100%;height:clamp(220px,46vw,420px);object-fit:cover;display:block;opacity:.62}
-.hero .tx{position:absolute;inset:auto 0 0 0;padding:22px 20px 20px;background:linear-gradient(transparent,rgba(10,8,30,.92))}
-.hero .tag{display:inline-block;background:#FF2E6E;color:#fff;font-weight:800;font-size:13px;border-radius:999px;padding:4px 10px}
-.hero h1{font-size:clamp(30px,7vw,54px);line-height:1.12;margin-top:10px}
-.hero p{color:#E6E3FF;margin-top:6px;font-size:16px}
-.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
-.facts div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
-.facts small{display:block;color:var(--mute);font-size:13px}
-.facts b{display:block;font-size:18px;margin-top:4px}
-.seat{display:flex;gap:10px;margin-top:12px}
-.seat div{flex:1;border-radius:14px;padding:14px;text-align:center;font-weight:800}
-.seat .f{background:rgba(255,46,110,.14);border:1px solid #FF2E6E}
-.seat .m{background:rgba(61,242,255,.12);border:1px solid #3DF2FF}
-.seat b{display:block;font:400 34px/1.1 "Black Han Sans",sans-serif;margin-top:4px}
-section.blk{margin-top:30px}
-section.blk h2{font-size:24px}
-.inc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px}
-.inc div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;line-height:1.6}
-.inc b{display:block;font-size:16px}
-.tl{list-style:none;padding:0;margin-top:12px;border-left:2px solid var(--line)}
-.tl li{position:relative;padding:0 0 14px 18px;line-height:1.6}
-.tl li:before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--lamp)}
-.tl b{color:var(--lamp);margin-right:6px}
-.note{color:var(--mute);font-size:14px;line-height:1.7;margin-top:8px}
-form.ap{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:12px;display:grid;gap:12px}
+:root{--pink:#FF2E6E;--cyan:#3DF2FF;--green:#2BE07A}
+body{background:var(--deep)}
+.top{background:rgba(14,12,44,.72);backdrop-filter:blur(10px)}
+.hero{position:relative;min-height:min(88vh,760px);display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
+.hero .bg{position:absolute;inset:0;z-index:-2;background:#000 url("https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1261339.jpg") center/cover no-repeat;transform:scale(1.04);animation:zoom 18s ease-in-out infinite alternate}
+@keyframes zoom{to{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.hero .bg{animation:none}}
+.hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,12,44,.25) 0%,rgba(14,12,44,.55) 45%,var(--deep) 96%)}
+.hero .in{width:100%;max-width:1080px;margin:0 auto;padding:0 20px 34px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-weight:800;font-size:13px;letter-spacing:.06em;color:#fff;background:rgba(255,46,110,.9);padding:6px 12px;border-radius:999px}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.hero h1{font-size:clamp(42px,11vw,92px);line-height:1.02;margin-top:14px;text-shadow:0 4px 30px rgba(0,0,0,.5)}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font-size:clamp(16px,4vw,20px);color:#EAE8FF;margin-top:12px;line-height:1.6;max-width:560px}
+.ticket{display:flex;flex-wrap:wrap;margin-top:22px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.16);max-width:640px}
+.ticket div{flex:1 1 0;min-width:0;padding:13px 12px;border-right:1px dashed rgba(255,255,255,.2)}
+.ticket div:last-child{border-right:0}
+.ticket small{display:block;font-size:11.5px;color:var(--mute);font-weight:700;letter-spacing:.06em}
+.ticket b{display:block;font-size:clamp(13.5px,3.6vw,17px);margin-top:3px;white-space:nowrap}
+.hero .cta{display:flex;gap:12px;align-items:center;margin-top:20px;flex-wrap:wrap}
+.btn.pink{background:var(--pink);color:#fff;box-shadow:0 10px 30px -8px rgba(255,46,110,.7)}
+.dday{font-weight:800;color:var(--lamp)}
+.seats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.seat{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}
+.seat h3{font-size:14px;color:var(--mute);font-weight:700;display:flex;justify-content:space-between}
+.seat h3 b{color:var(--ink)}
+.dots{display:flex;gap:5px;margin-top:10px}
+.dots span{flex:1;height:10px;border-radius:99px;background:rgba(255,255,255,.1)}
+.seat.f .dots span.on{background:var(--pink);box-shadow:0 0 12px var(--pink)}
+.seat.m .dots span.on{background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+main.wrap{max-width:1080px}
+section.blk{margin-top:56px}
+.kick{font-size:13px;font-weight:800;letter-spacing:.12em;color:var(--pink)}
+section.blk h2{font-size:clamp(28px,6vw,40px);margin-top:6px}
+section.blk .sub{color:var(--mute);margin-top:8px;line-height:1.7}
+.pics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.pics figure{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:3/4;background:var(--panel)}
+.pics img{width:100%;height:100%;object-fit:cover;display:block}
+.pics figcaption{position:absolute;inset:auto 0 0 0;padding:28px 12px 12px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:13px;line-height:1.5;color:#eee}
+.pics figcaption b{display:block;font-size:15px;color:#fff}
+@media(max-width:640px){.pics{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.pics figure{scroll-snap-align:start}}
+.tl{margin-top:20px;display:grid;gap:10px;padding:0}
+.tl li{list-style:none;display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.tl time{font:400 21px/1.1 "Black Han Sans",sans-serif;color:var(--lamp)}
+.tl b{display:block;font-size:16px}
+.tl p{color:var(--mute);font-size:14.5px;line-height:1.6;margin-top:3px}
+.tl li.hl{background:linear-gradient(120deg,rgba(255,46,110,.22),rgba(61,242,255,.14));border-color:rgba(255,46,110,.6)}
+.price{margin-top:20px;border-radius:22px;padding:22px;background:radial-gradient(120% 120% at 0% 0%,rgba(255,181,71,.18),transparent 60%),var(--panel);border:1px solid var(--line)}
+.price .big{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.price .big b{font:400 clamp(44px,10vw,64px)/1 "Black Han Sans",sans-serif;color:var(--lamp)}
+.price .big span{color:var(--mute)}
+.inc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+.inc div{background:rgba(255,255,255,.04);border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.5;color:var(--mute)}
+.inc div b{display:block;font-size:15.5px;color:var(--ink)}
+.wall{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.wall span{background:rgba(43,224,122,.12);border:1px solid rgba(43,224,122,.5);color:#C8FFE0;font-weight:700;font-size:14px;padding:7px 12px;border-radius:999px}
+.wall .empty{background:transparent;border-style:dashed;color:var(--mute)}
+.notice{margin-top:16px;display:flex;gap:12px;background:rgba(61,242,255,.08);border:1px solid rgba(61,242,255,.4);border-radius:16px;padding:14px 16px;line-height:1.65;font-size:14.5px}
+.notice b{color:var(--cyan)}
+.faq{margin-top:12px;display:grid;gap:8px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.faq summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";color:var(--lamp);font-weight:800}
+.faq details[open] summary:after{content:"−"}
+.faq p{color:var(--mute);margin-top:8px;line-height:1.7;font-size:14.5px}
+form.ap{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;margin-top:18px;display:grid;gap:14px}
+.grp{font-size:12.5px;font-weight:800;letter-spacing:.1em;color:var(--pink);padding-top:14px;border-top:1px solid var(--line)}
+.grp.first{border-top:0;padding-top:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 form.ap label{font-weight:700;font-size:14px;display:block;margin-bottom:6px}
-form.ap input,form.ap select,form.ap textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
-.gsel{display:flex;gap:8px}.gsel button{flex:1;font:inherit;font-weight:800;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
-.gsel button.on[data-g=f]{background:#FF2E6E;border-color:#FF2E6E;color:#fff}.gsel button.on[data-g=m]{background:#3DF2FF;border-color:#3DF2FF;color:#10102A}
-.chk{display:flex!important;gap:8px;align-items:flex-start;font-size:14px;line-height:1.6;color:var(--mute)}form.ap .chk input{width:auto;flex:none;margin-top:4px}
+form.ap input,form.ap select,form.ap textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:12px}
+form.ap input:focus,form.ap select:focus,form.ap textarea:focus{border-color:var(--lamp);outline:0}
+.gsel{display:flex;gap:8px}.gsel button{flex:1;font:inherit;font-weight:800;font-size:16px;padding:14px;border-radius:14px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.gsel button.on[data-g=f]{background:var(--pink);border-color:var(--pink);color:#fff}.gsel button.on[data-g=m]{background:var(--cyan);border-color:var(--cyan);color:#10102A}
+.ph{display:flex;gap:14px;align-items:center;position:relative}
+form.ap .ph label.pick{flex:none;width:96px;height:96px;border-radius:20px;border:1.5px dashed var(--lamp);display:grid;place-items:center;cursor:pointer;overflow:hidden;margin:0;color:var(--lamp);font-size:34px;font-weight:400;background:rgba(255,181,71,.06)}
+.ph label.pick img{width:100%;height:100%;object-fit:cover}
+form.ap .ph input{position:absolute;opacity:0;width:1px;height:1px;padding:0;border:0}
+.ph p{color:var(--mute);font-size:13.5px;line-height:1.6}
+form.ap .chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.6;color:var(--mute);font-weight:500;margin:0}
+form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--pink);padding:0}
+.chk b{color:var(--ink)}
 .msg{font-weight:700;min-height:1em}.msg.err{color:#FF7A9C}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:16px;line-height:1.7}
-.card .acc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:10px;padding:10px 12px;margin:8px 0}
-.st{display:inline-block;border-radius:999px;padding:3px 10px;font-weight:800;font-size:13px;background:var(--lamp);color:#1B1640}
-.disc{color:var(--mute);font-size:12px;line-height:1.6;margin:26px 0 10px}
-#adm table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}#adm td,#adm th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
-#adm button{font:inherit;font-size:12px;padding:4px 8px;margin:2px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;margin-top:20px;line-height:1.7}
+.card .acc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px;margin:8px 0}
+.st{display:inline-block;border-radius:999px;padding:4px 12px;font-weight:800;font-size:13px;background:var(--lamp);color:#1B1640}
+.disc{color:var(--dim);font-size:12px;line-height:1.6;margin:30px 0 10px}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:14px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(14,12,44,.96) 35%);display:flex;justify-content:center;transition:transform .3s}
+.dock.hide{transform:translateY(120%)}
+.dock a{width:100%;max-width:520px}
+.fab{bottom:calc(84px + env(safe-area-inset-bottom))}
+#adm table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}#adm td,#adm th{border-bottom:1px solid var(--line);padding:8px 4px;text-align:left;vertical-align:top;line-height:1.55}
+#adm button{font:inherit;font-size:12px;padding:5px 9px;margin:2px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 #adm img{width:60px;border-radius:6px}
 </style>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
-<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/reviews/">후기</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>
+<nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/reviews/">후기</a><a href="/me/">내 N CREW</a><a href="#apply" class="join">프로필 보내기</a></nav></div></header>
+
+<div id="evView">
+<section class="hero"><div class="bg" role="img" aria-label="연남루프탑점 루프탑에서 장작불에 고기 굽는 밤"></div>
+ <div class="in">
+  <span class="eyebrow"><i></i>PLAY N SOCIAL · 14명 한정</span>
+  <h1 class="disp">롤드컵 밤샘<br><em>소셜링</em></h1>
+  <p class="lede">루프탑에서 고기 굽고, 각자 챙겨 온 술 나눠 마시고, 처음 만난 사람과 2인 1팀으로 칼바람 붙어요. 새벽엔 다 같이 롤드컵 봐요.</p>
+  <div class="ticket">
+   <div><small>IN</small><b>10.24 토 19:00</b></div>
+   <div><small>OUT</small><b>10.25 일 12:00</b></div>
+   <div><small>PLACE</small><b>연남루프탑점</b></div>
+  </div>
+  <div class="cta"><a class="btn pink" href="#apply">프로필 보내기</a><span class="dday" id="dday"></span></div>
+ </div>
+</section>
+
 <main class="wrap">
 <div id="meView"></div>
-<div id="evView">
-<div class="hero"><img src="/assets/home/rooftop.webp" alt="연남루프탑점 루프탑, 잔디와 캠핑 의자" width="900" height="675">
-  <div class="tx"><span class="tag">14명 · 프로필 승인제</span><h1 class="disp">롤드컵 밤샘 소셜링<br>혼성 칼바람 7팀</h1><p>바베큐 굽고, 남녀 2인 1팀으로 칼바람 붙고, 새벽엔 롤드컵 같이 봐요.</p></div></div>
-<div class="facts">
-  <div><small>일시</small><b>10/24(토) 19:00</b><span class="note">다음날 일요일 12:00 퇴실</span></div>
-  <div><small>장소</small><b>연남루프탑점</b><span class="note">홍대입구역 걸어서 5분 안쪽</span></div>
-  <div><small>참가비</small><b id="price">70,000원</b><span class="note">바베큐·새벽 라면 포함</span></div>
-  <div><small>정원</small><b>14명 (여 7 · 남 7)</b><span class="note">프로필 보고 승인 · 성인만</span></div>
+<div class="seats">
+ <div class="seat f"><h3>여자 <b><span id="tf">0</span> / 7</b></h3><div class="dots" id="df"></div></div>
+ <div class="seat m"><h3>남자 <b><span id="tm">0</span> / 7</b></h3><div class="dots" id="dm"></div></div>
 </div>
-<div class="seat"><div class="f">여자 남은 자리<b id="lf">7</b></div><div class="m">남자 남은 자리<b id="lm">7</b></div></div>
 
-<section class="blk"><h2 class="disp">참가비에 들어 있는 것</h2>
-<div class="inc">
-  <div><b>🌙 나이트 통째로</b>토요일 19시부터 일요일 12시까지 연남 루프탑 전체를 14명이 써요</div>
-  <div><b>🔥 루프탑 바베큐</b>고기·소시지·쌈 준비해 둬요. 장작·숯·불판 무제한</div>
-  <div><b>🍜 새벽 라면</b>경기 보기 전에 다 같이 끓여 먹어요</div>
-  <div><b>🎮 게이밍 PC 5대</b>RTX 4070 더블모니터, 프로 무선 기어 그대로</div>
-  <div><b>📺 빔프로젝터 큰 화면</b>새벽 롤드컵을 큰 화면으로 같이 봐요</div>
-  <div><b>🏆 우승 상품</b>내전 우승팀 전원 다음 방문 바베큐 무료권</div>
-</div>
-<div class="card" style="margin-top:10px"><b>🍾 프리드링크</b><br>마시고 싶은 술을 한 병씩 챙겨 와요. 14병이 모이면 다 같이 나눠 마셔요. 신청할 때 적은 술이 아래에 모여요 (겹치지 않게 골라주세요).<div id="drinks" class="note"></div></div></section>
+<section class="blk"><span class="kick">THE NIGHT</span><h2 class="disp">이런 밤이에요</h2>
+ <p class="sub">전부 연남루프탑점 손님들이 직접 찍은 사진이에요.</p>
+ <div class="pics">
+  <figure><img src="https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1124058.jpg" alt="루프탑 잔디 위 바베큐 그릴에서 고기 굽는 모습" loading="lazy"><figcaption><b>🔥 루프탑 바베큐</b>“바베큐를 먹을 수 있는 테라스가 구비된 게임룸? 흔치 않습니다”</figcaption></figure>
+  <figure><img src="https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1321621.jpg" alt="더블모니터 게이밍 PC가 놓인 연남점 게임룸" loading="lazy"><figcaption><b>🎮 RTX 4070 PC 5대</b>“컴 사양도 좋고 친구들끼리 고기 구워 먹기 너무 좋아요”</figcaption></figure>
+  <figure><img src="https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1153343.jpg" alt="빔프로젝터 큰 화면으로 게임을 보는 손님들 뒷모습" loading="lazy"><figcaption><b>📺 빔프로젝터 큰 화면</b>“장비들도 다 고사양이고 내부도 청결하게 되어 있어서 좋았어요”</figcaption></figure>
+ </div>
+</section>
 
-<section class="blk"><h2 class="disp">이렇게 놀아요</h2>
-<ol class="tl">
-  <li><b>19:00</b>입실 · 신분증 확인 · 이름표 받고 바베큐 시작 · 프리드링크 오픈</li>
-  <li><b>20:30</b>팀 뽑기 — 여 1 + 남 1, 2인 1팀으로 7팀 (신청 때 적은 티어로 실력 맞춰 섞어요)</li>
-  <li><b>21:00</b>혼성 2:2 칼바람 토너먼트 7팀 · 기다리는 팀은 바베큐·노래방·빔프로젝터</li>
-  <li><b>자정 넘어</b>결승 · 시상 · 야식</li>
-  <li><b>새벽</b>새벽 라면 끓이고 롤드컵 스위스 스테이지 같이 보기 (LCK 4팀 모두 출전하는 1라운드)</li>
-  <li><b>12:00</b>일요일 정오 퇴실</li>
-</ol>
-<p class="note">롤드컵이 미국에서 열려 한국 시간 새벽에 경기해요. 정확한 경기 시각과 대진은 플레이-인(10/16~19)이 끝나면 확정자에게 문자로 알려드려요. 롤 안 해봐도 괜찮아요. 칼바람은 처음 해도 금방 배워요.</p></section>
+<section class="blk"><span class="kick">TIMELINE</span><h2 class="disp">이 밤의 순서</h2>
+ <ol class="tl">
+  <li><time>19:00</time><div><b>입실 · 바베큐 시작</b><p>신분증 확인하고 이름표 받아요. 고기는 준비돼 있어요. 챙겨 온 술 오픈!</p></div></li>
+  <li><time>20:30</time><div><b>팀 뽑기</b><p>여 1 + 남 1, 2인 1팀으로 7팀. 신청 때 적은 티어로 실력을 맞춰 섞어요.</p></div></li>
+  <li class="hl"><time>21:00</time><div><b>혼성 2:2 칼바람 토너먼트</b><p>7팀 토너먼트. 기다리는 팀은 바베큐·노래방·빔프로젝터. 우승팀은 다음 방문 바베큐 무료.</p></div></li>
+  <li><time>00:30</time><div><b>결승 · 시상 · 야식</b><p>여기부턴 자유롭게. 보드게임·노래방·불멍.</p></div></li>
+  <li class="hl"><time>새벽</time><div><b>롤드컵 같이 보기</b><p>새벽 라면 끓여 먹고 스위스 스테이지 1라운드를 큰 화면으로 봐요. LCK 4팀이 모두 나와요.</p></div></li>
+  <li><time>12:00</time><div><b>정오 퇴실</b><p>끝까지 있어도 되고 먼저 가도 돼요.</p></div></li>
+ </ol>
+ <p class="sub" style="font-size:14px">롤드컵은 미국에서 열려 한국 시간 새벽에 해요. 정확한 경기 시각과 대진은 10/19 플레이-인이 끝나면 확정자에게 문자로 알려드려요.</p>
+</section>
 
-<section class="blk"><h2 class="disp">신청하기</h2>
-<form class="ap" id="ap">
-  <p class="note" style="margin:0">프로필을 보고 사장님이 승인한 분만 함께해요. 승인되면 문자로 입금 안내를 드려요. 승인 전에는 입금하지 마세요.</p>
+<section class="blk"><span class="kick">PRICE</span><h2 class="disp">참가비 하나로 끝</h2>
+ <div class="price">
+  <div class="big"><b id="price">70,000원</b><span>1인 · 승인 후 입금</span></div>
+  <div class="inc">
+   <div><b>🌙 나이트 통째로</b>19시~다음날 12시, 연남 루프탑 전체</div>
+   <div><b>🔥 바베큐</b>고기·소시지·쌈, 장작 무제한</div>
+   <div><b>🍜 새벽 라면</b>경기 전에 다 같이</div>
+   <div><b>🎮 PC 5대 · 프로 기어</b>칼바람 토너먼트용</div>
+   <div><b>📺 빔프로젝터</b>롤드컵 큰 화면 관람</div>
+   <div><b>🏆 우승 상품</b>다음 방문 바베큐 무료</div>
+  </div>
+ </div>
+</section>
+
+<section class="blk"><span class="kick">FREE DRINK</span><h2 class="disp">술은 한 병씩</h2>
+ <p class="sub">마시고 싶은 술을 한 병씩 챙겨 와서 다 같이 나눠 마셔요. 신청할 때 적은 술이 여기 모여요. 겹치지 않게 골라주세요. 술을 못 마시면 음료도 괜찮아요.</p>
+ <div class="wall" id="wall"><span class="empty">첫 병을 정해주세요 🍾</span></div>
+</section>
+
+<section class="blk"><span class="kick">GOOD TO KNOW</span><h2 class="disp">미리 알려드려요</h2>
+ <div class="notice"><span>📸</span><div><b>현장 사진·영상은 플레이앤 홍보에 쓰여요.</b><br>행사 중 찍은 사진과 영상이 플레이앤 인스타그램·유튜브·사이트·광고에 올라가요. 얼굴이 나오는 게 싫으면 입실 때 말씀해 주세요. 그분은 얼굴을 가리고 써요.</div></div>
+ <div class="faq">
+  <details><summary>혼자 신청해도 돼요?</summary><p>네. 혼자 오는 분이 많을 거예요. 팀은 현장에서 섞어서 짜요.</p></details>
+  <details><summary>롤을 잘 못해도 괜찮아요?</summary><p>괜찮아요. 칼바람은 처음 해도 금방 배워요. 티어로 실력을 맞춰 팀을 짜니까 한쪽만 계속 지는 일은 없어요.</p></details>
+  <details><summary>어떤 기준으로 승인해요?</summary><p>성비와 나이대, 분위기가 잘 맞게 사장님이 프로필을 직접 보고 정해요. 결과는 1~2일 안에 문자로 알려드려요.</p></details>
+  <details><summary>잠은 어디서 자요?</summary><p>숙박 시설은 아니에요. 소파·좌식 의자에서 쉬다 가는 정도예요. 새벽 경기 끝나고 먼저 가셔도 돼요.</p></details>
+  <details><summary>환불은요?</summary><p id="refund"></p></details>
+ </div>
+</section>
+
+<section class="blk" id="apply"><span class="kick">APPLY</span><h2 class="disp">프로필 보내기</h2>
+ <p class="sub">사장님이 프로필을 보고 승인한 분만 함께해요. 승인되면 문자로 입금 안내를 드려요. <b>승인 전에는 입금하지 마세요.</b></p>
+ <form class="ap" id="ap" novalidate>
+  <div class="grp first">01 · 나</div>
   <div><label>성별</label><div class="gsel"><button type="button" data-g="f">여자</button><button type="button" data-g="m">남자</button></div></div>
-  <div><label for="pf0">프로필 사진 (얼굴 나온 사진 1장)</label><input type="file" id="pf0" accept="image/*" required><img id="pv" alt="" style="display:none;width:96px;height:96px;object-fit:cover;border-radius:12px;margin-top:8px"><p class="note">본인 확인과 승인에만 쓰고, 다른 참가자나 SNS에 공개하지 않아요.</p></div>
-  <div><label for="nm">이름 (실명, 입금 확인용)</label><input id="nm" maxlength="20" autocomplete="name" required></div>
-  <div><label for="nk">닉네임 (현장 이름표)</label><input id="nk" maxlength="12" required></div>
-  <div><label for="ph">연락처</label><input id="ph" inputmode="numeric" maxlength="13" placeholder="01012345678" autocomplete="tel" required></div>
-  <div><label for="by">태어난 해</label><input id="by" inputmode="numeric" maxlength="4" placeholder="예: 1998" required></div>
-  <div><label for="tr">롤 티어</label><select id="tr" required><option value="">선택</option><option>안 해봄</option><option>칼바람만 함</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option></select></div>
-  <div><label for="po">주 포지션·최애 챔프 (선택)</label><input id="po" maxlength="30" placeholder="예: 서폿 · 럭스"></div>
-  <div><label for="dk">가져올 술 한 병</label><input id="dk" maxlength="40" placeholder="예: 하이볼용 위스키, 막걸리, 와인" required></div>
-  <div><label for="mb">MBTI (선택)</label><input id="mb" maxlength="4" placeholder="ENFP"></div>
-  <div><label for="it">자기소개 한 줄</label><textarea id="it" rows="2" maxlength="300" placeholder="예: 칼바람 하루 3판, 이번 롤드컵은 젠지 응원해요" required></textarea></div>
-  <div><label for="ig">인스타 아이디 (선택, 본인 확인용)</label><input id="ig" maxlength="40" placeholder="@"></div>
-  <div><label for="jb">하는 일 (선택)</label><input id="jb" maxlength="30" placeholder="예: 대학생, 직장인(IT)"></div>
-  <div><label for="cp0">같이 신청한 친구 (선택)</label><input id="cp0" maxlength="40" placeholder="친구 닉네임"></div>
-  <div><label for="dp">입금자명 (이름과 다르면)</label><input id="dp" maxlength="20"></div>
-  <label class="chk"><input type="checkbox" id="pv_ok"> <span>[필수] 개인정보 수집·이용 동의: 이름·연락처·태어난 해·사진·위 프로필을 참가 승인과 행사 안내에만 써요. 행사 종료 후 30일 안에 사진과 연락처를 파기해요.</span></label>
-  <label class="chk"><input type="checkbox" id="ag"> <span>[필수] 성인이고 입실 때 신분증을 보여줄게요. 승인 후 24시간 안에 입금 캡처를 올려야 확정되고, 아래 환불 기준을 확인했어요.</span></label>
-  <label class="chk"><input type="checkbox" id="pm_ok"> <span>[선택] 행사 현장 사진(얼굴 가림)을 플레이앤 홍보에 써도 괜찮아요.</span></label>
-  <button class="btn" type="submit" id="sb">프로필 보내기</button>
+  <div class="ph"><label class="pick" for="pf0" id="pick" aria-label="프로필 사진 고르기">＋</label><input type="file" id="pf0" accept="image/*"><div><label for="pf0" style="margin:0">프로필 사진</label><p>얼굴이 나온 사진 1장. 승인할 때만 보고 다른 참가자에게 보여주지 않아요.</p></div></div>
+  <div class="two"><div><label for="nm">이름 (실명)</label><input id="nm" maxlength="20" autocomplete="name" placeholder="입금 확인용"></div><div><label for="nk">닉네임</label><input id="nk" maxlength="12" placeholder="이름표에 써요"></div></div>
+  <div class="two"><div><label for="ph">연락처</label><input id="ph" inputmode="numeric" maxlength="13" placeholder="01012345678" autocomplete="tel"></div><div><label for="by">태어난 해</label><input id="by" inputmode="numeric" maxlength="4" placeholder="1998"></div></div>
+  <div class="grp">02 · 롤</div>
+  <div class="two"><div><label for="tr">티어</label><select id="tr"><option value="">선택</option><option>안 해봄</option><option>칼바람만 함</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option></select></div><div><label for="po">포지션·최애 챔프</label><input id="po" maxlength="30" placeholder="선택"></div></div>
+  <div class="grp">03 · 소셜</div>
+  <div class="two"><div><label for="dk">가져올 술 한 병</label><input id="dk" maxlength="40" placeholder="예: 와인"></div><div><label for="mb">MBTI</label><input id="mb" maxlength="4" placeholder="선택"></div></div>
+  <div><label for="it">자기소개 한 줄</label><textarea id="it" rows="2" maxlength="300" placeholder="예: 칼바람 하루 3판, 이번 롤드컵은 젠지 응원해요"></textarea></div>
+  <div class="two"><div><label for="ig">인스타 아이디</label><input id="ig" maxlength="40" placeholder="선택 · 본인 확인용"></div><div><label for="jb">하는 일</label><input id="jb" maxlength="30" placeholder="선택"></div></div>
+  <div class="two"><div><label for="cp0">같이 신청한 친구</label><input id="cp0" maxlength="40" placeholder="선택"></div><div><label for="dp">입금자명</label><input id="dp" maxlength="20" placeholder="이름과 다르면"></div></div>
+  <div class="grp">04 · 확인</div>
+  <label class="chk"><input type="checkbox" id="pv_ok"> <span>[필수] 이름·연락처·태어난 해·사진·프로필을 참가 승인과 행사 안내에만 쓰고, 행사 끝나고 30일 안에 사진과 연락처를 파기하는 데 동의해요.</span></label>
+  <label class="chk"><input type="checkbox" id="ag"> <span>[필수] 성인이고 입실 때 신분증을 보여줄게요. 승인 후 24시간 안에 입금해야 확정되고, 환불 기준과 <b>현장 사진·영상이 플레이앤 홍보에 쓰인다는 것</b>을 확인했어요.</span></label>
+  <button class="btn pink" type="submit" id="sb" style="width:100%;padding:17px">프로필 보내기</button>
   <div class="msg" id="msg"></div>
-</form>
-<p class="note" id="refund"></p>
-<p class="note">연락처는 이 행사 안내에만 쓰고, 다른 참가자에게 알려주지 않아요. 연락처 교환은 자유예요.</p></section>
-</div>
-
-<div id="adm" hidden><h2 class="disp">신청 관리</h2><p class="note" id="admSum"></p><div id="admList"></div>
-<p style="margin-top:12px"><textarea id="admMsg" rows="2" style="width:100%" placeholder="확정자 전체에게 보낼 안내 문자"></textarea><button id="admSend">확정자 전체 문자</button></p></div>
-
+ </form>
+ <p class="sub" style="font-size:13.5px">연락처는 다른 참가자에게 알려주지 않아요. 연락처 교환은 자유예요.</p>
+</section>
 <p class="disc">이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다. 대회 일정: LoL Esports 공식 일정 기준. 참가비는 공간·바베큐·음식 이용료예요.</p>
 </main>
+</div>
+
+<main class="wrap" id="adm" hidden><h2 class="disp" style="margin-top:24px">신청 관리</h2><p class="sub" id="admSum"></p><div id="admList"></div>
+<p style="margin-top:12px"><textarea id="admMsg" rows="2" style="width:100%" placeholder="확정자 전체에게 보낼 안내 문자"></textarea><button id="admSend">확정자 전체 문자</button></p></main>
+
+<div class="dock hide" id="dock"><a class="btn pink" href="#apply" style="padding:16px">프로필 보내기 · <span id="dockPrice">70,000원</span></a></div>
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div></div></footer>
 <script>
 const F="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup",E="worlds1024";
 const $=id=>document.getElementById(id),e=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const won=n=>Number(n).toLocaleString("ko-KR")+"원",qs=new URLSearchParams(location.search);
 let G="",EV=null;
-function paint(ev){EV=ev;$("lf").textContent=ev.left_f;$("lm").textContent=ev.left_m;$("price").textContent=won(ev.price);$("refund").textContent="환불 기준: "+(ev.info?.refund||"");
-  document.querySelectorAll(".gsel button").forEach(b=>{const left=b.dataset.g==="f"?ev.left_f:ev.left_m;b.textContent=(b.dataset.g==="f"?"여자":"남자")+(left?` (${left}자리)`:" (마감 · 대기)")});
-  $("drinks").textContent=ev.drinks?.length?"지금까지 모인 술: "+ev.drinks.join(" · "):"아직 모인 술이 없어요. 첫 병을 정해주세요!";
+function dots(id,taken,cap){$(id).innerHTML=Array.from({length:cap},(_,i)=>`<span class="${i<taken?"on":""}"></span>`).join("")}
+function paint(ev){EV=ev;const tf=ev.cap_f-ev.left_f,tm=ev.cap_m-ev.left_m;
+  $("tf").textContent=tf;$("tm").textContent=tm;dots("df",tf,ev.cap_f);dots("dm",tm,ev.cap_m);
+  $("price").textContent=won(ev.price);$("dockPrice").textContent=won(ev.price);$("refund").textContent=ev.info?.refund||"";
+  const kd=x=>Math.floor((new Date(x).getTime()+9*36e5)/864e5),d=kd(ev.start_at)-kd(Date.now());$("dday").textContent=d>0?`D-${d} · 남은 자리 ${ev.left_f+ev.left_m}`:"";
+  document.querySelectorAll(".gsel button").forEach(b=>{const left=b.dataset.g==="f"?ev.left_f:ev.left_m;b.textContent=(b.dataset.g==="f"?"여자":"남자")+(left?` · ${left}자리`:" · 대기")});
+  $("wall").innerHTML=ev.drinks?.length?ev.drinks.map(x=>`<span>🍾 ${e(x)}</span>`).join(""):'<span class="empty">첫 병을 정해주세요 🍾</span>';
   if(ev.status!=="open"){$("sb").disabled=true;$("sb").textContent="신청이 마감됐어요"}}
+dots("df",0,7);dots("dm",0,7);
 document.querySelectorAll(".gsel button").forEach(b=>b.onclick=()=>{G=b.dataset.g;document.querySelectorAll(".gsel button").forEach(x=>x.classList.toggle("on",x===b))});
-$("ap").onsubmit=async ev=>{ev.preventDefault();const m=$("msg");m.className="msg";
-  if(!G){m.className="msg err";m.textContent="성별을 골라주세요";return}
-  if(!$("pf0").files[0]){m.className="msg err";m.textContent="프로필 사진을 올려주세요";return}
-  if(!$("ag").checked||!$("pv_ok").checked){m.className="msg err";m.textContent="필수 동의 두 개를 체크해 주세요";return}
-  $("sb").disabled=true;m.textContent="보내는 중…";
-  try{const photo=await shrink($("pf0").files[0],900);const r=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"apply",e:E,gender:G,photo,name:$("nm").value,nick:$("nk").value,phone:$("ph").value,birth_year:$("by").value,tier:$("tr").value,position:$("po").value,drink:$("dk").value,mbti:$("mb").value,intro:$("it").value,insta:$("ig").value,job:$("jb").value,companion:$("cp0").value,depositor:$("dp").value||$("nm").value,agree:true,privacy_ok:true,promo_photo_ok:$("pm_ok").checked})})).json();
-    if(!r.ok){m.className="msg err";m.textContent=r.err||"신청하지 못했어요";$("sb").disabled=false;return}
-    if(window.pnTrack)pnTrack("meet_apply",{e:E,g:G,w:r.waitlist?1:0});location.href="?t="+r.token}
+$("pf0").onchange=()=>{const f=$("pf0").files[0];if(f)$("pick").innerHTML=`<img src="${URL.createObjectURL(f)}" alt="선택한 프로필 사진">`};
+const need=[["nm","이름"],["nk","닉네임"],["ph","연락처"],["by","태어난 해"],["tr","티어"],["dk","가져올 술"],["it","자기소개"]];
+$("ap").onsubmit=async ev=>{ev.preventDefault();const m=$("msg");m.className="msg err";
+  if(!G){m.textContent="성별을 골라주세요";return}
+  if(!$("pf0").files[0]){m.textContent="프로필 사진을 올려주세요";return}
+  for(const [id,n] of need)if(!$(id).value.trim()){m.textContent=n+" 칸을 채워주세요";$(id).focus();return}
+  if(!$("ag").checked||!$("pv_ok").checked){m.textContent="필수 확인 두 개를 체크해 주세요";return}
+  m.className="msg";$("sb").disabled=true;m.textContent="보내는 중…";
+  try{const photo=await shrink($("pf0").files[0],900);const r=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"apply",e:E,gender:G,photo,name:$("nm").value,nick:$("nk").value,phone:$("ph").value,birth_year:$("by").value,tier:$("tr").value,position:$("po").value,drink:$("dk").value,mbti:$("mb").value,intro:$("it").value,insta:$("ig").value,job:$("jb").value,companion:$("cp0").value,depositor:$("dp").value||$("nm").value,agree:true,privacy_ok:true,promo_photo_ok:true})})).json();
+    if(!r.ok){m.className="msg err";m.textContent=r.err||"보내지 못했어요";$("sb").disabled=false;return}
+    if(window.pnTrack)pnTrack("meet_apply",{e:E,g:G});location.href="?t="+r.token}
   catch{m.className="msg err";m.textContent="연결이 불안정해요. 다시 눌러주세요";$("sb").disabled=false}};
-$("pf0").onchange=()=>{const f=$("pf0").files[0];if(f){$("pv").src=URL.createObjectURL(f);$("pv").style.display="block"}};
 async function shrink(file,mx=1600){const img=await createImageBitmap(file);const s=Math.min(1,mx/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85)}
 async function me(t){const r=await(await fetch(F+"?t="+encodeURIComponent(t))).json();if(!r.ok){$("meView").innerHTML=`<div class="card">${e(r.err||"신청 정보를 찾지 못했어요")}</div>`;return}
   paint(r.ev);const M=r.me,ST={review:"프로필 검토 중",rejected:"이번 회차 마감",applied:"승인 · 입금 대기",proof:"입금 확인 중",confirmed:"참가 확정",waitlist:"대기",cancelled:"취소됨",refunded:"환불됨"};
   let body="";
   if(M.status==="applied")body=`<p>참가비 <b>${won(r.ev.price)}</b>을 아래 계좌로 보내고 캡처를 올려주세요.<br><b>${new Date(M.hold_until).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})}</b>까지 안 올리면 자리가 다음 분께 넘어가요.</p>
-    <div class="acc"><span>${e(r.account)}</span><button class="btn" id="cp" type="button" style="padding:6px 12px;font-size:14px">계좌 복사</button></div>
+    <div class="acc"><span>${e(r.account)}</span><button class="btn lamp" id="cp" type="button" style="padding:8px 14px;font-size:14px">계좌 복사</button></div>
     <label style="font-weight:700;display:block;margin-top:8px">입금 캡처</label><input type="file" id="pf" accept="image/*"><div class="msg" id="pm"></div>`;
   else if(M.status==="proof")body="<p>캡처 잘 받았어요. 사장님이 입금 확인하면 확정 문자를 보내드려요.</p>";
-  else if(M.status==="confirmed")body="<p>참가 확정이에요 🎉 입실 전날 주소와 입실 안내를 문자로 보내드려요. 신분증 꼭 챙겨주세요.</p>";
+  else if(M.status==="confirmed")body="<p>참가 확정이에요 🎉 입실 전날 주소와 입실 안내를 문자로 보내드려요. 신분증이랑 술 한 병 꼭 챙겨주세요.</p>";
   else if(M.status==="review")body="<p>프로필 잘 받았어요. 사장님이 확인하고 1~2일 안에 문자로 알려드려요. 승인 전에는 입금하지 마세요.</p>";
   else if(M.status==="rejected")body="<p>이번 회차는 성비·인원 구성상 함께하기 어렵게 됐어요. 다음 소셜링을 열면 먼저 알려드릴게요.</p>";
   else if(M.status==="waitlist")body="<p>지금은 자리가 다 찼어요. 자리가 나면 바로 문자 드릴게요. 대기 중에는 입금하지 마세요.</p>";
   else body="<p>문의는 010-8339-5818로 주세요.</p>";
-  $("meView").innerHTML=`<div class="card"><span class="st">${ST[M.status]||M.status}</span><h2 class="disp" style="font-size:24px;margin-top:8px">${e(M.name)}님 신청 현황</h2>${body}</div>`;
+  $("meView").innerHTML=`<div class="card"><span class="st">${ST[M.status]||M.status}</span><h2 class="disp" style="font-size:26px;margin-top:10px">${e(M.name)}님 신청 현황</h2>${body}</div>`;
   if($("cp"))$("cp").onclick=()=>{navigator.clipboard?.writeText(r.account.replace(/\s*\(.*\)/,""));$("cp").textContent="복사됐어요"};
   if($("pf"))$("pf").onchange=async()=>{const pm=$("pm");pm.className="msg";pm.textContent="올리는 중…";
     try{const img=await shrink($("pf").files[0]);const x=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"proof",t,img})})).json();
       if(!x.ok){pm.className="msg err";pm.textContent=x.err||"실패했어요";return}if(window.pnTrack)pnTrack("meet_proof",{e:E});me(t)}catch{pm.className="msg err";pm.textContent="사진을 다시 골라주세요"}};
-  $("ap").closest("section").hidden=true}
+  $("apply").hidden=true;$("dock").hidden=true;$("meView").scrollIntoView({behavior:"smooth"})}
 async function admin(){let k="";try{k=localStorage.getItem("pn_admin")||""}catch{}if(!k){k=prompt("관리자 키");try{localStorage.setItem("pn_admin",k)}catch{}}
   const call=b=>fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,e:E,...b})}).then(r=>r.json());
-  const load=async()=>{const r=await call({action:"list"});if(!r.ok){$("admSum").textContent="키가 맞지 않아요";return}
-    $("adm").hidden=false;$("evView").hidden=true;const ST={review:"검토",applied:"승인(입금대기)",proof:"캡처옴",confirmed:"확정",waitlist:"대기",rejected:"거절",cancelled:"취소",refunded:"환불"};
+  const load=async()=>{const r=await call({action:"list"});$("adm").hidden=false;$("evView").hidden=true;$("dock").hidden=true;if(!r.ok){$("admSum").textContent="키가 맞지 않아요";return}
+    const ST={review:"검토",applied:"승인(입금대기)",proof:"캡처옴",confirmed:"확정",waitlist:"대기",rejected:"거절",cancelled:"취소",refunded:"환불"};
     const c={f:0,m:0};r.rows.forEach(x=>{if(x.status==="confirmed")c[x.gender]++});
     $("admSum").textContent=`확정 여 ${c.f}/${r.ev.cap_f} · 남 ${c.m}/${r.ev.cap_m} · 자리 잡힌 인원(승인+캡처+확정) ${r.ev.taken}명 · 검토 대기 ${r.rows.filter(x=>x.status==="review").length}명`;
     const NEXT={review:["applied","waitlist","rejected"],waitlist:["applied","rejected"],applied:["confirmed","cancelled"],proof:["confirmed","cancelled"],confirmed:["cancelled","refunded"],cancelled:["review"],rejected:["review"],refunded:[]},LB={applied:"승인",confirmed:"확정",waitlist:"대기",rejected:"거절",cancelled:"취소",refunded:"환불됨",review:"검토로"};
     const age=y=>new Date().getFullYear()-y+1;
-    $("admList").innerHTML=`<table><tr><th>사진</th><th>프로필</th><th>상태·캡처</th></tr>${r.rows.map(x=>`<tr><td>${x.photo_url?`<a href="${x.photo_url}" target="_blank"><img src="${x.photo_url}" alt="프로필" style="width:84px;height:84px;object-fit:cover"></a>`:""}</td><td><b>${x.gender==="f"?"여":"남"} · ${e(x.nick)}</b> (${e(x.name)}, ${age(x.birth_year)}세)<br>${e(x.tier)} · ${e(x.position)} · ${e(x.mbti)}<br>🍾 ${e(x.drink)}<br>“${e(x.intro)}”<br>${x.insta?`<a href="https://instagram.com/${encodeURIComponent(x.insta)}" target="_blank">@${e(x.insta)}</a> · `:""}${e(x.job)}${x.companion?` · 친구 ${e(x.companion)}`:""}<br>${e(x.phone)} · 입금자 ${e(x.depositor)}${x.promo_photo_ok?" · 사진 홍보 OK":""}</td><td><b>${ST[x.status]||x.status}</b>${x.status==="applied"&&!x.hold?" (24h 지남)":""}<br>${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img src="${x.proof_url}" alt="입금 캡처"></a><br>`:""}${(NEXT[x.status]||[]).map(s=>`<button data-id="${x.id}" data-s="${s}">${LB[s]}</button>`).join("")}</td></tr>`).join("")}</table>`;
+    $("admList").innerHTML=`<table><tr><th>사진</th><th>프로필</th><th>상태·캡처</th></tr>${r.rows.map(x=>`<tr><td>${x.photo_url?`<a href="${x.photo_url}" target="_blank"><img src="${x.photo_url}" alt="프로필" style="width:84px;height:84px;object-fit:cover"></a>`:""}</td><td><b>${x.gender==="f"?"여":"남"} · ${e(x.nick)}</b> (${e(x.name)}, ${age(x.birth_year)}세)<br>${e(x.tier)} · ${e(x.position)} · ${e(x.mbti)}<br>🍾 ${e(x.drink)}<br>“${e(x.intro)}”<br>${x.insta?`<a href="https://instagram.com/${encodeURIComponent(x.insta)}" target="_blank">@${e(x.insta)}</a> · `:""}${e(x.job)}${x.companion?` · 친구 ${e(x.companion)}`:""}<br>${e(x.phone)} · 입금자 ${e(x.depositor)}</td><td><b>${ST[x.status]||x.status}</b>${x.status==="applied"&&!x.hold?" (24h 지남)":""}<br>${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img src="${x.proof_url}" alt="입금 캡처"></a><br>`:""}${(NEXT[x.status]||[]).map(s=>`<button data-id="${x.id}" data-s="${s}">${LB[s]}</button>`).join("")}</td></tr>`).join("")}</table>`;
     $("admList").querySelectorAll("button").forEach(b=>b.onclick=async()=>{b.disabled=true;const x=await call({action:"set",id:b.dataset.id,status:b.dataset.s,notify:b.dataset.s==="cancelled"});if(!x.ok&&x.err)$("admSum").textContent="⚠ "+x.err;else load()})};
   $("admSend").onclick=async()=>{const m=$("admMsg").value.trim();if(!m)return;const r=await call({action:"notify",msg:m});$("admSend").textContent=`${r.sent??0}명에게 보냈어요`};load()}
+const vis={};const io=new IntersectionObserver(es=>{es.forEach(x=>vis[x.target.id||"hero"]=x.isIntersecting);$("dock").classList.toggle("hide",!!(vis.apply||vis.hero))},{threshold:.05});io.observe($("apply"));io.observe(document.querySelector(".hero .cta"));
 if(location.hash==="#admin")admin();
 else if(qs.get("t"))me(qs.get("t"));
 else fetch(F+"?e="+E).then(r=>r.json()).then(r=>{if(r.ok)paint(r.ev)});
