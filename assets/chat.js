@@ -103,7 +103,7 @@ function quick(){
   [["이번 주 빈자리 보기","#vac"],["인원별 요금 계산","/#calc"],["지점 3곳 비교","/#branches"],["N CREW 혜택","/#crew"]].forEach(([t,h])=>{const a=el("a",null,t);a.href=h;if(h==="#vac"){a.onclick=e=>{e.preventDefault();send("이번 주 빈자리 있어?")};q.appendChild(a);return}a.onclick=e=>{close();if(isHome){e.preventDefault();const id=h.split("#")[1];const x=document.getElementById(id);x&&x.scrollIntoView({behavior:"smooth",block:"start"})}};q.appendChild(a)});
   log.appendChild(q)}
 function brPick(){
-  log.appendChild(el("div","pnc-lab","어느 지점 기준으로 알려드릴까요?"));
+  log.appendChild(el("div","pnc-lab","지점을 고르면 그 지점 기준으로 더 자세히 답해요 (선택)"));
   const c=el("div","pnc-c");Object.entries(BR).forEach(([k,v])=>{const b=el("button",S.b===k?"on":null,v);b.type="button";b.onclick=()=>{S.b=k;save();[...c.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");
     if(pending){const p=pending;pending=null;send(p,true)}else bubble("assistant",v+"점 기준으로 답할게요. 궁금한 걸 적어주세요.")};c.appendChild(b)});log.appendChild(c);scroll()}
 function asks(){
@@ -142,13 +142,13 @@ async function send(text,shown){text=(text||"").trim();if(!text||busy)return;
       try{window.pnTrack&&window.pnTrack("chat_vacancy")}catch(e){}}
     catch(e){ty.remove();bubble("assistant","빈자리 표를 불러오지 못했어요. playn.kr 첫 화면 '이번 주 빈자리'에서 확인하시거나 호스트에게 문의해 주세요.");escCard()}
     busy=false;btn.disabled=false;return}
-  if(!S.b){ta.value="";bubble("user",text);pending=text;
-    bubble("assistant","지점마다 장비·요금이 조금씩 달라요. 어느 지점 기준으로 알려드릴까요?");brPick();return}
+  /* 지점을 안 골라도 바로 답함(AI가 세 지점을 나눠 안내). 질문에 지점 이름이 있으면 그 지점으로 기억 */
+  if(!S.b){const m=text.match(/연트럴|연남|홍대/);if(m)S.b={"연트럴":"yeontral","연남":"yeonnam","홍대":"hongdae"}[m[0]]}
   busy=true;btn.disabled=true;ta.value="";ta.style.height="";
   if(!shown)bubble("user",text);
   S.msgs.push({role:"user",content:text});save();try{window.pnTrack&&window.pnTrack("chat_send")}catch(e){}
   const ty=el("div","pnc-ty");ty.innerHTML="<i></i><i></i><i></i>";log.appendChild(ty);scroll();
-  try{const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({b:S.b,sid:S.sid,messages:S.msgs.slice(-12),page:path})});const j=await r.json();ty.remove();
+  try{const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({b:S.b||undefined,sid:S.sid,messages:S.msgs.slice(-12),page:path})});const j=await r.json();ty.remove();
     const ans=j.answer||"잠시 연결이 원활하지 않아요. 호스트에게 연락 주세요.";bubble("assistant",ans);S.msgs.push({role:"assistant",content:ans});save();
     if(/요금|가격|얼마|빈자리|예약|특가|할인/.test(text)){const c=el("div","pnc-c");const a=el("a",null,"이번 주 빈자리·특가 보기 →");a.href="/#deals";a.onclick=e=>{close();if(isHome){e.preventDefault();document.getElementById("deals").scrollIntoView({behavior:"smooth"})}};const b=el("a",null,"요금 계산기");b.href="/#calc";b.onclick=e=>{close();if(isHome){e.preventDefault();document.getElementById("calc").scrollIntoView({behavior:"smooth"})}};c.append(a,b);log.appendChild(c);scroll()}
     if(j.escalate)escCard()}
