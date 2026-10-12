@@ -62,6 +62,34 @@ if(document.querySelector(".dock"))launcher.classList.add("hasdock");document.bo
 document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;const h=a.getAttribute("href")||"";
   if(/(^|\/)help\/?(\?|$)/.test(h)&&!e.metaKey&&!e.ctrlKey){const b=(h.match(/[?&]b=(\w+)/)||[])[1];if(b&&BR[b]&&!S.msgs.length)S.b=b;e.preventDefault();open()}},true);
 
+
+/* 빈자리 질문은 AI 대신 실시간 빈자리 표(playn-site ?deals=1)로 바로 답함 */
+const SITE="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site";
+const VAC=/빈\s*방|빈\s*자리|빈\s*날|공실|비어\s*있|비었|자리\s*(있|남)|예약\s*(가능|돼|되나|될까)|남은\s*(날|자리|방)|언제\s*(가능|돼|비)|가능한\s*날/;
+const BRN={"홍대루프탑점":"홍대루프탑","연남루프탑점":"연남루프탑","연트럴파크점":"연트럴파크"};
+const PKN={day:"주간",night:"야간",full:"통대관"};
+let DEALS=null,DEALS_AT=0;
+async function deals(){if(DEALS&&Date.now()-DEALS_AT<120000)return DEALS;const r=await fetch(SITE+"?deals=1");DEALS=await r.json();DEALS_AT=Date.now();return DEALS}
+const man=n=>(Math.round(n/1000)/10).toLocaleString()+"만";
+function goDeals(br){return e=>{close();if(isHome){e.preventDefault();const t=[...document.querySelectorAll("#tabs button")].find(b=>br&&br.startsWith(b.textContent));t&&t.click();document.getElementById("deals").scrollIntoView({behavior:"smooth"})}}}
+async function vacancy(text){
+  const D=await deals();const q=text.replace(/\s+/g,"");
+  let brs=Object.keys(BRN);if(/연트럴/.test(q))brs=["연트럴파크점"];else if(/연남/.test(q))brs=["연남루프탑점"];else if(/홍대/.test(q)&&!/연남|연트럴/.test(q))brs=["홍대루프탑점"];
+  let pks=["day","night","full"];if(/주간|낮/.test(q))pks=["day"];else if(/야간|밤|저녁|나이트|1박|숙박/.test(q))pks=["night"];else if(/통대관|종일|하루/.test(q))pks=["full"];
+  let days=D.days,when="이번 주(오늘부터 7일)";const W="일월화수목금토";
+  const dm=q.match(/(\d{1,2})[\/월.](\d{1,2})일?/)||null,dn=!dm&&q.match(/(\d{1,2})일/);
+  if(/오늘/.test(q)){days=[D.days[0]];when="오늘"}else if(/내일/.test(q)){days=[D.days[1]];when="내일"}else if(/모레/.test(q)){days=[D.days[2]];when="모레"}
+  else if(dm||dn){const mm=dm?+dm[1]:null,dd=dm?+dm[2]:+dn[1];days=D.days.filter(d=>{const [m,x]=d.date.slice(5).split("-").map(Number);return x===dd&&(!mm||m===mm)});when=(mm?mm+"/":"")+dd+"일"}
+  else if(/주말/.test(q)){days=D.days.filter(d=>/\((금|토|일)\)/.test(d.label));when="이번 주말"}
+  else{const w=q.match(/([월화수목금토일])(요일|욜)/);if(w){days=D.days.filter(d=>d.label.includes("("+w[1]+")"));when=w[1]+"요일"}}
+  if(!days.length){return {text:`${when}은 아직 빈자리 표에 없어요. 표는 오늘부터 7일까지만 보여드려요.\n그 이후 날짜는 지점 예약 페이지에서 보시거나 호스트에게 문의해 주세요 (${HOST}).`,brs}}
+  const out=[];let any=false;
+  brs.forEach(b=>{const lines=[];days.forEach(d=>{const f=pks.filter(k=>d.branches[b]&&d.branches[b][k]&&d.branches[b][k].free).map(k=>{const s=d.branches[b][k];return PKN[k]+" "+(s.deal?man(s.deal)+(s.rate>0?(s.kind==="flash"?" ⚡":" ")+s.rate+"%↓":""):"문의")});if(f.length)lines.push("· "+d.label+"  "+f.join(" / "))});
+    if(lines.length){any=true;out.push(BRN[b]+"\n"+lines.join("\n"))}else out.push(BRN[b]+"\n· "+when+" "+(pks.length<3?pks.map(k=>PKN[k]).join("·")+" ":"")+"빈자리 없음")});
+  const head=any?`${when} 빈자리예요 (실시간 예약 표 기준)`:`${when}엔 ${pks.length<3?pks.map(k=>PKN[k]).join("·")+" ":""}빈자리가 없어요 😢`;
+  const foot=any?"\n\n가격은 5명 기준, ↓표시는 N CREW 멤버 특가예요. 6번째부터 1인 2만원 추가.\n아래 버튼으로 표에서 바로 신청할 수 있어요.":"\n\n다른 날짜나 지점도 물어보시면 바로 찾아드릴게요.";
+  return {text:head+"\n\n"+out.join("\n\n")+foot,brs,any}}
+
 let box,log,ta,btn;
 function save(){ss.set("pn_chat",S)}
 function scroll(){log.scrollTop=log.scrollHeight}
@@ -71,7 +99,7 @@ function escCard(){const d=el("div","pnc-e");d.appendChild(el("p",null,"호스�
 function quick(){
   log.appendChild(el("div","pnc-lab","바로 보기"));
   const q=el("div","pnc-c");
-  [["이번 주 빈자리·특가","/#deals"],["인원별 요금 계산","/#calc"],["지점 3곳 비교","/#branches"],["N CREW 혜택","/#crew"]].forEach(([t,h])=>{const a=el("a",null,t);a.href=h;a.onclick=e=>{close();if(isHome){e.preventDefault();const id=h.split("#")[1];const x=document.getElementById(id);x&&x.scrollIntoView({behavior:"smooth",block:"start"})}};q.appendChild(a)});
+  [["이번 주 빈자리 보기","#vac"],["인원별 요금 계산","/#calc"],["지점 3곳 비교","/#branches"],["N CREW 혜택","/#crew"]].forEach(([t,h])=>{const a=el("a",null,t);a.href=h;if(h==="#vac"){a.onclick=e=>{e.preventDefault();send("이번 주 빈자리 있어?")};q.appendChild(a);return}a.onclick=e=>{close();if(isHome){e.preventDefault();const id=h.split("#")[1];const x=document.getElementById(id);x&&x.scrollIntoView({behavior:"smooth",block:"start"})}};q.appendChild(a)});
   log.appendChild(q)}
 function brPick(){
   log.appendChild(el("div","pnc-lab","어느 지점 기준으로 알려드릴까요?"));
@@ -106,6 +134,13 @@ function open(){tip&&tip.remove();try{sessionStorage.setItem("pn_chat_tip","1")}
   try{window.pnTrack&&window.pnTrack("chat_open")}catch(e){}}
 function close(){if(box)box.hidden=true;launcher.hidden=false;document.documentElement.style.overflow=""}
 async function send(text,shown){text=(text||"").trim();if(!text||busy)return;
+  if(VAC.test(text.replace(/\s+/g," "))&&!/(환불|취소|연장)/.test(text)){busy=true;btn.disabled=true;ta.value="";ta.style.height="";if(!shown)bubble("user",text);
+    const ty=el("div","pnc-ty");ty.innerHTML="<i></i><i></i><i></i>";log.appendChild(ty);scroll();
+    try{const v=await vacancy(text);ty.remove();bubble("assistant",v.text);S.msgs.push({role:"user",content:text},{role:"assistant",content:v.text});save();
+      const c=el("div","pnc-c");v.brs.forEach(br=>{const a=el("a",null,BRN[br]+" 표에서 신청 →");a.href="/?branch="+encodeURIComponent(br)+"#deals";a.onclick=goDeals(br);c.appendChild(a)});log.appendChild(c);scroll();
+      try{window.pnTrack&&window.pnTrack("chat_vacancy")}catch(e){}}
+    catch(e){ty.remove();bubble("assistant","빈자리 표를 불러오지 못했어요. playn.kr 첫 화면 '이번 주 빈자리'에서 확인하시거나 호스트에게 문의해 주세요.");escCard()}
+    busy=false;btn.disabled=false;return}
   if(!S.b){ta.value="";bubble("user",text);pending=text;
     bubble("assistant","지점마다 장비·요금이 조금씩 달라요. 어느 지점 기준으로 알려드릴까요?");brPick();return}
   busy=true;btn.disabled=true;ta.value="";ta.style.height="";
