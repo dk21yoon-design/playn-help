@@ -206,6 +206,7 @@ const STS={checked_in:"🟡 이용 중",submitted:"🟢 송금 대기",hold:"⚠
 const W=n=>Number(n||0).toLocaleString()+"원";
 const VL2={ok:"깨끗함",minor:"보통",charge:"⚠️ 차감 검토",unknown:"판독 실패"};
 async function loadSettle(){const x=await spost({action:"admin_settle_list"});if(!x.ok)return;
+ const PF=(await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle-guard",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"admin_proofs",key:KEY,ids:x.items.map(s=>s.id)})}).then(r=>r.json()).catch(()=>({}))).proofs||{};
  const E=$("settleList");E.innerHTML=x.items.length||(x.cleans||[]).length?"":'<p class="sub">정산할 건이 없어요.</p>';
  // ✅ 바로 송금 가능 묶음
  const ready=x.items.filter(s=>s.calc&&s.status==="submitted"&&!(s.flags||[]).length&&(s.deposit_ok||s.deposit_exempt)&&!(s.clean&&s.clean.verdict==="charge"));
@@ -229,7 +230,7 @@ async function loadSettle(){const x=await spost({action:"admin_settle_list"});if
    (s.deposit_exempt?`<div class="meta" style="color:#FFB547">👑 레전드 · 보증금 면제${k?` · 받을 돈 ${W(k.owed)}`:""}</div>`:"");
   // 보증금 입금 상태
   if(s.status!=="paid"){const dp=document.createElement("div");dp.className="act";dp.style.flexWrap="wrap";
-   dp.innerHTML=s.deposit_exempt?`<span class="meta">👑 보증금 면제 (레전드)</span><span></span>`:s.deposit_ok?`<span class="meta">💰 보증금 입금 확인됨${s.deposit_at?" ("+new Date(s.deposit_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})+")":""}</span><button class="no">입금 취소</button>`:`<span class="meta" style="color:#ff6b6b">💸 보증금 미입금 (토스 알림 대기${s.deposit_reminded_at?" · 독촉문자 보냄":""})</span><button class="ok">입금 확인</button>`;
+   dp.innerHTML=s.deposit_exempt?`<span class="meta">👑 보증금 면제 (레전드)</span><span></span>`:s.deposit_ok?`<span class="meta">💰 보증금 입금 확인됨${s.deposit_at?" ("+new Date(s.deposit_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})+")":""}</span><button class="no">입금 취소</button>`:`<span class="meta" style="color:#ff6b6b">${PF[s.id]?`📎 손님이 입금 캡처 올림 → 토스 확인 후 '입금 확인'`:`💸 보증금 미입금 (토스 알림 대기${s.deposit_reminded_at?" · 독촉문자 보냄":""})`}${PF[s.id]?`<br><a href="${PF[s.id]}" target="_blank" rel="noopener"><img src="${PF[s.id]}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-top:4px"></a>`:""}</span><button class="ok">입금 확인</button>`;
    dp.lastElementChild.onclick=async()=>{const r=await spost({action:"admin_deposit_set",id:s.id,ok:!s.deposit_ok});if(!r.ok)alert0(dp,r.error||"실패");loadSettle()};d.appendChild(dp)}
   // 바베큐 결제 인원 확인
   if(k&&k.bbq&&k.bbq.people&&s.status!=="paid"){const bq=document.createElement("div");bq.className="act";bq.style.flexWrap="wrap";
