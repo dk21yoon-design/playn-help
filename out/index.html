@@ -125,7 +125,7 @@ function show(m){mode=m;$("fin").hidden=m!=="in";$("fout").hidden=m!=="out";docu
   if(m==="out")renderOut()}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>show(b.dataset.m));
 async function load(){
-  if(!k){$("lead").textContent="안내문자에 있는 링크로 들어와 주세요.";return}
+  if(!k){$("lead").innerHTML='체크인은 예약 확정 문자에 있는 <b>개인 링크</b>로 들어와야 열려요.<br>문자를 못 찾겠다면 아래로 바로 연락 주세요.<span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><a class="btn lamp" href="sms:01083395818">문자로 링크 다시 받기</a><a class="btn ghost" href="/help/">AI 상담</a><a class="btn ghost" href="/">홈으로</a></span>';return}
   D=await post({action:"info"}).catch(()=>null);
   if(!D||!D.ok){$("lead").textContent=(D&&D.error)||"잠시 후 다시 시도해 주세요.";return}
   const dt=new Date(D.date+"T00:00:00");$("meta").textContent=`${D.branch} · ${dt.getMonth()+1}/${dt.getDate()} ${D.pkg}`;$("meta").hidden=false;

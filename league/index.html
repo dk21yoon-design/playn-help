@@ -111,4 +111,5 @@ if($("lGo"))$("lGo").onclick=async()=>{const M=$("lMsg");M.style.color="#5A5690"
  const j=await fetch(AAPI,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"league_submit",token:TK,branch:$("lBr").value,date:$("lDate").value,team:$("lTeam").value,riot_ids:$("lIds").value,images:imgs})}).then(r=>r.json()).catch(()=>({}));
  $("lGo").disabled=false;M.style.color=j.ok?"#1F7A4D":"#D1124F";M.textContent=j.message||j.error||"다시 시도해 주세요";if(j.status==="approved")setTimeout(()=>location.reload(),2500)};
 </script>
+<script src="/assets/chat.js" defer></script>
 </body></html>

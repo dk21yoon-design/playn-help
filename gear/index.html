@@ -125,4 +125,5 @@ function drawVote(list){const v=$("vote");v.innerHTML="";const max=Math.max(1,..
 function load(){fetch(API).then(r=>r.json()).then(j=>drawVote(j.candidates)).catch(()=>{$("vote").innerHTML='<p class="sub">투표를 불러오지 못했어요.</p>'})}
 load();
 </script>
+<script src="/assets/chat.js" defer></script>
 </body></html>

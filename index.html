@@ -5,7 +5,7 @@
 <script>/* 예전 상담봇 링크(?b=지점) 호환 */if(/[?&]b=/.test(location.search))location.replace("help/"+location.search)</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>플레이앤 Play N | 홍대·연남 루프탑 게임파티룸</title>
-<meta name="description" content="홍대·연남 루프탑 게임파티룸 플레이앤. 게이밍 PC 5대와 프로 무선 기어, 노래방, 루프탑 바베큐. 평점 4.9, 후기 284개. N CREW 멤버는 매주 빈 날짜를 특가로 받아요.">
+<meta name="description" content="홍대·연남 루프탑 게임파티룸 플레이앤. 게이밍 PC 5대와 프로 무선 기어, 노래방, 루프탑 바베큐. 평점 4.9, 후기 287개. N CREW 멤버는 매주 빈 날짜를 특가로 받아요.">
 <meta property="og:title" content="플레이앤 N CREW | 이번 주 빈자리 특가">
 <meta property="og:description" content="홍대·연남 루프탑 게임파티룸. 멤버에게만 이번 주 공실을 특가로 열어요.">
 <meta name="theme-color" content="#0E0C2C">
@@ -398,15 +398,15 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
     <div class="shots rv" aria-hidden="true">
       <div class="a"><img src="assets/home/hero.webp" alt="" width="900" height="675" fetchpriority="high"></div>
       <div class="b"><img src="assets/home/neon.webp" alt="" width="900" height="675" loading="lazy"></div>
-      <div class="rating"><b>★ 4.9</b><span>후기 284개</span></div>
+      <div class="rating"><b>★ 4.9</b><span>후기 287개</span></div>
     </div>
   </div>
   <a class="event rv" href="worlds/"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span>10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
 </div></section>
 
 <div class="ticker" aria-label="플레이앤 한눈에"><div class="track">
-  <span><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span><b>루프탑 바베큐</b> 장작·숯 무제한</span><span><b>최대 16명</b> 최소 인원 없음</span><span><b>배달·주류 반입</b> 자유롭게</span><span><b>평점 4.9</b> 스페이스클라우드 후기 284개</span><span><b>N CREW 특가</b> 빈자리 최대 35%</span>
-  <span aria-hidden="true"><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span aria-hidden="true"><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span aria-hidden="true"><b>루프탑 바베큐</b> 장작·숯 무제한</span><span aria-hidden="true"><b>최대 16명</b> 최소 인원 없음</span><span aria-hidden="true"><b>배달·주류 반입</b> 자유롭게</span><span aria-hidden="true"><b>평점 4.9</b> 스페이스클라우드 후기 284개</span><span aria-hidden="true"><b>N CREW 특가</b> 빈자리 최대 35%</span>
+  <span><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span><b>루프탑 바베큐</b> 장작·숯 무제한</span><span><b>최대 16명</b> 최소 인원 없음</span><span><b>배달·주류 반입</b> 자유롭게</span><span><b>평점 4.9</b> 스페이스클라우드 후기 287개</span><span><b>N CREW 특가</b> 빈자리 최대 35%</span>
+  <span aria-hidden="true"><b>3개 지점</b> 홍대입구역 걸어서 1~5분</span><span aria-hidden="true"><b>게이밍 PC 5대</b> 전 좌석 더블모니터</span><span aria-hidden="true"><b>루프탑 바베큐</b> 장작·숯 무제한</span><span aria-hidden="true"><b>최대 16명</b> 최소 인원 없음</span><span aria-hidden="true"><b>배달·주류 반입</b> 자유롭게</span><span aria-hidden="true"><b>평점 4.9</b> 스페이스클라우드 후기 287개</span><span aria-hidden="true"><b>N CREW 특가</b> 빈자리 최대 35%</span>
 </div></div>
 
 <section class="blk" style="padding-top:clamp(40px,6vw,72px)"><div class="wrap">
@@ -685,6 +685,8 @@ $("lBtn").onclick=async()=>{const m=$("lMsg");if($("lPhone").value.replace(/\D/g
 
 /* 카카오 채널 */
 fetch(API).then(r=>r.json()).then(j=>{const k=$("kakaoBtn");if(j.kakao){k.href=j.kakao}else{k.removeAttribute("target");k.href="#";k.textContent="카카오톡 채널 'playn' 검색 (ID 복사)";k.onclick=async e=>{e.preventDefault();try{await navigator.clipboard.writeText("playn")}catch(_){}k.textContent="복사됨 · 카카오톡 검색창에 붙여넣기 하세요"}}k.hidden=false}).catch(()=>{});
+/* 매거진 상단 라벨: [데일리] 같은 내부 태그는 빼고 첫 주제 태그만 짧게 (에디토리얼 킥커) */
+function kicker(p){const t=String(p.series||"").replace(/\[데일리\]\s*/g,"");const m=t.match(/^\[([^\]]{1,14})\]/);if(m)return m[1];const c=MAG.categories.find(c=>c.id===p.cat);return c?c.name:t.slice(0,16)}
 /* 게임 매거진 */
 const POSTS_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-posts";
 let MAG={posts:[],categories:[]},magCat="all",magShown=8;
@@ -692,7 +694,7 @@ function magRender(){const list=MAG.posts.filter(p=>magCat==="all"||p.cat===magC
   if(!list.length){g.innerHTML='<p class="sub">아직 이 주제 글이 없어요.</p>';$("magMore").hidden=true;return}
   list.slice(0,magShown).forEach(p=>{const b=document.createElement("a");b.className="post";b.href="m/"+p.id+"/";
     b.innerHTML=`<div class="th">${p.cover?`<img loading="lazy" alt="" src="${p.cover}">`:""}<span class="kind">${p.type==="video"?"영상":"카드 "+p.images.length+"장"}</span></div><span class="ser"></span><span class="hl"></span>`;
-    b.querySelector(".ser").textContent=p.series;b.querySelector(".hl").textContent=p.headline;
+    b.querySelector(".ser").textContent=kicker(p);b.querySelector(".hl").textContent=p.headline;
     b.onclick=e=>{if(e.metaKey||e.ctrlKey)return;e.preventDefault();openPost(p)};g.appendChild(b)});
   $("magMore").hidden=list.length<=magShown}
 function magTabs(){const t=$("magTabs");t.innerHTML="";[{id:"all",name:"전체"},...MAG.categories].forEach(c=>{const n=c.id==="all"?MAG.posts.length:MAG.posts.filter(p=>p.cat===c.id).length;
@@ -703,7 +705,7 @@ function openPost(p){lastFocus=document.activeElement;const m=$("pvMedia");m.inn
   if(p.video){const v=document.createElement("video");v.src=p.video;v.poster=p.cover||"";v.controls=true;v.playsInline=true;v.setAttribute("playsinline","");v.preload="metadata";m.appendChild(v)}
   else if(p.images.length){const c=document.createElement("div");c.className="cards";p.images.forEach((u,i)=>{const im=document.createElement("img");im.src=u;im.alt=`${p.series} ${i+1}번째 카드`;im.loading=i?"lazy":"eager";c.appendChild(im)});
     c.addEventListener("scroll",()=>{$("pvCnt").textContent=`${Math.round(c.scrollLeft/c.clientWidth)+1} / ${p.images.length} · 옆으로 넘겨보세요`});m.appendChild(c);$("pvCnt").textContent=`1 / ${p.images.length} · 옆으로 넘겨보세요`}
-  const cat=MAG.categories.find(c=>c.id===p.cat);$("pvSer").textContent=(cat?cat.name+" · ":"")+p.series;$("pvTitle").textContent=p.headline;$("pvText").textContent=p.text;
+  const cat=MAG.categories.find(c=>c.id===p.cat);$("pvSer").textContent=(cat?cat.name+" · ":"")+kicker(p);$("pvTitle").textContent=p.headline;$("pvText").textContent=p.text;
   $("pvTags").innerHTML="";p.tags.forEach(t=>{const s=document.createElement("span");s.textContent="#"+t;$("pvTags").appendChild(s)});
   $("pvInsta").href=p.insta||"https://www.instagram.com/playn_no.1/";
   $("pvShare").textContent="링크 복사";$("pvShare").onclick=()=>{const u=location.origin+"/m/"+p.id+"/";(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>$("pvShare").textContent="복사했어요").catch(()=>{$("pvShare").textContent="복사 실패"})};
@@ -762,5 +764,6 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
 </script>
 <a class="fab" href="help/"><i></i>AI 상담사</a>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
+<script src="/assets/chat.js" defer></script>
 </body>
 </html>
