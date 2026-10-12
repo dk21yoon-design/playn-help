@@ -17,6 +17,7 @@ header .wrap{padding:0}
 .logo{font-size:26px;font-weight:800;letter-spacing:-.5px}.logo b{color:var(--orange)}
 header p{margin:4px 0 0;font-size:14px;opacity:.85}
 .notice{font-size:12.5px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:14px 0}
+.sub{display:block;text-align:center;text-decoration:none;background:#FF0033;color:#fff;font-weight:800;font-size:16px;padding:13px;border-radius:12px;margin:0 0 14px}
 .find{display:flex;gap:8px;margin:0 0 14px}
 .find input{flex:1;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .find button{font-size:16px;padding:0 16px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:700}
@@ -35,6 +36,7 @@ footer a{color:var(--sub)}
 <header><div class="wrap"><div class="logo">생활<b>공략집</b></div><p>영상 끝에 나온 <b>#번호</b>로 제품을 찾아보세요</p></div></header>
 <main class="wrap">
 <div class="notice">이 페이지의 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+<a class="sub" href="https://www.youtube.com/channel/UCPVlaD7mWbGT8o_60rupIdA?sub_confirmation=1" target="_blank" rel="noopener">🔔 매일 생활 공략 받기 — 유튜브 구독</a>
 <form class="find" onsubmit="go(event)"><input id="q" inputmode="numeric" placeholder="번호 입력 (예: 3)" aria-label="제품 번호"><button>찾기</button></form>
 <div id="list"><p class="notice">불러오는 중…</p></div>
 </main>
