@@ -250,6 +250,8 @@ fetch("{POSTS_API}?meta=1").then(r=>r.json()).then(j=>{{M=j;calc()}}).catch(()=>
 </main>
 {FOOT}
 <a class="fab" href="/help/?b={b['code']}"><i></i>AI 상담사</a>
+<script src="/assets/events.js" defer></script>
+<script src="/assets/tonight.js" defer></script>
 </body></html>"""
 
 # ───────────────────────── 매거진 글 페이지

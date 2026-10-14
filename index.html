@@ -843,5 +843,6 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
 <script>(function(){const d=document.getElementById("dock");if(!d)return;document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea"))d.classList.add("typing")});document.addEventListener("focusout",()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches("input,select,textarea"))d.classList.remove("typing")},120))})();</script>
 <script src="/assets/chat.js" defer></script>
 <script src="assets/events.js" defer></script>
+<script src="assets/tonight.js" defer></script>
 </body>
 </html>
