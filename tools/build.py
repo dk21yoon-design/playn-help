@@ -106,6 +106,18 @@ RULES = [
 REFUND = "이용 8일 전까지 취소하면 100% 환불되고, 7일 전부터는 환불이 어려워요. (스페이스클라우드는 결제 후 2시간 안에 취소하면 100% 환불)"
 
 BR_CSS = """
+.pcalc{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+.pcalc h3{font-size:18px}
+.pc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pc-row label{font-size:13px;font-weight:700;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+.pc-row input,.pc-row select{font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px}
+.pc-row .pc-bbq{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}
+.pc-row .pc-bbq input{width:20px;height:20px}
+.pc-out{margin-top:14px;font-size:17px;line-height:1.7}
+.pc-out .tier{font-size:12px;font-weight:800;background:rgba(255,181,71,.15);color:var(--lamp);padding:2px 8px;border-radius:6px;margin-right:6px}
+.pc-out .per b{color:var(--lamp);font-size:22px}
+.pc-out small{color:var(--dim)}
+
 .bh{padding:26px 0 8px}
 .bh h1{font-size:clamp(34px,7vw,60px)}
 .bh .tag{color:var(--mute);font-size:17px;margin-top:8px}
@@ -182,9 +194,10 @@ def branch_page(b, prices):
     <p class="tag">{E(b['tagline'])}</p>
     <div class="facts"><span class="star">★ {b['rating']:.2f} · 후기 {b['reviews_n']}개</span><span>{b['cap']}</span><span>{b['floor']}</span><span>{b['area']}</span><span>24시간 운영</span></div>
     <div class="cta">
+      <a class="btn pink" href="/me/?b={b['code']}#book">홈페이지로 예약 · N CREW 할인</a>
       <a class="btn lamp" href="{b['ss_url']}" target="_blank" rel="noopener">네이버로 예약</a>
       <a class="btn lamp" href="{b['sc_url']}" target="_blank" rel="noopener">스페이스클라우드로 예약</a>
-      <a class="btn pink" href="/?branch={b['name']}#deals">이번 주 멤버 특가 보기</a>
+      <a class="btn ghost" href="/?branch={b['name']}#deals">이번 주 빈자리 특가</a>
       <a class="btn ghost" href="tel:{HOST.replace('-','')}">전화 문의</a>
     </div>
   </section>
@@ -209,7 +222,21 @@ def branch_page(b, prices):
   <section class="s"><h2 class="disp">요금</h2><p class="sub">패키지 요금이에요. 보증금 20만원은 별도이고 퇴실 후 돌려드려요.</p>
     <div style="overflow-x:auto"><table class="price"><thead><tr><th>패키지</th><th>평일</th><th>금요일·<br>공휴일 전날</th><th>토요일·<br>연휴 중</th><th>일요일·<br>공휴일 당일</th></tr></thead><tbody>{rows}</tbody></table></div>
     <p class="note">표가 잘리면 옆으로 밀어보세요 · 5명까지 기본, 6번째 사람부터 1명당 2만원 · 바베큐 1인 1만원 · N CREW 멤버는 빈 날짜를 특가로 신청할 수 있어요.</p>
+    <div class="pcalc"><h3>우리 몇 명이면 1인 얼마?</h3>
+      <div class="pc-row"><label>날짜<input type="date" id="pcD"></label><label>패키지<select id="pcK"><option value="night">야간 19:00~익일 09:30</option><option value="day">주간 11:00~17:30</option><option value="full">통대관 12:00~익일 10:00</option></select></label><label>인원<input type="number" id="pcN" min="1" max="16" value="6" inputmode="numeric"></label><label class="pc-bbq"><input type="checkbox" id="pcB"> 바베큐</label></div>
+      <div class="pc-out" id="pcO" aria-live="polite">요금을 불러오는 중이에요</div>
+      <a class="btn pink" href="/me/?b={b['code']}#book" style="margin-top:12px">이 날짜 홈페이지로 예약 →</a>
+    </div>
   </section>
+<script>(function(){{const BRN="{b['name']}",$=i=>document.getElementById(i),ymd=d=>d.toISOString().slice(0,10),add=(s,n)=>ymd(new Date(new Date(s+"T00:00:00Z").getTime()+n*864e5));let M=null;
+const TN={{A:"평일",B:"금요일·공휴일 전날",C:"토요일·연휴 중",D:"일요일·공휴일 당일"}};
+function tier(d){{if((M.force_c||[]).includes(d.slice(5)))return"C";const off=x=>(M.holidays||[]).includes(x)||[0,6].includes(new Date(x+"T00:00:00Z").getUTCDay());const a=off(d),b=off(add(d,1));return!a&&!b?"A":!a&&b?"B":a&&b?"C":"D"}}
+function calc(){{if(!M)return;const d=$("pcD").value,k=$("pcK").value,n=Math.max(1,Math.min(16,+$("pcN").value||1)),o=$("pcO");if(!d){{o.textContent="날짜를 골라주세요";return}}
+const t=tier(d),base=M.prices?.[BRN]?.[k]?.[t];if(!base){{o.textContent="요금은 010-8339-5818로 문의해 주세요";return}}
+const extra=Math.max(0,n-5)*20000,bbq=$("pcB").checked?n*10000:0,tot=base+extra+bbq,per=Math.ceil(tot/n/100)*100;
+o.innerHTML=`<span class="tier">${{TN[t]}} 요금</span> 총 <b>${{tot.toLocaleString()}}원</b><br><span class="per">${{n}}명이면 1인 <b>${{per.toLocaleString()}}원</b></span><br><small>기본 ${{base.toLocaleString()}}원${{extra?` + 인원 추가 ${{extra.toLocaleString()}}원`:""}}${{bbq?` + 바베큐 ${{bbq.toLocaleString()}}원`:""}} · 보증금 별도(퇴실 후 환급)</small>`}}
+const t0=new Date(Date.now()+9*36e5);$("pcD").value=ymd(t0);$("pcD").min=ymd(t0);["pcD","pcK","pcN","pcB"].forEach(i=>$(i).addEventListener("input",calc));
+fetch("{POSTS_API}?meta=1").then(r=>r.json()).then(j=>{{M=j;calc()}}).catch(()=>{{$("pcO").textContent="요금표를 참고해 주세요"}})}})();</script>
 
   <section class="s"><h2 class="disp">이용 규칙</h2>
     <ul class="rules"><li>{E(b['minors'])}</li>{''.join(f'<li>{E(x)}</li>' for x in RULES)}<li>{E(REFUND)}</li></ul>
@@ -360,6 +387,43 @@ def for_page(f):
 <a class="fab" href="/help/"><i></i>AI 상담사</a>
 </body></html>"""
 
+
+# ───────────────────────── 매거진 목록 (/m/)
+def mag_index(data):
+    cats = data["categories"]; posts = sorted(data["posts"], key=lambda x: (x["date"] or "", x["id"]), reverse=True)
+    cname = {c["id"]: c["name"] for c in cats}
+    tabs = '<button class="on" data-c="all">전체</button>' + "".join(f'<button data-c="{E(str(c["id"]))}">{E(c["name"])}</button>' for c in cats if any(p["cat"] == c["id"] for p in posts))
+    items = "".join(f'<a class="mi" href="/m/{p["id"]}/" data-c="{E(str(p["cat"]))}"><img src="{E(p["cover"] or "/assets/og.png")}" alt="" loading="lazy"><span class="mc">{E(cname.get(p["cat"], ""))}</span><b>{E((p["headline"] or p["series"])[:60])}</b><small>{E(p["date"] or "")}</small></a>' for p in posts)
+    ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "플레이앤 게임 매거진", "url": f"{SITE}/m/",
+          "hasPart": [{"@type": "Article", "headline": (p["headline"] or p["series"])[:110], "url": f"{SITE}/m/{p['id']}/"} for p in posts[:30]]}
+    return f"""<!doctype html>
+<html lang="ko"><head>
+{HEAD_COMMON}
+<title>플레이앤 게임 매거진 | 친구랑 할 게임·신작·세일·롤드컵</title>
+<meta name="description" content="친구랑 할 협동 게임, 무료·세일 게임, 신작, 롤드컵 소식을 매일 정리해요. 홍대 게임파티룸 플레이앤이 만드는 게임 매거진 ({len(posts)}개 글).">
+<link rel="canonical" href="{SITE}/m/">
+<meta property="og:type" content="website"><meta property="og:url" content="{SITE}/m/"><meta property="og:title" content="플레이앤 게임 매거진"><meta property="og:image" content="{SITE}/assets/og.png">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+<style>
+.mh{{padding:26px 0 8px}}.mh h1{{font-size:clamp(32px,7vw,54px)}}.mh p{{color:var(--mute);margin-top:8px}}
+.mt{{display:flex;gap:8px;overflow-x:auto;padding:14px 0;scrollbar-width:none}}.mt button{{flex:none;font:inherit;font-weight:700;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}}.mt button.on{{background:var(--lamp);color:#1B1640;border-color:var(--lamp)}}
+.mg{{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:8px}}
+.mi{{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}}.mi img{{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;background:var(--panel)}}
+.mi .mc{{font-size:12px;font-weight:800;color:var(--lamp)}}.mi b{{font-size:15.5px;line-height:1.4}}.mi small{{color:var(--dim);font-size:12.5px}}
+@media(max-width:600px){{.mg{{grid-template-columns:1fr 1fr;gap:12px}}.mi b{{font-size:14px}}}}
+</style>
+</head><body>
+{TOP}
+<main class="wrap">
+  <section class="mh"><h1 class="disp">게임 매거진</h1><p>친구랑 할 게임, 무료·세일, 신작, 롤드컵 소식을 매일 정리해요.</p></section>
+  <div class="mt" id="mt">{tabs}</div>
+  <div class="mg" id="mg">{items}</div>
+</main>
+{FOOT}
+<script>document.querySelectorAll("#mt button").forEach(b=>b.onclick=()=>{{document.querySelectorAll("#mt button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll("#mg .mi").forEach(a=>a.hidden=b.dataset.c!=="all"&&a.dataset.c!==b.dataset.c)}})</script>
+<a class="fab" href="/help/"><i></i>AI 상담사</a>
+</body></html>"""
+
 def main():
     def get(url):
         with urllib.request.urlopen(url, timeout=30) as r: return json.load(r)
@@ -370,7 +434,8 @@ def main():
         d = os.path.join(ROOT, b["slug"]); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w").write(branch_page(b, meta["prices"]))
         urls.append((f"{SITE}/{b['slug']}/", "weekly", "0.9"))
-    urls += [(f"{SITE}/gear/", "weekly", "0.8"), (f"{SITE}/plan/", "monthly", "0.8"), (f"{SITE}/league/", "daily", "0.8")]
+    urls += [(f"{SITE}/gear/", "weekly", "0.8"), (f"{SITE}/plan/", "monthly", "0.8"), (f"{SITE}/league/", "daily", "0.8"),
+             (f"{SITE}/reviews/", "daily", "0.8"), (f"{SITE}/meet/", "weekly", "0.8"), (f"{SITE}/worlds/", "daily", "0.7"), (f"{SITE}/m/", "daily", "0.8")]
     for f in FOR_PAGES:
         d = os.path.join(ROOT, "for", f["slug"]); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w").write(for_page(f))
@@ -382,6 +447,7 @@ def main():
         d = os.path.join(mdir, str(p["id"])); os.makedirs(d, exist_ok=True); keep.add(str(p["id"]))
         open(os.path.join(d, "index.html"), "w").write(post_page(p, data["categories"], related))
         urls.append((f"{SITE}/m/{p['id']}/", "monthly", "0.6"))
+    open(os.path.join(mdir, "index.html"), "w").write(mag_index(data))
     for old in os.listdir(mdir):  # 숨김 처리된 글 페이지 정리
         if old not in keep and old.isdigit():
             for f in os.listdir(os.path.join(mdir, old)): os.remove(os.path.join(mdir, old, f))

@@ -17,6 +17,18 @@
 <meta property="og:image" content="https://playn.kr/assets/og.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "EntertainmentBusiness", "name": "게임파티룸 플레이앤 연트럴파크점", "alternateName": "Play N 연트럴파크점", "url": "https://playn.kr/yeontral/", "telephone": "+82-10-8339-5818", "address": {"@type": "PostalAddress", "streetAddress": "연남동 260-28 계림빌딩 5층", "addressLocality": "마포구", "addressRegion": "서울", "addressCountry": "KR"}, "geo": {"@type": "GeoCoordinates", "latitude": 37.56129859, "longitude": 126.92445428}, "openingHours": "Mo-Su 00:00-24:00", "priceRange": "₩100,000~", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.85, "reviewCount": 13, "bestRating": 5}, "sameAs": ["https://www.instagram.com/playn_no.1/", "https://www.spacecloud.kr/space/72605", "https://smartstore.naver.com/playn_/products/12071850850"]}</script>
 <style>
+.pcalc{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+.pcalc h3{font-size:18px}
+.pc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pc-row label{font-size:13px;font-weight:700;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+.pc-row input,.pc-row select{font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px}
+.pc-row .pc-bbq{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}
+.pc-row .pc-bbq input{width:20px;height:20px}
+.pc-out{margin-top:14px;font-size:17px;line-height:1.7}
+.pc-out .tier{font-size:12px;font-weight:800;background:rgba(255,181,71,.15);color:var(--lamp);padding:2px 8px;border-radius:6px;margin-right:6px}
+.pc-out .per b{color:var(--lamp);font-size:22px}
+.pc-out small{color:var(--dim)}
+
 .bh{padding:26px 0 8px}
 .bh h1{font-size:clamp(34px,7vw,60px)}
 .bh .tag{color:var(--mute);font-size:17px;margin-top:8px}
@@ -59,9 +71,10 @@
     <p class="tag">연트럴파크 옆, 5인 최적화 5층 게이밍 룸</p>
     <div class="facts"><span class="star">★ 4.85 · 후기 13개</span><span>최대 7명 (5명 최적)</span><span>5층 · 엘리베이터 없음</span><span>23㎡</span><span>24시간 운영</span></div>
     <div class="cta">
+      <a class="btn pink" href="/me/?b=yeontral#book">홈페이지로 예약 · N CREW 할인</a>
       <a class="btn lamp" href="https://smartstore.naver.com/playn_/products/12071850850" target="_blank" rel="noopener">네이버로 예약</a>
       <a class="btn lamp" href="https://www.spacecloud.kr/space/72605" target="_blank" rel="noopener">스페이스클라우드로 예약</a>
-      <a class="btn pink" href="/?branch=연트럴파크점#deals">이번 주 멤버 특가 보기</a>
+      <a class="btn ghost" href="/?branch=연트럴파크점#deals">이번 주 빈자리 특가</a>
       <a class="btn ghost" href="tel:01083395818">전화 문의</a>
     </div>
   </section>
@@ -86,7 +99,21 @@
   <section class="s"><h2 class="disp">요금</h2><p class="sub">패키지 요금이에요. 보증금 20만원은 별도이고 퇴실 후 돌려드려요.</p>
     <div style="overflow-x:auto"><table class="price"><thead><tr><th>패키지</th><th>평일</th><th>금요일·<br>공휴일 전날</th><th>토요일·<br>연휴 중</th><th>일요일·<br>공휴일 당일</th></tr></thead><tbody><tr><td>주간<br><small style='color:var(--dim);font-weight:500;white-space:nowrap'>11:00~17:30</small></td><td>100,000원</td><td>100,000원</td><td>150,000원</td><td>150,000원</td></tr><tr><td>야간<br><small style='color:var(--dim);font-weight:500;white-space:nowrap'>19:00~익일 09:30</small></td><td>150,000원</td><td>250,000원</td><td>250,000원</td><td>220,000원</td></tr><tr><td>통대관<br><small style='color:var(--dim);font-weight:500;white-space:nowrap'>12:00~익일 10:00</small></td><td>200,000원</td><td>280,000원</td><td>350,000원</td><td>250,000원</td></tr></tbody></table></div>
     <p class="note">표가 잘리면 옆으로 밀어보세요 · 5명까지 기본, 6번째 사람부터 1명당 2만원 · 바베큐 1인 1만원 · N CREW 멤버는 빈 날짜를 특가로 신청할 수 있어요.</p>
+    <div class="pcalc"><h3>우리 몇 명이면 1인 얼마?</h3>
+      <div class="pc-row"><label>날짜<input type="date" id="pcD"></label><label>패키지<select id="pcK"><option value="night">야간 19:00~익일 09:30</option><option value="day">주간 11:00~17:30</option><option value="full">통대관 12:00~익일 10:00</option></select></label><label>인원<input type="number" id="pcN" min="1" max="16" value="6" inputmode="numeric"></label><label class="pc-bbq"><input type="checkbox" id="pcB"> 바베큐</label></div>
+      <div class="pc-out" id="pcO" aria-live="polite">요금을 불러오는 중이에요</div>
+      <a class="btn pink" href="/me/?b=yeontral#book" style="margin-top:12px">이 날짜 홈페이지로 예약 →</a>
+    </div>
   </section>
+<script>(function(){const BRN="연트럴파크점",$=i=>document.getElementById(i),ymd=d=>d.toISOString().slice(0,10),add=(s,n)=>ymd(new Date(new Date(s+"T00:00:00Z").getTime()+n*864e5));let M=null;
+const TN={A:"평일",B:"금요일·공휴일 전날",C:"토요일·연휴 중",D:"일요일·공휴일 당일"};
+function tier(d){if((M.force_c||[]).includes(d.slice(5)))return"C";const off=x=>(M.holidays||[]).includes(x)||[0,6].includes(new Date(x+"T00:00:00Z").getUTCDay());const a=off(d),b=off(add(d,1));return!a&&!b?"A":!a&&b?"B":a&&b?"C":"D"}
+function calc(){if(!M)return;const d=$("pcD").value,k=$("pcK").value,n=Math.max(1,Math.min(16,+$("pcN").value||1)),o=$("pcO");if(!d){o.textContent="날짜를 골라주세요";return}
+const t=tier(d),base=M.prices?.[BRN]?.[k]?.[t];if(!base){o.textContent="요금은 010-8339-5818로 문의해 주세요";return}
+const extra=Math.max(0,n-5)*20000,bbq=$("pcB").checked?n*10000:0,tot=base+extra+bbq,per=Math.ceil(tot/n/100)*100;
+o.innerHTML=`<span class="tier">${TN[t]} 요금</span> 총 <b>${tot.toLocaleString()}원</b><br><span class="per">${n}명이면 1인 <b>${per.toLocaleString()}원</b></span><br><small>기본 ${base.toLocaleString()}원${extra?` + 인원 추가 ${extra.toLocaleString()}원`:""}${bbq?` + 바베큐 ${bbq.toLocaleString()}원`:""} · 보증금 별도(퇴실 후 환급)</small>`}
+const t0=new Date(Date.now()+9*36e5);$("pcD").value=ymd(t0);$("pcD").min=ymd(t0);["pcD","pcK","pcN","pcB"].forEach(i=>$(i).addEventListener("input",calc));
+fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-posts?meta=1").then(r=>r.json()).then(j=>{M=j;calc()}).catch(()=>{$("pcO").textContent="요금표를 참고해 주세요"})})();</script>
 
   <section class="s"><h2 class="disp">이용 규칙</h2>
     <ul class="rules"><li>미성년자는 부모님 연락처로 동의를 확인한 뒤 이용할 수 있어요. 음주·흡연은 엄격히 금지되고 적발 시 바로 퇴실이에요.</li><li>보증금 20만원은 입실 후 입금, 퇴실 1~2일 뒤 돌려드려요 (기본 쓰레기봉투 4,000원 차감)</li><li>기본 정리(설거지·분리수거·장비 원위치)가 안 돼 있으면 보증금에서 청소비가 차감돼요</li><li>실내 흡연·전자담배 금지, 흡연은 루프탑 테라스에서만</li><li>CCTV는 화장실 외 전 구역에 있어요. 가리거나 끄면 보증금을 돌려드리지 않아요</li><li>장비 파손·분실은 구매가로 청구돼요</li><li>반려동물은 함께 올 수 없어요</li><li>바베큐 후에는 불씨를 끄고 사진을 보내주세요</li><li>이용 8일 전까지 취소하면 100% 환불되고, 7일 전부터는 환불이 어려워요. (스페이스클라우드는 결제 후 2시간 안에 취소하면 100% 환불)</li></ul>
