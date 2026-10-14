@@ -27,7 +27,7 @@ HEAD_COMMON = """<meta charset="utf-8">
 TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
 <nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
 
-FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
+FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span><a href="https://pf.kakao.com/_xoxhsuxj/chat" target="_blank" rel="noopener">카카오톡 채널 문의</a></span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
 <div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/privacy/">개인정보처리방침</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">나라사랑 애국자 (군인)</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div><div class="row biz" style="margin-top:10px;font-size:12px;line-height:1.7;color:var(--dim)"><span>상호 플레이앤(PlayN)</span><span>대표 윤도권</span><span>사업자등록번호 231-20-01692 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=2312001692" target="_blank" rel="noopener">사업자정보 확인</a></span><span>통신판매업신고 2022-서울마포-2992</span><span>주소 서울특별시 마포구 월드컵북로2길 31, 4층 (동교동)</span><span>전화 010-8339-5818</span><span>이메일 dk21yoon@gmail.com</span><span>호스팅 GitHub Pages</span></div></div></footer>"""
 
 SMARTSTORE = {'43667': 'https://smartstore.naver.com/playn_/products/9434661597', '55750': 'https://smartstore.naver.com/playn_/products/9430485644', '72605': 'https://smartstore.naver.com/playn_/products/12071850850'}
@@ -162,7 +162,7 @@ def ld_business(b):
         "geo": {"@type": "GeoCoordinates", "latitude": b["lat"], "longitude": b["lng"]},
         "openingHours": "Mo-Su 00:00-24:00", "priceRange": "₩100,000~",
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": b["rating"], "reviewCount": b["reviews_n"], "bestRating": 5},
-        "sameAs": ["https://www.instagram.com/playn_no.1/", b["sc_url"], b["ss_url"]], "image": f"{SITE}/assets/og.png",
+        "sameAs": ["https://www.instagram.com/playn_no.1/", "https://pf.kakao.com/_xoxhsuxj", b["sc_url"], b["ss_url"]], "image": f"{SITE}/assets/og.png",
     }
 
 def branch_page(b, prices):
@@ -198,6 +198,7 @@ def branch_page(b, prices):
       <a class="btn lamp" href="{b['ss_url']}" target="_blank" rel="noopener">네이버로 예약</a>
       <a class="btn lamp" href="{b['sc_url']}" target="_blank" rel="noopener">스페이스클라우드로 예약</a>
       <a class="btn ghost" href="/?branch={b['name']}#deals">이번 주 빈자리 특가</a>
+      <a class="btn ghost" href="https://pf.kakao.com/_xoxhsuxj/chat" target="_blank" rel="noopener">카톡 문의</a>
       <a class="btn ghost" href="tel:{HOST.replace('-','')}">전화 문의</a>
     </div>
   </section>
