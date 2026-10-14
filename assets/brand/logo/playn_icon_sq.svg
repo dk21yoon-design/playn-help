@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-209.1 -316.1 632.2 632.2" width="512" height="512"><rect x="-209.09999999999997" y="-316.09999999999997" width="632.1999999999999" height="632.1999999999999" rx="139.08399999999997" fill="#E6195E"/><path d="M 137.40 -64.28 A 100 100 0 1 1 120.54 35.58 L 93.46 -35.58 A 100 100 0 1 0 76.60 64.28" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M -36 0 H 36 M 0 -36 V 36" stroke="#fff" stroke-width="26" stroke-linecap="round"/>
-<circle cx="214" cy="-34" r="17" fill="#fff"/>
-<circle cx="248" cy="0" r="17" fill="#fff"/>
-<circle cx="214" cy="34" r="17" fill="#fff"/>
-<circle cx="180" cy="0" r="17" fill="#fff"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-208.8 -311.8 623.5 623.5" width="512" height="512"><rect x="-208.75" y="-311.75" width="623.5" height="623.5" rx="137.17" fill="#E6195E"/><path d="M 129.40 -64.28 A 100 100 0 1 1 108.91 23.96 L 97.09 -23.96 A 100 100 0 1 0 76.60 64.28" fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M -40 0 H 40 M 0 -40 V 40" stroke="#fff" stroke-width="28" stroke-linecap="round"/>
+<circle cx="206" cy="-37" r="19.5" fill="#fff"/>
+<circle cx="243" cy="0" r="19.5" fill="#fff"/>
+<circle cx="206" cy="37" r="19.5" fill="#fff"/>
+<circle cx="169" cy="0" r="19.5" fill="#fff"/></svg>
