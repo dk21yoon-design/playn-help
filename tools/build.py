@@ -28,7 +28,7 @@ TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>
 <nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
 
 FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span>카카오톡 채널 playn</span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
-<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">나라사랑 애국자 (군인)</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div></div></footer>"""
+<div class="row" style="margin-top:8px"><a href="/hongdae/">홍대루프탑점</a><a href="/yeonnam/">연남루프탑점</a><a href="/yeontral/">연트럴파크점</a><a href="/privacy/">개인정보처리방침</a><a href="/#magazine">게임 매거진</a><a href="/for/military/">나라사랑 애국자 (군인)</a><a href="/for/worlds/">롤드컵 단체 관람</a><a href="/for/birthday/">생일 파티</a><a href="/for/club/">동아리·회사 내전</a></div></div></footer>"""
 
 SMARTSTORE = {'43667': 'https://smartstore.naver.com/playn_/products/9434661597', '55750': 'https://smartstore.naver.com/playn_/products/9430485644', '72605': 'https://smartstore.naver.com/playn_/products/12071850850'}
 
@@ -162,7 +162,7 @@ def ld_business(b):
         "geo": {"@type": "GeoCoordinates", "latitude": b["lat"], "longitude": b["lng"]},
         "openingHours": "Mo-Su 00:00-24:00", "priceRange": "₩100,000~",
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": b["rating"], "reviewCount": b["reviews_n"], "bestRating": 5},
-        "sameAs": ["https://www.instagram.com/playn_no.1/", b["sc_url"], b["ss_url"]],
+        "sameAs": ["https://www.instagram.com/playn_no.1/", b["sc_url"], b["ss_url"]], "image": f"{SITE}/assets/og.png",
     }
 
 def branch_page(b, prices):
