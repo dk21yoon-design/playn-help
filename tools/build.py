@@ -24,7 +24,7 @@ HEAD_COMMON = """<meta charset="utf-8">
 <link rel="stylesheet" href="/assets/base.css">
 <script src="/assets/pv.js" defer></script>"""
 
-TOP = """<header class="top"><div class="wrap"><a class="logo" href="/">PLAY <b>N</b></a>
+TOP = """<header class="top"><div class="wrap"><a class="logo" href="/"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a>
 <nav><a href="/#deals">공실특가</a><a href="/league/">리그</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/me/">내 N CREW</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>"""
 
 FOOT = f"""<footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:{HOST.replace('-','')}">{HOST}</a></span><span><a href="https://pf.kakao.com/_xoxhsuxj/chat" target="_blank" rel="noopener">카카오톡 채널 문의</a></span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div>
