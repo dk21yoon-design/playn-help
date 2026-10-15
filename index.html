@@ -228,19 +228,37 @@ details.terms div{padding:6px 0 0}
 .kakao{margin-top:10px;width:100%;background:#FEE500!important;color:#191919!important}
 .perk-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:56px}
 .perk-head h3{font-size:clamp(24px,3vw,32px)}
-.perk-nav{display:flex;gap:8px}
-.perk-nav button{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.06);color:var(--ink);font-size:18px;cursor:pointer;transition:background .2s}
-.perk-nav button:hover{background:rgba(255,255,255,.14)}
-.perks{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);grid-auto-columns:minmax(250px,1fr);gap:12px;margin-top:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
-@media(min-width:1100px){.perks{grid-auto-columns:calc((100% - 36px)/4)}}
-.perks>div{scroll-snap-align:start;background:linear-gradient(180deg,rgba(36,31,99,.55),rgba(28,24,80,.55));border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:border-color .25s,transform .3s var(--ease)}
-.perks>div:hover{border-color:var(--line2);transform:translateY(-3px)}
-.perks .k{font-size:13px;font-weight:800;color:var(--lamp)}
-.perks b{display:block;font-size:18.5px;margin:6px 0 6px;line-height:1.35}
-.perks span{font-size:14.5px;color:var(--mute);line-height:1.55;display:block}
-.perks span b{display:inline;font-size:inherit;color:var(--lamp);margin:0}
-.perks a{color:var(--lamp)}
-.perks>div.hot{background:linear-gradient(140deg,rgba(255,46,110,.20),rgba(91,72,214,.22));border-color:rgba(255,46,110,.45)}
+.perk-lead{margin-top:8px;color:var(--mute);font-size:15px}
+.lvl{list-style:none;padding:0;margin:18px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative;counter-reset:l}
+.lvl:before{content:"";position:absolute;left:12%;right:12%;top:27px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--line2),var(--lamp),#FF2E6E)}
+.lvl li{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
+.lvl .n{position:relative;z-index:1;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:15px;background:var(--deep);border:2px solid var(--lamp);color:var(--lamp)}
+.lvl li.lgd .n{background:linear-gradient(135deg,#FF2E6E,#FFB547);border:0;color:#fff;box-shadow:0 0 22px rgba(255,46,110,.55)}
+.lvl em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--mute);margin-top:6px;letter-spacing:.04em}
+.lvl b{font-size:16.5px;line-height:1.3}
+.lvl small{font-size:13px;color:var(--mute);line-height:1.45}
+@media(max-width:640px){.lvl{grid-template-columns:none;gap:0}.lvl:before{left:27px;right:auto;top:28px;bottom:28px;width:3px;height:auto;background:linear-gradient(180deg,var(--line2),var(--lamp),#FF2E6E)}
+ .lvl li{display:grid;grid-template-columns:56px 1fr;grid-template-rows:auto auto auto;column-gap:14px;text-align:left;align-items:center;padding:8px 0}
+ .lvl .n{grid-row:1/4}.lvl em{margin:0}.lvl b,.lvl small{grid-column:2}}
+.ptabs{display:flex;gap:6px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+.ptabs button{flex:none;font:700 14.5px Pretendard,sans-serif;padding:10px 16px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s}
+.ptabs button[aria-selected=true]{background:var(--lamp);border-color:var(--lamp);color:#1B1640}
+.plist{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+@media(min-width:900px){.plist{grid-template-columns:1fr 1fr}}
+.plist li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;border-radius:16px;background:rgba(36,31,99,.5);border:1px solid var(--line);animation:plIn .35s var(--ease) backwards}
+.plist li[hidden]{display:none}
+.plist li span{font-size:14.5px;color:var(--mute);line-height:1.5}
+.plist li span b{color:var(--ink)}
+.plist li strong{flex:none;max-width:52%;text-align:right;font-size:16px;line-height:1.35;color:var(--lamp)}
+.plist li.hot{background:linear-gradient(120deg,rgba(255,46,110,.18),rgba(91,72,214,.2));border-color:rgba(255,46,110,.45)}
+.plist li.hot strong{color:#fff}
+.plist li.go{justify-content:center;background:transparent;border-style:dashed}
+.plist li.go a{color:var(--lamp);font-weight:800;text-decoration:none}
+.plist a{color:var(--lamp)}
+@keyframes plIn{from{opacity:0;transform:translateY(8px)}}
+.fine2{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:4px;font-size:13.5px;color:var(--mute);line-height:1.6}
+.fine2 b{color:var(--ink)}.fine2 a{color:var(--lamp)}
+
 .fine{font-size:13.5px;color:var(--mute);margin-top:14px;max-width:60em}
 .fine a{color:var(--lamp)}
 
@@ -412,8 +430,6 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
  .sub{font-size:16px;line-height:1.7}
  h2.sh2{line-height:1.25}
  .fine,.rv-src,.legend,#dealNote span,.rv-row cite,.rvs cite,.post .ser,.calc-row label,.swipe-hint{font-size:14px}
- .perks .k{font-size:13.5px}
- .perks>div span{font-size:15px;line-height:1.6}
  .day small,.grid .h small{font-size:12px}
  button.cell s,button.cell .t{font-size:12px}
  .rv-row blockquote{font-size:16px;line-height:1.65}
@@ -561,27 +577,39 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
     </form>
   </div>
 
-  <div class="perk-head"><h3 class="disp">N CREW 혜택 한눈에</h3><div class="perk-nav"><button type="button" data-dir="-1" aria-label="이전 혜택">←</button><button type="button" data-dir="1" aria-label="다음 혜택">→</button></div></div>
-  <div class="perks" id="perks">
-    <div><span class="k">가입하면 · 루키</span><b>빈자리 특가 20%</b><span>3일 뒤부터 빈자리를 멤버가로. <b>당일엔 ⚡번개 1자리 35%</b></span></div>
-    <div><span class="k">2번 방문 · 레귤러</span><b>음료 2 + 물 2</b><span>올 때마다 1.5L 음료 2병과 물 2병 무료</span></div>
-    <div class="hot"><span class="k">N CREW 스탬프</span><b>3번 오면 바베큐 5인분 무료</b><span>어느 지점이든 3번 방문할 때마다 테라스 바베큐 무료권 1장. 퇴실 정산에서 자동으로 빠져요</span></div>
-    <div><span class="k">5번 방문 · 에이스</span><b>3시간 연장권</b><span>입실 전이나 퇴실 후로 3시간 더. 앞뒤 예약 때문에 못 쓰면 4만원 할인</span></div>
-    <div class="hot"><span class="k">10번 방문 · 레전드</span><b>모든 예약 20% + 통대관 무료</b><span>통대관 1회 무료 (금·토 제외, 금·토는 야간 예약하면 통대관으로 업그레이드) + 보증금 면제</span></div>
-    <div><span class="k">친구 초대</span><b>둘 다 2시간 연장권</b><span>친구가 첫 예약하면 초대한 사람과 친구 모두. 조기입실이나 퇴실 연장으로</span></div>
-    <div class="hot"><span class="k">초대왕 · VIP</span><b>10만원 할인권 + 매번 10%</b><span>내가 초대한 친구들이 5번 이상 이용하면 VIP로 승급 · <a href="me/#invite" style="color:var(--lamp);font-weight:800">내 초대 링크 받기 →</a></span></div>
-    <div><span class="k">나라사랑 애국자</span><b>군인 첫 예약 5만원 할인</b><span>사진 한 장으로 온라인 인증(AI 자동 확인)하면 배지 + 방문마다 음료·물 2병. <a href="for/military/">인증 방법</a></span></div>
-    <div><span class="k">플레이앤 리그</span><b>1위 평일 야간 무료</b><span>5명이 롤 자유랭크 연승 도전. 지점별 1위 팀은 평일 야간 패키지 무료 (5인). <a href="league/">순위 보기</a></span></div>
-    <div><span class="k">크루장</span><b>음료 4병 + 1시간 연장</b><span>같이 온 친구 3명이 그날 내 초대 링크로 가입하면</span></div>
-    <div><span class="k">14일 재방문</span><b>3만원 할인권</b><span>다녀간 날부터 14일 안에 다시 예약하면 자동으로 들어와요</span></div>
-    <div><span class="k">평일 주간 스탬프</span><b>3번 오면 1번 무료</b><span>평일 주간 패키지 3번 이용할 때마다 무료권 1장</span></div>
-    <div><span class="k">3개 지점 정복</span><b>5만원 할인권</b><span>홍대·연남·연트럴을 모두 다녀가면</span></div>
-    <div><span class="k">생일</span><b>3만원 할인권</b><span>생일 등록하면 2주 전에 자동 지급. 케이크 보관·초 준비까지</span></div>
-    <div class="hot"><span class="k">플레이앤 패스</span><b>50만원 충전 → 60만원</b><span>미리 충전하고 예약할 때 잔액으로 결제</span></div>
-    <div><span class="k">리그 도전</span><b>5연승이면 음료 2병</b><span>순위와 상관없이 5연승 이상 기록한 팀원 모두</span></div>
-    <div><span class="k">친구 초대 · VIP</span><b>초대할수록 커져요</b><span>친구 첫 예약 → 둘 다 2시간 연장권, 친구들 5번 이용 → VIP</span></div>
+  <div class="perk-head"><h3 class="disp">N CREW 혜택 한눈에</h3></div>
+  <p class="perk-lead">방문할수록 등급이 올라가요.</p>
+  <ol class="lvl" id="lvl">
+    <li><span class="n">가입</span><em>루키</em><b>빈자리 특가 20%</b><small>당일 ⚡번개 1자리 35%</small></li>
+    <li><span class="n">2번</span><em>레귤러</em><b>음료 2 + 물 2</b><small>올 때마다 1.5L 음료·물 2병씩</small></li>
+    <li><span class="n">5번</span><em>에이스</em><b>3시간 연장권</b><small>못 쓰면 4만원 할인</small></li>
+    <li class="lgd"><span class="n">10번</span><em>레전드</em><b>모든 예약 20%</b><small>+ 통대관 1회 무료 · 보증금 면제</small></li>
+  </ol>
+  <p class="perk-lead" style="margin-top:30px;font-weight:700;color:var(--ink)">등급과 별개로 더 받는 혜택</p>
+  <div class="ptabs" role="tablist" id="ptabs">
+    <button role="tab" aria-selected="true" data-g="stamp">🔁 자주 오면</button><button role="tab" aria-selected="false" data-g="friend">👯 친구랑</button><button role="tab" aria-selected="false" data-g="day">🎂 특별한 날</button><button role="tab" aria-selected="false" data-g="pass">💳 충전</button>
   </div>
-  <p class="fine"><b style="color:var(--lamp)">할인·쿠폰은 playn.kr 홈페이지 예약에서만 적용돼요</b> (<a href="me/">내 N CREW → 멤버 예약하기</a> 또는 위 빈자리 보드). 할인은 한 예약에 가장 큰 것 1개만 적용돼요. 음료·물·연장권 같은 서비스는 네이버·스페이스클라우드 예약이어도 받을 수 있어요. 쿠폰은 받은 날부터 6개월 동안 쓸 수 있고, <a href="me/">내 N CREW</a>에서 확인할 수 있어요.</p>
+  <ul class="plist" id="perks">
+    <li data-g="stamp" class="hot"><span>어느 지점이든 <b>3번</b> 방문할 때마다</span><strong>바베큐 5인분 무료</strong></li>
+    <li data-g="stamp"><span>평일 주간 패키지 <b>3번</b> 이용하면</span><strong>1번 무료</strong></li>
+    <li data-g="stamp"><span>다녀간 날부터 <b>14일 안</b>에 다시 예약하면</span><strong>3만원 할인권</strong></li>
+    <li data-g="stamp"><span>홍대·연남·연트럴 <b>3개 지점</b>을 다 다녀가면</span><strong>5만원 할인권</strong></li>
+    <li data-g="friend" class="hot"><span>초대한 친구가 <b>첫 예약</b>하면</span><strong>둘 다 2시간 연장권</strong></li>
+    <li data-g="friend"><span>같이 온 친구 <b>3명</b>이 그날 내 링크로 가입하면</span><strong>음료 4병 + 1시간 연장</strong></li>
+    <li data-g="friend" class="hot"><span>초대한 친구들이 <b>5번 이상</b> 이용하면 VIP</span><strong>10만원 할인권 + 매번 10%</strong></li>
+    <li data-g="friend" class="go"><a href="me/#invite">내 초대 링크 받기 →</a></li>
+    <li data-g="day"><span>생일 등록하면 <b>2주 전</b> 자동 지급</span><strong>3만원 할인권</strong></li>
+    <li data-g="day"><span>군인 사진 1장으로 <b>온라인 인증</b> · <a href="for/military/">방법</a></span><strong>첫 예약 5만원 할인</strong></li>
+    <li data-g="day"><span>플레이앤 리그 <b>지점별 1위</b> 팀 · <a href="league/">순위</a></span><strong>평일 야간 무료 (5인)</strong></li>
+    <li data-g="day"><span>리그에서 <b>5연승</b> 이상 기록하면</span><strong>팀원 모두 음료 2병</strong></li>
+    <li data-g="pass" class="hot"><span><b>50만원</b> 미리 충전하면</span><strong>60만원으로 써요</strong></li>
+    <li data-g="pass"><span>예약할 때 충전 <b>잔액</b>으로 결제해요</span><strong>보너스 10만원</strong></li>
+  </ul>
+  <ul class="fine2">
+    <li>💻 할인·쿠폰은 <b>playn.kr 예약</b>에서만 (<a href="me/">내 N CREW</a> 또는 위 빈자리 보드)</li>
+    <li>☝️ 할인은 한 예약에 <b>가장 큰 것 1개</b>만</li>
+    <li>🥤 음료·물·연장권은 네이버·스페이스클라우드 예약도 OK · 쿠폰은 <b>6개월</b> 동안</li>
+  </ul>
 </div></section>
 
 <section class="blk" id="branches"><div class="wrap">
@@ -850,8 +878,9 @@ if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduc
   const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{rootMargin:"0px 0px -8% 0px",threshold:.08});
   rv.forEach((el,i)=>{const sib=[...el.parentNode.children].filter(x=>x.classList.contains("rv"));el.style.transitionDelay=Math.min(sib.indexOf(el),5)*70+"ms";io.observe(el)});
 }else rv.forEach(el=>el.classList.add("in"));
-const pk=document.getElementById("perks");
-document.querySelectorAll(".perk-nav button").forEach(b=>b.onclick=()=>pk.scrollBy({left:+b.dataset.dir*pk.clientWidth*.8,behavior:"smooth"}));
+(function(){const tb=[...document.querySelectorAll("#ptabs button")],li=[...document.querySelectorAll("#perks li")];
+  const set=g=>{tb.forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g));li.forEach(l=>l.hidden=l.dataset.g!==g);if(window.pnTrack)pnTrack("perk_tab",{g})};
+  tb.forEach(b=>b.onclick=()=>set(b.dataset.g));li.forEach(l=>l.hidden=l.dataset.g!=="stamp")})();
 /* 모바일 하단 바: 가입 폼이 보이면 숨김 */
 const dock=document.getElementById("dock"),form=document.getElementById("joinForm");
 if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.classList.toggle("hide",es[0].isIntersecting),{threshold:.15}).observe(form);
