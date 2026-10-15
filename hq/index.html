@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Play N HQ 운영 관제실</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0E0C2C">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script src="icons.js"></script>
+<style>
+/* Play N HQ: 플레이앤 홈의 '루프탑 밤' 무드를 그대로 쓰는 관제실.
+   읽는 순서 = ① 전체 상태 한 줄 ② 오늘 숫자 5개 ③ 카테고리(브랜드) 카드 ④ 이슈 ⑤ 발행·성과 ⑥ 자동화 ⑦ 활동·할 일·스킬.
+   색 규칙: 앰버=강조 1개, 핑크=브랜드, 초록/주황/빨강=상태 전용(장식에 안 씀). 다크 고정(브랜드가 '밤'). */
+:root{
+  --deep:#0E0C2C;--night:#16133F;--panel:#1C1850;--panel2:#241F63;--line:rgba(166,162,214,.16);--line2:rgba(166,162,214,.3);
+  --ink:#F3F1FF;--mute:#B3AFDF;--dim:#8F8BC4;--lamp:#FFB547;--brand:#FF2E6E;
+  --ok:#3DDC97;--warn:#FFB547;--crit:#FF5A5F;--info:#8FA3FF;
+  --r:16px;--r-sm:10px;--ease:cubic-bezier(.16,1,.3,1);
+  --f-body:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-disp:"Black Han Sans",Pretendard,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:120px}
+body{background:var(--deep);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased;min-height:100vh;
+  background-image:radial-gradient(900px 500px at 85% -10%,rgba(255,181,71,.10),transparent 60%),radial-gradient(700px 500px at -10% 10%,rgba(255,46,110,.08),transparent 60%)}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:2px;border-radius:6px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* 상단바 */
+.top{position:sticky;top:0;z-index:20;background:rgba(14,12,44,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:58px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:8px}
+.logo b{font-family:var(--f-disp);font-weight:400;font-size:20px;letter-spacing:.5px}
+.logo span{white-space:nowrap;font-size:12px;color:var(--mute);border:1px solid var(--line2);border-radius:999px;padding:1px 8px}
+.live{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:pulse 2s infinite}
+.dot.off{background:var(--dim);animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+.btn-ghost{border:1px solid var(--line2);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mute)}
+.btn-ghost:hover{color:var(--ink);border-color:var(--mute)}
+
+/* 카테고리 탭 */
+.cats{position:sticky;top:calc(58px + env(safe-area-inset-top,0px));z-index:19;background:rgba(14,12,44,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.cats .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:10px}
+.cats .wrap::-webkit-scrollbar{display:none}
+.cat{text-decoration:none;display:flex;align-items:center;gap:7px;flex:none;padding:7px 13px 7px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mute);font-size:14px;font-weight:600;transition:.25s var(--ease)}
+.cat img,.cat .mono{width:22px;height:22px;border-radius:6px;flex:none}
+.cat:hover{color:var(--ink);border-color:var(--line2)}
+.cat.on{background:var(--ink);color:var(--deep);border-color:var(--ink)}
+.cat .n{min-width:18px;height:18px;border-radius:9px;background:var(--crit);color:#fff;font-size:11px;display:grid;place-items:center;padding:0 5px}
+.cat .n.w{background:var(--warn);color:#2A1A00}
+
+main{display:flex;flex-direction:column;gap:44px;padding-block:28px 80px}
+section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--ease) both}
+@keyframes rise{from{transform:translateY(10px)}}
+.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sh h2{font-family:var(--f-disp);font-weight:400;font-size:24px;letter-spacing:.3px}
+.sh .eye{font-size:12px;letter-spacing:.14em;color:var(--lamp);font-weight:700}
+.sh .meta{margin-left:auto;font-size:13px;color:var(--dim)}
+
+/* 상태 배너 */
+.status{border-radius:var(--r);padding:22px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border:1px solid var(--line2);background:linear-gradient(120deg,rgba(61,220,151,.16),rgba(61,220,151,.04))}
+.status.warn{background:linear-gradient(120deg,rgba(255,181,71,.18),rgba(255,181,71,.04))}
+.status.crit{background:linear-gradient(120deg,rgba(255,90,95,.2),rgba(255,90,95,.05))}
+.status .big{font-family:var(--f-disp);font-size:clamp(24px,4.4vw,36px);line-height:1.15;text-wrap:balance}
+.status .sub{color:var(--mute);font-size:14px}
+.status .ico{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;flex:none;background:var(--ok);color:#06281A}
+.status.warn .ico{background:var(--warn);color:#2A1A00}.status.crit .ico{background:var(--crit);color:#fff}
+.status .txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.status .go{border:1px solid var(--line2);border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
+
+/* KPI 띠 */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);background:var(--night);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.kpi{padding:16px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi:last-child{border-right:0}
+.kpi .l{font-size:12px;color:var(--mute);letter-spacing:.04em}
+.kpi .v{font-size:30px;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.kpi .s{font-size:12.5px;color:var(--dim)}
+.up{color:var(--ok)}.down{color:var(--crit)}
+@media (max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}.kpi{border-bottom:1px solid var(--line)}.kpi:nth-child(2n){border-right:0}.kpi:last-child{grid-column:1/-1}}
+
+/* 브랜드 카드 */
+.brands{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.bc{position:relative;text-decoration:none;color:inherit;text-align:left;background:linear-gradient(180deg,var(--panel),var(--night));border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:14px;transition:transform .35s var(--ease),border-color .35s}
+.bc:hover{transform:translateY(-3px);border-color:var(--line2)}
+.bc .hd{display:flex;align-items:center;gap:12px}
+.blogo{width:48px;height:48px;border-radius:13px;flex:none;object-fit:cover;background:var(--panel2)}
+.mono{display:grid;place-items:center;font-family:var(--f-disp);color:#fff}
+.bc h3{font-size:17px;font-weight:800;line-height:1.3}
+.bc .tag{font-size:12.5px;color:var(--mute)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{color:var(--ok);background:rgba(61,220,151,.12)}.pill.warn{color:var(--warn);background:rgba(255,181,71,.12)}.pill.crit{color:var(--crit);background:rgba(255,90,95,.14)}.pill.idle{color:var(--dim);background:rgba(143,139,196,.12)}
+.bc .hd .pill{margin-left:auto}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mini div{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 10px;min-width:0}
+.mini b{display:block;font-size:19px;font-weight:800;line-height:1.25}
+.mini span{font-size:11.5px;color:var(--mute);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plats{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pi{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.pi svg{width:16px;height:16px}
+.bc .more{margin-left:auto;font-size:13px;color:var(--lamp);font-weight:700}
+.bc .note{font-size:13px;color:var(--mute);border-top:1px dashed var(--line);padding-top:10px}
+
+/* 브랜드 상세 */
+.detail{background:var(--night);border:1px solid var(--line2);border-radius:var(--r);overflow:hidden}
+.dh{display:flex;align-items:center;gap:14px;padding:20px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:linear-gradient(120deg,rgba(255,181,71,.08),transparent)}
+.dh .blogo{width:56px;height:56px}
+.dh h2{font-family:var(--f-disp);font-weight:400;font-size:26px}
+.ptabs{display:flex;gap:4px;overflow-x:auto;padding:10px 14px;border-bottom:1px solid var(--line);scrollbar-width:none}
+.ptabs::-webkit-scrollbar{display:none}
+.pt{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;font-weight:700;font-size:14px;color:var(--mute);flex:none}
+.pt svg{width:17px;height:17px}
+.pt.on{background:var(--panel2);color:var(--ink)}
+.pbody{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.met{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.met .l{font-size:12.5px;color:var(--mute)}
+.met .v{font-size:26px;font-weight:800;line-height:1.2}
+.met .t{font-size:13px;color:var(--ink);overflow-wrap:anywhere}
+.met .f{font-size:11.5px;color:var(--dim)}
+.met.wide{grid-column:1/-1}
+.empty{grid-column:1/-1;border:1px dashed var(--line2);border-radius:var(--r-sm);padding:18px;color:var(--mute);font-size:14px}
+.empty b{color:var(--ink)}
+.plink{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap}
+.plink a{font-size:13px;color:var(--lamp);text-decoration:none;border:1px solid rgba(255,181,71,.35);border-radius:999px;padding:5px 12px}
+
+/* 이슈 */
+.issues{display:flex;flex-direction:column;gap:10px}
+.iss{display:grid;grid-template-columns:4px 1fr auto;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 16px 14px 0;align-items:start}
+.iss .bar{align-self:stretch;border-radius:0 3px 3px 0}
+.iss.crit .bar{background:var(--crit)}.iss.warn .bar{background:var(--warn)}.iss.info .bar{background:var(--info)}.iss.done .bar{background:var(--ok)}
+.iss .b{display:flex;flex-direction:column;gap:4px;min-width:0}
+.iss h4{font-size:15px;font-weight:700;line-height:1.4}
+.iss .m{font-size:12.5px;color:var(--dim);display:flex;gap:10px;flex-wrap:wrap}
+.iss .d{font-size:13.5px;color:var(--mute)}
+.iss .fix{font-size:13.5px;color:var(--ok)}
+.iss .act{font-size:12.5px;color:var(--mute);border:1px solid var(--line2);border-radius:999px;padding:4px 11px;white-space:nowrap}
+.iss.done{opacity:.85}
+details.res summary{cursor:pointer;color:var(--mute);font-size:14px;padding:6px 0;list-style:none}
+details.res summary::before{content:"▸ ";color:var(--lamp)}
+details.res[open] summary::before{content:"▾ "}
+
+/* 2열 */
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.box{background:var(--night);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.box h3{font-size:15px;font-weight:800;display:flex;gap:8px;align-items:center}
+.box h3 small{font-weight:500;color:var(--dim);font-size:12.5px;margin-left:auto}
+
+/* 타임라인 */
+.tl{display:flex;flex-direction:column}
+.tl li{list-style:none;display:grid;grid-template-columns:52px 14px 1fr;gap:10px;align-items:start;padding:7px 0}
+.tl time{font-size:13px;color:var(--mute);font-weight:700}
+.tl .c{width:10px;height:10px;border-radius:50%;margin-top:6px;border:2px solid var(--dim)}
+.tl .c.published{background:var(--ok);border-color:var(--ok)}.tl .c.ready{border-color:var(--lamp)}.tl .c.failed{background:var(--crit);border-color:var(--crit)}
+.tl .x{font-size:14px;line-height:1.45;min-width:0}
+.tl .x small{display:block;color:var(--dim);font-size:12px}
+
+/* 차트 */
+.spark{width:100%;height:120px;display:block}
+.spark text{fill:var(--dim);font-size:10px;font-family:var(--f-body)}
+.hbars{display:flex;flex-direction:column;gap:8px}
+.hb{display:grid;grid-template-columns:118px 1fr 50px;gap:10px;align-items:center;font-size:13px}
+.hb span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mute)}
+.track{height:9px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden}
+.track i{display:block;height:100%;border-radius:5px;background:var(--lamp);width:0;transition:width 1s var(--ease)}
+.track i.lo{background:var(--dim)}
+
+/* 표 */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-sm)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--mute);font-weight:600;background:rgba(255,255,255,.03);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td .why{display:block;color:var(--dim);font-size:12px}
+.v-터짐{color:var(--brand);background:rgba(255,46,110,.14)}.v-좋음{color:var(--ok);background:rgba(61,220,151,.12)}.v-보통{color:var(--mute);background:rgba(143,139,196,.12)}.v-부진{color:var(--crit);background:rgba(255,90,95,.12)}.v-측정중{color:var(--info);background:rgba(143,163,255,.12)}
+.review{font-size:13.5px;color:var(--mute);white-space:pre-wrap;line-height:1.7;max-height:260px;overflow:auto}
+
+/* 자동화 */
+.cronlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:8px}
+.cr{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cr .t{display:flex;gap:8px;align-items:center;font-size:13.5px;font-weight:700}
+.cr .t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cr .t small{margin-left:auto;color:var(--dim);font-weight:500;font-size:12px;white-space:nowrap}
+.runs{display:flex;gap:2px;height:22px}
+.runs i{flex:1;border-radius:2px;background:var(--ok);opacity:.85}
+.runs i.f{background:var(--crit);opacity:1}.runs i.p{background:var(--dim);opacity:.5}.runs i.e{background:rgba(255,255,255,.06)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--dim);flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--ok)}
+.legend .f::before{background:var(--crit)}.legend .p::before{background:var(--dim)}
+
+/* 활동·할 일 */
+.feed{display:flex;flex-direction:column;max-height:520px;overflow:auto}
+.fi{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.fi:last-child{border-bottom:0}
+.av{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800}
+.av.claude{background:rgba(217,119,87,.2);color:#F0A48A}.av.gpt{background:rgba(61,220,151,.15);color:var(--ok)}.av.auto{background:rgba(143,163,255,.15);color:var(--info)}
+.fi p{font-size:13.5px;line-height:1.5;overflow-wrap:anywhere}
+.fi small{font-size:12px;color:var(--dim)}
+.todo{display:flex;flex-direction:column;gap:8px}
+.td{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px}
+.td input{width:20px;height:20px;accent-color:var(--ok);flex:none;margin-top:2px}
+.td label{font-size:14px;line-height:1.5}
+.td.done label{color:var(--dim);text-decoration:line-through}
+
+/* 스킬 레이더 */
+.skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.sk{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.sk.pick{border-color:rgba(255,181,71,.55);background:linear-gradient(180deg,rgba(255,181,71,.09),var(--panel))}
+.sk .h{display:flex;gap:8px;align-items:center}
+.sk h4{font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.sk .st{margin-left:auto;font-size:12.5px;color:var(--lamp);font-weight:700;white-space:nowrap}
+.sk p{font-size:13px;color:var(--mute);line-height:1.55}
+.sk p b{color:var(--ink)}
+.sk .why{background:rgba(255,181,71,.08);border-radius:8px;padding:10px;color:var(--ink)}
+
+/* 로그인 */
+.gate{max-width:420px;margin:12vh auto;background:var(--night);border:1px solid var(--line2);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:14px}
+.gate h1{font-family:var(--f-disp);font-weight:400;font-size:28px}
+.gate input{font:inherit;color:var(--ink);background:var(--deep);border:1px solid var(--line2);border-radius:10px;padding:12px}
+.gate button{background:var(--lamp);color:#2A1A00;font-weight:800;border-radius:10px;padding:12px}
+.err{color:var(--crit);font-size:14px}
+.skel{background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.09),rgba(255,255,255,.04));background-size:200% 100%;animation:sk 1.4s infinite;border-radius:var(--r);height:120px}
+@keyframes sk{to{background-position:-200% 0}}
+footer{color:var(--dim);font-size:12.5px;padding-bottom:40px}
+@media (max-width:560px){.logo span{display:none}.live span{max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.iss{grid-template-columns:4px 1fr}.iss .act{grid-column:2;justify-self:start}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="gate" class="wrap" hidden>
+  <form class="gate" id="gateForm">
+    <h1>Play N HQ</h1>
+    <p style="color:var(--mute)">관리 화면(admin.html)과 같은 관리 키로 들어와요. 한 번 넣으면 이 기기에서 기억합니다.</p>
+    <input id="keyIn" type="password" autocomplete="current-password" placeholder="관리 키">
+    <button type="submit">들어가기</button>
+    <p class="err" id="gateErr" hidden></p>
+  </form>
+</div>
+
+<div id="app" hidden>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#all"><img src="img/playn.webp" alt="Play N"><b>HQ</b><span>운영 관제실</span></a>
+    <div class="live"><i class="dot" id="liveDot"></i><span id="liveTxt">연결 중</span></div>
+    <button class="btn-ghost" id="refresh" type="button">새로고침</button>
+  </div>
+</header>
+<nav class="cats" aria-label="카테고리"><div class="wrap" id="cats"></div></nav>
+
+<main class="wrap" id="main">
+  <div class="skel"></div><div class="skel" style="height:90px"></div>
+</main>
+<footer class="wrap">데이터: 수파베이스(10분 자동 감지) · PC 로그 수집(하루 16회) · Claude 예약 작업 점검(3시간) · 화면은 45초마다 갱신</footer>
+</div>
+
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq";
+const $=s=>document.querySelector(s), el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const H=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let KEY=(location.hash.match(/k=(\w+)/)||[])[1]||st.get("pn_admin")||"";
+if(/k=/.test(location.hash))history.replaceState(null,"",location.pathname);
+const fmt=n=>n==null||isNaN(n)?"–":Number(n).toLocaleString("ko-KR");
+const ago=t=>{if(!t)return"기록 없음";const s=(Date.now()-new Date(t))/1e3;if(s<60)return"방금";if(s<3600)return Math.floor(s/60)+"분 전";if(s<86400)return Math.floor(s/3600)+"시간 전";return Math.floor(s/86400)+"일 전"};
+const kst=t=>{const d=new Date(t);return d.toLocaleString("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:false})};
+const hm=t=>new Date(t).toLocaleTimeString("ko-KR",{timeZone:"Asia/Seoul",hour:"2-digit",minute:"2-digit",hour12:false});
+const ico=(k,size=16,color)=>{const i=(window.ICONS||{})[k];if(!i)return"";return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true"><path fill="${color||i.c}" d="${i.p}"/></svg>`};
+
+/* 브랜드·채널 구조 (카테고리) */
+const BRANDS=[
+ {id:"playn",name:"플레이앤",tag:"게임파티룸 3개 지점 · 홈페이지·인스타·유튜브·페북·스레드",logo:"img/playn.webp",
+  plats:[{id:"web",name:"홈페이지",icon:"web",url:"https://playn.kr/"},{id:"instagram",name:"인스타",icon:"instagram",url:"https://www.instagram.com/playn_no.1/"},{id:"youtube",name:"유튜브",icon:"youtube"},{id:"facebook",name:"페이스북",icon:"facebook"},{id:"threads",name:"스레드",icon:"threads"}]},
+ {id:"naver",name:"네이버 블로그",tag:"1호 살림보감 · 2호 생활정보 서랍 · 3호 오늘의 방법 + 쓰레드 3계정",mono:"N",monoBg:"#03C75A",
+  plats:[{id:"blog-salim",name:"1호 살림보감",icon:"naver",url:"https://blog.naver.com/spaceclean119"},{id:"blog-life",name:"2호 생활정보 서랍",icon:"naver",url:"https://blog.naver.com/dk22yoon"},{id:"blog-ch3",name:"3호 오늘의 방법",icon:"naver",url:"https://blog.naver.com/todaysmethod"},
+         {id:"threads-salim",name:"@salim.bogam",icon:"threads",url:"https://www.threads.net/@salim.bogam"},{id:"threads-life",name:"@life.drawer_kr",icon:"threads",url:"https://www.threads.net/@life.drawer_kr"},{id:"threads-ch3",name:"@todays.method",icon:"threads",url:"https://www.threads.net/@todays.method"}]},
+ {id:"saenghwal",name:"생활공략집",tag:"워드프레스 · 유튜브 쇼츠 · 인스타 · 페북",logo:"img/saenghwal.webp",
+  plats:[{id:"wordpress",name:"워드프레스",icon:"wordpress",url:"https://gongryakzip.com/"},{id:"youtube",name:"유튜브",icon:"youtube"},{id:"shorts",name:"쇼츠 대기열",icon:"shorts"},{id:"instagram",name:"인스타",icon:"instagram",url:"https://www.instagram.com/saenghwal.gongryak/"},{id:"facebook",name:"페이스북",icon:"facebook"}]},
+ {id:"hanta",name:"한타BGM",tag:"게임 플레이리스트 · 유튜브 · 인스타",mono:"한타",monoBg:"linear-gradient(135deg,#6B2BD9,#FF2E6E)",
+  plats:[{id:"youtube",name:"유튜브",icon:"youtube"},{id:"instagram",name:"인스타 @hantabgm",icon:"instagram",url:"https://www.instagram.com/hantabgm/"}]},
+ {id:"yeokjeon",name:"역전실록",tag:"역전 실화 다큐 쇼츠 · 유튜브 · 인스타 · 틱톡",logo:"img/yeokjeon.webp",
+  plats:[{id:"youtube",name:"유튜브",icon:"youtube"},{id:"instagram",name:"인스타",icon:"instagram"},{id:"tiktok",name:"틱톡",icon:"tiktok"},{id:"clip",name:"네이버 클립",icon:"naver"}]},
+ {id:"lab",name:"실험 채널",tag:"지롱이 · 범인은 · 힉스필드 광고 실험",mono:"LAB",monoBg:"linear-gradient(135deg,#1F5FD1,#3DDC97)",
+  plats:[{id:"jirong",name:"지롱이 인스타",icon:"instagram",url:"https://www.instagram.com/jirongejirong/"},{id:"jirong-yt",name:"안보면 후회하지롱",icon:"youtube"},{id:"beomin",name:"범인은",icon:"web"},{id:"higgs",name:"힉스필드 실험",icon:"web"}]},
+];
+const SYS={id:"system",name:"자동화·시스템"};
+const METRIC_LABEL={visitors_total:"누적 방문",posts:"글 수",published_today:"오늘 예약 발행",posts_today:"오늘 발행",views_recent15:"최근 15개 글 조회 합",top_post:"최고 조회 글",
+ subscribers:"구독자",views_total:"누적 조회",videos:"영상 수",uploads_today:"오늘 업로드",hold:"HOLD(보류)",folders:"제작 폴더",topics_todo:"남은 주제",topics_done:"발행한 주제",uploads_total:"누적 업로드"};
+
+let DATA=null, VIEW="all", PTAB={}, lastOk=0;
+const metrics=(b,ch)=>(DATA?.board?.metrics||[]).filter(m=>m.brand===b&&(!ch||m.channel===ch));
+const mv=(b,ch,k)=>{const m=metrics(b,ch).find(x=>x.metric===k);return m||null};
+const issuesOf=b=>(DATA?.board?.issues||[]).filter(i=>i.status==="open"&&(b==="all"||i.brand===b));
+function brandState(b){const o=issuesOf(b);if(o.some(i=>i.severity==="crit"))return["crit","확인 필요"];if(o.some(i=>i.severity==="warn"))return["warn","주의"];
+  const hasData=b==="playn"||metrics(b).length||(b==="yeokjeon"&&DATA?.board?.yeokjeon?.queue);return hasData?["ok","정상"]:["idle","연결 대기"]}
+
+function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.logo}" alt="">`:`<span class="${cls} mono" style="background:${B.monoBg};font-size:${B.mono.length>2?14:B.mono.length>1?16:24}px">${H(B.mono)}</span>`}
+
+/* ── 렌더 ── */
+function renderCats(){const c=$("#cats");c.innerHTML="";
+  const all=issuesOf("all");
+  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"}];
+  items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;
+    const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
+    const crit=o.filter(i=>i.severity==="crit").length, warn=o.filter(i=>i.severity==="warn").length;
+    a.innerHTML=(B.logo?`<img src="${B.logo}" alt="">`:`<span class="mono" style="background:${B.monoBg};font-size:${(B.mono||"").length>2?9:12}px">${H(B.mono)}</span>`)+H(B.name)+(crit?`<span class="n">${crit}</span>`:warn?`<span class="n w">${warn}</span>`:"");
+    c.appendChild(a)})}
+
+function countUp(root){root.querySelectorAll("[data-n]").forEach(e=>{const to=Number(e.dataset.n);if(isNaN(to))return;
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches||e.dataset.done){e.textContent=fmt(to);return}
+  const t0=performance.now(),d=700;e.dataset.done=1;const step=t=>{const p=Math.min(1,(t-t0)/d);e.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})}
+const N=v=>v==null?"–":`<span class="num" data-n="${v}">${fmt(v)}</span>`;
+
+function statusBanner(scope){const o=issuesOf(scope),c=o.filter(i=>i.severity==="crit").length,w=o.filter(i=>i.severity==="warn").length;
+  const cls=c?"crit":w?"warn":"";const big=c?`확인 필요 ${c}건${w?` · 주의 ${w}건`:""}`:w?`주의 ${w}건, 나머지는 정상`:"모든 자동화 정상 운영 중";
+  const top=o[0];const sub=top?`가장 급한 것: ${H(top.title)}`:"새 문제가 생기면 여기 바로 떠요.";
+  return `<div class="status ${cls}"><div class="ico">${c?"!":w?"!":"✓"}</div><div class="txt"><div class="big">${big}</div><div class="sub">${sub}</div></div>${o.length?`<a class="go" href="#issues">이슈 보기</a>`:""}</div>`}
+
+function kpiStrip(){const b=DATA.board,p=b.playn;const todayPosts=(p.today_posts||[]).filter(x=>x.status==="published").length;
+  const blogPub=mv("naver","blog","published_today")?.value??null, ytUp=mv("saenghwal","youtube","uploads_today")?.value??null;
+  const thToday=["salim","life","ch3"].reduce((s,c)=>s+(mv("naver","threads-"+c,"posts_today")?.value||0),0);
+  const pubAll=todayPosts+(blogPub||0)+(ytUp||0)+thToday;
+  const open=issuesOf("all").length, todos=(b.todos||[]).filter(t=>!t.done).length;
+  const v14=p.visitors14||[], y=v14.length>1?v14[v14.length-2].u:null;
+  return `<div class="kpis">
+   <div class="kpi"><span class="l">지금 홈페이지</span><span class="v">${N(p.live5)}</span><span class="s">최근 5분 접속</span></div>
+   <div class="kpi"><span class="l">오늘 방문자 (playn.kr)</span><span class="v">${N(p.today)}</span><span class="s">어제 ${fmt(y)}명</span></div>
+   <div class="kpi"><span class="l">오늘 발행</span><span class="v">${N(pubAll)}</span><span class="s">인스타 ${todayPosts} · 블로그 ${fmt(blogPub)} · 쓰레드 ${thToday} · 쇼츠 ${fmt(ytUp)}</span></div>
+   <div class="kpi"><span class="l">열린 이슈</span><span class="v ${open?"down":"up"}">${N(open)}</span><span class="s">해결 기록 ${(b.issues||[]).filter(i=>i.status==="resolved").length}건 (14일)</span></div>
+   <div class="kpi"><span class="l">사장님 할 일</span><span class="v">${N(todos)}</span><span class="s">로그인·결정만</span></div></div>`}
+
+function brandCard(B){const [s,lab]=brandState(B.id);const k=brandKpis(B.id);
+  const a=el("a","bc");a.href="#"+B.id;
+  a.innerHTML=`<div class="hd">${logoHTML(B)}<div><h3>${H(B.name)}</h3><div class="tag">${H(B.tag)}</div></div><span class="pill ${s}"><i></i>${lab}</span></div>
+   <div class="mini">${k.map(x=>`<div><b>${x.v}</b><span>${H(x.l)}</span></div>`).join("")}</div>
+   <div class="plats">${B.plats.map(p=>`<span class="pi" title="${H(p.name)}">${ico(p.icon)}</span>`).join("")}<span class="more">자세히 →</span></div>
+   ${issuesOf(B.id)[0]?`<div class="note">⚠ ${H(issuesOf(B.id)[0].title)}</div>`:""}`;
+  return a}
+
+function brandKpis(id){const b=DATA.board,p=b.playn;
+  if(id==="playn")return[{l:"오늘 방문",v:N(p.today)},{l:"N CREW",v:N(p.members)},{l:"예약 14일",v:N(p.res_upcoming)}];
+  if(id==="naver"){const tot=["salim","life","ch3"].reduce((s,c)=>s+(mv("naver","blog-"+c,"visitors_total")?.value||0),0);
+    const th=["salim","life","ch3"].reduce((s,c)=>s+(mv("naver","threads-"+c,"views_recent15")?.value||0),0);
+    return[{l:"블로그 누적 방문",v:N(tot||null)},{l:"오늘 예약 발행",v:N(mv("naver","blog","published_today")?.value)},{l:"쓰레드 최근 조회",v:N(th||null)}]}
+  if(id==="saenghwal")return[{l:"유튜브 구독",v:N(mv("saenghwal","youtube","subscribers")?.value)},{l:"WP 발행 글",v:N(DATA.wp?.total)},{l:"쇼츠 HOLD",v:N(mv("saenghwal","shorts","hold")?.value)}];
+  if(id==="yeokjeon"){const q=b.yeokjeon?.queue||{};return[{l:"인스타 게시",v:N(q.published||0)},{l:"인스타 대기",v:N(q.ready||0)},{l:"유튜브 업로드",v:N(mv("yeokjeon","youtube","uploads_total")?.value)}]}
+  if(id==="hanta")return[{l:"유튜브",v:"연결 대기"},{l:"인스타",v:"연결 대기"},{l:"공개 영상",v:"–"}];
+  return[{l:"지롱이",v:"운영 중"},{l:"범인은",v:"준비"},{l:"힉스필드",v:"실험"}]}
+
+function metCard(l,v,sub,f){return `<div class="met"><span class="l">${H(l)}</span><span class="v">${v}</span>${sub?`<span class="t">${sub}</span>`:""}${f?`<span class="f">${f}</span>`:""}</div>`}
+function genericMetrics(b,ch){const ms=metrics(b,ch);if(!ms.length)return"";return ms.map(m=>metCard(METRIC_LABEL[m.metric]||m.metric,m.value!=null?N(m.value):"–",m.text_value?H(m.text_value):"",`${ago(m.at)} 갱신 · ${m.source==="pc"?"PC 로그":m.source||""}`)).join("")}
+const emptyBox=(t)=>`<div class="empty">${t}</div>`;
+
+function platformBody(B,P){const b=DATA.board,p=b.playn;let h="";
+  if(B.id==="playn"){
+    if(P.id==="web"){h+=metCard("지금 접속",N(p.live5),"최근 5분")+metCard("오늘 방문자",N(p.today),`페이지뷰 ${fmt(p.today_pv)}`)+metCard("N CREW",N(p.members),`7일 +${fmt(p.members7)}`)+metCard("예약 (오늘)",N(p.res_today),`앞으로 14일 ${fmt(p.res_upcoming)}건 · 7일 새 예약 ${fmt(p.res_new7)}`);
+      h+=`<div class="met wide"><span class="l">방문자 14일</span>${spark(p.visitors14||[])}</div>`;
+      h+=`<div class="met wide"><span class="l">유입 경로 (7일, 사람 수)</span><div class="hbars">${hbars((p.sources7||[]).map(s=>({l:({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[s.src]||s.src,v:s.n})))}</div></div>`}
+    else if(P.id==="instagram"){const q=p.queue||{};h+=metCard("게시 완료",N(q.published),"전체")+metCard("발행 대기",N(q.ready),"예약됨")+metCard("초안",N(q.draft),"승인 전")+metCard("7일 조회",N(p.ch7?.ig),`공유 ${fmt(p.ch7?.shares)}`)}
+    else{const k={youtube:"yt",facebook:"fb",threads:"th"}[P.id];h+=metCard("7일 조회 합",N(p.ch7?.[k]),"릴스 자동 동시 발행분")+emptyBox("릴스가 인스타에 올라가면 이 채널에도 자동으로 같이 올라가요. 편별 조회는 아래 <b>발행·성과</b> 표에 있어요.")}
+  } else if(B.id==="saenghwal"&&P.id==="wordpress"){const w=DATA.wp||{};
+    h+=metCard("공개 글",N(w.total),"gongryakzip.com 실시간")+metCard("남은 주제",N(mv("saenghwal","wordpress","topics_todo")?.value),"topics.json")+((w.posts||[]).map(x=>`<div class="met wide"><span class="l">최근 글 · ${H((x.date||"").slice(5,10))}</span><a class="t" href="${H(x.link)}" target="_blank" rel="noopener">${H(x.title)}</a></div>`).join(""));
+  } else if(B.id==="yeokjeon"&&P.id==="instagram"){const y=b.yeokjeon||{};
+    h+=metCard("게시",N(y.queue?.published||0))+metCard("대기",N(y.queue?.ready||0))+(y.recent||[]).map(r=>`<div class="met wide"><span class="l">#${r.id} · ${r.publish_at?kst(r.publish_at):""}</span><span class="t">${r.status==="published"?`<a href="${H(r.permalink)}" target="_blank" rel="noopener">게시물 보기</a>`:r.status==="ready"?"발행 대기":H(r.status+" "+(r.error||""))}</span></div>`).join("");
+  } else {const ch=P.id;h+=genericMetrics(B.id,ch);
+    if(!h)h=emptyBox(`<b>${H(P.name)}</b> 숫자는 아직 연결 전이에요. 연결되면 자동으로 채워집니다.${B.id==="hanta"?" (한타BGM은 유튜브·인스타 통계 연결을 다음 단계로 진행)":""}`)}
+  const issues=issuesOf(B.id).filter(i=>!i.channel||P.name.includes(i.channel)||i.channel.includes(P.name.split(" ")[0]));
+  if(issues.length)h+=`<div class="met wide" style="border-color:rgba(255,90,95,.4)"><span class="l">이 채널 이슈</span>${issues.map(i=>`<span class="t">• ${H(i.title)}</span>`).join("")}</div>`;
+  if(P.url)h+=`<div class="plink"><a href="${H(P.url)}" target="_blank" rel="noopener">${H(P.name)} 열기 ↗</a></div>`;
+  return h}
+
+function detailView(B){const box=el("div","detail");const [s,lab]=brandState(B.id);
+  const cur=PTAB[B.id]||B.plats[0].id;const P=B.plats.find(x=>x.id===cur)||B.plats[0];
+  box.innerHTML=`<div class="dh">${logoHTML(B)}<div><h2>${H(B.name)}</h2><div class="tag" style="color:var(--mute);font-size:13.5px">${H(B.tag)}</div></div><span class="pill ${s}" style="margin-left:auto"><i></i>${lab}</span></div>
+   <div class="ptabs" role="tablist">${B.plats.map(p=>`<button class="pt${p.id===P.id?" on":""}" role="tab" aria-selected="${p.id===P.id}" data-p="${p.id}">${ico(p.icon,17)}${H(p.name)}</button>`).join("")}</div>
+   <div class="pbody">${platformBody(B,P)}</div>`;
+  box.querySelectorAll(".pt").forEach(t=>t.onclick=()=>{PTAB[B.id]=t.dataset.p;render()});
+  return box}
+
+function spark(arr){if(!arr.length)return"";const W=600,Hh=120,pad=22,max=Math.max(5,...arr.map(a=>a.u));
+  const x=i=>pad+i*(W-pad*2)/(arr.length-1||1),y=v=>Hh-18-(v/max)*(Hh-36);
+  const pts=arr.map((a,i)=>`${x(i).toFixed(1)},${y(a.u).toFixed(1)}`).join(" ");
+  const last=arr[arr.length-1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" role="img" aria-label="14일 방문자">
+   <line x1="${pad}" x2="${W-pad}" y1="${y(max)}" y2="${y(max)}" stroke="rgba(166,162,214,.14)"/><text x="${pad}" y="${y(max)-4}">${max}</text>
+   <polygon points="${x(0)},${Hh-18} ${pts} ${x(arr.length-1)},${Hh-18}" fill="rgba(255,181,71,.14)"/>
+   <polyline points="${pts}" fill="none" stroke="#FFB547" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
+   <circle cx="${x(arr.length-1)}" cy="${y(last.u)}" r="4" fill="#FFB547"/>
+   <text x="${pad}" y="${Hh-3}">${arr[0].d.slice(5)}</text><text x="${W-pad}" y="${Hh-3}" text-anchor="end">${last.d.slice(5)} · ${last.u}명</text></svg>`}
+function hbars(rows){if(!rows.length)return'<span style="color:var(--dim)">데이터 없음</span>';const max=Math.max(...rows.map(r=>r.v),1);
+  return rows.map(r=>`<div class="hb"><span>${H(r.l)}</span><div class="track"><i data-w="${(r.v/max*100).toFixed(1)}"${r.lo?' class="lo"':""}></i></div><span class="num" style="text-align:right">${H(r.t??fmt(r.v))}</span></div>`).join("")}
+
+function issueRow(i){const done=i.status==="resolved";const r=el("div","iss "+(done?"done":i.severity));
+  const br=[...BRANDS,SYS].find(b=>b.id===i.brand)?.name||i.brand;
+  r.innerHTML=`<i class="bar"></i><div class="b"><h4>${H(i.title)}</h4>
+   <div class="m"><span>${H(br)}${i.channel?" · "+H(i.channel):""}</span><span>${done?"해결 "+kst(i.resolved_at):"발생 "+kst(i.opened_at)}</span><span>${H({cron:"서버 감지",queue:"발행 큐",detect:"자동 감지",log:"발행 로그",pc:"PC 로그",claude:"Claude 점검",push:"보고"}[i.source]||i.source||"")}</span></div>
+   ${i.detail?`<div class="d">${H(i.detail)}</div>`:""}${done?`<div class="fix">✓ ${H(i.fix_note||"해결")} · 지금 정상</div>`:""}</div>
+   ${done?"":`<button class="act" type="button">해결로 표시</button>`}`;
+  const b=r.querySelector(".act");if(b)b.onclick=async()=>{b.disabled=true;b.textContent="처리 중";await post({action:"issue_resolve",id:i.id,note:"사장님이 확인 처리"});load()};
+  return r}
+
+function issuesSection(scope){const s=el("section");s.id="issues";
+  const all=(DATA.board.issues||[]).filter(i=>scope==="all"||i.brand===scope||(scope==="auto"&&i.brand==="system"));
+  const open=all.filter(i=>i.status==="open"),res=all.filter(i=>i.status==="resolved");
+  s.innerHTML=`<div class="sh"><span class="eye">ISSUES</span><h2>오류·이슈</h2><span class="meta">열림 ${open.length} · 14일 해결 ${res.length}</span></div>`;
+  const list=el("div","issues");if(!open.length)list.innerHTML=emptyBox("열린 이슈가 없어요. 문제가 생기면 10분 안에 여기 뜹니다.");open.forEach(i=>list.appendChild(issueRow(i)));s.appendChild(list);
+  if(res.length){const d=el("details","res");d.innerHTML=`<summary>해결된 기록 ${res.length}건 (무엇을 고쳤는지)</summary>`;const l=el("div","issues");res.forEach(i=>l.appendChild(issueRow(i)));d.appendChild(l);s.appendChild(d)}
+  return s}
+
+function publishSection(){const p=DATA.board.playn;const s=el("section");s.id="publish";
+  s.innerHTML=`<div class="sh"><span class="eye">PUBLISH & RESULTS</span><h2>발행과 성과</h2><span class="meta">플레이앤 릴스 기준</span></div>`;
+  const two=el("div","two");
+  const left=el("div","box");left.innerHTML=`<h3>오늘 발행 타임라인<small>${new Date().toLocaleDateString("ko-KR",{timeZone:"Asia/Seoul",month:"long",day:"numeric",weekday:"short"})}</small></h3>`;
+  const tl=el("ul","tl");const rows=[...(p.today_posts||[])];
+  if(!rows.length)tl.innerHTML=`<li><time>–</time><i class="c"></i><div class="x">오늘 예약된 게시물이 없어요</div></li>`;
+  rows.forEach(r=>tl.appendChild(el("li","",`<time>${hm(r.at)}</time><i class="c ${H(r.status)}"></i><div class="x">${H(r.title)}<small>${({published:"발행됨",ready:"예약됨",draft:"초안",failed:"실패",archived:"보관"})[r.status]||r.status}</small></div>`)));
+  left.appendChild(tl);
+  if((p.next_posts||[]).length){left.appendChild(el("h3","","다음 예약"));const t2=el("ul","tl");p.next_posts.forEach(r=>t2.appendChild(el("li","",`<time>${kst(r.at).replace(/\s/g," ")}</time><i class="c ready"></i><div class="x">${H(r.title)}</div>`)));left.appendChild(t2)}
+  const right=el("div","box");right.innerHTML=`<h3>시리즈별 공유율<small>공유 ÷ 도달, 30일</small></h3><div class="hbars">${hbars((p.series||[]).map(x=>({l:x.series,v:Number(x.share_rate)||0,t:(Number(x.share_rate)||0).toFixed(2)+"%",lo:(Number(x.share_rate)||0)<1})))}</div>`;
+  two.append(left,right);s.appendChild(two);
+  const tw=el("div","tw");tw.innerHTML=`<table><thead><tr><th>릴스</th><th>판정</th><th class="n">도달</th><th class="n">공유</th><th class="n">시청(초)</th><th class="n">유튜브</th><th class="n">페북</th><th class="n">스레드</th></tr></thead><tbody>${(p.reels||[]).map(r=>`<tr><td>${H(r.title)}<span class="why">${H(({discovery:"해외 발굴",coop_single:"협동 1개",news:"신작·소식",free:"무료",event:"이벤트",store:"매장",vs:"VS",price_single:"가격",esports:"e스포츠",patch:"패치"})[r.fmt]||r.fmt||"")} · 훅 "${H(r.hook||"")}" · 도달 ${r.reach_x??"–"}배 · 시청 ${r.watch_x??"–"}배</span></td><td><span class="pill v-${H(r.verdict)}">${H(r.verdict||"")}</span></td><td class="n">${fmt(r.reach)}</td><td class="n">${fmt(r.shares)}</td><td class="n">${r.watch_s??"–"}</td><td class="n">${fmt(r.yt_views)}</td><td class="n">${fmt(r.fb_views)}</td><td class="n">${fmt(r.th_views)}</td></tr>`).join("")}</tbody></table>`;
+  s.appendChild(tw);
+  if(p.review){const b=el("div","box");b.innerHTML=`<h3>왜 잘 됐고 왜 안 됐나<small>${H(p.review.d)} 아침 점검</small></h3><div class="review">${H(p.review.summary)}</div>`;s.appendChild(b)}
+  return s}
+
+function autoSection(){const b=DATA.board;const s=el("section");s.id="automation";
+  const tasks=metrics("system","claude-task");
+  s.innerHTML=`<div class="sh"><span class="eye">AUTOMATION</span><h2>자동화 상태</h2><span class="meta">서버 크론 ${b.cron?.length||0}개 · Claude 예약 ${tasks.length||"점검 대기"}</span></div>
+   <div class="legend"><span>성공</span><span class="f">실패</span><span class="p">진행·기타</span><span style="--x:0">왼쪽이 오래된 실행, 오른쪽이 최근</span></div>`;
+  const cl=el("div","cronlist");
+  (b.cron||[]).forEach(c=>{const runs=c.runs||[];const pad=Math.max(0,30-runs.length);const fail=runs.slice(-6).includes(0);
+    const r=el("div","cr");r.innerHTML=`<div class="t"><span class="pill ${fail?"crit":runs.length?"ok":"idle"}"><i></i></span><span>${H(c.name)}</span><small>${c.last_at?ago(c.last_at):"실행 전"} · ${H(c.schedule)}</small></div><div class="runs">${"<i class='e'></i>".repeat(pad)}${runs.map(v=>`<i class="${v===0?"f":v===2?"p":""}"></i>`).join("")}</div>`;cl.appendChild(r)});
+  s.appendChild(cl);
+  const t=el("div","box");t.innerHTML=`<h3>Claude 예약 작업<small>3시간마다 점검</small></h3>`+(tasks.length?`<div class="tw"><table><thead><tr><th>작업</th><th>마지막 실행</th><th>결과</th></tr></thead><tbody>${tasks.map(m=>`<tr><td>${H(m.text_value?.split("|")[0]||"")}</td><td>${H(m.text_value?.split("|")[1]||"")}</td><td>${H(m.text_value?.split("|")[2]||"")}</td></tr>`).join("")}</tbody></table></div>`:emptyBox("첫 점검이 돌면 Claude 예약 작업별 마지막 실행·결과가 여기 표로 떠요."));
+  s.appendChild(t);
+  const v=b.vault||{};const vb=el("div","box");vb.innerHTML=`<h3>${ico("obsidian",16)} 옵시디언 동기화</h3><p style="color:var(--mute);font-size:14px">마지막 PC 동기화 ${v.last_sync?kst(v.last_sync)+" ("+ago(v.last_sync)+")":"기록 없음"} · 반영 대기 노트 ${fmt(v.pending)}개</p>`;
+  s.appendChild(vb);return s}
+
+function activitySection(scope){const b=DATA.board;const s=el("section");s.id="activity";
+  s.innerHTML=`<div class="sh"><span class="eye">ACTIVITY & TODO</span><h2>작업 기록과 할 일</h2></div>`;
+  const two=el("div","two");
+  const left=el("div","box");left.innerHTML=`<h3>Claude·GPT·자동 작업 기록<small>최근 40건</small></h3>`;const f=el("div","feed");
+  (b.activity||[]).filter(a=>scope==="all"||a.brand===scope).forEach(a=>{const w=(a.who||"").toLowerCase();const k=w.includes("gpt")?"gpt":w.includes("claude")?"claude":"auto";
+    f.appendChild(el("div","fi",`<span class="av ${k}">${k==="gpt"?"GPT":k==="claude"?"C":"자동"}</span><div><p>${a.link?`<a href="${H(a.link)}" target="_blank" rel="noopener">${H(a.text)}</a>`:H(a.text)}</p><small>${kst(a.at)} · ${H(a.who||"")}</small></div>`))});
+  if(!f.children.length)f.innerHTML=emptyBox("기록이 아직 없어요.");left.appendChild(f);
+  const right=el("div","box");right.innerHTML=`<h3>사장님 할 일<small>로그인·결정만</small></h3>`;const td=el("div","todo");
+  (b.todos||[]).filter(t=>scope==="all"||t.brand===scope).forEach(t=>{const r=el("div","td"+(t.done?" done":""));const id="td"+t.id;
+    r.innerHTML=`<input type="checkbox" id="${id}" ${t.done?"checked":""}><label for="${id}">${H(t.text)}</label>`;
+    r.querySelector("input").onchange=async e=>{r.classList.toggle("done",e.target.checked);await post({action:"todo_done",id:t.id,done:e.target.checked})};td.appendChild(r)});
+  if(!td.children.length)td.innerHTML=emptyBox("지금은 사장님이 할 일이 없어요.");right.appendChild(td);
+  two.append(left,right);s.appendChild(two);return s}
+
+function skillsSection(){const s=el("section");s.id="skills";const sk=DATA.skills||[];
+  s.innerHTML=`<div class="sh"><span class="eye">SKILL RADAR</span><h2>스킬 레이더</h2><span class="meta">GitHub 인기 스킬 매일 수집 · ★ = 사장님 작업 추천</span></div>`;
+  const g=el("div","skills");
+  if(!sk.length)g.innerHTML=emptyBox("매일 아침 GitHub에서 추천 많이 받은 스킬을 모아 여기에 정리해요. 첫 수집이 끝나면 채워집니다.");
+  sk.forEach(k=>{const c=el("article","sk"+(k.pick?" pick":""));const dlt=k.stars_prev!=null&&k.stars!=null?k.stars-k.stars_prev:null;
+    c.innerHTML=`<div class="h">${ico("github",16,"#F3F1FF")}<h4>${k.pick?"★ ":""}${H(k.name)}</h4><span class="st">★ ${fmt(k.stars)}${dlt?` (+${fmt(dlt)})`:""}${k.rank?` · ${k.rank}위`:""}</span></div>
+     ${k.what?`<p><b>무엇:</b> ${H(k.what)}</p>`:""}${k.how?`<p><b>잘 쓰는 법:</b> ${H(k.how)}</p>`:""}${k.where_use?`<p><b>어디에:</b> ${H(k.where_use)}</p>`:""}
+     ${k.reviews?`<p><b>후기:</b> ${H(k.reviews)}</p>`:""}${k.good_for?`<p><b>꿀인 사람:</b> ${H(k.good_for)}</p>`:""}
+     ${k.pick&&k.pick_reason?`<p class="why"><b>내 작업에 쓰면:</b> ${H(k.pick_reason)}</p>`:""}
+     ${k.url?`<a href="${H(k.url)}" target="_blank" rel="noopener" style="font-size:13px;color:var(--lamp)">저장소 열기 ↗</a>`:""}`;g.appendChild(c)});
+  s.appendChild(g);return s}
+
+function render(){if(!DATA)return;renderCats();const m=$("#main");m.innerHTML="";
+  const B=BRANDS.find(b=>b.id===VIEW);
+  if(VIEW==="all"){
+    const s1=el("section");s1.innerHTML=statusBanner("all")+kpiStrip();m.appendChild(s1);
+    const s2=el("section");s2.innerHTML=`<div class="sh"><span class="eye">CHANNELS</span><h2>카테고리</h2><span class="meta">카드를 누르면 채널별로 나눠 보여줘요</span></div>`;
+    const g=el("div","brands");BRANDS.forEach(b=>g.appendChild(brandCard(b)));s2.appendChild(g);m.appendChild(s2);
+    m.appendChild(issuesSection("all"));m.appendChild(publishSection());m.appendChild(autoSection());m.appendChild(activitySection("all"));m.appendChild(skillsSection());
+  } else if(B){
+    const s1=el("section");s1.innerHTML=statusBanner(B.id);s1.appendChild(detailView(B));m.appendChild(s1);
+    m.appendChild(issuesSection(B.id));if(B.id==="playn")m.appendChild(publishSection());m.appendChild(activitySection(B.id));
+  } else if(VIEW==="auto"){m.appendChild(issuesSection("auto"));m.appendChild(autoSection())}
+  else if(VIEW==="skills"){m.appendChild(skillsSection())}
+  countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
+}
+
+/* ── 데이터 ── */
+const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크 연결이 끊겼어요"}));
+async function load(){const j=await post({action:"board"});
+  if(!j.ok){if(/관리 키/.test(j.error||"")){$("#app").hidden=true;$("#gate").hidden=false;if(KEY){$("#gateErr").hidden=false;$("#gateErr").textContent=j.error}return}
+    $("#liveDot").classList.add("off");$("#liveTxt").textContent="갱신 실패 · 다시 시도 중";return}
+  st.set("pn_admin",KEY);$("#gate").hidden=true;$("#app").hidden=false;DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick()}
+function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
+function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
+  if(["issues","publish","activity"].includes(h))return;render();window.scrollTo({top:0,behavior:"smooth"})}
+window.addEventListener("hashchange",route);
+$("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});
+$("#refresh").onclick=()=>{$("#liveTxt").textContent="갱신 중";load()};
+setInterval(()=>{if(!document.hidden)load()},45000);setInterval(tick,1000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-lastOk>30000)load()});
+VIEW=(location.hash.replace("#","")||"all");
+if(KEY)load();else{$("#gate").hidden=false}
+</script>
+</body>
+</html>
