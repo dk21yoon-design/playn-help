@@ -432,6 +432,25 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
  .only .o{scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;grid-template-columns:1fr;align-content:start}
  .only .o .go{display:none}
 }
+/* 2026-10-15: 실제 숫자 실시간 칩 · 이벤트 로테이터 · 빈자리 칸 순차 등장 · 카운트업 */
+.hpulse{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;min-height:34px}
+.hpulse span{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:#EAE8FF;background:rgba(255,255,255,.06);border:1px solid var(--line2);border-radius:999px;padding:7px 12px;animation:chipIn .5s var(--ease) backwards}
+.hpulse span:nth-child(2){animation-delay:.1s}.hpulse span:nth-child(3){animation-delay:.2s}
+.hpulse b{color:#fff;font-variant-numeric:tabular-nums}
+.hpulse .lv i{width:8px;height:8px;border-radius:50%;background:#2BE07A;animation:hping 1.8s infinite}
+@keyframes hping{0%{box-shadow:0 0 0 0 rgba(43,224,122,.7)}70%{box-shadow:0 0 0 8px rgba(43,224,122,0)}100%{box-shadow:0 0 0 0 rgba(43,224,122,0)}}
+@keyframes chipIn{from{opacity:0;transform:translateY(8px)}}
+.evrot{position:relative;margin-top:34px}
+.evrot .event{margin-top:0;position:absolute;inset:0 0 auto 0;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.evrot .event.on{position:relative;opacity:1;transform:none;pointer-events:auto}
+.evrot .event em{font-style:normal;font-weight:800;color:#2BE07A}
+.evrot .event.meet{background:linear-gradient(110deg,rgba(61,242,255,.18),rgba(255,46,110,.16));border-color:rgba(61,242,255,.4)}
+.evdots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.evdots button{width:7px;height:7px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.25);cursor:pointer;transition:width .3s,background .3s}
+.evdots button.on{width:20px;background:var(--lamp)}
+.grid .cell.pop{animation:cellIn .45s var(--ease) backwards;animation-delay:calc(var(--i)*18ms)}
+@keyframes cellIn{from{opacity:0;transform:scale(.85)}}
+.rating b .cu{font-size:inherit;color:inherit}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head>
@@ -451,14 +470,19 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
       <h1 class="disp rv"><span>이번 주,</span><span>비어있는 밤을</span><span class="lamp">먼저 드려요</span></h1>
       <p class="lead rv">홍대·연남 루프탑 게임파티룸. 고사양 PC와 프로 기어, 루프탑 바베큐까지. N&nbsp;CREW에게는 빈 날짜를 특가로 먼저 열어요.</p>
       <div class="cta rv"><a class="btn lamp" href="#deals">이번 주 빈자리 보기 <span class="ar">→</span></a><a class="btn ghost" href="#crew">N CREW 가입하기</a></div>
+      <div class="hpulse" id="hpulse" aria-live="polite"></div>
     </div>
     <div class="shots rv" aria-hidden="true">
       <div class="a"><img src="assets/home/hero.webp" alt="플레이앤 게임파티룸 실내, 게이밍 PC와 조명" width="900" height="675" fetchpriority="high"></div>
       <div class="b"><img src="assets/home/neon.webp" alt="플레이앤 네온 조명 아래 게임 공간" width="900" height="675" loading="lazy"></div>
-      <div class="rating"><b>★ 4.9</b><span>후기 285개</span></div>
+      <div class="rating"><b>★ <span class="cu" data-to="4.9" data-d="1">4.9</span></b><span>후기 <span class="cu" data-to="285">285</span>개</span></div>
     </div>
   </div>
-  <a class="event rv" href="worlds/"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span>10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
+  <div class="evrot rv" id="evrot">
+   <a class="event on" href="worlds/" data-track="home_ev_worlds"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span id="evW">10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
+   <a class="event meet" href="meet/" data-track="home_ev_meet"><b>🍾 롤드컵 밤샘 소셜링 · 10/24 토 연남루프탑</b><span id="evM">2:2 칼바람 · 바베큐 · 14명 한정</span><span class="go" aria-hidden="true">→</span></a>
+  </div>
+  <div class="evdots" id="evdots"><button class="on" aria-label="롤드컵 예언 이벤트"></button><button aria-label="소셜링 이벤트"></button></div>
 </div></section>
 <nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
   <a href="#events" class="ev" data-events-open>🎉 이벤트 <i>2</i></a><a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
@@ -705,14 +729,37 @@ function grid(){const g=$("grid");if(!D){return}
       if(s.free){free++;const b=document.createElement("button");b.className="cell"+(d.weekend?" lit":"")+(s.rate>0?" deal":" reg");b.type="button";
         b.setAttribute("aria-label",`${d.label} ${PK.find(p=>p[0]===k)[1]} ${s.deal?won(s.deal):"가격 문의"} 신청`);
         b.innerHTML=!s.deal?`<span class="p">빈자리</span><span class="t">가격 문의</span>`:s.rate>0?`<s>${won(s.regular)}</s><span class="p">${(s.deal/10000).toLocaleString()}만</span>${s.kind==="flash"?'<span class="t">⚡오늘 1자리</span>':""}`:`<span class="p">${(s.deal/10000).toLocaleString()}만</span><span class="t" style="color:var(--mute)">정가</span>`;
-        b.onclick=()=>openSheet(d,k,s);el.appendChild(b)}
+        b.onclick=()=>openSheet(d,k,s);b.classList.add("pop");b.style.setProperty("--i",el.children.length);el.appendChild(b)}
       else{const c=document.createElement("div");c.className="cell";c.textContent="마감";el.appendChild(c)}})});
   const dd=D.days.filter(d=>PK.some(([k])=>{const s=d.branches[cur][k];return s.free&&s.rate>0}));
   const note=$("dealNote");if(note){note.innerHTML=dd.length?`🔥 이번 주 ${SHORT[cur]} 특가 날짜: <b>${dd.map(d=>d.label).join(" · ")}</b> <span>(오늘~모레·토요일·금요일 밤은 정가)</span>`:`이번 주 ${SHORT[cur]}은 특가 칸이 없어요 <span>(오늘~모레·토요일·금요일 밤은 정가 · 다른 지점도 확인해 보세요)</span>`}
   g.innerHTML="";if(!free){g.innerHTML='<div class="empty">이번 주 '+SHORT[cur]+'은 빈자리가 없어요. 다른 지점을 확인해 보세요.</div>'}else g.appendChild(el);
   $("boardSub").textContent=D.rules&&D.rules.mode!=="classic"?`N CREW 멤버 특가: ${D.rules.early_from}일 뒤부터 빈자리 ${D.discount}% · 오늘은 ⚡번개 ${D.rules.flash_per_day}자리만 ${D.discount_today}% · 칸을 누르면 바로 예약 신청`:`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 예약 신청`;}
-fetch(API+"?deals=1").then(r=>r.json()).then(j=>{D=j;tabs();grid()}).catch(()=>{$("boardSub").textContent="빈자리를 불러오지 못했어요. 새로고침하거나 010-8339-5818로 문의해 주세요."});
+fetch(API+"?deals=1").then(r=>r.json()).then(j=>{D=j;tabs();grid();homePulse()}).catch(()=>{$("boardSub").textContent="빈자리를 불러오지 못했어요. 새로고침하거나 010-8339-5818로 문의해 주세요."});
 tabs();
+
+/* 실제 숫자 실시간 칩 + 이벤트 로테이터 (가짜 숫자 없음) */
+const HRM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let HP={live:0,today:0};
+function dealCount(){if(!D)return 0;let n=0;D.days.forEach(d=>BR.forEach(b=>PK.forEach(([k])=>{const s=d.branches[b]&&d.branches[b][k];if(s&&s.free&&s.rate>0)n++})));return n}
+function homePulse(){const c=[];if(HP.live>=2)c.push(`<span class="lv"><i></i>지금 <b>${HP.live}</b>명이 둘러보는 중</span>`);
+  const dn=dealCount();if(dn)c.push(`<span>🔥 이번 주 특가 빈자리 <b>${dn}</b>칸</span>`);
+  if(HP.today>=5)c.push(`<span>👀 오늘 <b>${HP.today}</b>명 방문</span>`);$("hpulse").innerHTML=c.join("")}
+function loadPulse(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track?pulse=/").then(r=>r.json()).then(r=>{if(r.ok){HP=r;homePulse()}}).catch(()=>{})}
+loadPulse();setInterval(loadPulse,60000);
+fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{if(!x.ok||!x.fan_total)return;
+  const top=Object.entries(x.fan||{}).sort((a,b)=>b[1]-a[1])[0];$("evW").innerHTML=(x.fan_total>=20?`지금까지 <em>${x.fan_total}표</em> · `:"")+`지금 1위 <em>${top?top[0]:"-"}</em> · 너의 픽은?`}).catch(()=>{});
+fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup?e=worlds1024").then(r=>r.json()).then(r=>{if(!r.ok||r.ev.status!=="open")return;const L=r.ev.left_f+r.ev.left_m;
+  $("evM").innerHTML=L?`여 <em>${r.ev.left_f}</em> · 남 <em>${r.ev.left_m}</em>자리 남음 · 2:2 칼바람 · 바베큐`:"자리 마감 · 대기 신청 가능"}).catch(()=>{});
+(function(){const ev=[...document.querySelectorAll("#evrot .event")],dt=[...document.querySelectorAll("#evdots button")];let i=0,t=null;
+  const show=n=>{i=n;ev.forEach((e,j)=>e.classList.toggle("on",j===i));dt.forEach((d,j)=>d.classList.toggle("on",j===i))};
+  const run=()=>{clearInterval(t);if(!HRM)t=setInterval(()=>show((i+1)%ev.length),5000)};
+  dt.forEach((d,j)=>d.onclick=()=>{show(j);run()});const box=$("evrot");box.onmouseenter=()=>clearInterval(t);box.onmouseleave=run;run()})();
+/* 숫자 카운트업 (화면에 들어올 때 한 번) */
+(function(){const els=document.querySelectorAll(".cu");if(HRM||!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;io.unobserve(en.target);const el=en.target,to=+el.dataset.to,dg=+(el.dataset.d||0),t0=performance.now();
+    const f=t=>{const k=Math.min(1,(t-t0)/900),v=to*(1-Math.pow(1-k,3));el.textContent=dg?v.toFixed(dg):Math.round(v);if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)}),{threshold:.5});
+  els.forEach(e=>io.observe(e))})();
 
 /* 신청 시트 */
 let sel=null,lastFocus=null;
