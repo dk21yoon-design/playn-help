@@ -278,6 +278,12 @@ def overlay_html(sc):
                  '<div class="vx num">VS</div>'
                  f'<div class="vt"><div class="vl"><img src="{img_uri(v.get("b"))}"></div><div class="vn">{H.escape(v.get("bn", ""))}</div></div></div>'
                  + (f'<div class="vtag">{mark(v["tag"])}</div>' if v.get('tag') else '') + '</div>')
+    # 서사형(2026-10-15 ggmag 레퍼런스): card=검은 화면 텍스트 카드, narr=흰 내레이션 자막(노란 caption=실제 보이스)
+    if sc.get('card'):
+        h.append('<div style="position:absolute;left:0;right:0;top:618px;height:720px;background:#05050A;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 90px">'
+                 f'<div style="font-size:54px;font-weight:700;line-height:1.5;color:#fff">{mark(sc["card"])}</div></div>')
+    if sc.get('narr'):
+        h.append(f'<div class="cap"><span style="color:#fff">{mark(sc["narr"])}</span></div>')
     if sc.get('caption'):
         h.append(f'<div class="cap"><span>{mark(sc["caption"])}</span></div>')
     if sc.get('review'):
@@ -303,6 +309,10 @@ def overlay_html(sc):
             h.append(f'<div class="say">{mark(sc["line"])}</div>')
         if sc.get('sub'):
             h.append(f'<div class="sub">{mark(sc["sub"])}</div>')
+        # 고정 모집 바 (spec["bar"]): 영상 아래 빈 공간에 매 장면 같은 문구
+        if spec.get('bar') and not (sc.get('name') or sc.get('line') or sc.get('sub') or sc.get('chips')):
+            h.append(f'<div style="margin-top:24px;font-size:30px;font-weight:700;letter-spacing:4px;color:#FF6E9A">{H.escape(spec["bar"].get("k", ""))}</div>'
+                     f'<div style="font-size:58px;font-weight:900;letter-spacing:-1px;color:#fff">{mark(spec["bar"].get("t", ""))}</div>')
     h.append('</div>')
     # 넘치면 글자 크기 자동 축소 (겹침 방지)
     h.append("""<script>
