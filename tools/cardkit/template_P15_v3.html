@@ -1,0 +1,163 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* Play N 카드뉴스 v3 (2026-10-15): 제목 = 여기어때 잘난체(브랜드 폰트), 본문 = Pretendard · 상단 글 / 하단 사진 분할 · 키워드 형광 박스 */
+@font-face{font-family:Jalnan;src:url(jalnan.woff) format("woff")}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:Pretendard,sans-serif;color:#F5F3FF;word-break:keep-all}
+:root{--bg:#0B0A1C;--panel:#17153A;--line:#2E2A5E;--red:#FF3355;--lamp:#FFC24B;--green:#2BE07A;--mute:#ABA7D3}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--bg);margin-bottom:20px}
+.top{position:absolute;left:84px;right:84px;top:86px;display:flex;justify-content:space-between;align-items:center;font-size:26px;font-weight:700;color:var(--mute);letter-spacing:-.01em}
+.top b{color:#fff}
+.logo{height:40px}
+.pill{display:inline-block;font-weight:800;font-size:32px;letter-spacing:-.02em;padding:12px 26px;border-radius:999px;background:var(--red);color:#fff}
+.t{font-family:Jalnan,sans-serif;font-weight:400;letter-spacing:-.01em;line-height:1.3}
+.hl{display:inline-block;background:var(--lamp);color:#141226;padding:.04em .16em 0;border-radius:.14em;line-height:1.12;margin:.04em 0}
+.q{color:var(--red)}
+.b{font-size:38px;font-weight:600;line-height:1.5;letter-spacing:-.02em;color:#DEDBFA}
+.b strong{color:#fff;font-weight:800}
+.pg{position:absolute;left:84px;bottom:70px;font-size:26px;font-weight:700;color:var(--mute)}
+.photo{position:absolute;left:60px;right:60px;bottom:60px;border-radius:36px;background-size:cover;background-position:center;overflow:hidden}
+.photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,28,.0) 50%,rgba(11,10,28,.75))}
+.list{display:grid;gap:20px}
+.it{display:flex;gap:26px;align-items:center;background:var(--panel);border:2px solid var(--line);border-radius:28px;padding:30px 34px}
+.it .n{flex:none;width:72px;height:72px;border-radius:22px;display:grid;place-items:center;font-family:Jalnan;font-size:40px;background:var(--lamp);color:#141226}
+.it h4{font-size:44px;font-weight:800;letter-spacing:-.03em}
+.it p{font-size:30px;color:var(--mute);margin-top:6px;font-weight:600;letter-spacing:-.02em}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cmp>div{border-radius:30px;padding:38px 34px}
+.cmp small{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.cmp .v{font-family:Jalnan;font-size:92px;margin:18px 0 20px;line-height:1}
+.cmp p{font-size:31px;line-height:1.55;font-weight:600;letter-spacing:-.02em}
+.ck{display:grid;gap:22px}
+.ck div{display:flex;gap:22px;align-items:flex-start;font-size:40px;font-weight:700;line-height:1.38;letter-spacing:-.025em}
+.ck i{flex:none;width:54px;height:54px;border-radius:14px;background:var(--green);position:relative;margin-top:4px}
+.ck i:after{content:"";position:absolute;left:18px;top:7px;width:13px;height:26px;border:solid #0B0A1C;border-width:0 6px 6px 0;transform:rotate(45deg)}
+.ck small{display:block;font-size:28px;color:var(--mute);font-weight:600;margin-top:4px}
+</style></head><body>
+
+<!-- 1. 표지: 상단 글 / 하단 사진 -->
+<div class="s" id="c1">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:178px">
+  <span class="pill">휴가 예정인 군인 필독</span>
+  <div class="t" style="font-size:96px;margin-top:34px;white-space:nowrap">자랑스러운 군인이<br><span class="hl">왜 돈 다 내고</span><br>놀아<span class="q">?</span></div>
+ </div>
+ <div class="photo" style="top:700px;background-image:url(o_1066879.jpg);background-position:center 35%">
+  <div style="position:absolute;left:40px;right:40px;bottom:36px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end">
+   <div style="font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.35">인증 사진 1장이면<br><span style="color:var(--lamp)">5만원 할인 + 2시간 더</span></div>
+   <div style="font-size:28px;font-weight:700;color:#fff;background:rgba(255,255,255,.16);padding:12px 20px;border-radius:999px">넘겨보기 →</div>
+  </div>
+ </div>
+</div>
+
+<!-- 2. 비교 -->
+<div class="s" id="c2">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <div class="t" style="font-size:92px">같은 방, 같은 날인데<br><span class="hl">이만큼</span> 달라요</div>
+  <div class="cmp" style="margin-top:60px">
+   <div style="background:#1A1834;border:2px dashed #4A4680"><small style="color:var(--mute)">그냥 예약하면</small><div class="v" style="color:#7F7BAE">정가</div><p style="color:#9C98C6">할인 없음<br>시간 그대로<br>음료 없음</p></div>
+   <div style="background:linear-gradient(160deg,rgba(255,51,85,.25),rgba(255,194,75,.12));border:3px solid var(--red)"><small style="color:var(--lamp)">군인 인증하고 예약하면</small><div class="v">-5만원</div><p>+ 2시간 더 놀기<br>+ 올 때마다 음료 2병</p></div>
+  </div>
+ </div>
+ <div class="pg">2 / 8</div>
+</div>
+
+<!-- 3. 받는 것 -->
+<div class="s" id="c3">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <div class="t" style="font-size:92px">인증 한 번에<br><span class="hl">3개</span> 다 받아요</div>
+  <div class="list" style="margin-top:60px">
+   <div class="it"><div class="n">1</div><div><h4>첫 예약 5만원 할인</h4><p>playn.kr 홈페이지 예약 1건</p></div></div>
+   <div class="it"><div class="n">2</div><div><h4>2시간 더 놀기</h4><p>조기입실이나 늦은퇴실 중 하나</p></div></div>
+   <div class="it"><div class="n">3</div><div><h4>올 때마다 음료 2병</h4><p>전역일까지 · 1.5L 음료·물 골라서</p></div></div>
+  </div>
+ </div>
+ <div class="pg">3 / 8</div>
+</div>
+
+<!-- 4. 반전 + 바베큐 안내 -->
+<div class="s" id="c4">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <span class="pill" style="background:var(--panel);border:2px solid var(--line)">근데 앞뒤로 예약이 차 있으면?</span>
+  <div class="t" style="font-size:96px;margin-top:30px">그날은<br>바베큐가 <span class="hl">공짜</span></div>
+  <div class="b" style="margin-top:22px">2시간을 못 늘리는 날엔 2시간권 대신<br><strong>바베큐 무료</strong>로 바꿔드려요</div>
+  <div style="margin-top:34px;display:flex;align-items:center;gap:22px;background:var(--panel);border:2px solid var(--line);border-radius:26px;padding:26px 30px">
+   <div style="font-size:30px;font-weight:700;color:var(--mute);letter-spacing:-.02em;line-height:1.4">원래 바베큐는<br><s style="font-size:44px;color:#fff;font-weight:900">1인 1만원</s></div>
+   <div style="font-size:30px;font-weight:700;line-height:1.45;letter-spacing:-.02em">숯·불판 <strong style="color:var(--lamp)">무제한</strong><br>맛있게 드실 것만 챙겨오세요</div>
+  </div>
+  <div style="margin-top:16px;font-size:30px;font-weight:700;letter-spacing:-.02em;color:#E6E3FF">🔥 군인 혜택 아니어도 <strong style="color:var(--lamp)">따로 신청</strong>할 수 있어요 · 예약할 때 말씀해 주세요</div>
+ </div>
+ <div class="photo" style="top:960px;bottom:60px;background-image:url(o_1124058.jpg)">
+  <div style="position:absolute;left:34px;right:34px;bottom:30px;z-index:2">
+   <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <span style="font-size:30px;font-weight:800;background:rgba(11,10,28,.82);padding:12px 20px;border-radius:999px">🛒 쿠팡 미리 주문 OK</span>
+    <span style="font-size:30px;font-weight:800;background:rgba(11,10,28,.82);padding:12px 20px;border-radius:999px">🧳 짐 미리 맡기기 OK</span>
+   </div>
+   <div class="t" style="font-size:52px;margin-top:16px;text-shadow:0 2px 14px rgba(0,0,0,.6)">휴가를 더 알차게!</div>
+  </div>
+ </div>
+</div>
+
+<!-- 5. 조건 -->
+<div class="s" id="c5">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <span class="pill">조건은 딱 하나</span>
+  <div class="t" style="font-size:100px;margin-top:34px">같이 온 사람<br><span class="hl">전원</span> N CREW 가입</div>
+  <div class="b" style="margin-top:34px">이름이랑 번호만 남기면 30초.<br>가입한 동기들도 다음부터<br><strong>홈페이지 할인</strong>을 같이 받아요.</div>
+  <div style="margin-top:70px;background:var(--panel);border-left:8px solid var(--lamp);border-radius:20px;padding:30px 34px">
+   <div style="font-size:36px;font-weight:700;line-height:1.5;letter-spacing:-.02em">“군대 동기들이랑 같이 왔는데<br>다들 정말 좋아했습니다!”</div>
+   <div style="font-size:26px;color:var(--mute);margin-top:10px;font-weight:600">연남루프탑점 실제 후기 ★5</div>
+  </div>
+ </div>
+ <div class="pg">5 / 8</div>
+</div>
+
+<!-- 6. 인증 방법 -->
+<div class="s" id="c6">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <div class="t" style="font-size:92px">인증은<br><span class="hl">사진 한 장</span>이면 끝</div>
+  <div class="list" style="margin-top:60px">
+   <div class="it"><div class="n">1</div><div><h4>N CREW 가입</h4><p>playn.kr에서 이름·번호만 · 30초</p></div></div>
+   <div class="it"><div class="n">2</div><div><h4>4자리 코드 + 신분증</h4><p>종이에 코드 적고 군 신분증 옆에서 찰칵</p></div></div>
+   <div class="it"><div class="n">3</div><div><h4>확인되면 바로 지급</h4><p>배지·5만원 할인권·2시간권이 내 N CREW로</p></div></div>
+  </div>
+  <div style="margin-top:26px;font-size:26px;color:var(--mute);font-weight:600">군번은 가려도 돼요 · 확인용 사진은 확인 후 삭제</div>
+ </div>
+ <div class="pg">6 / 8</div>
+</div>
+
+<!-- 7. 저장용 체크리스트 -->
+<div class="s" id="c7">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <span class="pill" style="background:var(--green);color:#0B0A1C">📌 저장해 두세요</span>
+  <div class="t" style="font-size:92px;margin-top:34px">휴가 전날<br><span class="hl">이것만</span> 확인</div>
+  <div class="ck" style="margin-top:54px">
+   <div><i></i><span>같이 갈 사람 전원 N CREW 가입</span></div>
+   <div><i></i><span>군인 인증 끝 (배지 떴는지)</span></div>
+   <div><i></i><span>playn.kr에서 예약<small>네이버·스페이스클라우드 예약엔 할인이 안 붙어요</small></span></div>
+   <div><i></i><span>2시간권 쓸 거면 호스트에게 미리 문자</span></div>
+  </div>
+ </div>
+ <div class="pg">7 / 8 · 할인은 합쳐서 최대 50% · 금·토는 가장 큰 할인 1개만</div>
+</div>
+
+<!-- 8. 보내기 -->
+<div class="s" id="c8">
+ <div class="top"><span><b>PLAY N</b> · 군인 혜택 가이드</span><img class="logo" src="logo.svg"></div>
+ <div style="position:absolute;left:84px;right:84px;top:180px">
+  <span class="pill">다음 휴가 언제야?</span>
+  <div class="t" style="font-size:104px;margin-top:34px">휴가 맞춘 동기한테<br><span class="hl">이거 보내</span></div>
+  <div class="b" style="margin-top:30px">인증은 <strong style="color:var(--green)">playn.kr/for/military</strong></div>
+ </div>
+ <div class="photo" style="top:760px;background-image:url(o_1043976.jpg)">
+  <div style="position:absolute;left:40px;right:40px;bottom:32px;z-index:2;font-size:23px;line-height:1.6;color:#E6E3FF;font-weight:600">5만원 할인은 1인 1회 · 2시간권은 앞뒤 예약에 따라 바베큐 무료로 바뀔 수 있어요 · 인증 정보가 사실과 다르면 혜택이 취소돼요</div>
+ </div>
+</div>
+</body></html>
