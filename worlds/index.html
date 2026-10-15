@@ -119,11 +119,32 @@ body{background:var(--bg)}
 .stp h3{margin:0;font-size:15px}.stp p{margin:3px 0 0;font-size:13.5px;color:#A9A4E0;line-height:1.55}
 .rules{font-size:13px;line-height:1.75;color:#A9A4E0}
 .legal{margin-top:14px;font-size:12px;color:#6F6AAB;line-height:1.6}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);background:#fff;color:#0B0920;font-weight:800;padding:12px 18px;border-radius:999px;transition:transform .3s;z-index:50}
-.toast.on{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);background:#fff;color:#0B0920;font-weight:800;padding:12px 18px;border-radius:999px;transition:transform .3s,opacity .3s;z-index:50;opacity:0;pointer-events:none}
+.toast.on{transform:translateX(-50%) translateY(-64px);opacity:1}
 @keyframes bl{50%{opacity:.25}}
 @keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
 .pop{animation:pop .35s}
+/* 2026-10-15: 픽 먼저 · 지역 탭 · 히어로 레이스 · 투표 버스트 · 실시간 방문 */
+.race{margin-top:12px;display:grid;gap:6px}
+.race .rr{display:grid;grid-template-columns:56px 1fr 40px;gap:8px;align-items:center;font-size:12.5px;font-weight:800}
+.race .rr u{height:8px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;text-decoration:none}
+.race .rr u i{display:block;height:100%;background:var(--tc);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.race .rr span:last-child{text-align:right;font-family:"Chakra Petch",sans-serif}
+.prize{display:inline-flex;gap:6px;align-items:center;margin-top:12px;background:rgba(245,200,107,.14);border:1px solid rgba(245,200,107,.5);color:#FFE7A8;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800}
+.rtabs{display:flex;gap:6px;overflow-x:auto;margin-top:14px;padding-bottom:2px;scrollbar-width:none}
+.rtabs button{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--edge);background:transparent;color:#D9D5FF;font:700 13px "Chakra Petch",Pretendard,sans-serif;cursor:pointer}
+.rtabs button.on{background:#fff;color:#0B0920;border-color:#fff}
+.tc.pend{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,200,107,.3)}
+.tc.pend:after{content:"확정 대기";position:absolute;top:10px;right:10px;font:700 10px Pretendard,sans-serif;background:var(--gold);color:#0B0920;padding:3px 7px;border-radius:6px}
+.burst{position:fixed;width:20px;height:20px;border-radius:50%;pointer-events:none;z-index:60;background:radial-gradient(circle,var(--tc) 0 30%,transparent 70%);animation:burst .7s ease-out forwards}
+@keyframes burst{to{transform:scale(18);opacity:0}}
+.tc{transition:transform .15s,border-color .2s,box-shadow .2s}.tc:active{transform:scale(.96)}
+.tc.flip{animation:flip .55s ease}
+@keyframes flip{0%{transform:perspective(600px) rotateY(0)}50%{transform:perspective(600px) rotateY(90deg)}100%{transform:perspective(600px) rotateY(0)}}
+.pulsew{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pulsew span{font-size:12.5px;font-weight:700;background:rgba(124,245,184,.1);border:1px solid rgba(124,245,184,.35);color:#C8FFE0;border-radius:999px;padding:5px 10px}
+.pendbar{margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(245,200,107,.12);border:1px solid rgba(245,200,107,.45);font-size:14px;line-height:1.5}
+@media (prefers-reduced-motion:reduce){.burst,.tc.flip,.pop{animation:none}.race .rr u i{transition:none}}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head><body>
@@ -133,6 +154,7 @@ body{background:var(--bg)}
   <section class="hero">
     <div class="k mono"><i></i>PLAY N PREDICTION ARENA · WORLDS 2026</div>
     <h1>롤드컵 우승,<br><em>먼저 예언한 사람</em>이<br>이긴다</h1>
+    <span class="prize">💰 나이트·통대관 팀은 맞히면 최대 10만원 페이백</span>
     <p>1인 1표로 우승팀을 찍어 두세요. 남들이 안 고른 팀을 맞힐수록 <b>상위 몇 % 예언자</b>가 돼요. 나이트·통대관 팀은 맞히면 <b>최대 10만원</b> 페이백까지.</p>
     <div class="cds">
       <div class="cd"><small>투표 마감까지</small><b class="mono" id="cdLock">--</b></div>
@@ -143,13 +165,26 @@ body{background:var(--bg)}
       <div class="stat"><small>지금 1위</small><b id="sTop">-</b></div>
       <div class="stat"><small>내 픽</small><b id="sMine">아직</b></div>
     </div>
-    <a class="go" href="#vote">🔮 지금 예언하러 가기</a>
+    <div class="race" id="race"></div>
+    <a class="go" href="#pick">🔮 우승팀 고르러 가기</a>
   </section>
   <div class="friend" id="friend" hidden></div>
 
+  <section class="sec" id="pick">
+    <div class="step mono">STEP 1 · 우승팀 선택</div>
+    <h2>누가 소환사의 컵을 들까?</h2>
+    <p class="sub">먼저 카드를 골라요. 번호는 다음 단계에서 한 번만 넣으면 돼요. 카드 아래 막대는 지금 득표율이에요.</p>
+    <div class="rtabs" id="rtabs"></div>
+    <div id="vTeams"></div>
+    <div class="ticket" id="ticket">
+      <img id="tkImg" alt="내 롤드컵 예언 카드">
+      <div class="tk-btns"><button class="a" id="tkShare">친구한테 공유</button><button class="b" id="tkSave">카드 저장</button></div>
+    </div>
+  </section>
+
   <section class="sec" id="vote">
-    <div class="step mono">STEP 1 · 본인 확인</div>
-    <h2>N CREW 번호로 입장</h2>
+    <div class="step mono">STEP 2 · 번호로 확정</div>
+    <h2>N CREW 번호로 예언 확정</h2><div class="pendbar" id="pendBar" hidden></div>
     <p class="sub">투표는 N CREW 멤버 1인 1표예요. 멤버가 아니면 여기서 30초 만에 가입돼요. 마감(<span id="vLock">11/3 23:59</span>) 전까지는 픽을 바꿀 수 있어요.</p>
     <div class="f"><input id="vPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000"><button class="bt" id="vCheck">입장</button></div>
     <div class="vmsg" id="vMsg" role="status"></div>
@@ -163,20 +198,10 @@ body{background:var(--bg)}
     </div>
   </section>
 
-  <section class="sec" id="pick">
-    <div class="step mono">STEP 2 · 우승팀 선택</div>
-    <h2>누가 소환사의 컵을 들까?</h2>
-    <p class="sub">카드를 누르면 바로 투표돼요. 카드 아래 막대는 지금 득표율이에요.</p>
-    <div id="vTeams"></div>
-    <div class="ticket" id="ticket">
-      <img id="tkImg" alt="내 롤드컵 예언 카드">
-      <div class="tk-btns"><button class="a" id="tkShare">친구한테 공유</button><button class="b" id="tkSave">카드 저장</button></div>
-    </div>
-  </section>
-
   <section class="sec" id="live">
     <div class="step mono"><i style="width:7px;height:7px;border-radius:50%;background:var(--mint);display:inline-block;animation:bl 1.4s infinite"></i> LIVE · 15초마다 갱신</div>
     <h2>실시간 예언 순위</h2>
+    <div class="pulsew" id="pulsew"></div>
     <div class="tick" id="tick"></div>
     <div id="podium"></div>
     <div class="regbat" id="regbat"></div>
@@ -242,6 +267,7 @@ const T={
 const RC={LCK:"#FF4FA3",LPL:"#FFC83D",LEC:"#7CF5B8",LCS:"#6EA8FF",LCP:"#C49BFF",CBLOL:"#FF8A65",기타:"#888"};
 const meta=t=>T[t]||{r:"기타",c:"#555",s:"",a:t.slice(0,3).toUpperCase()};
 const badge=t=>{const m=meta(t);return m.l?`<img src="${LOGO}${m.l}.png" alt="${esc(t)} 로고"${m.l=="dk"?' style="filter:invert(1)"':""}>`:`<span class="mono" style="--tc:${m.c}">${esc(m.a)}</span>`};
+let REG="전체",pending=null;const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 let P=null,mine=null,me=null,phone=st.get("pn_phone")||"",locked=false,checked=false;
 const msg=(t,c)=>{const m=$("vMsg");m.className="vmsg "+(c||"");m.textContent=t};
 const toast=t=>{const e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2200)};
@@ -254,10 +280,13 @@ function rarity(t){if(!P)return null;const n=(P.fan||{})[t]||0,tot=P.fan_total||
 function cards(){
   if(!P)return;const el=new Set(P.eliminated||[]),f=P.fan||{},tot=P.fan_total||0,all=P.teams||[];const groups={};
   all.forEach(t=>{const r=meta(t).r;(groups[r]=groups[r]||[]).push(t)});
-  let h="";for(const r of ["LCK","LPL","LEC","LCS","LCP","CBLOL","기타"]){if(!groups[r])continue;
+  const RS=["LCK","LPL","LEC","LCS","LCP","CBLOL","기타"].filter(r=>groups[r]);
+  $("rtabs").innerHTML=["전체",...RS].map(r=>`<button class="${r===REG?"on":""}" data-r="${r}">${r}${r==="전체"?"":" "+groups[r].length}</button>`).join("");
+  $("rtabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{REG=b.dataset.r;cards()});
+  let h="";for(const r of RS){if(REG!=="전체"&&r!==REG)continue;
     h+=`<div class="reg mono">${r}</div><div class="tg ${locked?"lockv":""}">`+groups[r].map(t=>{const m=meta(t),p=pct(f[t]||0,tot);return `<button class="tc ${t===mine?"on":""} ${el.has(t)?"out":""}" style="--tc:${m.c}" data-t="${esc(t)}" ${el.has(t)||locked?"disabled":""}><div class="lg">${badge(t)}</div><div class="nm">${esc(t)}</div><div class="st">${el.has(t)?"탈락":esc(m.s)}</div><div class="pm"><u><i style="width:${p}%"></i></u>${p}%</div></button>`}).join("")+`</div>`}
   $("vTeams").innerHTML=h;
-  $("vTeams").querySelectorAll(".tc").forEach(b=>b.onclick=()=>vote(b.dataset.t));
+  $("vTeams").querySelectorAll(".tc").forEach(b=>{if(b.dataset.t===pending&&!checked)b.classList.add("pend");b.onclick=()=>vote(b.dataset.t)});
 }
 function live(){
   if(!P)return;const f=P.fan||{},tot=P.fan_total||0,el=new Set(P.eliminated||[]);
@@ -266,6 +295,8 @@ function live(){
   // 티커
   const ago=s=>{const m=Math.round((Date.now()-new Date(s))/60000);return m<1?"방금":m<60?m+"분 전":Math.round(m/60)+"시간 전"};
   $("tick").innerHTML=(P.recent||[]).length?(P.recent||[]).map(x=>`<span>🔮 ${ago(x.at)} · <b>${esc(x.team)}</b> +1</span>`).join(""):`<span>🔮 아직 첫 예언 전이에요. 1번 예언자가 되어 보세요!</span>`;
+  $("race").innerHTML=tot?rows.slice(0,3).filter(r=>r[1]>0).map(([t,n])=>`<div class="rr" style="--tc:${meta(t).c}"><span>${esc(meta(t).a)}</span><u><i data-w="${pct(n,tot)}"></i></u><span>${pct(n,tot)}%</span></div>`).join(""):"";
+  requestAnimationFrame(()=>$("race").querySelectorAll("i").forEach(i=>i.style.width=i.dataset.w+"%"));
   if(!tot){$("podium").innerHTML="";$("regbat").innerHTML="";$("lb").innerHTML=`<div class="empty">첫 표가 들어오면 여기서 실시간으로 순위가 움직여요.</div>`;return}
   // 포디움
   const top=rows.slice(0,3).filter(r=>r[1]>0),ord=[top[1],top[0],top[2]];
@@ -292,20 +323,28 @@ async function check(){
     if(!j.ok){msg(j.error||"잠시 후 다시 시도해 주세요","err");return false}
     st.set("pn_phone",phone);$("jBox").hidden=true;checked=true;me=j.name;mine=j.team;cards();live();
     msg(j.team?`${j.name}님의 예언: ${j.team}. ${locked?"":"다른 카드를 누르면 바꿀 수 있어요."}`:`${j.name}님 입장 완료! 아래에서 우승팀 카드를 눌러 주세요 👇`,"ok");
+    if(pending&&!locked){const pt=pending;await vote(pt);return true}
     if(j.team)ticket();else document.getElementById("pick").scrollIntoView({behavior:"smooth"});
     return true;
   }catch(e){msg("네트워크 오류예요. 잠시 후 다시 시도해 주세요","err");return false}finally{$("vCheck").disabled=false}
 }
 async function vote(t){
   if(locked)return;
-  if(!checked){document.getElementById("vote").scrollIntoView({behavior:"smooth"});msg("먼저 N CREW 번호로 입장해 주세요 ☝️","err");$("vPhone").focus();return}
+  if(!checked){pending=t;cards();const pb=$("pendBar");pb.hidden=false;pb.innerHTML=`🔮 <b>${esc(t)}</b> 골랐어요. 번호만 넣으면 예언이 확정돼요. ${rarity(t)?`지금 ${rarity(t)}%만 이 팀을 골랐어요.`:"아직 아무도 안 고른 팀이에요."}`;
+    burst(t);document.getElementById("vote").scrollIntoView({behavior:RM?"auto":"smooth",block:"center"});setTimeout(()=>$("vPhone").focus({preventScroll:true}),400);if(window.pnTrack)pnTrack("worlds_prepick",{team:t});return}
   try{const j=await post(API,{action:"worlds_vote",phone,team:t});
     if(j.need_join){$("jBox").hidden=false;msg(j.error,"err");return}
     if(!j.ok){toast(j.error||"투표하지 못했어요");return}
-    mine=j.team;await load();toast(j.changed?`${j.team}(으)로 예언을 바꿨어요`:`${j.team} 예언 완료! 🔮`);
-    document.querySelector(`.tc[data-t="${CSS.escape(t)}"]`)?.classList.add("pop");ticket(true);
+    mine=j.team;pending=null;$("pendBar").hidden=true;await load();const r=rarity(j.team);
+    toast(j.changed?`${j.team}(으)로 바꿨어요 · 같은 픽 ${r}%`:`${j.team} 예언 완료! 같은 픽 ${r}% 🔮`);
+    burst(t);document.querySelector(`.tc[data-t="${CSS.escape(t)}"]`)?.classList.add("flip");ticket(true);
   }catch(e){toast("네트워크 오류예요")}
 }
+function burst(t){if(RM)return;const b=document.querySelector(`.tc[data-t="${CSS.escape(t)}"]`);if(!b)return;const r=b.getBoundingClientRect(),d=document.createElement("div");
+  d.className="burst";d.style.cssText=`left:${r.left+r.width/2-10}px;top:${r.top+r.height/2-10}px;--tc:${meta(t).c}`;document.body.appendChild(d);setTimeout(()=>d.remove(),800)}
+async function pulse(){try{const r=await(await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track?pulse=/worlds/")).json();const c=[];
+  if(r.live>=2)c.push(`🟢 지금 ${r.live}명이 보는 중`);if(r.today>=3)c.push(`👀 오늘 ${r.today}명 방문`);$("pulsew").innerHTML=c.map(x=>`<span>${x}</span>`).join("")}catch(e){}}
+pulse();setInterval(pulse,60000);
 // 내 예언 카드 (공유용 이미지)
 async function ticket(scroll){
   if(!mine)return;const m=meta(mine),r=rarity(mine),W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
@@ -341,7 +380,7 @@ $("jGo").onclick=async()=>{
   $("jGo").disabled=true;
   try{const j=await post(SITE,{action:"join",name,phone,branch:$("jBranch").value,agree:true,night_agree:$("jNight").checked,source:"worlds_vote"});
     if(!j.ok){msg(j.error||"가입하지 못했어요","err");return}
-    if(await check()&&!mine){msg(`${name}님, N CREW 가입 완료! 우승팀 카드를 눌러 예언하세요 🔮`,"ok");if(fp&&T[fp])toast(`친구는 ${fp}! 너는?`)}
+    if(await check()&&!mine&&!pending){msg(`${name}님, N CREW 가입 완료! 우승팀 카드를 눌러 예언하세요 🔮`,"ok");if(fp&&T[fp])toast(`친구는 ${fp}! 너는?`)}
   }catch(e){msg("네트워크 오류예요. 잠시 후 다시 시도해 주세요","err")}finally{$("jGo").disabled=false}
 };
 function pay(x){const E=$("lv"),el=new Set(x.eliminated||[]),R=Object.entries(x.tally).sort((a,b)=>b[1]-a[1]);
