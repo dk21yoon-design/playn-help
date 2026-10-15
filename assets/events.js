@@ -10,6 +10,11 @@
       meta: ["10/24(토) 19:00 → 일 12:00", "연남루프탑점", "1인 70,000원"], cta: "프로필 보내기",
       href: "/meet/", img: "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1261339.jpg",
       accent: "#FF2E6E", until: "2026-10-23T18:00:00+09:00" },
+    { id: "military", kick: "국군장병 감사 이벤트", title: "자랑스러운 국군장병\n여러분, 감사합니다",
+      sub: "군인 인증하면 첫 예약 5만원 할인 + 조기입실·늦은퇴실 2시간권. 시간이 안 되는 날엔 바베큐 무료로 바꿔드려요.",
+      meta: ["밀리패스로 온라인 인증", "같이 온 인원 모두 N CREW 가입", "올 때마다 음료 2병"], cta: "군인 인증하러 가기",
+      href: "/for/military/", img: "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1091459.jpg",
+      accent: "#2BE07A", until: "2026-12-31T23:59:00+09:00" },
     { id: "worlds", kick: "롤드컵 2026 이벤트", title: "우승팀 맞히면\n최대 10만원 페이백",
       sub: "N CREW 1인 1표로 우승팀을 예언하세요. 나이트·통대관 팀이 맞히면 이용료를 돌려드려요.",
       meta: ["11/14까지 참여", "N CREW 전원 가입 팀", "8강 전 10만 · 이후 5만"], cta: "예언하러 가기",
@@ -57,9 +62,9 @@
       '<div class="pnev-track">' + L.map(function (e) {
         var bgi = e.img ? 'background-image:url(' + e.img + ')' : 'background:radial-gradient(120% 90% at 80% 10%,' + e.accent + '55,transparent 60%),radial-gradient(100% 80% at 0% 100%,#3DF2FF33,transparent 60%),#0E0C2C';
         return '<a class="pnev-card" href="' + e.href + '" data-id="' + e.id + '"><div class="im" style="' + bgi + '"></div><div class="tx">' +
-          '<span class="k" style="background:' + e.accent + (e.accent === "#FFB547" ? ';color:#1B1640' : '') + '">' + esc(e.kick) + '</span>' +
+          '<span class="k" style="background:' + e.accent + ((e.accent === "#FFB547" || e.accent === "#2BE07A") ? ';color:#1B1640' : '') + '">' + esc(e.kick) + '</span>' +
           '<h3>' + esc(e.title) + '</h3><p>' + esc(e.sub) + '</p><ul>' + e.meta.map(function (m) { return '<li>' + esc(m) + '</li>'; }).join("") + '</ul>' +
-          '<span class="go" style="background:' + e.accent + ';color:' + (e.accent === "#FFB547" ? '#1B1640' : '#fff') + '">' + esc(e.cta) + ' →</span></div></a>';
+          '<span class="go" style="background:' + e.accent + ';color:' + ((e.accent === "#FFB547" || e.accent === "#2BE07A") ? '#1B1640' : '#fff') + '">' + esc(e.cta) + ' →</span></div></a>';
       }).join("") + '</div>' +
       (L.length > 1 ? '<div class="pnev-dots">' + L.map(function (_, i) { return '<i class="' + (i ? "" : "on") + '"></i>'; }).join("") + '</div>' : '') +
       '<div class="pnev-ft"><button type="button" class="d">오늘 하루 안 보기</button><button type="button" class="c">닫기</button></div></div>';
