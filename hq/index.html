@@ -487,6 +487,7 @@ function skillsSection(){const s=el("section");s.id="skills";const sk=DATA.skill
      ${k.what?`<p><b>무엇:</b> ${H(k.what)}</p>`:""}${k.how?`<p><b>잘 쓰는 법:</b> ${H(k.how)}</p>`:""}${k.where_use?`<p><b>어디에:</b> ${H(k.where_use)}</p>`:""}
      ${k.reviews?`<p><b>후기:</b> ${H(k.reviews)}</p>`:""}${k.good_for?`<p><b>꿀인 사람:</b> ${H(k.good_for)}</p>`:""}
      ${k.pick&&k.pick_reason?`<p class="why"><b>내 작업에 쓰면:</b> ${H(k.pick_reason)}</p>`:""}
+     ${k.status==="applied"?`<p class="why" style="background:rgba(61,220,151,.09);color:var(--ok)"><b style="color:var(--ok)">✓ 내 시스템에 적용됨</b> · ${H(k.applied_note||"")}</p>`:k.status==="testing"?`<p class="why" style="background:rgba(143,163,255,.1)"><b>시험 대기</b> · ${H(k.applied_note||"")}</p>`:""}
      ${k.url?`<a href="${H(k.url)}" target="_blank" rel="noopener" style="font-size:13px;color:var(--lamp)">저장소 열기 ↗</a>`:""}`;g.appendChild(c)});
   s.appendChild(g);return s}
 
