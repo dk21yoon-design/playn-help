@@ -112,6 +112,59 @@ form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:
 #adm table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}#adm td,#adm th{border-bottom:1px solid var(--line);padding:8px 4px;text-align:left;vertical-align:top;line-height:1.55}
 #adm button{font:inherit;font-size:12px;padding:5px 9px;margin:2px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 #adm img{width:60px;border-radius:6px}
+/* 2026-10-15 업그레이드: 실시간 신호·좌석 점등·밤 시계·파트너 뽑기·단계 폼 */
+.pulse{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pulse span{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:7px 12px;color:#EAE8FF}
+.pulse span b{font-variant-numeric:tabular-nums;color:#fff}
+.pulse .lv i{width:8px;height:8px;border-radius:50%;background:#2BE07A;box-shadow:0 0 0 0 rgba(43,224,122,.7);animation:ping 1.8s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(43,224,122,0)}100%{box-shadow:0 0 0 0 rgba(43,224,122,0)}}
+.feed{margin-top:10px;height:22px;overflow:hidden;font-size:13.5px;color:var(--mute)}
+.feed div{animation:feedIn .45s ease-out}
+@keyframes feedIn{from{transform:translateY(100%);opacity:0}}
+.dots span{transition:background .35s,box-shadow .35s,transform .35s}
+.dots span.on{animation:lit .5s ease-out backwards}
+@keyframes lit{0%{transform:scaleY(.4);opacity:.2}60%{transform:scaleY(1.5)}100%{transform:none;opacity:1}}
+.seat .left{display:block;margin-top:8px;font-size:12.5px;color:var(--mute);font-weight:700}
+.seat.f .left b{color:var(--pink)}.seat.m .left b{color:var(--cyan)}
+.night{display:grid;grid-template-columns:1fr;gap:16px;margin-top:20px}
+.clock{display:none}
+@media(min-width:760px){.night{grid-template-columns:240px 1fr}.clock{display:block;position:sticky;top:90px;align-self:start}}
+@media(max-width:759px){.clockm{position:sticky;top:64px;z-index:5;display:flex;gap:10px;align-items:center;background:rgba(14,12,44,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:8px 12px;margin-top:14px}}
+@media(min-width:760px){.clockm{display:none}}
+.clockm svg{width:38px;height:38px;flex:none}.clockm b{font-size:14px}.clockm small{display:block;color:var(--mute);font-size:12px}
+.dial{width:100%;aspect-ratio:1}
+.dial .hand,.clockm .hand{transform-origin:50px 50px;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.clock p{text-align:center;margin-top:10px;font-weight:800}.clock p small{display:block;color:var(--mute);font-weight:600;font-size:12.5px}
+.tl{margin-top:0}
+.tl li{transition:border-color .3s,background .3s,transform .3s,opacity .3s;opacity:.55}
+.tl li.now{opacity:1;transform:translateX(4px);border-color:var(--lamp)}
+.tl li.hl.now{border-color:var(--pink)}
+.roul{margin-top:18px;background:radial-gradient(120% 140% at 100% 0%,rgba(61,242,255,.16),transparent 60%),var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:center}
+.roul small{color:var(--mute);font-weight:700;letter-spacing:.08em;font-size:12px}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.slot{height:64px;overflow:hidden;border-radius:14px;background:rgba(0,0,0,.35);border:1px solid var(--line);position:relative}
+.slot .rl{display:flex;flex-direction:column}
+.slot .rl div{height:64px;display:grid;place-items:center;font-weight:800;font-size:clamp(13px,3.6vw,16px);padding:0 6px;line-height:1.25}
+.roul .res{min-height:48px;margin-top:12px;line-height:1.55;font-size:15px}
+.roul .res b{color:var(--lamp)}
+.roul button{margin-top:6px}
+.prog{display:flex;gap:6px;align-items:center}
+.prog i{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;position:relative}
+.prog i:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--pink),var(--lamp));transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+.prog i.on:after{transform:none}
+.prog span{font-size:12.5px;font-weight:800;color:var(--mute);margin-left:6px;white-space:nowrap}
+.stp{display:none;gap:14px;border:0;padding:0;margin:0;min-width:0}
+.stp.on{display:grid;animation:stIn .3s ease-out}
+@keyframes stIn{from{opacity:0;transform:translateX(14px)}}
+.nav2{display:flex;gap:10px}.nav2 [hidden]{display:none}.nav2 .btn{flex:1;padding:15px}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.faq .more{display:none}.faq.all .more{display:block}
+.faqmore{margin-top:10px;font:inherit;font-weight:800;font-size:14px;background:none;border:0;color:var(--lamp);cursor:pointer;padding:6px 0}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+.btn{transition:transform .1s ease}.btn:active{transform:scale(.97)}
+.dock a b{font-weight:800}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.dots span.on,.stp.on,.feed div,.pulse .lv i{animation:none}.tl li,.dial .hand,.clockm .hand{transition:none}}
 </style>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a>
@@ -135,9 +188,11 @@ form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:
 <main class="wrap">
 <div id="meView"></div>
 <div class="seats">
- <div class="seat f"><h3>여자 <b><span id="tf">0</span> / 7</b></h3><div class="dots" id="df"></div></div>
- <div class="seat m"><h3>남자 <b><span id="tm">0</span> / 7</b></h3><div class="dots" id="dm"></div></div>
+ <div class="seat f"><h3>여자 <b><span id="tf">0</span> / 7</b></h3><div class="dots" id="df"></div><span class="left" id="lf"></span></div>
+ <div class="seat m"><h3>남자 <b><span id="tm">0</span> / 7</b></h3><div class="dots" id="dm"></div><span class="left" id="lm"></span></div>
 </div>
+<div class="pulse" id="pulse" aria-live="polite"></div>
+<div class="feed" id="feed"></div>
 
 <section class="blk"><span class="kick">THE NIGHT</span><h2 class="disp">이런 밤이에요</h2>
  <p class="sub">전부 연남루프탑점 손님들이 직접 찍은 사진이에요.</p>
@@ -149,6 +204,8 @@ form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:
 </section>
 
 <section class="blk"><span class="kick">HOW IT GOES</span><h2 class="disp">이 밤의 순서</h2>
+ <div class="clockm" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="6"/><g class="hand" id="handm"><line x1="50" y1="50" x2="50" y2="14" stroke="#FFB547" stroke-width="9" stroke-linecap="round"/></g></svg><div><small>지금 보는 순서</small><b id="nowm">01 · 입실</b></div></div>
+ <div class="night"><div class="clock"><svg viewBox="0 0 100 100" class="dial" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.18)"/><path d="M50 4 A46 46 0 1 1 49.9 4" fill="none" stroke="url(#ng)" stroke-width="3" stroke-dasharray="289" stroke-dashoffset="289" id="arc"/><defs><linearGradient id="ng"><stop offset="0" stop-color="#FF2E6E"/><stop offset="1" stop-color="#FFB547"/></linearGradient></defs><text x="50" y="16" text-anchor="middle" font-size="7" fill="#9b97c9">19:00</text><text x="50" y="91" text-anchor="middle" font-size="7" fill="#9b97c9">새벽</text><text x="87" y="52" text-anchor="middle" font-size="7" fill="#9b97c9">밤</text><text x="14" y="52" text-anchor="middle" font-size="7" fill="#9b97c9">12:00</text><g class="hand" id="hand"><line x1="50" y1="50" x2="50" y2="14" stroke="#FFB547" stroke-width="3" stroke-linecap="round"/></g><circle cx="50" cy="50" r="4" fill="#FFB547"/></svg><p><span id="nowd">01 · 입실</span><small>스크롤하면 밤이 흘러가요</small></p></div>
  <ol class="tl">
   <li><time>01</time><div><b>입실 · 바베큐 · 술 오픈</b><p>신분증 확인하고 이름표 받아요. 고기는 준비돼 있어요. 챙겨 온 술을 한데 모아요.</p></div></li>
   <li><time>02</time><div><b>팀 뽑기</b><p>여 1 + 남 1, 2인 1팀으로 7팀. 신청 때 적은 티어로 실력을 맞춰 섞어요.</p></div></li>
@@ -157,7 +214,11 @@ form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:
   <li><time>05</time><div><b>자유시간</b><p>보드게임 · 닌텐도 스위치 · 철권 · 노래방 · 불멍. 기다리는 팀도, 탈락한 팀도 놀 거리는 많아요.</p></div></li>
   <li class="hl"><time>06</time><div><b>새벽 · 롤드컵 같이 보기</b><p>라면 끓여 먹고 스위스 스테이지 개막일 경기를 큰 화면으로 봐요.</p></div></li>
   <li><time>07</time><div><b>정오 퇴실</b><p>끝까지 있어도 되고 먼저 가도 돼요.</p></div></li>
- </ol>
+ </ol></div>
+ <div class="roul" id="roul"><small>재미로 돌려보기 · 실제 팀 배정과 무관해요</small><h3 class="disp" style="font-size:24px;margin-top:6px">칼바람 파트너 뽑기 🎰</h3>
+  <div class="slots"><div class="slot"><div class="rl" id="r0"><div>?</div></div></div><div class="slot"><div class="rl" id="r1"><div>?</div></div></div><div class="slot"><div class="rl" id="r2"><div>?</div></div></div></div>
+  <div class="res" id="rres">당일 만날 파트너는 어떤 타입일까요?</div>
+  <button class="btn lamp" type="button" id="rgo" style="padding:12px 22px">레버 당기기</button></div>
  <p class="sub" style="font-size:14px">롤드컵은 미국에서 열려 한국 시간 새벽에 해요. 정확한 경기 시각과 대진은 10/19 플레이-인이 끝나면 확정자에게 문자로 알려드려요.</p>
 </section>
 
@@ -188,31 +249,35 @@ form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:
   <details><summary>롤을 잘 못해도 괜찮아요?</summary><p>괜찮아요. 칼바람은 처음 해도 금방 배워요. 티어로 실력을 맞춰 팀을 짜니까 한쪽만 계속 지는 일은 없어요.</p></details>
   <details><summary>어떤 기준으로 승인해요?</summary><p>성비와 나이대, 분위기가 잘 맞게 사장님이 프로필을 직접 보고 정해요. 결과는 1~2일 안에 문자로 알려드려요.</p></details>
   <details><summary>잠은 어디서 자요?</summary><p>숙박 시설은 아니에요. 소파·좌식 의자에서 쉬다 가는 정도예요. 새벽 경기 끝나고 먼저 가셔도 돼요.</p></details>
-  <details><summary>한국팀 경기가 꼭 있어요?</summary><p>10/24(현지)는 스위스 스테이지 첫날이라 16팀이 모두 1라운드를 시작하는 날이에요. 다만 어느 팀이 몇 시에 붙는지는 10/19 플레이-인이 끝나야 정해져요. 정해지는 대로 확정자분들께 문자로 알려드릴게요. 이 밤의 메인은 바베큐·프리드링크·칼바람 토너먼트고, 롤드컵은 새벽 보너스예요.</p></details>
-  <details><summary>상품은 어떻게 써요?</summary><p>1등 팀은 두 분 각자 평일(일~목) 커플 나이트 이용권 1장, 2등 팀은 각자 루프탑 바베큐장 이용권 1장을 받아요. 3개월 안에 빈 날짜로 예약해서 쓰면 돼요.</p></details>
-  <details><summary>환불은요?</summary><p id="refund"></p></details>
+  <details class="more"><summary>한국팀 경기가 꼭 있어요?</summary><p>10/24(현지)는 스위스 스테이지 첫날이라 16팀이 모두 1라운드를 시작하는 날이에요. 다만 어느 팀이 몇 시에 붙는지는 10/19 플레이-인이 끝나야 정해져요. 정해지는 대로 확정자분들께 문자로 알려드릴게요. 이 밤의 메인은 바베큐·프리드링크·칼바람 토너먼트고, 롤드컵은 새벽 보너스예요.</p></details>
+  <details class="more"><summary>상품은 어떻게 써요?</summary><p>1등 팀은 두 분 각자 평일(일~목) 커플 나이트 이용권 1장, 2등 팀은 각자 루프탑 바베큐장 이용권 1장을 받아요. 3개월 안에 빈 날짜로 예약해서 쓰면 돼요.</p></details>
+  <details class="more"><summary>환불은요?</summary><p id="refund"></p></details>
  </div>
+ <button class="faqmore" type="button" id="faqMore">질문 3개 더 보기 ↓</button>
 </section>
 
 <section class="blk" id="apply"><span class="kick">APPLY</span><h2 class="disp">프로필 보내기</h2>
  <p class="sub">사장님이 프로필을 보고 승인한 분만 함께해요. 승인되면 문자로 입금 안내를 드려요. <b>승인 전에는 입금하지 마세요.</b></p>
  <form class="ap" id="ap" novalidate>
-  <div class="grp first">01 · 나</div>
+  <div class="prog" id="prog"><i class="on"></i><i></i><i></i><i></i><span id="progT">1/4 · 나</span></div>
+  <fieldset class="stp on" data-s="0"><div class="grp first">01 · 나</div>
   <div><label>성별</label><div class="gsel"><button type="button" data-g="f">여자</button><button type="button" data-g="m">남자</button></div></div>
   <div class="ph"><label class="pick" for="pf0" id="pick" aria-label="프로필 사진 고르기">＋</label><input type="file" id="pf0" accept="image/*"><div><label for="pf0" style="margin:0">프로필 사진</label><p>얼굴이 나온 사진 1장. 승인할 때만 보고 다른 참가자에게 보여주지 않아요.</p></div></div>
   <div class="two"><div><label for="nm">이름 (실명)</label><input id="nm" maxlength="20" autocomplete="name" placeholder="입금 확인용"></div><div><label for="nk">닉네임</label><input id="nk" maxlength="12" placeholder="이름표에 써요"></div></div>
-  <div class="two"><div><label for="ph">연락처</label><input id="ph" inputmode="numeric" maxlength="13" placeholder="01012345678" autocomplete="tel"></div><div><label for="by">태어난 해</label><input id="by" inputmode="numeric" maxlength="4" placeholder="1998"></div></div>
-  <div class="grp">02 · 롤</div>
-  <div class="two"><div><label for="tr">티어</label><select id="tr"><option value="">선택</option><option>안 해봄</option><option>칼바람만 함</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option></select></div><div><label for="po">포지션·최애 챔프</label><input id="po" maxlength="30" placeholder="선택"></div></div>
-  <div class="grp">03 · 소셜</div>
+  <div class="two"><div><label for="ph">연락처</label><input id="ph" inputmode="numeric" maxlength="13" placeholder="01012345678" autocomplete="tel"></div><div><label for="by">태어난 해</label><input id="by" inputmode="numeric" maxlength="4" placeholder="1998"></div></div></fieldset>
+  <fieldset class="stp" data-s="1"><div class="grp first">02 · 롤</div>
+  <div class="two"><div><label for="tr">티어</label><select id="tr"><option value="">선택</option><option>안 해봄</option><option>칼바람만 함</option><option>아이언~브론즈</option><option>실버</option><option>골드</option><option>플래티넘</option><option>에메랄드</option><option>다이아 이상</option></select></div><div><label for="po">포지션·최애 챔프</label><input id="po" maxlength="30" placeholder="선택"></div></div></fieldset>
+  <fieldset class="stp" data-s="2"><div class="grp first">03 · 소셜</div>
   <div class="two"><div><label for="dk">가져올 술 한 병</label><input id="dk" maxlength="40" placeholder="예: 와인"></div><div><label for="mb">MBTI</label><input id="mb" maxlength="4" placeholder="선택"></div></div>
   <div><label for="it">자기소개 한 줄</label><textarea id="it" rows="2" maxlength="300" placeholder="예: 칼바람 하루 3판, 이번 롤드컵은 젠지 응원해요"></textarea></div>
   <div class="two"><div><label for="ig">인스타 아이디</label><input id="ig" maxlength="40" placeholder="선택 · 본인 확인용"></div><div><label for="jb">하는 일</label><input id="jb" maxlength="30" placeholder="선택"></div></div>
-  <div class="two"><div><label for="cp0">같이 신청한 친구</label><input id="cp0" maxlength="40" placeholder="선택"></div><div><label for="dp">입금자명</label><input id="dp" maxlength="20" placeholder="이름과 다르면"></div></div>
-  <div class="grp">04 · 확인</div>
+  <div class="two"><div><label for="cp0">같이 신청한 친구</label><input id="cp0" maxlength="40" placeholder="선택"></div><div><label for="dp">입금자명</label><input id="dp" maxlength="20" placeholder="이름과 다르면"></div></div></fieldset>
+  <fieldset class="stp" data-s="3"><div class="grp first">04 · 확인</div>
   <label class="chk"><input type="checkbox" id="pv_ok"> <span>[필수] 이름·연락처·태어난 해·사진·프로필을 참가 승인과 행사 안내에만 쓰고, 행사 끝나고 30일 안에 사진과 연락처를 파기하는 데 동의해요.</span></label>
   <label class="chk"><input type="checkbox" id="ag"> <span>[필수] 성인이고 입실 때 신분증을 보여줄게요. 승인 후 24시간 안에 입금해야 확정되고, 환불 기준과 <b>현장 사진·영상이 플레이앤 홍보에 쓰인다는 것</b>을 확인했어요.</span></label>
-  <button class="btn pink" type="submit" id="sb" style="width:100%;padding:17px">프로필 보내기</button>
+</fieldset>
+  <div class="nav2"><button class="btn ghost" type="button" id="bk" hidden>이전</button><button class="btn pink" type="button" id="nx">다음</button>
+  <button class="btn pink" type="submit" id="sb" hidden>프로필 보내기</button></div>
   <div class="msg" id="msg"></div>
  </form>
  <p class="sub" style="font-size:13.5px">연락처는 다른 참가자에게 알려주지 않아요. 연락처 교환은 자유예요.</p>
@@ -224,16 +289,20 @@ form.ap .chk input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:
 <main class="wrap" id="adm" hidden><h2 class="disp" style="margin-top:24px">신청 관리</h2><p class="sub" id="admSum"></p><div id="admList"></div>
 <p style="margin-top:12px"><textarea id="admMsg" rows="2" style="width:100%" placeholder="확정자 전체에게 보낼 안내 문자"></textarea><button id="admSend">확정자 전체 문자</button></p></main>
 
-<div class="dock hide" id="dock"><a class="btn pink" href="#apply" style="padding:16px">프로필 보내기 · <span id="dockPrice">70,000원</span></a></div>
+<div class="dock hide" id="dock"><a class="btn pink" href="#apply" style="padding:16px">프로필 보내기 · <span id="dockPrice">70,000원</span><b id="dockLeft"></b></a></div>
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span><span><a href="https://pf.kakao.com/_xoxhsuxj/chat" target="_blank" rel="noopener">카카오톡 채널 문의</a></span><span><a href="/privacy/">개인정보처리방침</a></span><span><a href="https://www.instagram.com/playn_no.1/" target="_blank" rel="noopener">@playn_no.1</a></span></div><div class="row biz" style="margin-top:10px;font-size:12px;line-height:1.7;color:var(--dim)"><span>상호 플레이앤(PlayN)</span><span>대표 윤도권</span><span>사업자등록번호 231-20-01692 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=2312001692" target="_blank" rel="noopener">사업자정보 확인</a></span><span>통신판매업신고 2022-서울마포-2992</span><span>주소 서울특별시 마포구 월드컵북로2길 31, 4층 (동교동)</span><span>전화 010-8339-5818</span><span>이메일 dk21yoon@gmail.com</span><span>호스팅 GitHub Pages</span></div></div></footer>
 <script>
 const F="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup",E="worlds1024";
 const $=id=>document.getElementById(id),e=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const won=n=>Number(n).toLocaleString("ko-KR")+"원",qs=new URLSearchParams(location.search);
 let G="",EV=null;
-function dots(id,taken,cap){$(id).innerHTML=Array.from({length:cap},(_,i)=>`<span class="${i<taken?"on":""}"></span>`).join("")}
+function dots(id,taken,cap){$(id).innerHTML=Array.from({length:cap},(_,i)=>`<span class="${i<taken?"on":""}" style="animation-delay:${i*.12}s"></span>`).join("")}
+function countUp(el,to){const t0=performance.now(),d=700;if(RM||!to){el.textContent=to;return}const f=t=>{const k=Math.min(1,(t-t0)/d);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function paint(ev){EV=ev;const tf=ev.cap_f-ev.left_f,tm=ev.cap_m-ev.left_m;
-  $("tf").textContent=tf;$("tm").textContent=tm;dots("df",tf,ev.cap_f);dots("dm",tm,ev.cap_m);
+  countUp($("tf"),tf);countUp($("tm"),tm);dots("df",tf,ev.cap_f);dots("dm",tm,ev.cap_m);
+  $("lf").innerHTML=ev.left_f?`남은 자리 <b>${ev.left_f}</b>`:"<b>마감 · 대기 신청 가능</b>";$("lm").innerHTML=ev.left_m?`남은 자리 <b>${ev.left_m}</b>`:"<b>마감 · 대기 신청 가능</b>";
+  $("dockLeft").textContent=` · 남은 ${ev.left_f+ev.left_m}자리`;
   $("price").textContent=won(ev.price);$("dockPrice").textContent=won(ev.price);$("refund").textContent=ev.info?.refund||"";
   const kd=x=>Math.floor((new Date(x).getTime()+9*36e5)/864e5),d=kd(ev.start_at)-kd(Date.now());$("dday").textContent=d>0?`D-${d} · 남은 자리 ${ev.left_f+ev.left_m}`:"";
   document.querySelectorAll(".gsel button").forEach(b=>{const left=b.dataset.g==="f"?ev.left_f:ev.left_m;b.textContent=(b.dataset.g==="f"?"여자":"남자")+(left?` · ${left}자리`:" · 대기")});
@@ -244,9 +313,7 @@ document.querySelectorAll(".gsel button").forEach(b=>b.onclick=()=>{G=b.dataset.
 $("pf0").onchange=()=>{const f=$("pf0").files[0];if(f)$("pick").innerHTML=`<img src="${URL.createObjectURL(f)}" alt="선택한 프로필 사진">`};
 const need=[["nm","이름"],["nk","닉네임"],["ph","연락처"],["by","태어난 해"],["tr","티어"],["dk","가져올 술"],["it","자기소개"]];
 $("ap").onsubmit=async ev=>{ev.preventDefault();const m=$("msg");m.className="msg err";
-  if(!G){m.textContent="성별을 골라주세요";return}
-  if(!$("pf0").files[0]){m.textContent="프로필 사진을 올려주세요";return}
-  for(const [id,n] of need)if(!$(id).value.trim()){m.textContent=n+" 칸을 채워주세요";$(id).focus();return}
+  for(let i=0;i<3;i++)if(!chk(i)){const t=m.textContent;go(i);m.className="msg err";m.textContent=t;return}
   if(!$("ag").checked||!$("pv_ok").checked){m.textContent="필수 확인 두 개를 체크해 주세요";return}
   m.className="msg";$("sb").disabled=true;m.textContent="보내는 중…";
   try{const photo=await shrink($("pf0").files[0],900);const r=await(await fetch(F,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"apply",e:E,gender:G,photo,name:$("nm").value,nick:$("nk").value,phone:$("ph").value,birth_year:$("by").value,tier:$("tr").value,position:$("po").value,drink:$("dk").value,mbti:$("mb").value,intro:$("it").value,insta:$("ig").value,job:$("jb").value,companion:$("cp0").value,depositor:$("dp").value||$("nm").value,agree:true,privacy_ok:true,promo_photo_ok:true})})).json();
@@ -283,10 +350,54 @@ async function admin(){let k="";try{k=localStorage.getItem("pn_admin")||""}catch
     $("admList").innerHTML=`<table><tr><th>사진</th><th>프로필</th><th>상태·캡처</th></tr>${r.rows.map(x=>`<tr><td>${x.photo_url?`<a href="${x.photo_url}" target="_blank"><img src="${x.photo_url}" alt="프로필" style="width:84px;height:84px;object-fit:cover"></a>`:""}</td><td><b>${x.gender==="f"?"여":"남"} · ${e(x.nick)}</b> (${e(x.name)}, ${age(x.birth_year)}세)<br>${e(x.tier)} · ${e(x.position)} · ${e(x.mbti)}<br>🍾 ${e(x.drink)}<br>“${e(x.intro)}”<br>${x.insta?`<a href="https://instagram.com/${encodeURIComponent(x.insta)}" target="_blank">@${e(x.insta)}</a> · `:""}${e(x.job)}${x.companion?` · 친구 ${e(x.companion)}`:""}<br>${e(x.phone)} · 입금자 ${e(x.depositor)}</td><td><b>${ST[x.status]||x.status}</b>${x.status==="applied"&&!x.hold?" (24h 지남)":""}<br>${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img src="${x.proof_url}" alt="입금 캡처"></a><br>`:""}${(NEXT[x.status]||[]).map(s=>`<button data-id="${x.id}" data-s="${s}">${LB[s]}</button>`).join("")}</td></tr>`).join("")}</table>`;
     $("admList").querySelectorAll("button").forEach(b=>b.onclick=async()=>{b.disabled=true;const x=await call({action:"set",id:b.dataset.id,status:b.dataset.s,notify:b.dataset.s==="cancelled"});if(!x.ok&&x.err)$("admSum").textContent="⚠ "+x.err;else load()})};
   $("admSend").onclick=async()=>{const m=$("admMsg").value.trim();if(!m)return;const r=await call({action:"notify",msg:m});$("admSend").textContent=`${r.sent??0}명에게 보냈어요`};load()}
+
+// ── 실시간 신호: 실제 숫자만 (가짜 신청자 없음) ──
+const PULSE="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track?pulse=/meet/&e="+E;
+const ago=t=>{const m=Math.max(1,Math.round((Date.now()-new Date(t))/6e4));return m<60?m+"분 전":m<1440?Math.round(m/60)+"시간 전":Math.round(m/1440)+"일 전"};
+let feedI=0,feedT=null;
+async function pulse(){try{const r=await(await fetch(PULSE)).json();if(!r.ok)return;const c=[];
+  if(r.live>=2)c.push(`<span class="lv"><i></i>지금 <b>${r.live}</b>명이 보고 있어요</span>`);
+  if(r.today>=3)c.push(`<span>👀 오늘 <b>${r.today}</b>명이 봤어요</span>`);
+  if(EV&&EV.status==="open"){const n=r.recent.length;if(n)c.push(`<span>📨 프로필 보낸 사람 <b>${n>=6?"6+":n}</b>명</span>`)}
+  $("pulse").innerHTML=c.join("");
+  const items=r.recent.map(x=>`${x.g==="f"?"👩 여자":"👨 남자"} 1명이 ${ago(x.at)} 프로필을 보냈어요`);
+  clearInterval(feedT);if(!items.length){$("feed").innerHTML="";return}
+  const show=()=>{$("feed").innerHTML=`<div>${items[feedI++%items.length]}</div>`};show();if(items.length>1)feedT=setInterval(show,4000)}catch{}}
+// ── 밤 시계: 지금 화면에 있는 순서에 맞춰 바늘이 돌아요 ──
+const steps=[...document.querySelectorAll(".tl li")],SN=["입실","팀 뽑기","칼바람 토너먼트","한 몸 미드전","자유시간","롤드컵 관람","정오 퇴실"];
+const setStep=i=>{steps.forEach((x,j)=>x.classList.toggle("now",j===i));const deg=Math.round(i/(steps.length-1)*270);
+  $("hand").style.transform=$("handm").style.transform=`rotate(${deg}deg)`;$("arc").style.strokeDashoffset=289-289*deg/360;
+  $("nowd").textContent=$("nowm").textContent=`0${i+1} · ${SN[i]}`};
+setStep(0);const stepIO=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting)setStep(steps.indexOf(x.target))}),{rootMargin:"-40% 0px -50% 0px"});steps.forEach(li=>stepIO.observe(li));
+// ── 파트너 뽑기 (재미용) ──
+const RP=[["원딜","서폿","탱커","암살자","메이지","브루저"],["한타 장인","라인전 장인","킬 욕심","CS 집착","핑 장인","궁 먼저"],["말 많은","조용한 캐리","리액션 큰","분석러","분위기 메이커","먹방 담당"]];
+let spinning=false;$("rgo").onclick=()=>{if(spinning)return;spinning=true;const pick=RP.map(a=>a[Math.floor(Math.random()*a.length)]);
+  RP.forEach((a,i)=>{const rl=$("r"+i),seq=[...Array(14)].map(()=>a[Math.floor(Math.random()*a.length)]).concat(pick[i]);
+    rl.innerHTML=seq.map(x=>`<div>${x}</div>`).join("");rl.style.transition="none";rl.style.transform="translateY(0)";rl.offsetHeight;
+    rl.style.transition=RM?"none":`transform ${1.1+i*.45}s cubic-bezier(.15,.85,.25,1)`;rl.style.transform=`translateY(-${(seq.length-1)*64}px)`});
+  setTimeout(()=>{$("rres").innerHTML=`오늘 밤 파트너: <b>${pick[2]} ${pick[1]} ${pick[0]}</b><br>진짜 파트너는 당일 티어 맞춰서 뽑아요 😉`;spinning=false;if(window.pnTrack)pnTrack("meet_roulette",{e:E})},RM?0:2100)};
+// ── FAQ 더 보기 ──
+$("faqMore").onclick=()=>{document.querySelector(".faq").classList.add("all");$("faqMore").remove()};
+// ── 4단계 폼 ──
+let S=0;const ST_=[...document.querySelectorAll(".stp")],SNM=["나","롤","소셜","확인"];
+function chk(i){const m=$("msg");m.className="msg err";m.textContent="";
+  if(i===0){if(!G){m.textContent="성별을 골라주세요";return false}if(!$("pf0").files[0]){m.textContent="프로필 사진을 올려주세요";return false}
+    for(const [id,n] of [["nm","이름"],["nk","닉네임"],["ph","연락처"],["by","태어난 해"]])if(!$(id).value.trim()){m.textContent=n+" 칸을 채워주세요";$(id).focus();return false}}
+  if(i===1&&!$("tr").value){m.textContent="티어를 골라주세요";$("tr").focus();return false}
+  if(i===2){for(const [id,n] of [["dk","가져올 술"],["it","자기소개"]])if(!$(id).value.trim()){m.textContent=n+" 칸을 채워주세요";$(id).focus();return false}
+    if($("it").value.trim().length<10){m.textContent="자기소개를 10자 이상 적어주세요";$("it").focus();return false}}
+  return true}
+function go(n){S=n;ST_.forEach((x,i)=>x.classList.toggle("on",i===S));document.querySelectorAll(".prog i").forEach((x,i)=>x.classList.toggle("on",i<=S));
+  $("progT").textContent=`${S+1}/4 · ${SNM[S]}`;$("bk").hidden=S===0;$("nx").hidden=S===3;$("sb").hidden=S!==3;
+  $("ap").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});if(window.pnTrack)pnTrack("meet_step",{e:E,s:S+1})}
+$("nx").onclick=()=>{if(chk(S))go(S+1)};$("bk").onclick=()=>go(S-1);
+// ── 스크롤 등장 ──
+const rv=document.querySelectorAll("section.blk,.seats,.roul");
+if(!RM){rv.forEach(x=>x.classList.add("rv"));const rio=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");rio.unobserve(x.target)}}),{threshold:.08});rv.forEach(x=>rio.observe(x))}
 const vis={};const io=new IntersectionObserver(es=>{es.forEach(x=>vis[x.target.id||"hero"]=x.isIntersecting);$("dock").classList.toggle("hide",!!(vis.apply||vis.hero))},{threshold:.05});io.observe($("apply"));io.observe(document.querySelector(".hero .cta"));
 if(location.hash==="#admin")admin();
 else if(qs.get("t"))me(qs.get("t"));
-else fetch(F+"?e="+E).then(r=>r.json()).then(r=>{if(r.ok)paint(r.ev)});
+else fetch(F+"?e="+E).then(r=>r.json()).then(r=>{if(r.ok)paint(r.ev);pulse();setInterval(pulse,60000)});
 if(window.pnTrack)pnTrack("meet_view",{e:E});
 </script>
 </body></html>
