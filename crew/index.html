@@ -22,6 +22,7 @@ body{background:var(--deep)}
 .hero2 p{color:#E3DCFF;margin-top:8px;font-size:15px;line-height:1.6}
 .slot{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
 .slot span{background:rgba(14,12,44,.5);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:700}
+.left{margin-top:12px;font-weight:800;font-size:15px;color:#FFB547;font-variant-numeric:tabular-nums}.left.x{color:#FF7A9C}
 .prog{margin-top:18px}
 .prog .row{display:flex;justify-content:space-between;font-weight:800;font-size:14px}
 .prog .row b{color:var(--lamp);font-variant-numeric:tabular-nums}
@@ -57,6 +58,7 @@ details{margin-top:10px;font-size:12.5px;color:#5A5690}
   <h1 id="ttl">같이 가는 예약이에요</h1>
   <p id="lead">이용 인원 전원이 N CREW 인증을 마쳐야 50% 할인 예약이 확정돼요. 번호 인증 30초면 끝나요.</p>
   <div class="slot" id="slot"></div>
+  <div class="left" id="left"></div>
   <div class="prog"><div class="row"><span>인증한 사람</span><b id="cnt">-</b></div><div class="bar"><i id="bar"></i></div><div class="seats" id="seats"></div></div>
  </section>
 
@@ -71,7 +73,7 @@ details{margin-top:10px;font-size:12.5px;color:#5A5690}
   <div class="msg" id="msg" role="status"></div>
  </section>
  <div class="done" id="done" hidden></div>
- <p class="note">할인권은 월~목만 써요 (공휴일·주말과 쉬는 날 전날 제외). 인원이 다 모이면 호스트가 확인하고 대표자에게 확정 문자를 보내요.</p>
+ <p class="note">신청 후 30분 안에 전원 인증이 안 되면 자동 취소되고 할인권은 대표자에게 돌아가요. 할인권은 월~목만 써요 (공휴일·주말과 쉬는 날 전날 제외). 인원이 다 모이면 호스트가 확인하고 대표자에게 확정 문자를 보내요.</p>
 </main>
 <script>
 (()=>{
@@ -87,9 +89,13 @@ function paint(s){
   $("slot").innerHTML=[s.branch,s.date&&lab(s.date),PK[s.pkg]].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join("");
   $("cnt").textContent=`${s.have} / ${s.need}`;requestAnimationFrame(()=>$("bar").style.width=Math.round(s.have/s.need*100)+"%");
   $("seats").innerHTML=Array.from({length:s.need},(_,i)=>`<span class="${i<s.have?"on":""}" style="animation-delay:${i*.06}s">${i<s.have?"✓ "+esc(s.names[i]||""):"대기"}</span>`).join("");
-  if(s.done){$("form").hidden=true;$("done").hidden=false;$("done").innerHTML=`<b>🎉 ${s.need}명 모두 인증 완료!</b><br>호스트가 확인하면 대표자에게 확정 문자를 보내드려요.`}
+  DL=s.expires_at?new Date(s.expires_at).getTime():0;tick();
+  if(s.expired&&!s.done){$("form").hidden=true;$("done").hidden=false;$("done").innerHTML="⏰ 신청 후 30분이 지나 이 예약은 자동 취소됐어요. 대표자가 다시 신청하면 새 링크가 나와요.";return}
+  if(s.done){DONE=true;$("left").textContent="";$("form").hidden=true;$("done").hidden=false;$("done").innerHTML=`<b>🎉 ${s.need}명 모두 인증 완료!</b><br>호스트가 확인하면 대표자에게 확정 문자를 보내드려요.`}
   else if(s.closed){$("form").hidden=true;$("done").hidden=false;$("done").innerHTML="이 예약은 이미 마감됐거나 정리됐어요."}
 }
+let DL=0,DONE=false;function tick(){if(!DL||DONE)return;const ms=DL-Date.now(),L=$("left");if(ms<=0){L.className="left x";L.textContent="⏰ 인증 시간이 끝났어요";return}const m=Math.floor(ms/6e4),sec=Math.floor(ms%6e4/1e3);L.className="left";L.textContent=`⏳ 남은 시간 ${m}:${String(sec).padStart(2,"0")} · 30분 안에 전원 인증해야 해요`}
+setInterval(tick,1000);
 async function load(){const s=await post({action:"crew_status"}).catch(()=>({}));if(!s.ok){$("ttl").textContent="링크를 다시 확인해 주세요";$("lead").textContent=s.error||"인증 링크가 올바르지 않아요.";$("form").hidden=true;return}paint(s)}
 $("send").onclick=async()=>{const phone=$("ph").value.replace(/\D/g,"");if(!/^01\d{8,9}$/.test(phone)){msg("휴대폰 번호를 확인해 주세요","err");return}
   $("send").disabled=true;const j=await post({action:"crew_otp",phone}).catch(()=>({}));$("send").disabled=false;
