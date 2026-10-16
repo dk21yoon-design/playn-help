@@ -165,6 +165,20 @@ section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--eas
 .cn .cp{font-size:12px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--ink);background:none;cursor:pointer}
 .cn .tk{display:flex;gap:6px}.cn .tk input{flex:1;min-width:0;background:var(--deep);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;color:var(--ink);font-size:13px}
 .cn .tk .go{font-size:13px;font-weight:700;color:#1a1300;background:var(--lamp);border:0;border-radius:999px;padding:7px 14px;cursor:pointer}
+.mus{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.mu{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.mu .h{display:flex;align-items:center;gap:8px;min-width:0}.mu .h b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mu .src{font-size:12.5px;color:var(--dim)}.mu .tags{display:flex;gap:5px;flex-wrap:wrap}
+.mu .tags span{font-size:12px;padding:2px 9px;border-radius:999px;background:rgba(166,162,214,.12);color:var(--mute)}
+.mu audio{width:100%;height:36px}
+.mu .fv{margin-left:auto;min-width:44px;min-height:36px;border:1px solid var(--line2);border-radius:999px;background:none;color:var(--mute);font-size:13px;cursor:pointer}
+.mu .fv.on{color:#1a1300;background:var(--lamp);border-color:var(--lamp)}
+.mu .cmd{display:flex;gap:6px;align-items:flex-start;background:var(--deep);border-radius:8px;padding:8px}
+.mu .cmd code{font-size:12px;color:var(--ink);white-space:pre-wrap;flex:1;min-width:0;line-height:1.5}
+.mu .cp{font-size:12px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--ink);background:none;cursor:pointer;white-space:nowrap}
+.mup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel2);border:1px dashed var(--line2);border-radius:var(--r-sm);padding:14px;margin-bottom:12px}
+.mup label.go{font-size:14px;font-weight:700;color:#1a1300;background:var(--lamp);border-radius:999px;padding:10px 18px;cursor:pointer}
+.mup p{font-size:13px;color:var(--mute);line-height:1.5;flex:1;min-width:220px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;max-width:min(520px,calc(100vw - 32px));background:#211d3b;color:var(--ink);border:1px solid var(--line2);border-radius:14px;padding:12px 16px;font-size:14px;line-height:1.5;box-shadow:0 12px 40px rgba(0,0,0,.45);transition:.25s;z-index:99;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 details.res summary{cursor:pointer;color:var(--mute);font-size:14px;padding:6px 0;list-style:none}
@@ -370,7 +384,7 @@ function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.log
 /* ── 렌더 ── */
 function renderCats(){const c=$("#cats");c.innerHTML="";
   const all=issuesOf("all");
-  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"}];
+  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"music",name:"릴스 음악",mono:"♪",monoBg:"#3A0F2A"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"}];
   items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;
     const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
     const crit=o.filter(i=>i.severity==="crit").length, warn=o.filter(i=>i.severity==="warn").length;
@@ -542,7 +556,38 @@ function skillsSection(){const s=el("section");s.id="skills";const sk=DATA.skill
      ${k.url?`<a href="${H(k.url)}" target="_blank" rel="noopener" style="font-size:13px;color:var(--lamp)">저장소 열기 ↗</a>`:""}`;g.appendChild(c)});
   s.appendChild(g);return s}
 
-function render(){if(!DATA)return;renderCats();const m=$("#main");m.innerHTML="";
+const MOOD_KO={hype:"신남",epic:"웅장",fun:"경쾌",chill:"잔잔",emotional:"감성",retro:"레트로",dark:"어두움",cute:"귀여움"};
+function musicSection(){const s=el("section");s.id="music";const all=DATA.music||[];const ready=all.filter(m=>m.status==="ready"),idea=all.filter(m=>m.status==="idea");
+  s.innerHTML=`<div class="sh"><span class="eye">REEL MUSIC</span><h2>릴스 음악 보관함</h2><span class="meta">${ready.length}곡 사용 가능 · 아이디어 ${idea.length} · 릴스 만들 때 덜 쓴 곡부터 자동 선택</span></div>`;
+  const up=el("div","mup");up.innerHTML=`<label class="go" for="muFile">수노 곡 올리기</label><input id="muFile" type="file" accept=".mp3,.wav,.m4a,audio/*" multiple hidden>
+    <p>수노에서 받은 mp3를 고르면 바로 보관함에 들어가요. PC의 <b>작업실/음악 보관함</b> 폴더에 넣어도 다음 PC 실행 때 자동으로 올라가요.</p>`;
+  up.querySelector("input").onchange=async e=>{const fs=[...e.target.files];let n=0;for(const f of fs){toast(`올리는 중… ${f.name}`);
+      const u=await post({action:"music_upload_url",filename:f.name});if(!u.ok){toast("실패: "+(u.error||""));continue}
+      const r=await fetch(u.upload_url,{method:"PUT",headers:{"content-type":f.type||"audio/mpeg"},body:f}).catch(()=>null);if(!r||!r.ok){toast("업로드 실패: "+f.name);continue}
+      const dur=await new Promise(res=>{const a=new Audio();a.preload="metadata";a.onloadedmetadata=()=>res(Math.round(a.duration)||null);a.onerror=()=>res(null);a.src=URL.createObjectURL(f)});
+      const j=await post({action:"music_add",slug:u.slug,title:f.name.replace(/\.[^.]+$/,""),url:u.public_url,duration_s:dur});if(j.ok)n++}
+    toast(n?`✓ ${n}곡 추가했어요`:"추가된 곡이 없어요");e.target.value="";load()};
+  s.appendChild(up);
+  const g=el("div","mus");
+  ready.forEach(m=>{const c=el("article","mu");
+    c.innerHTML=`<div class="h"><b>${H(m.title)}</b><button type="button" class="fv${m.fav?" on":""}" aria-label="즐겨찾기">${m.fav?"★ 단골":"☆"}</button></div>
+     <div class="src">${[m.source==="suno"?"내 수노 곡":"CC 음원",m.bpm?Math.round(m.bpm)+"bpm":"",m.duration_s?Math.floor(m.duration_s/60)+":"+String(Math.round(m.duration_s%60)).padStart(2,"0"):"",m.best_start!=null?`하이라이트 ${Math.round(m.best_start)}초~`:"",m.vocals===false?"보컬 없음":m.vocals?"보컬":""].filter(Boolean).join(" · ")}</div>
+     <div class="tags">${[...new Set([...(m.mood||[]).map(x=>MOOD_KO[x]||x),...(m.use_for||[])])].map(x=>`<span>${H(x)}</span>`).join("")}</div>
+     <audio controls preload="none" src="${H(m.url)}"></audio>
+     <div class="src">사용 ${m.uses||0}회${(m.used_in||[]).length?" · "+H(m.used_in.slice(-4).join(", ")):""} · 캡션: ${H(m.credit||"")}</div>`;
+    const a=c.querySelector("audio");if(m.best_start)a.addEventListener("loadedmetadata",()=>{if(a.currentTime<1)a.currentTime=m.best_start},{once:true});
+    c.querySelector(".fv").onclick=async e=>{m.fav=!m.fav;e.target.classList.toggle("on",m.fav);e.target.textContent=m.fav?"★ 단골":"☆";await post({action:"music_update",id:m.id,fav:m.fav})};
+    g.appendChild(c)});
+  if(!ready.length)g.innerHTML=emptyBox("아직 곡이 없어요. 위 버튼으로 수노 곡을 올려 주세요.");
+  s.appendChild(g);
+  if(idea.length){const h=el("div","sh");h.style.marginTop="22px";h.innerHTML=`<span class="eye">SUNO IDEAS</span><h2>만들면 좋은 곡</h2><span class="meta">프롬프트 복사 → 수노에 붙여넣기 → 받은 곡을 위에서 올리기</span>`;s.appendChild(h);
+    const g2=el("div","mus");idea.forEach(m=>{const c=el("article","mu");
+      c.innerHTML=`<div class="h"><b>${H(m.title)}</b></div><div class="src">${H(m.lyrics_note||"")}</div><div class="tags">${(m.use_for||[]).map(x=>`<span>${H(x)}</span>`).join("")}</div>
+       <div class="cmd"><code>${H(m.prompt||"")}</code><button type="button" class="cp">복사</button></div>`;
+      c.querySelector(".cp").onclick=()=>navigator.clipboard?.writeText(m.prompt||"").then(()=>toast("복사했어요. 수노 Custom 모드 Style 칸에 붙여넣기"));g2.appendChild(c)});s.appendChild(g2)}
+  return s}
+
+function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio")].some(a=>!a.paused))return;renderCats();const m=$("#main");m.innerHTML="";
   const B=BRANDS.find(b=>b.id===VIEW);
   if(VIEW==="all"){
     const s1=el("section");s1.innerHTML=statusBanner("all")+kpiStrip();m.appendChild(s1);
@@ -554,6 +599,7 @@ function render(){if(!DATA)return;renderCats();const m=$("#main");m.innerHTML=""
     m.appendChild(issuesSection(B.id));if(B.id==="playn")m.appendChild(publishSection());m.appendChild(activitySection(B.id));
   } else if(VIEW==="auto"){m.appendChild(connSection());m.appendChild(issuesSection("auto"));m.appendChild(autoSection())}
   else if(VIEW==="skills"){m.appendChild(skillsSection())}
+  else if(VIEW==="music"){m.appendChild(musicSection())}
   countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
 }
 
@@ -564,7 +610,7 @@ async function load(){const j=await post({action:"board"});
     $("#liveDot").classList.add("off");$("#liveTxt").textContent="갱신 실패 · 다시 시도 중";return}
   st.set("pn_admin",KEY);$("#gate").hidden=true;$("#app").hidden=false;DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
-function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
+function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
   if(["issues","publish","activity"].includes(h))return;render();window.scrollTo({top:0,behavior:"smooth"})}
 window.addEventListener("hashchange",route);
 $("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});

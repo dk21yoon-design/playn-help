@@ -27,7 +27,7 @@ spec.json 예시
   {"dur": 2.0, "clip": {"file": "local.mp4", "start": 3}, "center": "대망의 {1위}는…?", "sub": "친구랑 하면 {우정 파괴} 확정"},
   {"dur": 2.0, "image": "https://…/cover.jpg", "cta": true, "line": "시험 끝난 친구 {태그}하고\\n오늘 밤 바로 ㄱㄱ 👇", "pill": "📌 저장해두고 시험 끝나면 꺼내보기"}
  ],
- "music": {"url": "<CC 곡 URL 또는 로컬 mp3>", "start": 0}
+ "music": {"url": "<CC 곡 URL 또는 로컬 mp3>", "start": 0}   ← 또는 {"lib": "suno_last_stand"} / {"lib": "auto", "mood": "epic", "use_for": "롤드컵"} (관제실 음악 보관함)
 }
 - clip: steam_appid(+trailer id, 생략 시 첫 트레일러) 또는 file. start=초. crop_top=true 면 원본 위쪽 900/1080만 사용(트레일러에 영문 자막이 박혀 있을 때)
 - image: URL·로컬 경로·data URI. 천천히 확대(Ken Burns). 제품 사진은 "fit": "contain"(+ "pad": "white") → 잘림 없이 전체 표시. 실사 사진(공식 제품 이미지·보도사진)만. AI 생성 이미지 금지.
@@ -500,8 +500,40 @@ def mix_music(mspec, dst):
          '-t', f'{total}', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
     return round(float(st), 1)
 
+# 2026-10-16 릴스 음악 보관함(관제실 hq_music): "music": {"lib": "<slug>"} 또는 {"lib": "auto", "mood": "epic", "use_for": "롤드컵"}
+#   auto = 조건에 맞는 곡 중 덜 쓴 곡 → 최근에 안 쓴 곡 순. start 생략 시 곡의 best_start(하이라이트). 캡션 credit은 결과 JSON music_credit.
+HQ_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq'
+def _hq(body):
+    k = os.environ.get('PLAYN_KEY')
+    if not k: raise SystemExit('❌ PLAYN_KEY 없음: 음악 보관함을 못 읽음')
+    req = urllib.request.Request(HQ_API, data=json.dumps({**body, 'intake': k}).encode(), headers={'content-type': 'application/json'})
+    return json.load(urllib.request.urlopen(req, timeout=30))
+def resolve_lib(mspec):
+    if not mspec or not mspec.get('lib'): return mspec, None
+    lib = _hq({'action': 'music_list'}).get('music', [])
+    if mspec['lib'] != 'auto':
+        pick = next((x for x in lib if x['slug'] == mspec['lib']), None)
+    else:
+        def ok(x):
+            if mspec.get('mood') and mspec['mood'] not in (x.get('mood') or []): return False
+            if mspec.get('use_for') and mspec['use_for'] not in (x.get('use_for') or []): return False
+            if mspec.get('vocals') is not None and x.get('vocals') is not None and bool(x['vocals']) != bool(mspec['vocals']): return False
+            if mspec.get('source') and x.get('source') != mspec['source']: return False
+            return True
+        cand = [x for x in lib if ok(x)] or lib
+        cand.sort(key=lambda x: (not x.get('fav'), x.get('source') != 'suno', x.get('uses') or 0, x.get('last_used_at') or ''))
+        pick = cand[0] if cand else None
+    if not pick: raise SystemExit(f"❌ 음악 보관함에 맞는 곡 없음: {mspec}")
+    out = {**{k: v for k, v in mspec.items() if k not in ('lib', 'mood', 'use_for', 'vocals', 'source')}, 'url': pick['url']}
+    if 'start' not in mspec: out['start'] = pick['best_start'] if pick.get('best_start') is not None else 'auto'
+    print(f"음악 보관함: {pick['title']} ({pick['slug']}) start={out['start']}", file=sys.stderr)
+    return out, pick
+
 res_extra = {}
 m = spec.get('music')
+m, _mpick = resolve_lib(m)
+if _mpick:
+    res_extra.update(music_slug=_mpick['slug'], music_title=_mpick['title'], music_credit=_mpick.get('credit'))
 if m and m.get('url'):
     res_extra['music_start'] = mix_music(m, out)
 else:
@@ -516,4 +548,7 @@ ci = spec.get('cover_scene', 1 if len(parts) > 1 else 0)
 t0 = sum(d for _, d in parts[:ci]) + min(1.0, parts[ci][1] / 2)
 run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', f'{t0:.2f}', '-i', out, '-frames:v', '1', '-q:v', '2', base + '_cover.jpg'])
 clip_commit(_reg, _rows, _rid)
+if _mpick:
+    try: _hq({'action': 'music_used', 'slug': _mpick['slug'], 'reel': _rid})
+    except Exception as e: print('음악 사용 기록 실패:', e, file=sys.stderr)
 print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), **res_extra}, ensure_ascii=False))
