@@ -473,7 +473,11 @@ function platformBody(B,P){const b=DATA.board,p=b.playn;let h="";
       h+=metCard("예약 버튼 클릭 (7일)",N(f.reserve7??null),`${fmt(f.reserve7_u)}명 · 견적 바에서 ${fmt(f.qbar_reserve7)}회`,"네이버 예약·스페이스클라우드 링크")
         +metCard("견적 바 조작 (7일)",N(f.qbar7??null),`${fmt(f.qbar7_u)}명 · SNS 배지 노출 ${fmt(f.qbar_badge7)}회`,"인원·지점·시간·날짜 변경");
       h+=`<div class="met wide"><span class="l">유입 경로별 예약 클릭 (7일, 사람 수)</span><div class="hbars">${hbars((f.reserve_src||[]).map(s=>({l:(({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[s.src]||s.src)+" · 방문 "+s.v,v:s.r,t:`${s.r}명 (${pct(s.r,s.v)})`,lo:!s.r})))}</div></div>`;
-      if((f.reserve_by||[]).length)h+=`<div class="met wide"><span class="l">예약 클릭 위치 (7일)</span><div class="hbars">${hbars(f.reserve_by.map(x=>({l:x.k.replace("hongdae","홍대").replace("yeonnam","연남").replace("yeontral","연트럴").replace("qbar","견적 바").replace("branches","지점 카드"),v:x.n})))}</div></div>`}
+      if((f.reserve_by||[]).length)h+=`<div class="met wide"><span class="l">예약 클릭 위치 (7일)</span><div class="hbars">${hbars(f.reserve_by.map(x=>({l:x.k.replace("hongdae","홍대").replace("yeonnam","연남").replace("yeontral","연트럴").replace("qbar","견적 바").replace("branches","지점 카드"),v:x.n})))}</div></div>`
+      const a=f.attrib;if(a){
+        h+=metCard("예약 완료 (30일)",N(a.res30),`웹 클릭과 시간 겹침 ${fmt(a.matched30)}건 (추정)`,"같은 지점 예약 버튼 클릭 뒤 6시간 안에 들어온 예약")
+        h+=metCard("체크인 설문 응답 (30일)",N(a.found30),`정산 링크 ${fmt(a.settle30)}건 · 체크인 ${fmt(a.checkin30)}건`,"손님이 직접 고른 답")
+        h+=`<div class="met wide"><span class="l">예약 완료 유입 경로 (30일)</span><div class="hbars">${hbars([...(a.found_by||[]).map(x=>({l:"설문 · "+x.k,v:x.n})),...(a.match_src||[]).map(x=>({l:"시간 매칭(추정) · "+(({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[x.src]||x.src),v:x.n}))])}</div></div>`}}
     else if(P.id==="instagram"){const q=p.queue||{};h+=genericMetrics("playn","instagram")+metCard("게시 완료",N(q.published),"전체")+metCard("발행 대기",N(q.ready),"예약됨")+metCard("초안",N(q.draft),"승인 전")+metCard("7일 조회",N(p.ch7?.ig),`공유 ${fmt(p.ch7?.shares)}`)}
     else{const k={youtube:"yt",facebook:"fb",threads:"th"}[P.id];h+=genericMetrics("playn",P.id)+metCard("7일 조회 합",N(p.ch7?.[k]),"릴스 자동 동시 발행분")+emptyBox("릴스가 인스타에 올라가면 이 채널에도 자동으로 같이 올라가요. 편별 조회는 아래 <b>발행·성과</b> 표에 있어요.")}
   } else if(B.id==="saenghwal"&&P.id==="wordpress"){const w=DATA.wp||{};
