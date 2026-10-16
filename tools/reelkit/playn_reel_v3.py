@@ -370,7 +370,17 @@ def scene_video(i, sc):
     ap = f'{W}/a{i}.wav'
     if sc.get('mic') and sc.get('clip'):
         c = sc['clip']
-        run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', str(c.get('start', 0)), '-t', f'{d}', '-i', source_audio(c), '-vn', '-ac', '2', '-ar', '44100',
+        if spec.get('continuous_audio'):
+            # 2026-10-16 연속 오디오(롱테이크형): 장면마다 음량 정규화·페이드를 하지 않아 해설이 끊기지 않게. 앞뒤가 이어진 장면이면 페이드 없음
+            def _contig(a, b):
+                return a and b and a.get('mic') and b.get('mic') and a.get('clip') and b.get('clip') and a['clip'].get('file') == b['clip'].get('file') and abs(a['clip'].get('start', 0) + a['dur'] - b['clip'].get('start', 0)) < 0.06
+            prv = scenes[i - 1] if i > 0 else None; nxt = scenes[i + 1] if i + 1 < len(scenes) else None
+            fi = '' if _contig(prv, sc) else 'afade=t=in:d=0.12,'
+            fo = '' if _contig(sc, nxt) else f',afade=t=out:st={max(0, d - 0.25):.2f}:d=0.25'
+            run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', str(c.get('start', 0)), '-t', f'{d}', '-i', source_audio(c), '-vn', '-ac', '2', '-ar', '44100',
+                 '-af', f'{fi}apad=whole_dur={d}{fo}', '-t', f'{d}', ap])
+        else:
+            run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', str(c.get('start', 0)), '-t', f'{d}', '-i', source_audio(c), '-vn', '-ac', '2', '-ar', '44100',
              '-af', f'apad=whole_dur={d},loudnorm=I=-16:TP=-1.5,afade=t=in:d=0.08,afade=t=out:st={max(0, d - 0.15):.2f}:d=0.15', '-t', f'{d}', ap])
     else:
         run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', '-t', f'{d}', ap])
@@ -458,6 +468,8 @@ alst = f'{W}/alist.txt'
 open(alst, 'w').write(''.join(f"file '{W}/a{i}.wav'\n" for i in range(len(parts))))
 voice = f'{W}/voice.wav'
 run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', alst, '-c', 'copy', voice])
+if spec.get('continuous_audio'):  # 연속 오디오는 전체를 한 번에 정규화(장면마다 음량이 튀지 않게)
+    run(['ffmpeg', '-y', '-loglevel', 'error', '-i', voice, '-af', 'loudnorm=I=-15:TP=-1.5:LRA=9', '-ar', '44100', '-ac', '2', voice + '.n.wav']); os.replace(voice + '.n.wav', voice)
 has_mic = any(sc.get('mic') for sc in scenes)
 # 무음(인스타 음악용) 버전: mic 장면 소리만 남김
 run(['ffmpeg', '-y', '-loglevel', 'error', '-i', vid, '-i', voice, '-map', '0:v', '-map', '1:a', '-shortest', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', base + '_silent.mp4'])
@@ -485,7 +497,7 @@ def mix_music(mspec, dst):
     # 2026-10-16 보이스 우선 믹스: mic 장면은 음악을 duck_level(기본 8%)까지 0.3초 램프로 내리고, 보이스는 잡음 컷·압축·증폭
     ivs, t0 = [], 0.0
     for (p_, d_), sc in zip(parts, scenes):
-        if sc.get('mic'): ivs.append((t0, t0 + d_))
+        if sc.get('mic') and not sc.get('music_up'): ivs.append((t0, t0 + d_))  # music_up: 해설 위라도 음악을 올리는 장면(클라이맥스)
         t0 += d_
     dl = float(mspec.get('duck_level', spec.get('duck_level', 0.08))); rp = 0.3
     if ivs:
@@ -495,9 +507,11 @@ def mix_music(mspec, dst):
         vol = f"volume='1-{1 - dl:.2f}*({e})':eval=frame,"
     else: vol = ''
     vchain = "highpass=f=90,lowpass=f=9000,acompressor=threshold=0.05:ratio=4:attack=5:release=150:makeup=4,volume=1.5"
-    af = f"[1:a]atrim=start={st},asetpts=PTS-STARTPTS,loudnorm=I=-14:TP=-1.5:LRA=11,volume={float(mspec.get('gain', spec.get('music_gain', 1.0))):.2f},{vol}afade=t=out:st={max(0, total - 0.8):.2f}:d=0.8[mu];[2:a]{vchain}[vo];[mu][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]"
+    mchain = f"atrim=start={st},asetpts=PTS-STARTPTS,loudnorm=I=-14:TP=-1.5:LRA=11,volume={float(mspec.get('gain', spec.get('music_gain', 1.0))):.2f},{vol}{('afade=t=in:d=%.2f,' % float(mspec['fade_in'])) if mspec.get('fade_in') else ''}afade=t=out:st={max(0, total - 0.8):.2f}:d=0.8"
+    af = f"[1:a]{mchain}[mu];[2:a]{vchain}[vo];[mu][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]"
     run(['ffmpeg', '-y', '-loglevel', 'error', '-i', vid, '-i', mp, '-i', voice, '-filter_complex', af, '-map', '0:v', '-map', '[a]',
          '-t', f'{total}', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
+    run(['ffmpeg', '-y', '-loglevel', 'error', '-i', mp, '-af', mchain, '-t', f'{total}', os.path.splitext(dst)[0] + '_music.wav'])  # reel_qa.py 드롭 검사용
     return round(float(st), 1)
 
 # 2026-10-16 릴스 음악 보관함(관제실 hq_music): "music": {"lib": "<slug>"} 또는 {"lib": "auto", "mood": "epic", "use_for": "롤드컵"}
@@ -511,14 +525,18 @@ def _hq(body):
 def resolve_lib(mspec):
     if not mspec or not mspec.get('lib'): return mspec, None
     lib = _hq({'action': 'music_list'}).get('music', [])
+    mic_ratio = sum(sc_['dur'] for sc_ in scenes if sc_.get('mic')) / max(1e-6, sum(sc_['dur'] for sc_ in scenes))
     if mspec['lib'] != 'auto':
         pick = next((x for x in lib if x['slug'] == mspec['lib']), None)
+        if pick and mic_ratio > 0.5 and pick.get('vocals') and not mspec.get('allow_vocals'):
+            raise SystemExit(f"❌ 해설 비중 {mic_ratio:.0%}인데 보컬 곡 {pick['title']}: 보컬 없는 곡을 쓰거나 allow_vocals:true")
     else:
         def ok(x):
             if mspec.get('mood') and mspec['mood'] not in (x.get('mood') or []): return False
             if mspec.get('use_for') and mspec['use_for'] not in (x.get('use_for') or []): return False
             if mspec.get('vocals') is not None and x.get('vocals') is not None and bool(x['vocals']) != bool(mspec['vocals']): return False
             if mspec.get('source') and x.get('source') != mspec['source']: return False
+            if mic_ratio > 0.5 and x.get('vocals') and not mspec.get('allow_vocals'): return False  # 해설 위 보컬 곡 금지(말소리 가림)
             if (mspec.get('hit_at') is not None or mspec.get('hit_scene') is not None) and not x.get('drops'): return False
             return True
         cand = [x for x in lib if ok(x)] or lib
