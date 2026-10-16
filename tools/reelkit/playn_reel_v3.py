@@ -495,7 +495,7 @@ def mix_music(mspec, dst):
         vol = f"volume='1-{1 - dl:.2f}*({e})':eval=frame,"
     else: vol = ''
     vchain = "highpass=f=90,lowpass=f=9000,acompressor=threshold=0.05:ratio=4:attack=5:release=150:makeup=4,volume=1.5"
-    af = f"[1:a]atrim=start={st},asetpts=PTS-STARTPTS,loudnorm=I=-14:TP=-1.5:LRA=11,{vol}afade=t=out:st={max(0, total - 0.8):.2f}:d=0.8[mu];[2:a]{vchain}[vo];[mu][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]"
+    af = f"[1:a]atrim=start={st},asetpts=PTS-STARTPTS,loudnorm=I=-14:TP=-1.5:LRA=11,volume={float(mspec.get('gain', spec.get('music_gain', 1.0))):.2f},{vol}afade=t=out:st={max(0, total - 0.8):.2f}:d=0.8[mu];[2:a]{vchain}[vo];[mu][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]"
     run(['ffmpeg', '-y', '-loglevel', 'error', '-i', vid, '-i', mp, '-i', voice, '-filter_complex', af, '-map', '0:v', '-map', '[a]',
          '-t', f'{total}', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
     return round(float(st), 1)
@@ -522,7 +522,7 @@ def resolve_lib(mspec):
             if (mspec.get('hit_at') is not None or mspec.get('hit_scene') is not None) and not x.get('drops'): return False
             return True
         cand = [x for x in lib if ok(x)] or lib
-        cand.sort(key=lambda x: (not x.get('fav'), x.get('source') != 'suno', x.get('uses') or 0, x.get('last_used_at') or ''))
+        cand.sort(key=lambda x: (_rid not in (x.get('used_in') or []), not x.get('fav'), x.get('source') != 'suno', x.get('uses') or 0, x.get('last_used_at') or ''))
         pick = cand[0] if cand else None
     if not pick: raise SystemExit(f"❌ 음악 보관함에 맞는 곡 없음: {mspec}")
     out = {**{k: v for k, v in mspec.items() if k not in ('lib', 'mood', 'use_for', 'vocals', 'source', 'hit_at', 'hit_scene', 'drop')}, 'url': pick['url']}
