@@ -349,7 +349,7 @@ const BRANDS=[
   plats:[{id:"blog-salim",name:"1호 살림보감",icon:"naver",url:"https://blog.naver.com/spaceclean119"},{id:"blog-life",name:"2호 생활정보 서랍",icon:"naver",url:"https://blog.naver.com/dk22yoon"},{id:"blog-ch3",name:"3호 오늘의 방법",icon:"naver",url:"https://blog.naver.com/todaysmethod"},
          {id:"threads-salim",name:"@salim.bogam",icon:"threads",url:"https://www.threads.net/@salim.bogam"},{id:"threads-life",name:"@life.drawer_kr",icon:"threads",url:"https://www.threads.net/@life.drawer_kr"},{id:"threads-ch3",name:"@todays.method",icon:"threads",url:"https://www.threads.net/@todays.method"}]},
  {id:"saenghwal",name:"생활공략집",tag:"워드프레스 · 유튜브 쇼츠 · 인스타 · 페북",logo:"img/saenghwal.webp",
-  plats:[{id:"wordpress",name:"워드프레스",icon:"wordpress",url:"https://gongryakzip.com/"},{id:"youtube",name:"유튜브",icon:"youtube"},{id:"shorts",name:"쇼츠 대기열",icon:"shorts"},{id:"instagram",name:"인스타",icon:"instagram",url:"https://www.instagram.com/saenghwal.gongryak/"},{id:"facebook",name:"페이스북",icon:"facebook"}]},
+  plats:[{id:"wordpress",name:"워드프레스",icon:"wordpress",url:"https://gongryakzip.com/"},{id:"youtube",name:"유튜브",icon:"youtube"},{id:"shorts",name:"쇼츠 대기열",icon:"shorts"},{id:"pick",name:"제품 페이지",icon:"web",url:"https://playn.kr/pick/"},{id:"instagram",name:"인스타",icon:"instagram",url:"https://www.instagram.com/saenghwal.gongryak/"},{id:"facebook",name:"페이스북",icon:"facebook"}]},
  {id:"hanta",name:"한타BGM",tag:"게임 플레이리스트 · 유튜브 · 인스타",mono:"한타",monoBg:"linear-gradient(135deg,#6B2BD9,#FF2E6E)",
   plats:[{id:"youtube",name:"유튜브",icon:"youtube"},{id:"instagram",name:"인스타 @hantabgm",icon:"instagram",url:"https://www.instagram.com/hantabgm/"},{id:"facebook",name:"페이스북",icon:"facebook"}]},
  {id:"yeokjeon",name:"역전실록",tag:"역전 실화 다큐 쇼츠 · 유튜브 · 인스타 · 틱톡",logo:"img/yeokjeon.webp",
@@ -399,7 +399,7 @@ function connSection(){const s=el("section");s.id="connect";const rows=CONN.map(
     g.appendChild(d)});
   s.appendChild(g);return s}
 
-let DATA=null, VIEW="all", PTAB={}, lastOk=0;
+let DATA=null, VIEW="all", PTAB={}, lastOk=0, PICKS=null;
 const metrics=(b,ch)=>(DATA?.board?.metrics||[]).filter(m=>m.brand===b&&(!ch||m.channel===ch));
 const mv=(b,ch,k)=>{const m=metrics(b,ch).find(x=>x.metric===k);return m||null};
 const issuesOf=b=>(DATA?.board?.issues||[]).filter(i=>i.status==="open"&&(b==="all"||i.brand===b));
@@ -454,7 +454,7 @@ function brandKpis(id){const b=DATA.board,p=b.playn;
   if(id==="naver"){const tot=["salim","life","ch3"].reduce((s,c)=>s+(mv("naver","blog-"+c,"visitors_total")?.value||0),0);
     const th=["salim","life","ch3"].reduce((s,c)=>s+(mv("naver","threads-"+c,"views_recent15")?.value||0),0);
     return[{l:"블로그 누적 방문",v:N(tot||null)},{l:"오늘 예약 발행",v:N(mv("naver","blog","published_today")?.value)},{l:"쓰레드 최근 조회",v:N(th||null)}]}
-  if(id==="saenghwal")return[{l:"유튜브 구독",v:N(mv("saenghwal","youtube","subscribers")?.value)},{l:"WP 발행 글",v:N(DATA.wp?.total)},{l:"쇼츠 HOLD",v:N(mv("saenghwal","shorts","hold")?.value)}];
+  if(id==="saenghwal"){const f=b.funnel||{};return[{l:"유튜브 구독",v:N(mv("saenghwal","youtube","subscribers")?.value)},{l:"제품 페이지 방문 7일",v:N(f.pick_view7??null)},{l:"제품 클릭 7일",v:N(f.pick_out7??null)}]}
   if(id==="yeokjeon"){const q=b.yeokjeon?.queue||{};return[{l:"인스타 게시",v:N(q.published||0)},{l:"인스타 대기",v:N(q.ready||0)},{l:"유튜브 업로드",v:N(mv("yeokjeon","youtube","uploads_total")?.value)}]}
   const W=(b,ch,k)=>{const x=mv(b,ch,k);return x?N(x.value):"연결 대기"};
   if(id==="hanta")return[{l:"유튜브 구독",v:W("hanta","youtube","subscribers")},{l:"최근 10개 조회",v:W("hanta","youtube","views_recent10")},{l:"인스타 팔로워",v:W("hanta","instagram","followers")}];
@@ -468,11 +468,21 @@ function platformBody(B,P){const b=DATA.board,p=b.playn;let h="";
   if(B.id==="playn"){
     if(P.id==="web"){h+=metCard("지금 접속",N(p.live5),"최근 5분")+metCard("오늘 방문자",N(p.today),`페이지뷰 ${fmt(p.today_pv)}`)+metCard("N CREW",N(p.members),`7일 +${fmt(p.members7)}`)+metCard("예약 (오늘)",N(p.res_today),`앞으로 14일 ${fmt(p.res_upcoming)}건 · 7일 새 예약 ${fmt(p.res_new7)}`);
       h+=`<div class="met wide"><span class="l">방문자 14일</span>${spark(p.visitors14||[])}</div>`;
-      h+=`<div class="met wide"><span class="l">유입 경로 (7일, 사람 수)</span><div class="hbars">${hbars((p.sources7||[]).map(s=>({l:({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[s.src]||s.src,v:s.n})))}</div></div>`}
+      h+=`<div class="met wide"><span class="l">유입 경로 (7일, 사람 수)</span><div class="hbars">${hbars((p.sources7||[]).map(s=>({l:({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[s.src]||s.src,v:s.n})))}</div></div>`;
+      const f=b.funnel||{},pct=(a,z)=>z?Math.round(a/z*1000)/10+"%":"–";
+      h+=metCard("예약 버튼 클릭 (7일)",N(f.reserve7??null),`${fmt(f.reserve7_u)}명 · 견적 바에서 ${fmt(f.qbar_reserve7)}회`,"네이버 예약·스페이스클라우드 링크")
+        +metCard("견적 바 조작 (7일)",N(f.qbar7??null),`${fmt(f.qbar7_u)}명 · SNS 배지 노출 ${fmt(f.qbar_badge7)}회`,"인원·지점·시간·날짜 변경");
+      h+=`<div class="met wide"><span class="l">유입 경로별 예약 클릭 (7일, 사람 수)</span><div class="hbars">${hbars((f.reserve_src||[]).map(s=>({l:(({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[s.src]||s.src)+" · 방문 "+s.v,v:s.r,t:`${s.r}명 (${pct(s.r,s.v)})`,lo:!s.r})))}</div></div>`;
+      if((f.reserve_by||[]).length)h+=`<div class="met wide"><span class="l">예약 클릭 위치 (7일)</span><div class="hbars">${hbars(f.reserve_by.map(x=>({l:x.k.replace("hongdae","홍대").replace("yeonnam","연남").replace("yeontral","연트럴").replace("qbar","견적 바").replace("branches","지점 카드"),v:x.n})))}</div></div>`}
     else if(P.id==="instagram"){const q=p.queue||{};h+=genericMetrics("playn","instagram")+metCard("게시 완료",N(q.published),"전체")+metCard("발행 대기",N(q.ready),"예약됨")+metCard("초안",N(q.draft),"승인 전")+metCard("7일 조회",N(p.ch7?.ig),`공유 ${fmt(p.ch7?.shares)}`)}
     else{const k={youtube:"yt",facebook:"fb",threads:"th"}[P.id];h+=genericMetrics("playn",P.id)+metCard("7일 조회 합",N(p.ch7?.[k]),"릴스 자동 동시 발행분")+emptyBox("릴스가 인스타에 올라가면 이 채널에도 자동으로 같이 올라가요. 편별 조회는 아래 <b>발행·성과</b> 표에 있어요.")}
   } else if(B.id==="saenghwal"&&P.id==="wordpress"){const w=DATA.wp||{};
     h+=metCard("공개 글",N(w.total),"gongryakzip.com 실시간")+metCard("남은 주제",N(mv("saenghwal","wordpress","topics_todo")?.value),"topics.json")+((w.posts||[]).map(x=>`<div class="met wide"><span class="l">최근 글 · ${H((x.date||"").slice(5,10))}</span><a class="t" href="${H(x.link)}" target="_blank" rel="noopener">${H(x.title)}</a></div>`).join(""));
+  } else if(B.id==="saenghwal"&&P.id==="pick"){const f=b.funnel||{};
+    if(!PICKS){PICKS={};fetch("/pick/picks.json").then(r=>r.json()).then(a=>{a.forEach(x=>PICKS[x.no]=x.name);render(true)}).catch(()=>{})}
+    h+=metCard("방문 (7일)",N(f.pick_view7??null),`오늘 ${fmt(f.pick_view_today)}명`,"playn.kr/pick 고유 방문자")+metCard("쿠팡 제품 클릭 (7일)",N(f.pick_out7??null),`오늘 ${fmt(f.pick_out_today)}회`,"보러가기 버튼")
+      +metCard("클릭률",f.pick_view7?Math.round(f.pick_out7/f.pick_view7*100)+"%":"–","클릭 ÷ 방문자");
+    h+=(f.pick_top||[]).length?`<div class="met wide"><span class="l">많이 누른 제품 (7일)</span><div class="hbars">${hbars(f.pick_top.map(x=>({l:"#"+x.no+(PICKS[x.no]?" "+PICKS[x.no]:""),v:x.n})))}</div></div>`:emptyBox("아직 제품 클릭 기록이 없어요. 쇼츠를 보고 프로필 링크로 들어와 '보러가기'를 누르면 여기에 쌓여요.");
   } else if(B.id==="yeokjeon"&&P.id==="instagram"){const y=b.yeokjeon||{};
     h+=genericMetrics("yeokjeon","instagram")+metCard("게시",N(y.queue?.published||0))+metCard("대기",N(y.queue?.ready||0))+(y.recent||[]).map(r=>`<div class="met wide"><span class="l">#${r.id} · ${r.publish_at?kst(r.publish_at):""}</span><span class="t">${r.status==="published"?`<a href="${H(r.permalink)}" target="_blank" rel="noopener">게시물 보기</a>`:r.status==="ready"?"발행 대기":H(r.status+" "+(r.error||""))}</span></div>`).join("");
   } else {const ch=P.id;h+=genericMetrics(B.id,ch);

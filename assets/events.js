@@ -90,6 +90,19 @@
   document.addEventListener("click", function (ev) { var a = ev.target.closest && ev.target.closest("[data-events-open]"); if (a) { ev.preventDefault(); open("nav"); } });
   if (!list.length || get("localStorage", "pn_ev_hide") === kst || get("sessionStorage", "pn_ev_seen")) return;
   if (/[?&](k|t)=/.test(location.search) || location.hash === "#admin") return;
-  set("sessionStorage", "pn_ev_seen", "1");
-  setTimeout(function () { open("auto"); }, 700);
+  // 2026-10-17 자동 팝업 시점: SNS 유입(?from=·utm_source, 같은 세션 포함)은 첫 화면에 띄우지 않고
+  // 50% 스크롤 또는 견적 바를 만진 뒤 5초. 직접 방문은 7초 또는 30% 스크롤. 견적 바 조건 창이 열려 있으면 닫힐 때까지 미룸
+  var qs = new URLSearchParams(location.search), sns = !!(qs.get("from") || qs.get("utm_source") || get("sessionStorage", "pn_src"));
+  var done = false, tm = null, need = sns ? 0.5 : 0.3;
+  function fire() {
+    if (done) return;
+    var qp = document.getElementById("qPanel");
+    if (qp && !qp.hidden) { clearTimeout(tm); tm = setTimeout(fire, 3000); return; }
+    done = true; clearTimeout(tm); removeEventListener("scroll", onScroll);
+    set("sessionStorage", "pn_ev_seen", "1"); open("auto");
+  }
+  function onScroll() { var h = document.documentElement.scrollHeight - innerHeight; if (h > 0 && scrollY / h >= need) fire(); }
+  addEventListener("scroll", onScroll, { passive: true });
+  if (sns) document.addEventListener("click", function (ev) { if (!done && ev.target.closest && ev.target.closest("#qbar")) { clearTimeout(tm); tm = setTimeout(fire, 5000); } });
+  else tm = setTimeout(fire, 7000);
 })();
