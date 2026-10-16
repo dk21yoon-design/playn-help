@@ -51,7 +51,7 @@ def main():
             if runs and runs[-1]['file'] == c['file'] and abs(runs[-1]['src_end'] - c.get('start', 0)) < 0.06:
                 runs[-1]['src_end'] += s['dur']; runs[-1]['dur'] += s['dur']
             else:
-                runs.append({'file': c['file'], 'src': c.get('start', 0), 'src_end': c.get('start', 0) + s['dur'], 't': t0, 'dur': s['dur']})
+                runs.append({'file': c.get('audio_file') or c['file'], 'src': c.get('start', 0), 'src_end': c.get('start', 0) + s['dur'], 't': t0, 'dur': s['dur']})
         t0 += s['dur']
     silent = out.replace('.mp4', '_silent.mp4')
     for r in runs:

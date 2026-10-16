@@ -101,6 +101,9 @@ _trailers = {}
 
 
 def source_audio(c):
+    # audio_file: 같은 타임라인의 다른 오디오(예: demucs로 원본 BGM을 뺀 보이스 트랙). 시작 초는 clip.start 그대로
+    if c.get('audio_file'):
+        return c['audio_file']
     if c.get('file'):
         return c['file']
     raise SystemExit('mic 장면은 clip.file(원본 소리가 있는 파일)만 지원')
