@@ -179,6 +179,26 @@ section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--eas
 .mup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel2);border:1px dashed var(--line2);border-radius:var(--r-sm);padding:14px;margin-bottom:12px}
 .mup label.go{font-size:14px;font-weight:700;color:#1a1300;background:var(--lamp);border-radius:999px;padding:10px 18px;cursor:pointer}
 .mup p{font-size:13px;color:var(--mute);line-height:1.5;flex:1;min-width:220px}
+.mk{display:grid;gap:12px}
+.mkf{background:var(--panel2);border:1px solid var(--line2);border-radius:var(--r-sm);padding:16px;display:grid;gap:10px}
+.mkf label{font-size:13px;color:var(--mute);font-weight:700}
+.mkf select,.mkf textarea,.mkj input{width:100%;background:var(--deep);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;font-size:14px}
+.mkf textarea{min-height:64px;resize:vertical}
+.mkf .go,.mkj .go{justify-self:start;font-size:14px;font-weight:800;color:#1a1300;background:var(--lamp);border:0;border-radius:999px;padding:11px 20px;cursor:pointer;min-height:44px}
+.mkf .go:disabled,.mkj .go:disabled{opacity:.55;cursor:default}
+.mkj{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;display:grid;gap:10px}
+.mkj .h{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.mkj .h b{font-size:15px}
+.mkj .chip{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(166,162,214,.14);color:var(--mute)}
+.mkj .chip.working{background:rgba(143,163,255,.14);color:#8FA3FF}.mkj .chip.ready{background:rgba(255,181,71,.16);color:var(--lamp)}
+.mkj .chip.published{background:rgba(61,220,151,.14);color:var(--ok)}.mkj .chip.failed{background:rgba(255,90,95,.14);color:#FF5A5F}
+.mkj .pr{font-size:13px;color:var(--mute);line-height:1.5}
+.mkj .vw{display:grid;grid-template-columns:minmax(0,280px) 1fr;gap:14px;align-items:start}
+.mkj video{width:100%;aspect-ratio:9/16;border-radius:12px;background:#000}
+.mkj pre{white-space:pre-wrap;font:inherit;font-size:13px;color:var(--mute);background:var(--deep);border-radius:10px;padding:10px;max-height:260px;overflow:auto;margin:0}
+.mkj .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mkj .ghost{font-size:13px;border:1px solid var(--line2);border-radius:999px;padding:9px 14px;background:none;color:var(--ink);cursor:pointer;min-height:40px}
+.mkj .qa{font-size:12.5px;color:var(--dim)}
+@media (max-width:640px){.mkj .vw{grid-template-columns:1fr}}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;max-width:min(520px,calc(100vw - 32px));background:#211d3b;color:var(--ink);border:1px solid var(--line2);border-radius:14px;padding:12px 16px;font-size:14px;line-height:1.5;box-shadow:0 12px 40px rgba(0,0,0,.45);transition:.25s;z-index:99;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 details.res summary{cursor:pointer;color:var(--mute);font-size:14px;padding:6px 0;list-style:none}
@@ -384,7 +404,7 @@ function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.log
 /* ── 렌더 ── */
 function renderCats(){const c=$("#cats");c.innerHTML="";
   const all=issuesOf("all");
-  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"music",name:"릴스 음악",mono:"♪",monoBg:"#3A0F2A"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"}];
+  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"maker",name:"릴스 생성기",mono:"▶",monoBg:"#3A1F00"},{id:"music",name:"릴스 음악",mono:"♪",monoBg:"#3A0F2A"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"}];
   items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;
     const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
     const crit=o.filter(i=>i.severity==="crit").length, warn=o.filter(i=>i.severity==="warn").length;
@@ -587,7 +607,40 @@ function musicSection(){const s=el("section");s.id="music";const all=DATA.music|
       c.querySelector(".cp").onclick=()=>navigator.clipboard?.writeText(m.prompt||"").then(()=>toast("복사했어요. 수노 Custom 모드 Style 칸에 붙여넣기"));g2.appendChild(c)});s.appendChild(g2)}
   return s}
 
-function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio")].some(a=>!a.paused))return;renderCats();const m=$("#main");m.innerHTML="";
+const JST={queued:["queued","대기 중"],working:["working","만드는 중"],ready:["ready","확인 대기"],publishing:["working","발행 중"],published:["published","발행 완료"],failed:["failed","실패"]};
+function makerSection(){const s=el("section");s.id="maker";const jobs=DATA.reel_jobs||[],mom=(DATA.moments||[]).filter(m=>!m.used_reel);
+  s.innerHTML=`<div class="sh"><span class="eye">REEL MAKER</span><h2>롤드컵 하이라이트 생성기</h2><span class="meta">누르면 생성 담당이 편집 플레이북대로 만들고 자동 검사까지 통과하면 여기에 올려요 · 보통 30~60분</span></div>`;
+  const w=el("div","mk");
+  const f=el("form","mkf");f.innerHTML=`<label for="mkM">장면</label><select id="mkM"><option value="">자동 선택 (아직 안 쓴 명장면 중 우선순위 순)</option>${mom.map(m=>`<option value="${H(m.slug)}">${H(m.title)}${m.why?" · "+H(m.why):""}</option>`).join("")}</select>
+    <label for="mkH">원하는 점 (선택)</label><textarea id="mkH" placeholder="예: 페이커 보이스 위주로, 소셜링 안내 빼고, 30초 안쪽"></textarea><button class="go" type="submit">롤드컵 하이라이트 만들기</button>`;
+  f.onsubmit=async e=>{e.preventDefault();const bt=f.querySelector("button");bt.disabled=true;bt.textContent="요청 중…";
+    const j=await post({action:"reel_job_create",moment:$("#mkM").value||null,hint:$("#mkH").value.trim()});bt.disabled=false;bt.textContent="롤드컵 하이라이트 만들기";
+    toast(j.ok?`✓ 생성 요청 #${j.id} 접수 · 완성되면 여기 미리보기가 떠요`:(j.error||"실패"));if(j.ok){$("#mkH").value="";load()}};
+  w.appendChild(f);
+  jobs.forEach(j=>{const [cls,lab]=JST[j.status]||["",j.status];const c=el("article","mkj");const q=j.q||{};
+    const when=new Date(j.created_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+    let body=`<div class="h"><b>#${j.id} ${H(j.title||j.request?.hint||"롤드컵 하이라이트")}</b><span class="chip ${cls}">${lab}</span><span class="pr">${when} 요청${j.reel_id?" · "+H(j.reel_id):""}</span></div><div class="pr">${H(j.progress||"")}${j.error?" · "+H(j.error):""}</div>`;
+    if(j.preview_url&&["ready","publishing","published"].includes(j.status)){
+      const qa=j.qa?Object.entries(j.qa).map(([k,v])=>`${H(k)} ${H(String(v))}`).join(" · "):"";
+      body+=`<div class="vw"><video controls playsinline preload="metadata" src="${H(j.preview_url)}" ${j.cover_url?`poster="${H(j.cover_url)}"`:""}></video><div style="display:grid;gap:10px">
+        ${j.caption?`<pre>${H(j.caption)}</pre>`:""}${qa?`<div class="qa">자동 검사: ${qa}</div>`:""}
+        ${j.status==="ready"?`<div class="acts"><button class="go" data-a="pub">지금 발행</button><input type="datetime-local" aria-label="예약 시각" style="max-width:220px"><button class="ghost" data-a="sch">이 시간에 예약</button></div>
+        <div class="acts"><input type="text" placeholder="다시 만들 때 바꿀 점" aria-label="다시 만들 때 바꿀 점" style="flex:1;min-width:180px"><button class="ghost" data-a="redo">다시 만들기</button><button class="ghost" data-a="del">버리기</button></div>`:""}
+        ${q.permalink?`<a href="${H(q.permalink)}" target="_blank" rel="noopener" style="color:var(--lamp);font-size:14px">인스타에서 보기 ↗</a>`:""}
+        ${j.status==="publishing"&&q.status==="published"?`<div class="pr" style="color:var(--ok)">발행 완료</div>`:""}</div></div>`}
+    else if(["queued","failed"].includes(j.status))body+=`<div class="acts"><button class="ghost" data-a="del">${j.status==="failed"?"지우기":"취소"}</button></div>`;
+    c.innerHTML=body;
+    c.querySelectorAll("button[data-a]").forEach(b=>b.onclick=async()=>{const a=b.dataset.a;let r;b.disabled=true;
+      if(a==="pub"){r=await post({action:"reel_job_publish",id:j.id})}
+      else if(a==="sch"){const v=c.querySelector('input[type="datetime-local"]').value;if(!v){toast("예약 시각을 골라 주세요");b.disabled=false;return}r=await post({action:"reel_job_publish",id:j.id,publish_at:new Date(v).toISOString()})}
+      else if(a==="redo"){r=await post({action:"reel_job_create",moment:j.request?.moment||null,hint:j.request?.hint||"",redo_of:j.id,note:c.querySelector('input[type="text"]').value.trim()});if(r.ok)await post({action:"reel_job_discard",id:j.id})}
+      else if(a==="del"){r=await post({action:"reel_job_discard",id:j.id})}
+      toast(r&&r.ok?({pub:"✓ 발행 대기열에 올렸어요 · 몇 분 안에 모든 채널에 올라가요",sch:"✓ 예약했어요",redo:"✓ 다시 만들기 요청했어요",del:"정리했어요"}[a]):(r?.error||"실패"));load()});
+    w.appendChild(c)});
+  if(!jobs.length){const e0=el("div");e0.innerHTML=emptyBox("아직 요청한 릴스가 없어요. 위 버튼을 누르면 시작해요.");w.appendChild(e0)}
+  s.appendChild(w);return s}
+
+function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio,#main video")].some(a=>!a.paused)||document.activeElement?.closest?.(".mkf,.mkj"))return;renderCats();const m=$("#main");m.innerHTML="";
   const B=BRANDS.find(b=>b.id===VIEW);
   if(VIEW==="all"){
     const s1=el("section");s1.innerHTML=statusBanner("all")+kpiStrip();m.appendChild(s1);
@@ -600,6 +653,7 @@ function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio"
   } else if(VIEW==="auto"){m.appendChild(connSection());m.appendChild(issuesSection("auto"));m.appendChild(autoSection())}
   else if(VIEW==="skills"){m.appendChild(skillsSection())}
   else if(VIEW==="music"){m.appendChild(musicSection())}
+  else if(VIEW==="maker"){m.appendChild(makerSection())}
   countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
 }
 
@@ -610,7 +664,7 @@ async function load(){const j=await post({action:"board"});
     $("#liveDot").classList.add("off");$("#liveTxt").textContent="갱신 실패 · 다시 시도 중";return}
   st.set("pn_admin",KEY);$("#gate").hidden=true;$("#app").hidden=false;DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
-function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
+function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
   if(["issues","publish","activity"].includes(h))return;render();window.scrollTo({top:0,behavior:"smooth"})}
 window.addEventListener("hashchange",route);
 $("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});
