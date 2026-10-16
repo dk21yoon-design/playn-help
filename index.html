@@ -462,6 +462,19 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 .evrot .event.on{position:relative;opacity:1;transform:none;pointer-events:auto}
 .evrot .event em{font-style:normal;font-weight:800;color:#2BE07A}
 .evrot .event.meet{background:linear-gradient(110deg,rgba(61,242,255,.18),rgba(255,46,110,.16));border-color:rgba(61,242,255,.4)}
+.mlive{display:block;margin-top:16px;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(166,162,214,.28);color:var(--ink);text-decoration:none;transition:border-color .2s,background .2s}
+.mlive:hover{border-color:rgba(61,242,255,.5);background:rgba(255,255,255,.06)}.mlive:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+.mlive .mh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}.mlive .mh b{font-weight:800}
+.mlive .lvd{width:8px;height:8px;border-radius:50%;background:#2BE07A;flex:none;animation:hping 1.8s infinite}
+.mlive .mt{margin-left:auto;font-size:13px;color:var(--dim)}
+.mlive .mrow{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;margin-top:12px;font-size:14px}
+.mlive .g{color:var(--mute);font-weight:700}
+.mlive .bar{height:10px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.mlive .bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s var(--ease)}
+.mlive .f .bar i{background:var(--brand)}.mlive .m .bar i{background:#3DF2FF}
+.mlive .n{font-variant-numeric:tabular-nums;color:var(--mute);white-space:nowrap}.mlive .n b{color:#fff;font-size:17px}
+.mlive .ms{margin-top:10px;font-size:13px;color:var(--dim)}.mlive .ms em{font-style:normal;color:var(--lamp);font-weight:700}
+@media (prefers-reduced-motion:reduce){.mlive .lvd{animation:none}.mlive .bar i{transition:none}}
 .evdots{display:flex;gap:6px;justify-content:center;margin-top:10px}
 .evdots button{width:7px;height:7px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.25);cursor:pointer;transition:width .3s,background .3s}
 .evdots button.on{width:20px;background:var(--lamp)}
@@ -500,6 +513,12 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
    <a class="event meet" href="meet/" data-track="home_ev_meet"><b>🍾 롤드컵 밤샘 소셜링 · 10/24 토 연남루프탑</b><span id="evM">2:2 칼바람 · 바베큐 · 14명 한정</span><span class="go" aria-hidden="true">→</span></a>
   </div>
   <div class="evdots" id="evdots"><button class="on" aria-label="롤드컵 예언 이벤트"></button><button aria-label="소셜링 이벤트"></button></div>
+  <a class="mlive" href="meet/" id="mlive" data-track="home_meet_live" hidden aria-live="polite">
+   <div class="mh"><span class="lvd" aria-hidden="true"></span><b>롤드컵 밤샘 소셜링 실시간 신청 현황</b><span class="mt" id="mlT"></span></div>
+   <div class="mrow f"><span class="g">여자</span><div class="bar" aria-hidden="true"><i id="mbF"></i></div><span class="n"><b id="mnF">0</b>명 신청</span></div>
+   <div class="mrow m"><span class="g">남자</span><div class="bar" aria-hidden="true"><i id="mbM"></i></div><span class="n"><b id="mnM">0</b>명 신청</span></div>
+   <div class="ms" id="mlS"></div>
+  </a>
 </div></section>
 <nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
   <a href="#events" class="ev" data-events-open>🎉 이벤트 <i>2</i></a><a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
@@ -779,8 +798,16 @@ function loadPulse(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v
 loadPulse();setInterval(loadPulse,60000);
 fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{if(!x.ok||!x.fan_total)return;
   const top=Object.entries(x.fan||{}).sort((a,b)=>b[1]-a[1])[0];$("evW").innerHTML=(x.fan_total>=20?`지금까지 <em>${x.fan_total}표</em> · `:"")+`지금 1위 <em>${top?top[0]:"-"}</em> · 너의 픽은?`}).catch(()=>{});
-fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup?e=worlds1024").then(r=>r.json()).then(r=>{if(!r.ok||r.ev.status!=="open")return;const L=r.ev.left_f+r.ev.left_m;
-  $("evM").innerHTML=L?`여 <em>${r.ev.left_f}</em> · 남 <em>${r.ev.left_m}</em>자리 남음 · 2:2 칼바람 · 바베큐`:"자리 마감 · 대기 신청 가능"}).catch(()=>{});
+/* 소셜링 실시간 신청 현황: 성별 신청자 수만 (이름·사진 등 개인정보는 서버가 보내지 않음) */
+function loadMeet(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup?e=worlds1024").then(r=>r.json()).then(r=>{if(!r.ok||r.ev.status!=="open")return;const v=r.ev,L=v.left_f+v.left_m;
+  $("evM").innerHTML=L?`여 <em>${v.left_f}</em> · 남 <em>${v.left_m}</em>자리 남음 · 2:2 칼바람 · 바베큐`:"자리 마감 · 대기 신청 가능";
+  if(v.apply_f==null)return;const box=$("mlive");box.hidden=false;
+  $("mnF").textContent=v.apply_f;$("mnM").textContent=v.apply_m;
+  requestAnimationFrame(()=>{$("mbF").style.width=Math.min(100,v.apply_f/v.cap_f*100)+"%";$("mbM").style.width=Math.min(100,v.apply_m/v.cap_m*100)+"%"});
+  const ago=t=>{if(!t)return"";const m=Math.max(1,Math.round((Date.now()-new Date(t))/6e4));return m<60?m+"분 전":m<1440?Math.round(m/60)+"시간 전":Math.round(m/1440)+"일 전"};
+  $("mlT").textContent=v.last_apply_at?`마지막 신청 ${ago(v.last_apply_at)}`:"";
+  $("mlS").innerHTML=`정원 여 ${v.cap_f} · 남 ${v.cap_m} · 참가 확정 여 <em>${v.conf_f}</em> · 남 <em>${v.conf_m}</em> · 프로필 보고 사장님이 승인해요`}).catch(()=>{})}
+loadMeet();setInterval(()=>{if(!document.hidden)loadMeet()},30000);
 (function(){const ev=[...document.querySelectorAll("#evrot .event")],dt=[...document.querySelectorAll("#evdots button")];let i=0,t=null;
   const show=n=>{i=n;ev.forEach((e,j)=>e.classList.toggle("on",j===i));dt.forEach((d,j)=>d.classList.toggle("on",j===i))};
   const run=()=>{clearInterval(t);if(!HRM)t=setInterval(()=>show((i+1)%ev.length),5000)};

@@ -301,7 +301,8 @@ function countUp(el,to){const t0=performance.now(),d=700;if(RM||!to){el.textCont
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function paint(ev){EV=ev;const tf=ev.cap_f-ev.left_f,tm=ev.cap_m-ev.left_m;
   countUp($("tf"),tf);countUp($("tm"),tm);dots("df",tf,ev.cap_f);dots("dm",tm,ev.cap_m);
-  $("lf").innerHTML=ev.left_f?`남은 자리 <b>${ev.left_f}</b>`:"<b>마감 · 대기 신청 가능</b>";$("lm").innerHTML=ev.left_m?`남은 자리 <b>${ev.left_m}</b>`:"<b>마감 · 대기 신청 가능</b>";
+  const ap=g=>ev["apply_"+g]!=null?` · 지금까지 신청 <b>${ev["apply_"+g]}</b>명`:"";
+  $("lf").innerHTML=(ev.left_f?`남은 자리 <b>${ev.left_f}</b>`:"<b>마감 · 대기 신청 가능</b>")+ap("f");$("lm").innerHTML=(ev.left_m?`남은 자리 <b>${ev.left_m}</b>`:"<b>마감 · 대기 신청 가능</b>")+ap("m");
   $("dockLeft").textContent=` · 남은 ${ev.left_f+ev.left_m}자리`;
   $("price").textContent=won(ev.price);$("dockPrice").textContent=won(ev.price);$("refund").textContent=ev.info?.refund||"";
   const kd=x=>Math.floor((new Date(x).getTime()+9*36e5)/864e5),d=kd(ev.start_at)-kd(Date.now());$("dday").textContent=d>0?`D-${d} · 남은 자리 ${ev.left_f+ev.left_m}`:"";
@@ -397,7 +398,7 @@ if(!RM){rv.forEach(x=>x.classList.add("rv"));const rio=new IntersectionObserver(
 const vis={};const io=new IntersectionObserver(es=>{es.forEach(x=>vis[x.target.id||"hero"]=x.isIntersecting);$("dock").classList.toggle("hide",!!(vis.apply||vis.hero))},{threshold:.05});io.observe($("apply"));io.observe(document.querySelector(".hero .cta"));
 if(location.hash==="#admin")admin();
 else if(qs.get("t"))me(qs.get("t"));
-else fetch(F+"?e="+E).then(r=>r.json()).then(r=>{if(r.ok)paint(r.ev);pulse();setInterval(pulse,60000)});
+else fetch(F+"?e="+E).then(r=>r.json()).then(r=>{if(r.ok)paint(r.ev);pulse();setInterval(pulse,60000);setInterval(()=>{if(!document.hidden)fetch(F+"?e="+E).then(x=>x.json()).then(x=>{if(x.ok)paint(x.ev)}).catch(()=>{})},30000)});
 if(window.pnTrack)pnTrack("meet_view",{e:E});
 </script>
 </body></html>
