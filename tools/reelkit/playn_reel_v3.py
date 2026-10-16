@@ -482,13 +482,20 @@ def mix_music(mspec, dst):
     mp = fetch(mspec['url'], f'{W}/music_{abs(hash(mspec["url"])) % 10**8}')
     st = mspec.get('start', 'auto')
     if st == 'auto': st = auto_start(mp, total)
-    duck, t0 = [], 0.0
+    # 2026-10-16 보이스 우선 믹스: mic 장면은 음악을 duck_level(기본 8%)까지 0.3초 램프로 내리고, 보이스는 잡음 컷·압축·증폭
+    ivs, t0 = [], 0.0
     for (p_, d_), sc in zip(parts, scenes):
-        if sc.get('mic'):
-            duck.append(f"between(t,{t0:.2f},{t0 + d_:.2f})")
+        if sc.get('mic'): ivs.append((t0, t0 + d_))
         t0 += d_
-    vol = f"volume='if({'+'.join(duck)},0.18,1)':eval=frame," if duck else ''
-    af = f"[1:a]atrim=start={st},asetpts=PTS-STARTPTS,loudnorm=I=-14:TP=-1.5:LRA=11,{vol}afade=t=out:st={max(0, total - 0.8):.2f}:d=0.8[mu];[2:a]volume=1.6[vo];[mu][vo]amix=inputs=2:duration=first:normalize=0[a]"
+    dl = float(mspec.get('duck_level', spec.get('duck_level', 0.08))); rp = 0.3
+    if ivs:
+        g = [f"clip((t-{a - rp:.2f})/{rp},0,1)*clip(({b + rp:.2f}-t)/{rp},0,1)" for a, b in ivs]
+        e = g[0]
+        for x in g[1:]: e = f"max({e},{x})"
+        vol = f"volume='1-{1 - dl:.2f}*({e})':eval=frame,"
+    else: vol = ''
+    vchain = "highpass=f=90,lowpass=f=9000,acompressor=threshold=0.05:ratio=4:attack=5:release=150:makeup=4,volume=1.5"
+    af = f"[1:a]atrim=start={st},asetpts=PTS-STARTPTS,loudnorm=I=-14:TP=-1.5:LRA=11,{vol}afade=t=out:st={max(0, total - 0.8):.2f}:d=0.8[mu];[2:a]{vchain}[vo];[mu][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]"
     run(['ffmpeg', '-y', '-loglevel', 'error', '-i', vid, '-i', mp, '-i', voice, '-filter_complex', af, '-map', '0:v', '-map', '[a]',
          '-t', f'{total}', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', dst])
     return round(float(st), 1)
