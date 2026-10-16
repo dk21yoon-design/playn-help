@@ -46,12 +46,13 @@ function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt
 function render(P){
   const L=document.getElementById("list");
   if(!P.length){L.innerHTML='<p class="notice">곧 첫 제품이 올라와요.</p>';return}
-  L.innerHTML=P.map(p=>`<div class="item" id="n${+p.no}"><div class="no">#${+p.no}</div>${p.image?`<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy">`:""}<div class="txt"><div class="name">${esc(p.name)}</div><div class="ben">${esc(p.benefit)}</div></div><a class="go" href="${esc(p.link)}" target="_blank" rel="sponsored nofollow noopener">보러가기</a></div>`).join("");
+  L.innerHTML=P.map(p=>`<div class="item" id="n${+p.no}"><div class="no">#${+p.no}</div>${p.image?`<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy">`:""}<div class="txt"><div class="name">${esc(p.name)}</div><div class="ben">${esc(p.benefit)}</div></div><a class="go" href="${esc(p.link)}" data-no="${+p.no}" target="_blank" rel="sponsored nofollow noopener">보러가기</a></div>`).join("");
   const h=(location.hash.match(/\d+/)||[])[0]; if(h) mark(h);
 }
 function mark(n){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const e=document.getElementById("n"+n);if(e){e.classList.add("hit");e.scrollIntoView({behavior:"smooth"})}}
-function go(ev){ev.preventDefault();const n=(document.getElementById("q").value.match(/\d+/)||[])[0];if(n){history.replaceState(null,"","#"+n);mark(n)}}
+function go(ev){ev.preventDefault();const n=(document.getElementById("q").value.match(/\d+/)||[])[0];if(n){history.replaceState(null,"","#"+n);mark(n);if(window.pnTrack)pnTrack("pick_find:"+n)}}
 fetch("picks.json?"+Date.now()).then(r=>r.json()).then(P=>render(P.sort((a,b)=>b.no-a.no))).catch(()=>{document.getElementById("list").innerHTML='<p class="notice">목록을 불러오지 못했어요. 잠시 후 다시 열어주세요.</p>'});
 </script>
+<script src="/assets/pv.js" defer></script>
 </body>
 </html>

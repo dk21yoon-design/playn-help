@@ -12,6 +12,11 @@
     try { if (src0) sessionStorage.setItem("pn_src", src0); } catch (e) {}
     let src = src0; try { src = src0 || sessionStorage.getItem("pn_src") || ""; } catch (e) {}
     let ref = ""; try { if (document.referrer) { const r = new URL(document.referrer); if (r.host !== location.host) ref = r.host; } } catch (e) {}
+    // 2026-10-17: SNS 유입 채널 (화면 배지용). 저장하는 src 값은 바꾸지 않는다
+    const CH = { ig: "ig", instagram: "ig", yt: "yt", youtube: "yt", th: "th", threads: "th", fb: "fb", facebook: "fb", tt: "tt", tiktok: "tt" };
+    let ch = CH[String(src).toLowerCase()] || "";
+    if (!ch && ref) ch = /instagram/.test(ref) ? "ig" : /youtu/.test(ref) ? "yt" : /threads/.test(ref) ? "th" : /facebook|fb\./.test(ref) ? "fb" : /tiktok/.test(ref) ? "tt" : "";
+    window.pnChannel = ch;
     const send = (ev, label, extra) => {
       const b = JSON.stringify(Object.assign({ path: location.pathname, ev: ev || "view", label: label || "", src, ref, vid, sid }, extra || {}));
       if (navigator.sendBeacon) navigator.sendBeacon(E, new Blob([b], { type: "text/plain" }));
@@ -19,11 +24,24 @@
     };
     send("view");
     window.pnTrack = (label) => send("click", String(label || ""));
-    // 클릭: data-track > id > 외부 링크 주소 > 내부 링크 경로·글자
+    // 2026-10-17: 예약 링크는 cta_reserve:<채널>:<지점>:<위치> 로 통일 (예: cta_reserve:naver:yeonnam:br_card)
+    const BR = { "9434661597": "hongdae", "43667": "hongdae", "9430485644": "yeonnam", "55750": "yeonnam", "12071850850": "yeontral", "72605": "yeontral" };
+    const reserveLabel = (a, href) => {
+      const m = href.match(/smartstore\.naver\.com\/playn_\/products\/(\d+)|booking\.naver\.com|spacecloud\.kr\/space\/(\d+)/);
+      if (!m) return "";
+      const chn = /spacecloud/.test(href) ? "spacecloud" : "naver";
+      const br = BR[m[1] || m[2]] || (location.pathname.match(/^\/(hongdae|yeonnam|yeontral)/) || [])[1] || "unknown";
+      const pl = a.dataset.place || (a.closest("[data-place]") || {}).dataset?.place || (a.closest("section[id]") || {}).id || location.pathname.replace(/\//g, "") || "home";
+      return ["cta_reserve", chn, br, pl].join(":");
+    };
+    window.pnReserveLabel = reserveLabel;
+    // 클릭: 예약 링크 > 쿠팡(pick) > data-track > id > 외부 링크 주소 > 내부 링크 경로·글자
     document.addEventListener("click", (e) => {
       const a = e.target.closest && e.target.closest("a,button,[data-track],summary"); if (!a) return;
-      let t = a.dataset && a.dataset.track || "";
       const href = a.getAttribute && a.getAttribute("href") || "";
+      let t = reserveLabel(a, href);
+      if (!t && /coupang\.com/.test(href)) t = "pick_out:" + (a.dataset.no || "");
+      if (!t) t = a.dataset && a.dataset.track || "";
       const txt = (a.textContent || "").replace(/\s+/g, " ").trim().slice(0, 24);
       if (!t && /^(https?:|tel:|sms:)/.test(href) && !href.includes(location.host)) t = href.replace(/^https?:\/\//, "").slice(0, 60);
       if (!t && a.id) t = "#" + a.id;

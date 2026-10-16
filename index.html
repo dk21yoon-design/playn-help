@@ -404,6 +404,56 @@ footer button{background:none;border:0;color:var(--mute);text-decoration:underli
   .dock a.p{background:var(--lamp);color:#1B1640}
 }
 
+/* ── 2026-10-17 듀얼 무드 스위처 ── */
+.hero::before{content:"";position:absolute;inset:-10% -10% auto auto;width:70%;height:90%;pointer-events:none;background:radial-gradient(closest-side,var(--mood-glow,rgba(143,163,255,.16)),transparent 70%);transition:background .4s var(--ease)}
+html[data-mood=roof]{--mood-glow:rgba(255,181,71,.2)}
+.mood{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:var(--pill);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line2)}
+.mood::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:var(--pill);background:var(--panel2);box-shadow:inset 0 0 0 1px var(--line2);transition:transform .3s var(--ease)}
+html:not([data-mood=arena]) .mood::before{transform:translateX(100%)}
+.mood button{position:relative;all:unset;position:relative;z-index:1;cursor:pointer;min-height:44px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:8px;font:700 14.5px/1 Pretendard,sans-serif;color:var(--mute);border-radius:var(--pill);white-space:nowrap}
+.mood button[aria-checked=true]{color:var(--ink)}
+.mood button:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
+.mood svg{width:16px;height:16px;flex:none}
+.shots img{transition:opacity .35s var(--ease)}
+.shots.swap img{opacity:0}
+
+/* ── 2026-10-17 하단 고정 1/N 견적 바 ── */
+.qbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:31;width:min(560px,calc(100vw - 360px));display:flex;flex-direction:column;gap:6px;transition:transform .3s var(--ease),opacity .3s}
+.qbar.hide,.qbar.typing{transform:translate(-50%,160%);opacity:0;pointer-events:none}
+.qsrc{display:flex;align-items:center;gap:8px;margin:0;align-self:flex-start;padding:7px 8px 7px 12px;border-radius:var(--pill);font-size:13px;font-weight:700;color:var(--ink);background:rgba(14,12,44,.92);box-shadow:inset 0 0 0 1px var(--line2)}
+.qsrc b{color:var(--lamp)}
+.qsrc button{all:unset;cursor:pointer;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;color:var(--mute)}
+.qsrc button:focus-visible{outline:2px solid var(--lamp)}
+.qpanel{padding:14px;border-radius:var(--r);background:rgba(14,12,44,.96);box-shadow:inset 0 0 0 1px var(--line2),0 18px 40px -12px rgba(0,0,0,.7);display:grid;gap:10px}
+.qrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.qrow>span{width:44px;font-size:12.5px;color:var(--dim);font-weight:700}
+.qrow button{all:unset;cursor:pointer;min-height:40px;padding:0 14px;display:inline-flex;align-items:center;border-radius:var(--pill);font-size:14px;font-weight:700;color:var(--mute);box-shadow:inset 0 0 0 1px var(--line2)}
+.qrow button[aria-pressed=true]{color:#1B1640;background:var(--lamp);box-shadow:none}
+.qrow button:focus-visible,.qmain button:focus-visible,.qmain a:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
+.qlinks{display:flex;flex-wrap:wrap;gap:6px 14px;padding-top:4px;border-top:1px solid var(--line)}
+.qlinks a{font-size:13.5px;font-weight:700;color:var(--mute);text-decoration:none;padding:8px 0}
+.qlinks a:hover{color:var(--ink)}
+.qmain{display:flex;align-items:center;gap:6px;padding:6px;border-radius:var(--pill);background:rgba(14,12,44,.9);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);box-shadow:inset 0 0 0 1px var(--line2),0 18px 40px -12px rgba(0,0,0,.7)}
+.qstep{display:flex;align-items:center;border-radius:var(--pill);background:rgba(255,255,255,.05)}
+.qstep button{all:unset;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;font-size:20px;font-weight:700;color:var(--ink);border-radius:50%}
+.qstep button:disabled{opacity:.35;cursor:default}
+.qstep output{min-width:38px;text-align:center;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.qsum{all:unset;cursor:pointer;flex:1;min-width:0;min-height:44px;display:flex;flex-direction:column;justify-content:center;padding:0 8px;border-radius:14px}
+.qper{font-size:15px;font-weight:700;white-space:nowrap}
+.qper b{font-size:17px;color:var(--lamp);font-variant-numeric:tabular-nums}
+.qmeta{font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qmeta i{font-style:normal;color:var(--dim)}
+.qgo{flex:none;min-height:44px;padding:0 20px;display:flex;align-items:center;border-radius:var(--pill);background:var(--lamp);color:#1B1640;font-weight:800;font-size:15px;text-decoration:none}
+.qgo:hover{background:var(--lamp2)}
+@media(max-width:1000px){.qbar{left:20px;transform:none;width:min(560px,calc(100vw - 200px))}.qbar.hide,.qbar.typing{transform:translateY(160%)}}
+@media(max-width:760px){
+  .qbar{left:12px;right:12px;width:auto;bottom:calc(12px + env(safe-area-inset-bottom))}
+  body.has-qbar .dock{display:none}
+  body.has-qbar{padding-bottom:84px}
+  .qgo{padding:0 16px}
+}
+@media(max-width:360px){.qmeta{display:none}}
+@media(prefers-reduced-transparency:reduce){.qmain,.qpanel,.qsrc{background:var(--deep);backdrop-filter:none;-webkit-backdrop-filter:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
 @media(prefers-reduced-transparency:reduce){.top,.drawer,.dock,.rating{background:var(--deep);backdrop-filter:none;-webkit-backdrop-filter:none}}
 @media(max-width:600px){
@@ -497,13 +547,14 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
   <div class="bulbs" aria-hidden="true"><svg viewBox="0 0 1000 90" preserveAspectRatio="none" id="bulbs"></svg></div>
   <div class="hero-grid">
     <div>
+      <div class="mood rv" id="mood" role="radiogroup" aria-label="공간 분위기 고르기"><button type="button" role="radio" aria-checked="false" data-m="arena" data-track="mood_arena" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg>실내 아레나</button><button type="button" role="radio" aria-checked="true" data-m="roof" data-track="mood_roof"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-2-1-4 0-7z"/><path d="M5 21h14"/></svg>루프탑 바베큐</button></div>
       <h1 class="disp rv"><span>이번 주,</span><span>비어있는 밤을</span><span class="lamp">먼저 드려요</span></h1>
-      <p class="lead rv">홍대·연남 루프탑 게임파티룸. 고사양 PC와 프로 기어, 루프탑 바베큐까지. N&nbsp;CREW에게는 빈 날짜를 특가로 먼저 열어요.</p>
+      <p class="lead rv" id="heroLead">홍대·연남 루프탑 게임파티룸. 고사양 PC와 프로 기어, 루프탑 바베큐까지. N&nbsp;CREW에게는 빈 날짜를 특가로 먼저 열어요.</p>
       <div class="cta rv"><a class="btn lamp" href="#deals">이번 주 빈자리 보기 <span class="ar">→</span></a><a class="btn ghost" href="#crew">N CREW 가입하기</a></div>
       <div class="hpulse" id="hpulse" aria-live="polite"></div>
     </div>
-    <div class="shots rv" aria-hidden="true">
-      <div class="a"><img src="assets/home/hero.webp" alt="플레이앤 게임파티룸 실내, 게이밍 PC와 조명" width="900" height="675" fetchpriority="high"></div>
+    <div class="shots rv" id="heroShots" aria-hidden="true">
+      <div class="a"><img src="assets/home/hero.webp" alt="플레이앤 루프탑, 해 질 녘 전구 조명이 켜진 테라스" width="900" height="675" fetchpriority="high"></div>
       <div class="b"><img src="assets/home/neon.webp" alt="플레이앤 네온 조명 아래 게임 공간" width="900" height="675" loading="lazy"></div>
       <div class="rating"><b>★ <span class="cu" data-to="4.9" data-d="1">4.9</span></b><span>후기 <span class="cu" data-to="285">285</span>개</span></div>
     </div>
@@ -890,9 +941,10 @@ function calc(){if(!M)return;const br=$("cBr").value,d=$("cDate").value,pk=$("cP
   const extra=Math.max(0,ppl-5)*20000,total=base+extra,deal=Math.round(base*(100-M.discount)/100/1000)*1000+extra;
   const dt=new Date(d+"T00:00:00");const lab=`${dt.getMonth()+1}/${dt.getDate()}(${"일월화수목금토"[dt.getDay()]})`;
   o.innerHTML=`${lab} ${$("cPk").selectedOptions[0].text.split(" ")[0]}<span class="tier">${tierName[t]} 요금</span><br><b>${total.toLocaleString()}원</b> <span style="color:var(--lamp);font-weight:800">· ${ppl}명이면 1인 ${(Math.ceil(total/ppl/100)*100).toLocaleString()}원</span>${extra?` <span style="color:var(--mute)">(기본 ${base.toLocaleString()}원 + 인원 추가 ${extra.toLocaleString()}원)</span>`:""}<br><span style="color:var(--mute)">3일 이상 남은 평일 빈자리라면 N CREW 멤버 특가 약 ${deal.toLocaleString()}원 · <a href="#deals">빈자리 보기</a></span>`}
+window.pnQuote=(br,d,pk,ppl)=>{if(!M)return null;const t=tier(d),base=M.prices?.[br]?.[pk]?.[t];if(!base)return{none:true};const extra=Math.max(0,ppl-5)*20000,total=base+extra;return{total,per:Math.ceil(total/ppl/100)*100,tier:tierName[t]}};
 const t0=new Date(Date.now()+9*36e5);$("cDate").value=ymd(t0);$("cDate").min=ymd(t0);
 ["cBr","cDate","cPk","cPpl"].forEach(id=>$(id).addEventListener("input",calc));
-fetch(POSTS_API+"?meta=1").then(r=>r.json()).then(j=>{M=j;calc()}).catch(()=>{$("cOut").textContent="요금을 불러오지 못했어요. 지점 페이지에서 요금표를 확인해 주세요."})})();
+fetch(POSTS_API+"?meta=1").then(r=>r.json()).then(j=>{M=j;calc();document.dispatchEvent(new Event("pn:price"))}).catch(()=>{$("cOut").textContent="요금을 불러오지 못했어요. 지점 페이지에서 요금표를 확인해 주세요."})})();
 </script>
 <script>
 /* v2 UI: 모바일 메뉴, 스크롤 등장, 혜택 넘기기 */
@@ -944,8 +996,75 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
 </script>
 <script>(function(){const b=document.getElementById("stepsTg");if(b)b.onclick=()=>{const w=b.parentNode,o=w.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"이용 방법 접기 ▴":"이용 방법 5단계 보기 ▾"}})();</script>
 <script>(function(){const l=document.getElementById("faqList"),b=document.getElementById("faqMore");if(!l||!b)return;const n=l.querySelectorAll("details").length;if(n<=5){b.hidden=true;return}l.classList.add("fold");b.textContent=`질문 ${n-5}개 더 보기`;b.onclick=()=>{const f=l.classList.toggle("fold");b.textContent=f?`질문 ${n-5}개 더 보기`:"접기"}})();</script>
+<div class="qbar" id="qbar" role="region" aria-label="1/N 견적">
+ <p class="qsrc" id="qSrc" hidden></p>
+ <div class="qpanel" id="qPanel" hidden>
+  <div class="qrow" data-k="br" role="group" aria-label="지점"><span>지점</span><button type="button" data-v="홍대루프탑점" data-track="qbar_br:홍대루프탑점" aria-pressed="true">홍대</button><button type="button" data-v="연남루프탑점" data-track="qbar_br:연남루프탑점" aria-pressed="false">연남</button><button type="button" data-v="연트럴파크점" data-track="qbar_br:연트럴파크점" aria-pressed="false">연트럴</button></div>
+  <div class="qrow" data-k="pk" role="group" aria-label="패키지"><span>시간</span><button type="button" data-v="day" data-track="qbar_pk:day" aria-pressed="false">주간 11~17:30</button><button type="button" data-v="night" data-track="qbar_pk:night" aria-pressed="true">야간 19~09:30</button><button type="button" data-v="full" data-track="qbar_pk:full" aria-pressed="false">통대관</button></div>
+  <div class="qrow" data-k="d" role="group" aria-label="날짜"><span>날짜</span><button type="button" data-v="0" data-track="qbar_d:0" aria-pressed="true">오늘</button><button type="button" data-v="1" data-track="qbar_d:1" aria-pressed="false">내일</button><button type="button" data-v="sat" data-track="qbar_d:sat" aria-pressed="false" id="qSat">이번 토요일</button></div>
+  <div class="qlinks"><a href="#deals" data-track="qbar_deals">빈자리 특가 보기</a><a href="#crew" data-track="qbar_crew">N CREW 가입</a><a href="help/" data-track="qbar_help">AI 상담</a><a href="#calc" data-track="qbar_calc">자세한 요금 계산</a></div>
+ </div>
+ <div class="qmain">
+  <div class="qstep"><button type="button" data-d="-1" data-track="qbar_ppl_minus" aria-label="인원 한 명 줄이기">−</button><output id="qPpl" aria-live="polite">4명</output><button type="button" data-d="1" data-track="qbar_ppl_plus" aria-label="인원 한 명 늘리기">+</button></div>
+  <button type="button" class="qsum" id="qSum" data-track="qbar_sum" aria-expanded="false" aria-controls="qPanel"><span class="qper">1인 <b id="qPer">–</b></span><span class="qmeta" id="qMeta">요금 불러오는 중</span></button>
+  <a class="qgo" id="qGo" href="https://smartstore.naver.com/playn_/products/9434661597" target="_blank" rel="noopener" data-place="qbar">예약</a>
+ </div>
+</div>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
 <script>(function(){const d=document.getElementById("dock");if(!d)return;document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea"))d.classList.add("typing")});document.addEventListener("focusout",()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches("input,select,textarea"))d.classList.remove("typing")},120))})();</script>
+<script>
+/* 2026-10-17 듀얼 무드 스위처: 실내 아레나 ⇄ 루프탑 바베큐 (?mood=roof 로 바로 열기) */
+(function(){const box=document.getElementById("mood");if(!box)return;const btns=[...box.querySelectorAll("button")],lead=document.getElementById("heroLead"),shots=document.getElementById("heroShots");
+ const A=shots.querySelector(".a img"),B=shots.querySelector(".b img");
+ const M={roof:{lead:lead.innerHTML,a:[A.getAttribute("src"),A.alt],b:[B.getAttribute("src"),B.alt]},
+  arena:{lead:"전 좌석 더블모니터 게이밍 PC 5대와 프로 무선 기어. 다섯 명이 한 팀으로 랭크 돌리기 좋은 실내 아레나예요. N&nbsp;CREW에게는 빈 날짜를 특가로 먼저 열어요.",a:["assets/home/hd.webp","홍대루프탑점 더블모니터 PC 좌석"],b:["assets/home/yt.webp","연트럴파크점 네온 게이밍 룸"]}};
+ let cur="roof";const st={get(){try{return localStorage.getItem("pn_mood")}catch(e){return null}},set(v){try{localStorage.setItem("pn_mood",v)}catch(e){}}};
+ function apply(m,user){if(!M[m])m="roof";if(m===cur&&!user)return;cur=m;document.documentElement.dataset.mood=m;
+  btns.forEach(b=>{const on=b.dataset.m===m;b.setAttribute("aria-checked",on);b.tabIndex=on?0:-1});
+  const d=M[m],run=()=>{lead.innerHTML=d.lead;A.src=d.a[0];A.alt=d.a[1];B.src=d.b[0];B.alt=d.b[1];shots.classList.remove("swap")};
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches||!user)run();else{shots.classList.add("swap");setTimeout(run,180)}
+  if(user)st.set(m)}
+ btns.forEach(b=>b.addEventListener("click",()=>apply(b.dataset.m,true)));
+ box.addEventListener("keydown",e=>{if(!["ArrowLeft","ArrowRight"].includes(e.key))return;e.preventDefault();const n=cur==="arena"?"roof":"arena";apply(n,true);box.querySelector(`[data-m="${n}"]`).focus();if(window.pnTrack)pnTrack("mood_"+n)});
+ new Image().src=M.arena.a[0];
+ const q=new URLSearchParams(location.search).get("mood");apply(q==="roof"||q==="arena"?q:st.get()||"roof",false)})();
+
+/* 2026-10-17 하단 고정 1/N 견적 바 + SNS 유입 배지 */
+(function(){const bar=document.getElementById("qbar");if(!bar)return;document.body.classList.add("has-qbar");
+ const LINK={"홍대루프탑점":"https://smartstore.naver.com/playn_/products/9434661597","연남루프탑점":"https://smartstore.naver.com/playn_/products/9430485644","연트럴파크점":"https://smartstore.naver.com/playn_/products/12071850850"};
+ const SHORT={"홍대루프탑점":"홍대","연남루프탑점":"연남","연트럴파크점":"연트럴"},PKN={day:"주간",night:"야간",full:"통대관"};
+ const $q=id=>document.getElementById(id),cBr=$q("cBr"),cPk=$q("cPk"),cPpl=$q("cPpl"),cDate=$q("cDate");
+ const S={br:cBr?cBr.value:"홍대루프탑점",pk:cPk?cPk.value:"night",d:"0",ppl:Math.min(16,Math.max(1,+(cPpl&&cPpl.value)||4))};
+ const ymd=x=>x.toISOString().slice(0,10);
+ function dateOf(v){const t=new Date(Date.now()+9*36e5);if(v==="sat"){const dw=t.getUTCDay();t.setUTCDate(t.getUTCDate()+((6-dw+7)%7||7))}else t.setUTCDate(t.getUTCDate()+(+v));return ymd(t)}
+ function label(ds){const d=new Date(ds+"T00:00:00Z");return`${d.getUTCMonth()+1}/${d.getUTCDate()}(${"일월화수목금토"[d.getUTCDay()]})`}
+ function draw(){$q("qPpl").textContent=S.ppl+"명";bar.querySelector('[data-d="-1"]').disabled=S.ppl<=1;bar.querySelector('[data-d="1"]').disabled=S.ppl>=16;
+  bar.querySelectorAll(".qrow").forEach(r=>r.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===String(S[r.dataset.k]))));
+  const ds=dateOf(S.d),q=window.pnQuote&&window.pnQuote(S.br,ds,S.pk,S.ppl);const go=$q("qGo");go.href=LINK[S.br];
+  if(!q){$q("qPer").textContent="–";$q("qMeta").textContent="요금 불러오는 중";return}
+  if(q.none){$q("qPer").textContent="문의";$q("qMeta").textContent=`${SHORT[S.br]} · ${PKN[S.pk]} 요금은 문의해 주세요`;return}
+  $q("qPer").textContent=q.per.toLocaleString()+"원";
+  $q("qMeta").innerHTML=`${label(ds)} ${SHORT[S.br]} ${PKN[S.pk]} · 총 ${q.total.toLocaleString()}원 <i>· 조건 바꾸기</i>`}
+ function syncCalc(){if(!cBr)return;cBr.value=S.br;cPk.value=S.pk;cPpl.value=S.ppl;cDate.value=dateOf(S.d);cPpl.dispatchEvent(new Event("input"))}
+ bar.querySelectorAll(".qstep button").forEach(b=>b.addEventListener("click",()=>{S.ppl=Math.min(16,Math.max(1,S.ppl+(+b.dataset.d)));draw();syncCalc()}));
+ bar.querySelectorAll(".qrow").forEach(r=>r.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S[r.dataset.k]=b.dataset.v;draw();syncCalc()}));
+ const sum=$q("qSum"),panel=$q("qPanel");sum.addEventListener("click",()=>{const o=panel.hidden;panel.hidden=!o;sum.setAttribute("aria-expanded",o)});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden){panel.hidden=true;sum.setAttribute("aria-expanded","false");sum.focus()}});
+ document.addEventListener("click",e=>{if(!panel.hidden&&!bar.contains(e.target)){panel.hidden=true;sum.setAttribute("aria-expanded","false")}});
+ panel.addEventListener("click",e=>{if(e.target.closest(".qlinks a")){panel.hidden=true;sum.setAttribute("aria-expanded","false")}});
+ if(cBr)[cBr,cPk,cPpl].forEach(x=>x.addEventListener("input",()=>{S.br=cBr.value;S.pk=cPk.value;S.ppl=Math.min(16,Math.max(1,+cPpl.value||1));draw()}));
+ if(new Date(Date.now()+9*36e5).getUTCDay()===6)$q("qSat").textContent="다음 토요일";
+ document.addEventListener("pn:price",draw);draw();
+ const form=document.getElementById("joinForm");if(form&&"IntersectionObserver" in window)new IntersectionObserver(es=>bar.classList.toggle("hide",es[0].isIntersecting),{threshold:.15}).observe(form);
+ document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea")&&!bar.contains(e.target))bar.classList.add("typing")});
+ document.addEventListener("focusout",()=>setTimeout(()=>{const a=document.activeElement;if(!a||!a.matches("input,select,textarea"))bar.classList.remove("typing")},120));
+ function badge(){const ch=window.pnChannel!==undefined?window.pnChannel:(()=>{const q=new URLSearchParams(location.search),s=(q.get("from")||q.get("utm_source")||"").toLowerCase(),r=document.referrer;
+   return{ig:"ig",instagram:"ig",yt:"yt",youtube:"yt",th:"th",threads:"th",fb:"fb",facebook:"fb",tt:"tt",tiktok:"tt"}[s]||(/instagram/.test(r)?"ig":/youtu/.test(r)?"yt":/threads/.test(r)?"th":/facebook/.test(r)?"fb":/tiktok/.test(r)?"tt":"")})();
+  const N={ig:"인스타",yt:"유튜브",th:"쓰레드",fb:"페이스북",tt:"틱톡"}[ch];if(!N)return;let off=false;try{off=sessionStorage.getItem("pn_qsrc_off")==="1"}catch(e){}if(off)return;
+  const el=$q("qSrc");el.innerHTML=`<span>${N}에서 오셨군요 · 인원만 고르면 <b>1인 요금</b>이 나와요</span><button type="button" aria-label="안내 닫기">×</button>`;el.hidden=false;
+  el.querySelector("button").onclick=()=>{el.hidden=true;try{sessionStorage.setItem("pn_qsrc_off","1")}catch(e){}};if(window.pnTrack)pnTrack("qbar_badge_"+ch)}
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",badge);else setTimeout(badge,0)})();
+</script>
 <script src="/assets/chat.js" defer></script>
 <script src="assets/events.js" defer></script>
 <script src="assets/tonight.js" defer></script>
