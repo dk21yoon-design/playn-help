@@ -27,7 +27,7 @@ spec.json 예시
   {"dur": 2.0, "clip": {"file": "local.mp4", "start": 3}, "center": "대망의 {1위}는…?", "sub": "친구랑 하면 {우정 파괴} 확정"},
   {"dur": 2.0, "image": "https://…/cover.jpg", "cta": true, "line": "시험 끝난 친구 {태그}하고\\n오늘 밤 바로 ㄱㄱ 👇", "pill": "📌 저장해두고 시험 끝나면 꺼내보기"}
  ],
- "music": {"url": "<CC 곡 URL 또는 로컬 mp3>", "start": 0}   ← 또는 {"lib": "suno_last_stand"} / {"lib": "auto", "mood": "epic", "use_for": "롤드컵"} (관제실 음악 보관함)
+ "music": {"url": "<CC 곡 URL 또는 로컬 mp3>", "start": 0}   ← 또는 {"lib": "suno_last_stand"} / {"lib": "auto", "use_for": "롤드컵", "hit_scene": 3} (관제실 음악 보관함, hit_scene/hit_at = 곡 드롭이 터질 장면 번호/초)
 }
 - clip: steam_appid(+trailer id, 생략 시 첫 트레일러) 또는 file. start=초. crop_top=true 면 원본 위쪽 900/1080만 사용(트레일러에 영문 자막이 박혀 있을 때)
 - image: URL·로컬 경로·data URI. 천천히 확대(Ken Burns). 제품 사진은 "fit": "contain"(+ "pad": "white") → 잘림 없이 전체 표시. 실사 사진(공식 제품 이미지·보도사진)만. AI 생성 이미지 금지.
@@ -519,13 +519,25 @@ def resolve_lib(mspec):
             if mspec.get('use_for') and mspec['use_for'] not in (x.get('use_for') or []): return False
             if mspec.get('vocals') is not None and x.get('vocals') is not None and bool(x['vocals']) != bool(mspec['vocals']): return False
             if mspec.get('source') and x.get('source') != mspec['source']: return False
+            if (mspec.get('hit_at') is not None or mspec.get('hit_scene') is not None) and not x.get('drops'): return False
             return True
         cand = [x for x in lib if ok(x)] or lib
         cand.sort(key=lambda x: (not x.get('fav'), x.get('source') != 'suno', x.get('uses') or 0, x.get('last_used_at') or ''))
         pick = cand[0] if cand else None
     if not pick: raise SystemExit(f"❌ 음악 보관함에 맞는 곡 없음: {mspec}")
-    out = {**{k: v for k, v in mspec.items() if k not in ('lib', 'mood', 'use_for', 'vocals', 'source')}, 'url': pick['url']}
+    out = {**{k: v for k, v in mspec.items() if k not in ('lib', 'mood', 'use_for', 'vocals', 'source', 'hit_at', 'hit_scene', 'drop')}, 'url': pick['url']}
     if 'start' not in mspec: out['start'] = pick['best_start'] if pick.get('best_start') is not None else 'auto'
+    # 2026-10-16 드롭 맞추기: 곡의 드롭(클라이맥스)이 릴스의 hit_at초(또는 hit_scene번 장면 시작)에 터지게 시작점 계산
+    hit = mspec.get('hit_at')
+    if hit is None and mspec.get('hit_scene') is not None: hit = sum(d for _, d in parts[:int(mspec['hit_scene'])])
+    drops = [float(x) for x in (pick.get('drops') or [])]
+    if hit is not None and drops and 'start' not in mspec:
+        dur = float(pick.get('duration_s') or 1e9); want = int(mspec.get('drop', 0))
+        order = drops[want:] + drops[:want]
+        ok_d = [d for d in order if d - hit >= 0 and d - hit + total <= dur - 0.5]
+        d = ok_d[0] if ok_d else order[0]
+        out['start'] = round(max(0.0, d - float(hit)), 2)
+        print(f"드롭 {d}s → 릴스 {float(hit):.1f}s 지점에 맞춤", file=sys.stderr)
     print(f"음악 보관함: {pick['title']} ({pick['slug']}) start={out['start']}", file=sys.stderr)
     return out, pick
 
