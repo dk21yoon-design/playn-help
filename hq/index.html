@@ -179,7 +179,7 @@ section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--eas
 .mup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--panel2);border:1px dashed var(--line2);border-radius:var(--r-sm);padding:14px;margin-bottom:12px}
 .mup label.go{font-size:14px;font-weight:700;color:#1a1300;background:var(--lamp);border-radius:999px;padding:10px 18px;cursor:pointer}
 .mup p{font-size:13px;color:var(--mute);line-height:1.5;flex:1;min-width:220px}
-.mk{display:grid;gap:12px}
+.mk{display:grid;gap:12px}.mk>*{min-width:0}
 .mkf{background:var(--panel2);border:1px solid var(--line2);border-radius:var(--r-sm);padding:16px;display:grid;gap:10px}
 .mkf label{font-size:13px;color:var(--mute);font-weight:700}
 .mkf select,.mkf textarea,.mkj input{width:100%;background:var(--deep);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;font-size:14px}
@@ -196,6 +196,13 @@ section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--eas
 .mkj video{width:100%;aspect-ratio:9/16;border-radius:12px;background:#000}
 .mkj pre{white-space:pre-wrap;font:inherit;font-size:13px;color:var(--mute);background:var(--deep);border-radius:10px;padding:10px;max-height:260px;overflow:auto;margin:0}
 .mkj .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mkf[hidden]{display:none}
+.mkrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.mkrow>*{flex:0 0 auto}.mkf input[type=text],.mkf input[type=date],.mkf input[type=time],.mkf input[type=number]{background:var(--deep);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;font-size:14px;min-height:44px}
+.mkck{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink);font-weight:600;min-height:44px}.mkck input{width:20px;height:20px;accent-color:var(--lamp)}
+.mktabs{display:flex;gap:6px}.mktabs button{font:inherit;font-size:14px;font-weight:800;padding:9px 16px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--mute);cursor:pointer;min-height:44px}.mktabs button[aria-pressed=true]{background:var(--lamp);color:#1a1300;border-color:var(--lamp)}
+.mknew{display:flex;gap:8px;flex-wrap:wrap}.mknew button{font:inherit;font-size:13px;text-align:left;background:rgba(255,181,71,.10);border:1px solid rgba(255,181,71,.35);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;min-height:44px}.mknew b{color:var(--lamp);margin-right:6px}
+.mkperf{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;overflow-x:auto}.mkperf table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}.mkperf th{color:var(--mute);font-weight:700;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line2)}.mkperf th:first-child,.mkperf td:first-child{text-align:left}.mkperf td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}.mkperf .best{color:var(--ok);font-weight:800}.mkperf p{margin:8px 0 0;font-size:13px;color:var(--mute);line-height:1.6}
+.mkj .perf{font-size:13px;color:var(--ink);background:rgba(61,220,151,.08);border-radius:10px;padding:8px 10px}
 .mkj .ghost{font-size:13px;border:1px solid var(--line2);border-radius:999px;padding:9px 14px;background:none;color:var(--ink);cursor:pointer;min-height:40px}
 .mkj .qa{font-size:12.5px;color:var(--dim)}
 @media (max-width:640px){.mkj .vw{grid-template-columns:1fr}}
@@ -608,24 +615,47 @@ function musicSection(){const s=el("section");s.id="music";const all=DATA.music|
   return s}
 
 const JST={queued:["queued","대기 중"],working:["working","만드는 중"],ready:["ready","확인 대기"],publishing:["working","발행 중"],published:["published","발행 완료"],failed:["failed","실패"]};
-function makerSection(){const s=el("section");s.id="maker";const jobs=DATA.reel_jobs||[],mom=(DATA.moments||[]).filter(m=>!m.used_reel);
-  s.innerHTML=`<div class="sh"><span class="eye">REEL MAKER</span><h2>롤드컵 하이라이트 생성기</h2><span class="meta">누르면 생성 담당이 편집 플레이북대로 만들고 자동 검사까지 통과하면 여기에 올려요 · 보통 30~60분</span></div>`;
+function perfTable(rows){if(!rows.length)return "";const ok=rows.filter(r=>r.views!=null);
+  const best=k=>Math.max(...ok.map(r=>Number(r[k])||0));const bw=best("avg_watch_s"),bs=best("share_rate"),bv=best("views");
+  const tr=rows.map(r=>`<tr><td>${H((r.reel_id||"")+" "+(r.title||"").replace(/^R\d+\s*/,"").replace(/\[[^\]]*\]\s*/g,"").slice(0,26))}</td><td${r.views==bv&&bv?' class="best"':""}>${r.views??"집계 전"}</td><td${Number(r.avg_watch_s)==bw&&bw?' class="best"':""}>${r.avg_watch_s!=null?r.avg_watch_s+"초":"–"}</td><td${Number(r.share_rate)==bs&&bs?' class="best"':""}>${r.share_rate!=null?r.share_rate+"%":"–"}</td><td>${r.yt_views??"–"}</td><td style="text-align:left">${H((r.song||"").replace(/\s*[-(].*$/,"").slice(0,18))}</td></tr>`).join("");
+  return `<div class="mkperf"><table><thead><tr><th>롤드컵 명장면 성과</th><th>인스타 조회</th><th>평균 시청</th><th>공유율</th><th>쇼츠 조회</th><th>곡</th></tr></thead><tbody>${tr}</tbody></table><p>발행 다음 날부터 매일 06:20에 숫자가 채워져요. 생성 담당은 새로 만들 때마다 이 표에서 평균 시청·공유율이 높은 곡·길이·장면 유형을 먼저 골라요.</p></div>`}
+let MKTAB="one";
+function makerSection(){const s=el("section");s.id="maker";const jobs=DATA.reel_jobs||[],mom=(DATA.moments||[]).filter(m=>!m.used_reel),ev=(DATA.open_events||[])[0];
+  const fresh=mom.filter(m=>m.origin==="auto"&&Date.now()-new Date(m.created_at)<3*864e5);
+  s.innerHTML=`<div class="sh"><span class="eye">REEL MAKER</span><h2>롤드컵 하이라이트 생성기</h2><span class="meta">누르면 생성 담당이 편집 플레이북대로 만들고 자동 검사까지 통과하면 여기에 올려요 · 매시 55분 시작 · 한 편 30~60분</span></div>`;
   const w=el("div","mk");
-  const f=el("form","mkf");f.innerHTML=`<label for="mkM">장면</label><select id="mkM"><option value="">자동 선택 (아직 안 쓴 명장면 중 우선순위 순)</option>${mom.map(m=>`<option value="${H(m.slug)}">${H(m.title)}${m.why?" · "+H(m.why):""}</option>`).join("")}</select>
-    <label for="mkH">원하는 점 (선택)</label><textarea id="mkH" placeholder="예: 페이커 보이스 위주로, 소셜링 안내 빼고, 30초 안쪽"></textarea><button class="go" type="submit">롤드컵 하이라이트 만들기</button>`;
+  if(fresh.length){const nb=el("div");nb.innerHTML=`<div class="pr" style="font-size:13px;color:var(--mute);margin-bottom:6px">🔥 최근 경기에서 새로 뽑은 장면 · 누르면 바로 생성 요청</div><div class="mknew">${fresh.map(m=>`<button type="button" data-s="${H(m.slug)}"><b>NEW</b>${H(m.title)}</button>`).join("")}</div>`;
+    nb.querySelectorAll("button").forEach(b=>b.onclick=async()=>{b.disabled=true;const r=await post({action:"reel_job_create",moment:b.dataset.s,hint:"",social:!!ev});toast(r.ok?`✓ 생성 요청 #${r.id} 접수`:(r.error||"실패"));load()});w.appendChild(nb)}
+  const tabs=el("div","mktabs");tabs.innerHTML=`<button type="button" aria-pressed="${MKTAB==="one"}" data-t="one">한 편</button><button type="button" aria-pressed="${MKTAB==="ser"}" data-t="ser">시리즈</button>`;w.appendChild(tabs);
+  const soc=ev?`<label class="mkck"><input type="checkbox" class="mkSoc" checked> 끝 화면에 「${H(ev.title)}」 신청 현황 넣기</label>`:"";
+  const f=el("form","mkf");f.innerHTML=`<label for="mkM">장면</label><select id="mkM"><option value="">자동 선택 (아직 안 쓴 명장면 중 성과·우선순위 순)</option>${mom.map(m=>`<option value="${H(m.slug)}">${m.origin==="auto"?"[NEW] ":""}${H(m.title)}${m.why?" · "+H(m.why):""}</option>`).join("")}</select>
+    <label for="mkH">원하는 점 (선택)</label><textarea id="mkH" placeholder="예: 페이커 보이스 위주로, 30초 안쪽"></textarea>${soc}<button class="go" type="submit">롤드컵 하이라이트 만들기</button>`;
   f.onsubmit=async e=>{e.preventDefault();const bt=f.querySelector("button");bt.disabled=true;bt.textContent="요청 중…";
-    const j=await post({action:"reel_job_create",moment:$("#mkM").value||null,hint:$("#mkH").value.trim()});bt.disabled=false;bt.textContent="롤드컵 하이라이트 만들기";
+    const j=await post({action:"reel_job_create",moment:$("#mkM").value||null,hint:$("#mkH").value.trim(),social:!!f.querySelector(".mkSoc")?.checked});bt.disabled=false;bt.textContent="롤드컵 하이라이트 만들기";
     toast(j.ok?`✓ 생성 요청 #${j.id} 접수 · 완성되면 여기 미리보기가 떠요`:(j.error||"실패"));if(j.ok){$("#mkH").value="";load()}};
-  w.appendChild(f);
+  const tm=new Date(Date.now()+9*36e5+864e5).toISOString().slice(0,10);
+  const sf=el("form","mkf");sf.hidden=MKTAB!=="ser";f.hidden=MKTAB!=="one";sf.innerHTML=`<label for="srT">시리즈 주제 (선수·팀·라이벌)</label><input type="text" id="srT" placeholder="예: 페이커 명장면, T1 vs 젠지 라이벌전, 역대 우승 확정 순간" maxlength="80">
+    <div class="mkrow"><label for="srN" style="font-size:13px;color:var(--mute);font-weight:700">편수</label><input type="number" id="srN" min="2" max="5" value="3" style="width:80px">
+    <label for="srD" style="font-size:13px;color:var(--mute);font-weight:700">시작일</label><input type="date" id="srD" value="${tm}">
+    <label for="srH" style="font-size:13px;color:var(--mute);font-weight:700">매일</label><input type="time" id="srH" value="21:00"></div>
+    <label for="srX">원하는 점 (선택)</label><textarea id="srX" placeholder="예: 매 편 첫 화면에 시리즈 번호 크게"></textarea>
+    <label class="mkck"><input type="checkbox" id="srA" checked> 자동 검사 통과하면 위 시각에 바로 예약 (안 고르면 한 편씩 확인 후 발행)</label>${soc.replace("mkSoc","mkSoc2")}
+    <button class="go" type="submit">시리즈 만들기</button>`;
+  sf.onsubmit=async e=>{e.preventDefault();const bt=sf.querySelector("button.go");bt.disabled=true;
+    const r=await post({action:"reel_series_create",theme:$("#srT").value.trim(),count:Number($("#srN").value),start_date:$("#srD").value,time:$("#srH").value,hint:$("#srX").value.trim(),auto:$("#srA").checked,social:!!sf.querySelector(".mkSoc2")?.checked});bt.disabled=false;
+    toast(r.ok?`✓ 시리즈 ${r.ids.length}편 요청 · 매시 55분마다 한 편씩 만들어요`:(r.error||"실패"));if(r.ok)load()};
+  tabs.querySelectorAll("button").forEach(b=>b.onclick=()=>{MKTAB=b.dataset.t;tabs.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));f.hidden=b.dataset.t!=="one";sf.hidden=b.dataset.t!=="ser"});
+  w.appendChild(f);w.appendChild(sf);
   jobs.forEach(j=>{const [cls,lab]=JST[j.status]||["",j.status];const c=el("article","mkj");const q=j.q||{};
     const when=new Date(j.created_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
-    let body=`<div class="h"><b>#${j.id} ${H(j.title||j.request?.hint||"롤드컵 하이라이트")}</b><span class="chip ${cls}">${lab}</span><span class="pr">${when} 요청${j.reel_id?" · "+H(j.reel_id):""}</span></div><div class="pr">${H(j.progress||"")}${j.error?" · "+H(j.error):""}</div>`;
+    let body=`<div class="h"><b>#${j.id} ${H(j.title||j.request?.hint||"롤드컵 하이라이트")}</b><span class="chip ${cls}">${lab}</span><span class="pr">${when} 요청${j.reel_id?" · "+H(j.reel_id):""}${j.request?.series?` · 시리즈 ${j.request.series.idx}/${j.request.series.total}`:""}${j.request?.auto_publish_at?` · ${new Date(j.request.auto_publish_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})} 자동 예약`:""}</span></div><div class="pr">${H(j.progress||"")}${j.error?" · "+H(j.error):""}</div>`;
     if(j.preview_url&&["ready","publishing","published"].includes(j.status)){
       const qa=j.qa?Object.entries(j.qa).map(([k,v])=>`${H(k)} ${H(String(v))}`).join(" · "):"";
       body+=`<div class="vw"><video controls playsinline preload="metadata" src="${H(j.preview_url)}" ${j.cover_url?`poster="${H(j.cover_url)}"`:""}></video><div style="display:grid;gap:10px">
         ${j.caption?`<pre>${H(j.caption)}</pre>`:""}${qa?`<div class="qa">자동 검사: ${qa}</div>`:""}
         ${j.status==="ready"?`<div class="acts"><button class="go" data-a="pub">지금 발행</button><input type="datetime-local" aria-label="예약 시각" style="max-width:220px"><button class="ghost" data-a="sch">이 시간에 예약</button></div>
         <div class="acts"><input type="text" placeholder="다시 만들 때 바꿀 점" aria-label="다시 만들 때 바꿀 점" style="flex:1;min-width:180px"><button class="ghost" data-a="redo">다시 만들기</button><button class="ghost" data-a="del">버리기</button></div>`:""}
+        ${q.perf&&q.perf.views!=null?`<div class="perf">📈 조회 ${q.perf.views} · 평균 시청 ${q.perf.avg_watch_s??"–"}초 · 공유율 ${q.perf.share_rate??"–"}% · 저장 ${q.perf.saved??0}${q.perf.yt_views!=null?` · 쇼츠 ${q.perf.yt_views}`:""}</div>`:(q.status==="published"?`<div class="perf">📈 성과는 발행 다음 날 06:20부터 채워져요</div>`:"")}
         ${q.permalink?`<a href="${H(q.permalink)}" target="_blank" rel="noopener" style="color:var(--lamp);font-size:14px">인스타에서 보기 ↗</a>`:""}
         ${j.status==="publishing"&&q.status==="published"?`<div class="pr" style="color:var(--ok)">발행 완료</div>`:""}</div></div>`}
     else if(["queued","failed"].includes(j.status))body+=`<div class="acts"><button class="ghost" data-a="del">${j.status==="failed"?"지우기":"취소"}</button></div>`;
@@ -638,9 +668,10 @@ function makerSection(){const s=el("section");s.id="maker";const jobs=DATA.reel_
       toast(r&&r.ok?({pub:"✓ 발행 대기열에 올렸어요 · 몇 분 안에 모든 채널에 올라가요",sch:"✓ 예약했어요",redo:"✓ 다시 만들기 요청했어요",del:"정리했어요"}[a]):(r?.error||"실패"));load()});
     w.appendChild(c)});
   if(!jobs.length){const e0=el("div");e0.innerHTML=emptyBox("아직 요청한 릴스가 없어요. 위 버튼을 누르면 시작해요.");w.appendChild(e0)}
+  const pf=el("div");pf.innerHTML=perfTable(DATA.reel_perf||[]);w.appendChild(pf);
   s.appendChild(w);return s}
 
-function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio,#main video")].some(a=>!a.paused)||document.activeElement?.closest?.(".mkf,.mkj"))return;renderCats();const m=$("#main");m.innerHTML="";
+function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio,#main video")].some(a=>!a.paused)||document.activeElement?.closest?.(".mkf,.mkj,.mktabs"))return;renderCats();const m=$("#main");m.innerHTML="";
   const B=BRANDS.find(b=>b.id===VIEW);
   if(VIEW==="all"){
     const s1=el("section");s1.innerHTML=statusBanner("all")+kpiStrip();m.appendChild(s1);
