@@ -1,0 +1,7 @@
+---
+description: Cursor 전용 안내. 프로젝트 기준은 AGENTS.md
+alwaysApply: true
+---
+
+- 프로젝트 규칙·기능·역할 분담은 저장소 루트 `AGENTS.md`를 따른다. 여기에 규칙을 다시 적지 않는다.
+- Cursor 채팅 모델: 기획·코드 감사는 Gemini, 구현·디버깅은 Claude로 골라 쓴다.

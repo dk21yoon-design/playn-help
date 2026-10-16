@@ -419,7 +419,7 @@ function renderCats(){const c=$("#cats");c.innerHTML="";
     c.appendChild(a)})}
 
 function countUp(root){root.querySelectorAll("[data-n]").forEach(e=>{const to=Number(e.dataset.n);if(isNaN(to))return;
-  if(matchMedia("(prefers-reduced-motion:reduce)").matches||e.dataset.done){e.textContent=fmt(to);return}
+  if(COUNTED||matchMedia("(prefers-reduced-motion:reduce)").matches||e.dataset.done){e.textContent=fmt(to);return}
   const t0=performance.now(),d=700;e.dataset.done=1;const step=t=>{const p=Math.min(1,(t-t0)/d);e.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})}
 const N=v=>v==null?"–":`<span class="num" data-n="${v}">${fmt(v)}</span>`;
 
@@ -438,8 +438,8 @@ function kpiStrip(){const b=DATA.board,p=b.playn;const todayPosts=(p.today_posts
    <div class="kpi"><span class="l">지금 홈페이지</span><span class="v">${N(p.live5)}</span><span class="s">최근 5분 접속</span></div>
    <div class="kpi"><span class="l">오늘 방문자 (playn.kr)</span><span class="v">${N(p.today)}</span><span class="s">어제 ${fmt(y)}명</span></div>
    <div class="kpi"><span class="l">오늘 발행</span><span class="v">${N(pubAll)}</span><span class="s">인스타 ${todayPosts} · 블로그 ${fmt(blogPub)} · 쓰레드 ${thToday} · 쇼츠 ${fmt(ytUp)}</span></div>
-   <div class="kpi"><span class="l">열린 이슈</span><span class="v ${open?"down":"up"}">${N(open)}</span><span class="s">해결 기록 ${(b.issues||[]).filter(i=>i.status==="resolved").length}건 (14일)</span></div>
-   <div class="kpi"><span class="l">사장님 할 일</span><span class="v">${N(todos)}</span><span class="s">로그인·결정만</span></div></div>`}
+   <div class="kpi"><span class="l">열린 이슈</span><span class="v ${open?"down":"up"}" data-k="open">${N(open)}</span><span class="s">해결 기록 ${(b.issues||[]).filter(i=>i.status==="resolved").length}건 (14일)</span></div>
+   <div class="kpi"><span class="l">사장님 할 일</span><span class="v" data-k="todos">${N(todos)}</span><span class="s">로그인·결정만</span></div></div>`}
 
 function brandCard(B){const [s,lab]=brandState(B.id);const k=brandKpis(B.id);
   const a=el("a","bc");a.href="#"+B.id;
@@ -487,7 +487,7 @@ function detailView(B){const box=el("div","detail");const [s,lab]=brandState(B.i
   box.innerHTML=`<div class="dh">${logoHTML(B)}<div><h2>${H(B.name)}</h2><div class="tag" style="color:var(--mute);font-size:13.5px">${H(B.tag)}</div></div><span class="pill ${s}" style="margin-left:auto"><i></i>${lab}</span></div>
    <div class="ptabs" role="tablist">${B.plats.map(p=>`<button class="pt${p.id===P.id?" on":""}" role="tab" aria-selected="${p.id===P.id}" data-p="${p.id}">${ico(p.icon,17)}${H(p.name)}</button>`).join("")}</div>
    <div class="pbody">${platformBody(B,P)}</div>`;
-  box.querySelectorAll(".pt").forEach(t=>t.onclick=()=>{PTAB[B.id]=t.dataset.p;render()});
+  box.querySelectorAll(".pt").forEach(t=>t.onclick=()=>{PTAB[B.id]=t.dataset.p;render(true)});
   return box}
 
 function spark(arr){if(!arr.length)return"";const W=600,Hh=120,pad=22,max=Math.max(5,...arr.map(a=>a.u));
@@ -509,11 +509,17 @@ function issueRow(i){const done=i.status==="resolved";const r=el("div","iss "+(d
    <div class="m"><span>${H(br)}${i.channel?" · "+H(i.channel):""}</span><span>${done?"해결 "+kst(i.resolved_at):"발생 "+kst(i.opened_at)}</span><span>${H({cron:"서버 감지",queue:"발행 큐",detect:"자동 감지",log:"발행 로그",pc:"PC 로그",claude:"Claude 점검",push:"보고"}[i.source]||i.source||"")}</span></div>
    ${i.detail?`<div class="d">${H(i.detail)}</div>`:""}${done?`<div class="fix">✓ ${H(i.fix_note||"해결")} · 지금 정상</div>`:fixLine(i)}</div>
    ${done?"":`<div class="acts">${i.fix_state&&!["done","human"].includes(i.fix_state)?"":`<button class="go" type="button">${i.fix_state?"다시 시도":"바로 해결"}</button>`}<button class="act" type="button">해결로 표시</button></div>`}`;
-  const b=r.querySelector(".act");if(b)b.onclick=async()=>{b.disabled=true;b.textContent="처리 중";await post({action:"issue_resolve",id:i.id,note:"사장님이 확인 처리"});load()};
-  const g=r.querySelector(".go");if(g)g.onclick=async()=>{g.disabled=true;g.textContent="수리 중…";const j=await post({action:"fix",id:i.id});
-    toast(j.ok?(j.state==="done"?"✓ ":"⏳ ")+j.msg:(j.msg||j.error||"수리 요청 실패"));load()};
+  const b=r.querySelector(".act");if(b)b.onclick=async()=>{const note="사장님이 확인 처리";
+    const undo=optimistic(i,{status:"resolved",resolved_at:new Date().toISOString(),fix_note:note});
+    const j=await post({action:"issue_resolve",id:i.id,note});
+    if(!j.ok){undo();toast("해결 표시를 저장하지 못했어요. 원래대로 돌렸어요"+(j.error?` (${j.error})`:""));return}load()};
+  const g=r.querySelector(".go");if(g)g.onclick=async()=>{
+    const undo=optimistic(i,{fix_state:"sending",fix_log:"수리 요청을 보내는 중",fix_at:new Date().toISOString()});
+    const j=await post({action:"fix",id:i.id});
+    if(!j.ok){undo();toast((j.msg||j.error||"수리 요청 실패")+" · 원래대로 돌렸어요");return}
+    toast((j.state==="done"?"✓ ":"⏳ ")+j.msg);load()};
   return r}
-const FIXWHO={done:["ok","수리 완료","정상 확인 중"],pc:["","PC 수리 대기",""],claude:["","Claude 수리 대기",""],human:["","사장님 확인 필요",""]};
+const FIXWHO={sending:["","수리 요청 중",""],done:["ok","수리 완료","정상 확인 중"],pc:["","PC 수리 대기",""],claude:["","Claude 수리 대기",""],human:["","사장님 확인 필요",""]};
 function fixLine(i){if(!i.fix_state)return"";const[c,t]=FIXWHO[i.fix_state]||["",i.fix_state];
   return `<div class="fx ${c}"><b>${t}</b> · ${H(i.fix_log||"")}${i.fix_at?` <span style="opacity:.7">(${kst(i.fix_at)})</span>`:""}</div>`}
 let toastT;function toast(m){let t=document.querySelector(".toast");if(!t){t=el("div","toast");document.body.appendChild(t)}
@@ -566,7 +572,10 @@ function activitySection(scope){const b=DATA.board;const s=el("section");s.id="a
   const right=el("div","box");right.innerHTML=`<h3>사장님 할 일<small>로그인·결정만</small></h3>`;const td=el("div","todo");
   (b.todos||[]).filter(t=>scope==="all"||t.brand===scope).forEach(t=>{const r=el("div","td"+(t.done?" done":""));const id="td"+t.id;
     r.innerHTML=`<input type="checkbox" id="${id}" ${t.done?"checked":""}><label for="${id}">${H(t.text)}</label>`;
-    r.querySelector("input").onchange=async e=>{r.classList.toggle("done",e.target.checked);await post({action:"todo_done",id:t.id,done:e.target.checked})};td.appendChild(r)});
+    r.querySelector("input").onchange=async e=>{const cb=e.target,on=cb.checked,was=!!t.done;
+      const set=v=>{t.done=v;cb.checked=v;r.classList.toggle("done",v);syncKpis()};set(on);
+      const j=await post({action:"todo_done",id:t.id,done:on});
+      if(!j.ok){set(was);toast("할 일 상태를 저장하지 못했어요. 원래대로 돌렸어요"+(j.error?` (${j.error})`:""))}};td.appendChild(r)});
   if(!td.children.length)td.innerHTML=emptyBox("지금은 사장님이 할 일이 없어요.");right.appendChild(td);
   two.append(left,right);s.appendChild(two);return s}
 
@@ -671,7 +680,29 @@ function makerSection(){const s=el("section");s.id="maker";const jobs=DATA.reel_
   const pf=el("div");pf.innerHTML=perfTable(DATA.reel_perf||[]);w.appendChild(pf);
   s.appendChild(w);return s}
 
-function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio,#main video")].some(a=>!a.paused)||document.activeElement?.closest?.(".mkf,.mkj,.mktabs"))return;renderCats();const m=$("#main");m.innerHTML="";
+/* ── 무지연 UX: 갱신 보호 + 낙관적 업데이트 ── */
+const BUSY=new Set();let DEFER=false,COUNTED=false; // COUNTED: 숫자 올라가는 연출은 첫 화면에서만
+function canRender(){const m=$("#main");if(!m)return true;if(BUSY.size)return false;
+  if([...m.querySelectorAll("audio,video")].some(a=>!a.paused))return false;
+  const a=document.activeElement;if(a&&m.contains(a)&&(a.matches('input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]),textarea,select,[contenteditable="true"]')||a.closest(".mkf,.mkj,.mktabs")))return false;
+  return true}
+function flush(){if(DEFER&&canRender())render()}
+const dKey=d=>(d.closest("section")?.id||"")+"|"+(d.querySelector("summary")?.textContent||"").replace(/[\d,]+/g,"#").trim();
+function snapUI(){const m=$("#main");const vals=new Map();
+  m.querySelectorAll("input[id],textarea[id],select[id]").forEach(e=>{if(["checkbox","radio","file","button","submit"].includes(e.type))return;
+    const def=e.tagName==="SELECT"?([...e.options].find(o=>o.defaultSelected)||e.options[0])?.value:e.defaultValue;if(e.value!==def)vals.set(e.id,e.value)});
+  return{view:VIEW,y:window.scrollY,open:new Set([...m.querySelectorAll("details[open]")].map(dKey)),vals}}
+function restoreUI(sn){if(!sn||sn.view!==VIEW)return;const m=$("#main");
+  if(sn.open.size)m.querySelectorAll("details").forEach(d=>{if(sn.open.has(dKey(d)))d.open=true});
+  sn.vals.forEach((v,id)=>{const e=document.getElementById(id);if(e&&m.contains(e))e.value=v});
+  if(Math.abs(window.scrollY-sn.y)>1)window.scrollTo(0,sn.y)}
+function optimistic(i,patch){const prev={};for(const k in patch)prev[k]=i[k];Object.assign(i,patch);render(true);
+  return()=>{Object.assign(i,prev);render(true)}}
+function syncKpis(){const k=$("#main .kpis");if(!k)return;const t=document.createElement("div");t.innerHTML=kpiStrip();k.replaceWith(t.firstElementChild)}
+document.addEventListener("focusout",()=>setTimeout(flush,150));
+["pause","ended"].forEach(ev=>document.addEventListener(ev,()=>setTimeout(flush,150),true));
+
+function render(force){if(!DATA)return;if(!force&&!canRender()){DEFER=true;return}DEFER=false;const sn=snapUI();renderCats();const m=$("#main");m.innerHTML="";
   const B=BRANDS.find(b=>b.id===VIEW);
   if(VIEW==="all"){
     const s1=el("section");s1.innerHTML=statusBanner("all")+kpiStrip();m.appendChild(s1);
@@ -686,17 +717,20 @@ function render(){if(!DATA)return;if([...document.querySelectorAll("#main audio,
   else if(VIEW==="music"){m.appendChild(musicSection())}
   else if(VIEW==="maker"){m.appendChild(makerSection())}
   countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
+  COUNTED=true;restoreUI(sn);
 }
 
 /* ── 데이터 ── */
-const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크 연결이 끊겼어요"}));
+const post=b=>{const t=b.action!=="board"?{}:null;if(t)BUSY.add(t);
+  return fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크 연결이 끊겼어요"}))
+    .finally(()=>{if(t){BUSY.delete(t);setTimeout(flush,0)}})};
 async function load(){const j=await post({action:"board"});
   if(!j.ok){if(/관리 키/.test(j.error||"")){$("#app").hidden=true;$("#gate").hidden=false;if(KEY){$("#gateErr").hidden=false;$("#gateErr").textContent=j.error}return}
     $("#liveDot").classList.add("off");$("#liveTxt").textContent="갱신 실패 · 다시 시도 중";return}
   st.set("pn_admin",KEY);$("#gate").hidden=true;$("#app").hidden=false;DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
 function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
-  if(["issues","publish","activity"].includes(h))return;render();window.scrollTo({top:0,behavior:"smooth"})}
+  if(["issues","publish","activity"].includes(h))return;render(true);window.scrollTo({top:0,behavior:"smooth"})}
 window.addEventListener("hashchange",route);
 $("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});
 $("#refresh").onclick=()=>{$("#liveTxt").textContent="갱신 중";load()};
