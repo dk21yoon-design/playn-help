@@ -309,7 +309,7 @@ def post_page(p, cats, related):
   <div class="acts"><a class="btn pink" href="{E(p['insta'] or 'https://www.instagram.com/playn_no.1/')}" target="_blank" rel="noopener">인스타그램에서 보기</a><a class="btn ghost" href="/#magazine">매거진 목록</a></div>
   <section class="s"><h2 class="disp" style="font-size:22px">같은 주제 글</h2><div class="more">{rel}</div></section>
   <section class="s"><h2 class="disp" style="font-size:22px">친구들이랑 직접 해보고 싶다면</h2><p class="sub">게이밍 PC 5대와 프로 기어가 있는 홍대·연남 게임파티룸이에요.</p>
-    <div class="acts"><a class="btn lamp" href="/#deals">이번 주 빈자리 보기</a><a class="btn ghost" href="/#branches">지점 둘러보기</a></div></section>
+    <div class="acts"><a class="btn lamp" href="/?mood=arena">오늘 밤 1인 요금 보기</a><a class="btn ghost" href="/?mood=arena#deals">이번 주 빈자리 보기</a></div></section>
 </main>
 {FOOT}
 </body></html>"""

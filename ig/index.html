@@ -23,7 +23,8 @@ body{min-height:100dvh;background:radial-gradient(700px 400px at 90% -10%,rgba(2
 .logo b{color:var(--brand);font-weight:400}
 .cover p{color:#DDD9FF;font-size:14.5px;margin-top:6px}
 .ls{display:grid;gap:10px;margin-top:18px}
-.ls a{display:flex;align-items:center;gap:14px;text-decoration:none;padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid var(--line);transition:transform .25s var(--ease),background .2s}
+a{color:inherit}
+.ls a{color:var(--ink);display:flex;align-items:center;gap:14px;text-decoration:none;padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid var(--line);transition:transform .25s var(--ease),background .2s}
 .ls a:active{transform:scale(.98)}
 .ls a:hover{background:rgba(255,255,255,.09)}
 .ls a .i{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:20px;background:rgba(255,181,71,.12)}
@@ -47,10 +48,12 @@ h2{font-size:13.5px;color:var(--mute);font-weight:700;margin:24px 4px 0}
 <body><div class="w">
   <div class="cover"><img src="/assets/home/hero.webp" alt="플레이앤 연남 루프탑" width="900" height="675"><div class="t"><div class="logo">PLAY <b>N</b></div><p>홍대·연남 루프탑 게임파티룸 · ★ 4.9 후기 285개</p></div></div>
   <div class="ls">
-    <a class="p" href="/?from=ig#deals"><span class="i">🔥</span><span><b>이번 주 빈자리 특가</b><span class="s">N CREW 최대 35% · 칸 누르면 바로 신청</span></span><span class="ar">→</span></a>
+    <a class="p" href="/?from=ig&amp;mood=arena" data-track="ig_quote"><span class="i">🧮</span><span><b>오늘 밤 1인 얼마? 바로 계산</b><span class="s">인원만 고르면 1인 요금 · 실내 PC 아레나</span></span><span class="ar">→</span></a>
+    <a href="/?from=ig&amp;mood=roof" data-track="ig_roof"><span class="i">🔥</span><span><b>루프탑 바베큐 보기</b><span class="s">장작·숯 무제한 · 테라스 불멍</span></span><span class="ar">→</span></a>
+    <a href="/?from=ig&amp;mood=arena#deals"><span class="i">⏰</span><span><b>이번 주 빈자리 특가</b><span class="s">N CREW 최대 35% · 칸 누르면 바로 신청</span></span><span class="ar">→</span></a>
     <a href="/worlds/?from=ig"><span class="i">🏆</span><span><b>롤드컵 우승 예측</b><span class="s">맞히면 이용료 최대 10만원 페이백</span></span><span class="ar">→</span></a>
-    <a href="/?from=ig#crew"><span class="i">🎟️</span><span><b>N CREW 가입 (무료)</b><span class="s">빈자리 알림 · 방문할수록 할인</span></span><span class="ar">→</span></a>
-    <a href="/?from=ig#magazine"><span class="i">🎮</span><span><b>친구랑 할 게임 찾기</b><span class="s">릴스에 나온 게임 정보 모아보기</span></span><span class="ar">→</span></a>
+    <a href="/?from=ig&amp;mood=arena#crew"><span class="i">🎟️</span><span><b>N CREW 가입 (무료)</b><span class="s">빈자리 알림 · 방문할수록 할인</span></span><span class="ar">→</span></a>
+    <a href="/?from=ig&amp;mood=arena#magazine"><span class="i">🎮</span><span><b>친구랑 할 게임 찾기</b><span class="s">릴스에 나온 게임 정보 모아보기</span></span><span class="ar">→</span></a>
     <a class="k" id="kakao" href="/help/?from=ig" hidden><span class="i">💬</span><span><b>카카오톡 채널</b><span class="s">예약·이용 문의</span></span><span class="ar">→</span></a>
     <a href="/help/?from=ig"><span class="i">🤖</span><span><b>AI 상담사 (24시간)</b><span class="s">요금·장비·이용 방법 바로 답변</span></span><span class="ar">→</span></a>
   </div>
@@ -63,6 +66,9 @@ h2{font-size:13.5px;color:var(--mute);font-weight:700;margin:24px 4px 0}
   <p class="f">플레이앤 Play N · 문의 010-8339-5818</p>
 </div>
 <script>
+/* 2026-10-17: 한 페이지를 인스타·유튜브·스레드 프로필에 같이 쓴다 (/ig/?from=yt · /ig/?from=th). 모든 버튼의 from 값을 들어온 채널로 바꿈 */
+(function(){const f=(new URLSearchParams(location.search).get("from")||"ig").toLowerCase().replace(/[^a-z0-9_]/g,"").slice(0,12)||"ig";if(f==="ig")return;
+ document.querySelectorAll('a[href*="from=ig"]').forEach(a=>a.setAttribute("href",a.getAttribute("href").replace("from=ig","from="+f)))})();
 fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site").then(r=>r.json()).then(j=>{const k=document.getElementById("kakao");if(j.kakao){k.href=j.kakao;k.target="_blank";k.rel="noopener"}else{k.href="#";k.querySelector(".s").textContent="카카오톡에서 'playn' 검색 · 눌러서 ID 복사";k.onclick=async e=>{e.preventDefault();try{await navigator.clipboard.writeText("playn")}catch(_){}k.querySelector(".s").textContent="복사됨 · 카카오톡 검색창에 붙여넣기"}}k.hidden=false}).catch(()=>{});
 </script>
 <script src="/assets/chat.js" defer></script>
