@@ -1,0 +1,31 @@
+{
+ "date": "example-v2",
+ "series": "롤드컵 데일리",
+ "title": "W08v2 [롤드컵 데일리] C9 첫 탈락할 줄 알았어?",
+ "publish_at": "2099-01-01T00:00:00Z",
+ "status": "draft",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-17_fur-c9/cover.jpg",
+  "hi5.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-17_fur-c9/hi5.jpg",
+  "FUR.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/templates/worlds_logos/FUR.png",
+  "C9.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/templates/worlds_logos/C9.png",
+  "MVK.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/templates/worlds_logos/MVK.png",
+  "KC.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/templates/worlds_logos/KC.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": ["lounge.jpg"],
+ "slides": [
+  {"type": "cover", "pill": "롤드컵 새벽 경기 놓친 사람 필독", "title": "C9이\n[첫 탈락]할 줄\n알았어{?}", "photo": "cover.jpg", "cap": "FURIA *3:1* 역전승\n롤드컵 2026 첫 탈락팀은 Cloud9"},
+  {"type": "score", "title": "1세트 내주고\n[3판 연속]", "a": {"logo": "FUR.png", "name": "FURIA", "sub": "브라질 CBLOL 2시드", "score": 3}, "b": {"logo": "C9.png", "name": "Cloud9", "sub": "북미 LCS 3시드", "score": 1},
+   "sets": [["1세트", "C9", "c"], ["2세트", "FUR", "f"], ["3세트", "FUR", "f"], ["4세트", "FUR", "f"]], "photo": "hi5.jpg", "cap": "넥서스 터진 순간 FURIA 선수석"},
+  {"type": "steps", "title": "어디서\n[뒤집혔냐]면", "steps": [["2세트", "31분 C9 리신이 깊게 들어갔다 잡힘", "→ FURIA 바론 · 1:1"], ["3세트", "킬 0:3으로 지다가 볼리베어 다이브", "→ 드래곤 한타 이기고 2:1"], ["4세트", "트위스티드 페이트가 코르키 끊음", "→ 바론 · 골드 8천 차 · 에이스"]],
+   "stats": [["4세트 킬", "*16* : 7"], ["골드", "*60.8K* : 48.1K"], ["포탑", "*9* : 2"]]},
+  {"type": "next", "title": "오늘 새벽엔\n[지면 탈락]", "matches": [
+    {"date": "10/18(일) 새벽 3시 · 패자조 결승", "a": {"logo": "MVK.png", "name": "MVK"}, "b": {"logo": "FUR.png", "name": "FURIA"}, "note": "진 팀은 바로 짐 싸요", "hot": true},
+    {"date": "10/19(월) 새벽 3시 · 플레이인 최종전", "a": {"logo": "KC.png", "name": "KC"}, "b": {"name": "이긴 팀"}, "note": "KC는 MVK를 *3:0*으로 이기고 최종전 직행\n여기서 이기면 스위스 마지막 한 자리"}],
+   "chips": ["📌 스위스 스테이지 10/24(토)부터", "🏆 결승 11/15"]},
+  {"type": "cta", "title": "새벽 3시 경기\n보고 바로\n[5인큐] 갈 사람{?}", "photo": "lounge.jpg", "cap": "PC 5대 · 프로게이머 기어 · 큰 화면 · 루프탑", "line": "나이트·통대관 이용하고 우승팀 맞히면 *10만원 페이백*", "url": "playn.kr/worlds"}
+ ],
+ "caption": "(예시)",
+ "first_comment": "오늘 새벽 3시 살아남을 팀은? 👇\n1 MVK  2 FURIA"
+}

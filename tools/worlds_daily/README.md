@@ -1,20 +1,39 @@
-# 롤드컵 데일리 홍보 (W 시리즈)
+# 롤드컵 데일리 홍보 (W 시리즈) — v2 (2026-10-17 사장님 승인)
 
-매일 18:50 KST, @playn_no.1에 롤드컵 이벤트(playn.kr/worlds) 홍보 캐러셀 1개를 올린다. 기간은 11/15 결승까지.
-발행 자체는 Supabase `playn-publish` cron이 맡는다. `playn_ig_queue`에 status `ready`로 넣으면 끝.
+매일 18:50 KST, @playn_no.1에 롤드컵 이벤트(playn.kr/worlds) 홍보 1개. 기간은 11/15 결승까지.
+발행은 Supabase `playn-publish` cron이 맡는다. `playn_ig_queue`에 status `ready`로 넣으면 끝.
+
+## v2에서 바뀐 것 (W08 점검 결과: W01~W06 평균 도달 31·공유 0 → 원인 = 매장 사진 돌려쓰기·팀 정체성 없음)
+- **하루 1개, 형식은 날에 따라**
+  - 직전 24시간에 경기가 있었던 날 → **결과 릴스 15초** (관제실 릴스 생성기로 만든다: `hq_reel_jobs`에 queued 행 1개, `request.auto_publish_at` = 오늘 18:50). 캐러셀은 만들지 않는다.
+  - 경기가 없던 날(10/20~23 휴식, 스위스·토너먼트 사이 쉬는 날) → **v2 캐러셀** (`v2/build_v2.py`)
+- **사진**: 표지·결과 장은 공식 하이라이트 장면(`playn-media/promo/worlds_frames/`) + 팀 로고(`templates/worlds_logos/<CODE>.png`). 매장 사진은 마지막 cta 장에만(`promo/store/`). 실제로 롤드컵을 틀어 둔 매장 사진이 생기면 그걸 1순위로.
+- **출처·Riot 고지문은 카드에 넣지 않는다.** 캡션 맨 끝 `—` 아래 '출처' 블록에 모은다(영상·이미지 / 경기 기록 / 일정 기준 / 매장 사진 / Riot 고지문).
+- **표 수 규칙**: 픽 현황 표 수가 10표 미만이면 숫자 대신 순위·문구("지금 찍으면 네 픽이 1위")로. 빌더가 "n표"(n<10)를 자동으로 막는다.
+- **팀 로고·선수 얼굴 OK**(사장님 2026-10-15). 협업·제휴·후원·공식 파트너처럼 읽히는 문구는 계속 금지.
+- **자동 검사(build_v2.py 내장)**: 크기·넘침·이미지 로드·폰트·금지어(출처 문구가 카드에 들어가면 실패)·10표 미만·쪽수·매장 사진 위치·표지 = 공식 장면·표지 사진 직전 3편 중복. 실패하면 업로드하지 않는다.
+- **성과 루프**: 시작 전에 지난 W·결과 릴스 3편 성과를 읽고(`playn_ig_insights`) 도달·공유가 가장 높은 표지 유형(질문형·스코어형·장면형)을 따른다.
+
+## 장면·로고 라이브러리 채우는 법
+- 결과 릴스를 만드는 생성 담당이 공식 하이라이트 원본(storage `src/yt/`)에서 표지용 장면 3~6장(넥서스 파괴·ACE·선수석 반응·결과 화면)을 `promo/worlds_frames/<YYYY-MM-DD>_<팀a>-<팀b>/`에 올린다.
+- 새 팀 로고는 결과 화면 프레임에서 `python3 v2/extract_logos.py result.jpg <왼쪽팀> <오른쪽팀>` → `templates/worlds_logos/<CODE>.png` 업로드.
+- 클라우드는 유튜브를 직접 못 받는다(2026-10-17부터 차단). 원본은 집 PC 「원본 받기 담당」이 받는다.
 
 ## 하루 작업 순서
 1. `curl -s -X POST https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle -H 'content-type: application/json' -d '{"action":"worlds_public"}'`로 데이터를 받는다. 받는 값: 득표(tally, fan), stage, eliminated, winner.
 2. 웹검색 2곳 이상으로 어제 새벽 결과와 오늘 밤에서 내일 새벽 사이 경기(한국시간)를 확인한다. 기준은 LoL Esports 공식 일정이다. 확인이 안 된 경기 시간과 시드는 적지 않는다.
-3. `specs/<YYYY-MM-DD>.json`을 작성한다. 형식은 기존 spec을 따른다. 슬라이드는 4장 안팎이고 마지막은 항상 `cta`다. 디스클레이머는 cta에 자동으로 들어간다.
+3. (캐러셀 날) `specs/<YYYY-MM-DD>.json`을 `specs/example_v2_W08.json` 형식으로 작성한다. 슬라이드 4~6장, 첫 장 `cover`(공식 장면), 마지막 `cta`. 타입: cover / score / steps / next / list / cta. 강조 문법: `[노란 박스]` `{빨강}` `*노랑 글자*` `\n` 줄바꿈.
+   (결과 릴스 날) spec 대신 `hq_reel_jobs`에 insert — 아래 「결과 릴스」 참고.
    - `publish_at`: `<date>T09:50:00Z` (18:50 KST)
    - `title`: `W<번호> [롤드컵 데일리] ...`. 번호는 큐에서 마지막 W 번호에 1을 더한다.
    - `caption`: 아래 형식을 지킨다. hook 1줄, ✔ 4줄, `👉 playn.kr/worlds (프로필 링크)`, 디스클레이머, `사진: 플레이앤 매장`, 해시태그.
      - 해시태그는 **5개까지**(인스타 제한, 캡션+첫 댓글 합계). 기본: `#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸`. 넘치면 발행 함수가 6번째부터 자동으로 지운다.
      - hook 1줄에 검색어(롤드컵·LCK·팀명 등)를 넣는다. 인스타 검색은 캡션 키워드를 읽는다.
-4. 빌드와 업로드: `PLAYN_KEY=<playand_config.intake_key> node tools/worlds_daily/build.mjs tools/worlds_daily/specs/<date>.json`
-   - 넘침 오류가 나면 문구를 줄여 다시 빌드한다.
-   - 출력된 `out/<date>/insert.sql`을 Supabase에서 실행한다.
+     - 맨 끝(해시태그 앞)에 `—` 줄 다음 '출처' 블록: `영상·이미지: <채널> 공식 유튜브 「원본 제목」` / `경기 기록: <매체 2곳+>` / `일정: LoL Esports 공식 일정 기준` / `매장 사진: 플레이앤` / Riot 고지문(이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.)
+4. 빌드와 업로드: `PLAYN_KEY=<playand_config.intake_key> python3 tools/worlds_daily/v2/build_v2.py tools/worlds_daily/specs/<date>.json` (옛 build.mjs는 쓰지 않는다)
+   - 자동 검사 실패 메시지대로 고쳐 다시 빌드한다. 렌더된 `v2/out/<date>/*.jpg`를 직접 Read해서 한 번 더 본다.
+   - `v2/used_covers.json`(표지 중복 기록)도 같이 커밋한다.
+   - 출력된 `v2/out/<date>/insert.sql`을 Supabase에서 실행한다.
 5. spec 파일을 커밋하고 push한다. `out/`은 gitignore 대상이다.
 6. `playand_log`에 `{source:'worlds_daily', payload:{date,id,title}}`를 남긴다.
 
@@ -31,16 +50,22 @@
 | 11/15 | 결승 당일 (새벽 4시) | 결과와 정산 안내. 이 날로 시리즈를 끝낸다 |
 
 - 같은 레이아웃을 이틀 연속 첫 장에 쓰지 않는다.
-- 사진 `img/`는 매장 실사만 쓴다. AI 이미지는 금지다.
-- 같은 사진 반복 금지: 첫 장(cover/count) 사진은 직전 3일 spec과 겹치지 않게 고른다(`grep photo specs/*.json`). 슬라이드 구성(레이아웃 순서)도 전날과 다르게 한다.
+- AI 이미지는 금지다. 표지는 공식 경기 장면, 매장 사진은 cta 장에만 (`img/`의 옛 매장 사진 6장은 표지에 쓰지 않는다).
+- 표지 사진은 직전 3편과 겹치지 않게(빌더가 검사). 슬라이드 구성도 전날과 다르게 한다.
 - 릴스를 만들 땐 `tools/reelkit/playn_reel_v3.py`를 쓴다. 이 빌더는 서버 공용 클립 기록(playn_clip_registry)으로 모든 시리즈의 영상 재사용을 막는다(PLAYN_KEY 필요).
 
 ## 문구 규칙 (사장님 확정)
 - 팀명, 경기 결과, 일정 같은 사실은 쓴다.
-- 협업, 공식 파트너, 후원처럼 읽히는 표현은 금지다. Riot, 팀, 선수 로고도 쓰지 않는다.
+- 협업, 공식 파트너, 후원처럼 읽히는 표현은 금지다. 팀 로고·선수 얼굴은 써도 된다(2026-10-15 사장님 확정). Riot 회사 로고는 쓰지 않는다.
 - 톤은 "이런 경기가 있는데 우리 파티룸에서 같이 볼래? 예약할래?"이다.
 - 페이백 조건은 그대로 적는다: 10/12~11/14 나이트·통대관 이용 팀, 11/3까지 픽하면 10만원, 그 뒤는 5만원, 팀원 전원 N CREW 가입, 결승 뒤 7일 안에 송금.
-- 득표가 0이면 숫자 대신 "아직 1위 없음, 지금 찍으면 네 픽이 1위"로 쓴다.
+- 득표가 10표 미만이면 숫자 대신 "아직 1위 없음, 지금 찍으면 네 픽이 1위" 같은 문구나 순위만 쓴다.
 
 ## 문체 규칙 — AI 티 제거 (2026-10-12)
 - 카드 문구·캡션·첫 댓글은 빌드·업로드 직전 Supabase `select value from playand_config where key='humanize_rules'` 규칙으로 점검해 고친다(번역투·AI 관용구·대구 반복·연결어미 쉼표). 경기 시간·스코어·팀명·Riot 고지문은 그대로.
+
+## 결과 릴스 (경기 다음 날)
+1. 웹 2곳 이상으로 결과 확인 → LCK 공식 유튜브(없으면 LoL Esports)에서 그 경기 「매치 하이라이트」 URL을 찾고 oEmbed author_name으로 공식 채널 확인.
+2. `insert into hq_reel_jobs(status, requested_by, request) values ('queued', 'W 데일리 작업', jsonb_build_object('source_url','<공식 하이라이트 URL>', 'hint','롤드컵 데일리 결과 릴스 15초: <팀 vs 팀 스코어>. 결정적 장면(롱테이크) → 결과 화면 → 마지막 2초 "다음 경기 <일시 KST> · 같이 볼 친구 태그 · playn.kr/worlds". kicker 롤드컵 데일리', 'auto_publish_at','<오늘 YYYY-MM-DD>T09:50:00Z', 'note','W 데일리 v2 결과 릴스 — 결과 원본에서 표지용 장면 3~6장과 새 팀 로고를 라이브러리에 올릴 것')) returning id;`
+3. 생성 담당이 유튜브 차단으로 source_wait에 두면 집 PC 원본 받기 담당이 받아 이어서 만든다. 자동 검사를 통과해야 18:50 자동 예약된다.
+4. 같은 날 W 캐러셀은 만들지 않는다(하루 1개).
