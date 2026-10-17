@@ -91,7 +91,9 @@ const B={
   light:"루프탑 조명 끄기 (LED 조명은 켜둬도 돼요)",
   trash:"선반에 일반·음식물·분리수거 봉투가 있어요. 봉투가 없으면 분리수거 봉투에 담아 1층 오른쪽 건물 모노멘션 앞 길가에 두세요. 기본 봉투 4,000원은 보증금에서 기본 차감돼요."}
 };
-const Q=new URLSearchParams(location.search),key=Q.get("b"),tok=Q.get("k");
+const Q=new URLSearchParams(location.search),key=Q.get("b");let tok=Q.get("k");
+// 체크인 화면을 이 폰에서 연 적이 있으면 그 링크를 기억해 둠 (/in/에서 저장)
+if(!tok){try{tok=localStorage.getItem("pn_in_k")||""}catch(e){}}
 const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const li=a=>a.map(x=>"<li>"+x+"</li>").join("");
 const brs=document.getElementById("brs");
@@ -100,8 +102,8 @@ const g=B[key];
 if(g){
  document.title=g.name+" 이용 안내 | 플레이앤";
  const inUrl=tok?"/in/?k="+encodeURIComponent(tok):null;
- const doorBox=inUrl?'<div class="door">🔐 '+g.door+'는 <b>체크인 화면</b>에서 입실 시간에 맞춰 열려요<br><a class="btn lamp" href="'+inUrl+'">체크인 화면 열기</a></div>'
-  :'<div class="door">🔐 '+g.door+'는 <b>예약 확정 문자에 있는 체크인 링크(playn.kr/in)</b>에서 체크인을 마치면 입실 시간에 맞춰 보여요</div>';
+ const doorBox=inUrl?'<div class="door">🔐 '+g.door+'는 <b>체크인 화면</b>에서 체크인과 보증금 입금 인증을 마치면 바로 보여요<br><a class="btn lamp" href="'+inUrl+'">체크인 화면 열기</a></div>'
+  :'<div class="door">🔐 '+g.door+'는 <b>예약 확정 문자에 있는 체크인 링크</b>(playn.kr/in/…)로 체크인하면 바로 보여요<br><a class="btn lamp" href="sms:01083395818?body=%EC%B2%B4%ED%81%AC%EC%9D%B8%20%EB%A7%81%ED%81%AC%20%EB%8B%A4%EC%8B%9C%20%EB%B3%B4%EB%82%B4%EC%A3%BC%EC%84%B8%EC%9A%94">체크인 링크 다시 받기 (문자)</a></div>';
  const H=`
  <div class="hero"><img src="${IMG}playn_cover.jpg" alt="플레이앤 ${g.name} 공간" width="1280" height="560"></div>
  <h1 class="disp">${g.name} 이용 안내</h1>
@@ -113,7 +115,7 @@ if(g){
  <nav class="toc" aria-label="안내 목차"><a href="#s0">30초 요약</a><a href="#s1">오시는 길</a><a href="#s2">후기 이벤트</a><a href="#s3">공간 이용</a><a href="#s4">셀프 결제</a><a href="#s5">문제 해결</a><a href="#s6">퇴실 체크</a><a href="#s7">보증금·규정</a></nav>
  <section class="gs" id="s0"><h2 class="disp">⚡ 30초 요약</h2>
   <table class="t"><tr><th>주소</th><td>${g.addr}<br><small style="color:var(--mute)">${g.addr2}</small></td></tr>
-  <tr><th>🔐 비밀번호</th><td>체크인을 마치면 체크인 화면·문자로 보내드려요 (${g.door})</td></tr>
+  <tr><th>🔐 비밀번호</th><td>체크인하면 바로 체크인 화면·문자로 보내드려요 (${g.door})</td></tr>
   <tr><th>⏰ 이용 시간</th><td>${COMMON.hours}</td></tr>
   ${g.toilet?`<tr><th>🚻 화장실</th><td>${g.toilet}</td></tr>`:""}
   <tr><th>💰 보증금</th><td>20만원 · 입실 전 입금 · 퇴실 1~2일 뒤 환급</td></tr>

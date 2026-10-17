@@ -125,7 +125,7 @@
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle";
 const $=id=>document.getElementById(id);
-const k=new URLSearchParams(location.search).get("k")||"";
+const k=new URLSearchParams(location.search).get("k")||"";try{if(k)localStorage.setItem("pn_in_k",k)}catch(e){}
 const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,k})}).then(r=>r.json());
 const won=n=>Number(n||0).toLocaleString("ko-KR")+"원";
 const BANKS=["토스뱅크","카카오뱅크","국민","신한","우리","하나","농협","기업","SC제일","새마을금고","우체국","케이뱅크","수협","부산","대구","신협","씨티","광주","전북","경남","제주","산업"];
