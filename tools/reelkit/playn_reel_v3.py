@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PLAY N 릴스 빌더 v3.1 (2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
+"""PLAY N 릴스 빌더 v3.20261017 (줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
   새 장면 옵션: "mic": true 또는 "mic": "T1 팀 보이스" → 그 장면은 원본 소리(선수 마이크·인게임 보이스)를 살리고 음악을 낮춤. clip.file 필요.
                "caption": "자막" → 영상 아래쪽 노란 자막(보이스 번역·대사용).
               "preview_music": {"url": "<인스타 음악 preview URL>", "start": "auto"} → out_preview.mp4 (사장님 확인용, 실제 인스타 곡). music.start도 "auto"면 드롭 지점 자동 탐색.
@@ -33,7 +33,14 @@ spec.json 예시
 - image: URL·로컬 경로·data URI. 천천히 확대(Ken Burns). 제품 사진은 "fit": "contain"(+ "pad": "white") → 잘림 없이 전체 표시. 실사 사진(공식 제품 이미지·보도사진)만. AI 생성 이미지 금지.
 - 자막 노출 시간 기준: 단어당 0.3초 + 0.5초. 마지막 1.5~2초는 CTA.
 - 음악: loudnorm I=-14 TP=-1.5, 끝 0.8초 페이드아웃. 인스타 음악(audio_id)을 쓸 땐 out_silent.mp4 를 video_url_silent 로 등록.
+- [2026-10-17 줌 액센트] 지금까지 후처리(ffmpeg)로 손으로 넣던 펀치 줌·미니 줌을 빌더가 영상 박스(1080x720) 안에서만 넣는다. 자막·배지·흐린 배경은 그대로.
+  장면 "punch": 0.15 또는 [0.15, 2.4] → 장면 시작 기준 그 초에 0.4초 펀치 줌(1.00→1.10, 0.08초 만에 들어가 0.4초 뒤 0.2초 동안 복귀). q_punch
+      spec "punch_zoom": 1.10 (세기), "punch_len": 0.4 (길이) 로 조절
+  spec "interrupt": true (또는 간격 초, 기본 1.75) → interrupt_min(기본 2.4초) 이상인 CTA 아닌 장면에서 간격마다 0.05 미니 줌(1.00↔1.05 번갈아, 0.15초 전환). q_interrupt2s
+      장면 끝 0.5초·펀치 0.6초 안은 건너뜀. 장면 "interrupt": false 로 그 장면만 끔
+  둘 다 없으면 이전 버전과 같은 결과. 결과 JSON "zoom" 에 펀치 위치(전체 기준 초)·미니 줌 개수가 나온다 → playn_reel_qa.notes·quality_items 에 그대로
 """
+BUILDER_VERSION = 'v3.20261017'
 import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil, base64
 
 FPS = 30
@@ -342,6 +349,48 @@ async def render_overlays(scenes):
         await b.close()
 
 
+# ---- 줌 액센트 (2026-10-17 v3.20261017): 펀치 줌·미니 줌을 영상 박스 안에서만 ----
+ZOOM_LOG = {'punch_s': [], 'interrupt_n': 0}
+
+
+def _punch_list(sc):
+    p = sc.get('punch')
+    if p is None or p is False: return []
+    return [float(x) for x in (p if isinstance(p, (list, tuple)) else [p])]
+
+
+def zoom_filter(i, sc, d):
+    """[fg] 체인 뒤에 붙일 zoompan. 줌이 없으면 '' (이전 결과와 동일)"""
+    pz = float(spec.get('punch_zoom', 1.10)) - 1; pl = float(spec.get('punch_len', 0.4))
+    terms = []
+    t0 = sum(float(x.get('dur', 3.0)) for x in scenes[:i])
+    punches = [t for t in _punch_list(sc) if 0 <= t < d - 0.05]
+    for t in punches:
+        a, b, e = t + 0.08, t + pl, min(t + pl + 0.2, d)
+        # 0.08초에 pz까지 올라가고 pl까지 유지, 0.2초 동안 복귀 (선형 → 툭 치는 느낌)
+        terms.append(f"if(gte(it,{t:.3f})*lt(it,{a:.3f}),{pz:.4f}*(it-{t:.3f})/0.08,0)")
+        terms.append(f"if(gte(it,{a:.3f})*lt(it,{b:.3f}),{pz:.4f},0)")
+        if e > b: terms.append(f"if(gte(it,{b:.3f})*lt(it,{e:.3f}),{pz:.4f}*(1-(it-{b:.3f})/{e - b:.3f}),0)")
+        ZOOM_LOG['punch_s'].append(round(t0 + t, 2))
+    iv = spec.get('interrupt')
+    n_int = 0
+    if iv and sc.get('interrupt', True) and not sc.get('cta') and d >= float(spec.get('interrupt_min', 2.4)):
+        step = 1.75 if iv is True else float(iv)
+        t, lvl = step, 0
+        while t < d - 0.5:
+            if all(abs(t - p) > 0.6 and not (p <= t <= p + pl + 0.2) for p in punches):
+                lvl ^= 1; n_int += 1
+                # 0.15초에 걸쳐 1.00↔1.05 계단 전환 (같은 장면 안 컷 바뀐 느낌)
+                sgn = 1 if lvl else -1
+                terms.append(f"if(gte(it,{t:.3f})*lt(it,{t + 0.15:.3f}),{sgn * 0.05:.3f}*(it-{t:.3f})/0.15,if(gte(it,{t + 0.15:.3f}),{sgn * 0.05:.3f},0))")
+            t += step
+        ZOOM_LOG['interrupt_n'] += n_int
+    if not terms: return ''
+    z = '1+' + '+'.join(terms)
+    # 2배 확대 후 zoompan → 좌표 반올림 떨림 줄임. d=1: 입력 프레임 1장당 1장
+    return (f",scale=2160:1440,zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x720:fps={FPS}")
+
+
 def scene_video(i, sc):
     d = float(sc.get('dur', 3.0))
     outp = f'{W}/s{i}.mp4'
@@ -365,7 +414,7 @@ def scene_video(i, sc):
                    f'setsar=1,split[a][b]')
     fc = (pre + ';'
           '[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=28:2,eq=brightness=-0.32:saturation=0.8[bg];'
-          '[b]scale=1080:720:force_original_aspect_ratio=increase,crop=1080:720[fg];'
+          f'[b]scale=1080:720:force_original_aspect_ratio=increase,crop=1080:720{zoom_filter(i, sc, d)}[fg];'
           '[bg][fg]overlay=0:620[v];[v][1:v]overlay=0:0,format=yuv420p[o]')
     run(['ffmpeg', '-y', '-loglevel', 'error', *inp, '-i', f'{W}/o{i}.png', '-filter_complex', fc, '-map', '[o]',
          '-t', f'{d}', '-r', str(FPS), '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-an', outp])
@@ -589,4 +638,5 @@ clip_commit(_reg, _rows, _rid)
 if _mpick:
     try: _hq({'action': 'music_used', 'slug': _mpick['slug'], 'reel': _rid})
     except Exception as e: print('음악 사용 기록 실패:', e, file=sys.stderr)
-print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), **res_extra}, ensure_ascii=False))
+if ZOOM_LOG['punch_s'] or ZOOM_LOG['interrupt_n']: res_extra['zoom'] = ZOOM_LOG
+print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), 'builder': BUILDER_VERSION, **res_extra}, ensure_ascii=False))
