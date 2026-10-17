@@ -390,6 +390,13 @@ def scene_video(i, sc):
     return outp, d
 
 
+HQ_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq'
+def _hq(body):
+    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
+    if not k and not t: raise SystemExit('❌ PLAYN_KEY·PLAYN_TICKET 없음: 음악 보관함을 못 읽음')
+    auth = {'intake': k} if k else {'ticket': t}
+    req = urllib.request.Request(HQ_API, data=json.dumps({**body, **auth}).encode(), headers={'content-type': 'application/json'})
+    return json.load(urllib.request.urlopen(req, timeout=30))
 # ---- 클립 신선도 검사 (사장님 지시 2026-10-06: 릴스마다 주제에 맞는 새 클립) ----
 # 규칙: ① 이전 릴스와 같은 원본·겹치는 구간 금지 ② 한 원본은 최대 2개 릴스까지
 #       ③ 릴스 장면의 60% 이상은 처음 쓰는 원본 ④ 예외는 spec "allow_reuse": [장면번호]
@@ -523,13 +530,6 @@ def mix_music(mspec, dst):
 
 # 2026-10-16 릴스 음악 보관함(관제실 hq_music): "music": {"lib": "<slug>"} 또는 {"lib": "auto", "mood": "epic", "use_for": "롤드컵"}
 #   auto = 조건에 맞는 곡 중 덜 쓴 곡 → 최근에 안 쓴 곡 순. start 생략 시 곡의 best_start(하이라이트). 캡션 credit은 결과 JSON music_credit.
-HQ_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq'
-def _hq(body):
-    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
-    if not k and not t: raise SystemExit('❌ PLAYN_KEY·PLAYN_TICKET 없음: 음악 보관함을 못 읽음')
-    auth = {'intake': k} if k else {'ticket': t}
-    req = urllib.request.Request(HQ_API, data=json.dumps({**body, **auth}).encode(), headers={'content-type': 'application/json'})
-    return json.load(urllib.request.urlopen(req, timeout=30))
 def resolve_lib(mspec):
     if not mspec or not mspec.get('lib'): return mspec, None
     lib = _hq({'action': 'music_list'}).get('music', [])
