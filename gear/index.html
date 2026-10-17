@@ -41,6 +41,8 @@
 .note{color:var(--dim);font-size:13.5px;margin-top:10px}
 </style>
 <script src="/assets/pv.js" defer></script>
+<link rel="stylesheet" href="/assets/gearvote.css">
+<script src="/assets/gearvote.js" defer></script>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a>
 <nav><a href="/#deals">공실특가</a><a href="/gear/">기어</a><a href="/plan/">파티 플래너</a><a href="/#crew" class="join">N CREW 가입</a></nav></div></header>
@@ -56,9 +58,9 @@
   <p class="note">스페이스클라우드 시설 안내 기준이에요. 장비는 수시로 바뀌니 꼭 써보고 싶은 게 있으면 예약할 때 호스트에게 말씀해 주세요.</p>
 
   <section class="s" id="vote-sec">
-    <h2 class="disp">다음에 들일 장비, 투표해 주세요</h2>
-    <p class="sub">표를 가장 많이 받은 장비를 지점에 들여놓을게요. 1인 1장비 1표예요.</p>
-    <div class="vote" id="vote"><p class="sub">불러오는 중이에요</p></div>
+    <h2 class="disp">🗳️ 매월 1개 실제 구매, 기어 입고 투표</h2>
+    <p class="sub">써보고 싶은 기어에 투표하거나 직접 신청해 주세요. 이번 달 10표를 넘긴 장비 중 1위 1개를 플레이앤이 직접 사서 매장에 들여놔요. 장비마다 한 달에 1표예요.</p>
+    <div id="gvGear" data-gearvote style="margin-top:16px"></div>
   </section>
 
   <section class="s">
@@ -113,17 +115,7 @@ function render(){btns($("fType"),TYPES,fT,k=>fT=k);btns($("fBr"),[["all","전 �
   c.innerHTML=`<span class="k">${TYPES.find(x=>x[0]===t)[1]} · <a href="${BR[b][1]}" style="color:inherit">${BR[b][0]}</a></span><h3></h3><p class="d"></p><div class="tags">${tags.map(x=>`<span class="${x==="무선"?"w":""}">${x}</span>`).join("")}</div>`;
   c.querySelector("h3").textContent=n;c.querySelector(".d").textContent=d;g.appendChild(c)})}
 render();
-/* 투표 */
-const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";
-let voter;try{voter=localStorage.getItem("pn_voter")||(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem("pn_voter",voter)}catch(e){voter=Math.random().toString(36).slice(2)+Date.now().toString(36)}
-function voted(){try{return JSON.parse(localStorage.getItem("pn_voted")||"[]")}catch(e){return[]}}
-function drawVote(list){const v=$("vote");v.innerHTML="";const max=Math.max(1,...list.map(x=>x.votes));const mine=voted();
- list.sort((a,b)=>b.votes-a.votes).forEach(x=>{const b=document.createElement("button");b.type="button";const done=mine.includes(x.item);b.disabled=done;
-  b.innerHTML=`<span class="bar" style="width:${x.votes/max*100}%"></span><span class="row"><span></span><b>${x.votes}표${done?" · 투표함":""}</b></span>`;b.querySelector(".row span").textContent=x.item;
-  b.onclick=async()=>{b.disabled=true;const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"vote",item:x.item,voter})}).then(r=>r.json()).catch(()=>({}));
-   if(r.ok||r.already){try{localStorage.setItem("pn_voted",JSON.stringify([...voted(),x.item]))}catch(e){}}load()};v.appendChild(b)})}
-function load(){fetch(API).then(r=>r.json()).then(j=>drawVote(j.candidates)).catch(()=>{$("vote").innerHTML='<p class="sub">투표를 불러오지 못했어요.</p>'})}
-load();
+/* 투표: /assets/gearvote.js (홈과 같은 위젯) */
 </script>
 <script src="/assets/chat.js" defer></script>
 </body></html>

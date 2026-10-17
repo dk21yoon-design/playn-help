@@ -532,6 +532,33 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 @keyframes cellIn{from{opacity:0;transform:scale(.85)}}
 .rating b .cu{font-size:inherit;color:inherit}
 
+
+/* ── 2026-10-17 기어 월 쇼케이스 + 월간 입고 투표 ── */
+.gw-eye{font-size:12.5px;font-weight:800;letter-spacing:.06em;color:var(--lamp);margin:0 0 8px}
+.gw-sum{margin:14px 0 0;font-size:16px;font-weight:700;color:var(--ink)}
+.gw-sum b{color:var(--lamp);font-size:20px}.gw-sum span{color:var(--mute)}.gw-sum span b{color:#3DDC97}
+.gw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.gw-c{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:var(--r);background:linear-gradient(180deg,var(--panel2),var(--panel));box-shadow:inset 0 0 0 1px var(--line2)}
+.gw-c.hi{box-shadow:inset 0 0 0 1.5px rgba(255,181,71,.55),0 18px 36px -20px rgba(255,181,71,.5)}
+.gw-k{font-size:12.5px;font-weight:700;color:var(--dim)}
+.gw-c h3{font-size:17px;line-height:1.35;margin:0}
+.gw-d{font-size:14px;color:var(--mute);margin:0;line-height:1.5}
+.gw-pr{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:6px 0 0;font-variant-numeric:tabular-nums}
+.gw-pr span{font-size:13px;color:var(--dim)}.gw-pr s{color:var(--mute)}
+.gw-pr b{font-size:16px;color:var(--lamp)}
+.gw-br{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.gw-br span{font-size:12px;font-weight:700;padding:3px 9px;border-radius:var(--pill);background:rgba(255,255,255,.06);color:var(--ink)}
+.gw-br .b-h{box-shadow:inset 0 0 0 1px rgba(255,77,134,.55)}.gw-br .b-y{box-shadow:inset 0 0 0 1px rgba(255,181,71,.55)}.gw-br .b-t{box-shadow:inset 0 0 0 1px rgba(143,163,255,.6)}
+.gw-fine{margin-top:12px}.gw-fine a{color:var(--lamp)}
+.gw-vote{margin-top:36px;padding:22px 18px;border-radius:24px;background:linear-gradient(180deg,rgba(36,31,99,.6),rgba(22,19,63,.6));box-shadow:inset 0 0 0 1px var(--line2);display:grid;gap:16px}
+.gw-vh{display:grid;gap:8px;justify-items:start}
+.gw-eye2{font-size:12.5px;font-weight:800;padding:5px 10px;border-radius:var(--pill);color:var(--lamp);background:rgba(255,181,71,.12);box-shadow:inset 0 0 0 1px rgba(255,181,71,.35)}
+.gw-vh h3{font-size:clamp(22px,2.6vw,28px);margin:0}
+.gw-vh p{margin:0;color:var(--mute);font-size:15px;line-height:1.6;max-width:46em}.gw-vh p b{color:var(--ink)}
+.gw-share{all:unset;box-sizing:border-box;cursor:pointer;min-height:44px;padding:0 16px;display:inline-flex;align-items:center;border-radius:var(--pill);font-size:14px;font-weight:700;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.gw-share:hover{background:rgba(255,255,255,.06)}.gw-share:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
+@media(max-width:900px){.gw-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.gw-grid{grid-template-columns:1fr}.gw-vote{padding:18px 12px}}
 /* ── 2026-10-17 빈자리 매트릭스 보드 (제미나이 시안 → 구현) ── */
 .vm{padding:22px 18px 18px}
 .vm-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 18px;padding:0 4px 16px}
@@ -609,6 +636,8 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 @media(max-width:760px){.qbar{width:auto}.qinfo{flex-basis:100%}.qact{flex-basis:100%}.qact>*{flex:1;justify-content:center}.qshare,.qgo{padding:0 10px;font-size:14px}body.has-qbar{padding-bottom:150px}}
 </style>
 <script src="/assets/pv.js" defer></script>
+<link rel="stylesheet" href="/assets/gearvote.css">
+<script src="/assets/gearvote.js" defer></script>
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -648,7 +677,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
   </a>
 </div></section>
 <nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
-  <a href="#events" class="ev" data-events-open>🎉 이벤트 <i>2</i></a><a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
+  <a href="#events" class="ev" data-events-open>🎉 이벤트 <i>2</i></a><a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#gear" data-s="gear">기어 월·입고 투표</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
 </div></nav>
 
 
@@ -697,6 +726,34 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
     <a class="o" href="#magazine"><span class="o-k">게임 매거진</span><b>매일 올라오는 게임 정보</b><span class="d">친구랑 할 게임, 신작, 세일, 롤드컵 소식을 주제별로 모았어요.</span><span class="go" aria-hidden="true">→</span></a>
   </div>
   <div class="for-row rv"><span>이럴 때 플레이앤</span><a href="for/military/">나라사랑 애국자 (군인)</a><a href="for/worlds/">롤드컵 단체 관람</a><a href="for/birthday/">생일 파티</a><a href="for/club/">동아리·회사 내전</a></div>
+</div></section>
+
+<section class="blk" id="gear"><div class="wrap">
+  <p class="gw-eye rv">GEAR WALL · 기어 월</p>
+  <h2 class="disp sh2 rv">수십만 원짜리 프로 장비, 여기선 그냥 써요</h2>
+  <p class="sub rv">대관료만 내면 지점에 있는 마우스·키보드·헤드셋을 전부 무료로 써요. 그중 몇 개만 골라 출시가를 적었어요.</p>
+  <p class="gw-sum rv">헤드셋·마우스 5개 출시가만 더해도 <b>159만원</b> <span>→ 플레이앤에선 <b>0원</b></span></p>
+  <div class="gw-grid rv">
+<article class="gw-c"><span class="gw-k">마우스 · 레이저</span><h3>레이저 데스에더 V3 프로 페이커 에디션</h3><p class="gw-d">페이커 시그니처 한정판 · 63g 무선 · Focus Pro 30K 센서</p><p class="gw-pr"><span>출시가 <s>249,000원</s></span><b>플레이앤에선 0원</b></p><div class="gw-br"><span class="b-y">연남</span></div></article>
+<article class="gw-c hi"><span class="gw-k">헤드셋 · 젠하이저</span><h3>젠하이저 GSP 670</h3><p class="gw-d">젠하이저 무선 게이밍 헤드셋 플래그십 · 블루투스 동시 연결</p><p class="gw-pr"><span>출시가 <s>449,000원</s></span><b>플레이앤에선 0원</b></p><div class="gw-br"><span class="b-h">홍대</span><span class="b-y">연남</span></div></article>
+<article class="gw-c hi"><span class="gw-k">헤드셋 · 오디지</span><h3>오디지 펜로즈</h3><p class="gw-d">100mm 평판형 드라이버를 넣은 무선 게이밍 헤드셋</p><p class="gw-pr"><span>출시가 <s>429,000원</s></span><b>플레이앤에선 0원</b></p><div class="gw-br"><span class="b-y">연남</span></div></article>
+<article class="gw-c"><span class="gw-k">헤드셋 · 스틸시리즈</span><h3>스틸시리즈 아크티스 9</h3><p class="gw-d">PC 무선과 블루투스를 같이 연결 · 20시간 배터리</p><p class="gw-pr"><span>출시가 <s>269,000원</s></span><b>플레이앤에선 0원</b></p><div class="gw-br"><span class="b-y">연남</span></div></article>
+<article class="gw-c"><span class="gw-k">헤드셋 · 커세어</span><h3>커세어 HS80 RGB 무선</h3><p class="gw-d">돌비 애트모스 지원 무선 헤드셋</p><p class="gw-pr"><span>출시가 <s>195,000원</s></span><b>플레이앤에선 0원</b></p><div class="gw-br"><span class="b-h">홍대</span><span class="b-y">연남</span></div></article>
+<article class="gw-c"><span class="gw-k">마우스 · 로지텍</span><h3>로지텍 G PRO X SUPERLIGHT</h3><p class="gw-d">'지슈라' 63g 초경량 무선 · 프로게이머 단골 마우스</p><p class="gw-pr"><b>대관하면 무료로 써요</b></p><div class="gw-br"><span class="b-h">홍대</span><span class="b-y">연남</span></div></article>
+<article class="gw-c"><span class="gw-k">마우스 · 벡시·잠자리·샤크·로지텍·레이저 외</span><h3>8K 폴링 마우스 11종</h3><p class="gw-d">1초에 8,000번 신호 보내는 마우스를 골라 쓰기</p><p class="gw-pr"><b>대관하면 무료로 써요</b></p><div class="gw-br"><span class="b-t">연트럴</span></div></article>
+<article class="gw-c"><span class="gw-k">키보드 · 자석축·8K 지원</span><h3>래피드 트리거 자석축 키보드 8종</h3><p class="gw-d">눌리는 깊이까지 조절되는 자석축 키보드</p><p class="gw-pr"><b>대관하면 무료로 써요</b></p><div class="gw-br"><span class="b-t">연트럴</span></div></article>
+<article class="gw-c"><span class="gw-k">PC·모니터 · 24인치 FHD 320Hz + 34인치 QHD</span><h3>320Hz 모니터 게이밍 PC</h3><p class="gw-d">RTX 5070·4070 · 더블모니터 · 눕는 좌식 의자</p><p class="gw-pr"><b>대관하면 무료로 써요</b></p><div class="gw-br"><span class="b-t">연트럴</span></div></article>
+  </div>
+  <p class="fine gw-fine">출시가는 국내 정식 출시 때 소비자가예요(2026년 10월 확인, 지금 시세와 다를 수 있음). 장비는 수시로 바뀌니 꼭 써보고 싶은 게 있으면 예약할 때 말씀해 주세요. <a href="gear/">지점별 장비 전체 보기 →</a></p>
+  <div class="gw-vote rv" id="gearvote">
+    <div class="gw-vh">
+      <span class="gw-eye2">🗳️ 매월 1개 실제 구매</span>
+      <h3 class="disp">게이밍 기어 입고 투표</h3>
+      <p>써보고 싶은 마우스·키보드·헤드셋에 투표하거나 직접 신청해 주세요. <b>이번 달 10표를 넘긴 장비 중 1위 1개</b>를 플레이앤이 직접 사서 매장에 들여놔요.</p>
+      <button type="button" class="gw-share" id="gwShare" data-track="cta_gear_share">📋 단톡방에 표 부탁하기</button>
+    </div>
+    <div id="gvHome" data-gearvote></div>
+  </div>
 </div></section>
 
 <section class="blk" id="magazine"><div class="wrap">
@@ -1091,6 +1148,10 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
  secs.forEach(s=>io.observe(s));
  links.forEach(a=>a.addEventListener("click",()=>{set(a.dataset.s);if(window.pnTrack)pnTrack("catbar_"+a.dataset.s)}))})();
 </script>
+<script>(function(){const b=document.getElementById("gwShare");if(!b)return;let D=null;document.addEventListener("gv:data",e=>{D=e.detail});
+ b.onclick=async()=>{const min=D?D.min:10,c=D&&D.candidates.length?[...D.candidates].sort((a,b)=>b.votes-a.votes)[0]:null;
+  const t=c&&c.votes<min?`플레이앤에서 이번 달 「${c.item}」 ${min-c.votes}표만 더 모이면 실제로 사서 매장에 둔대 🔥 같이 눌러줘\nhttps://playn.kr/?from=gear#gear`:`플레이앤 게이밍 기어 입고 투표 중! 10표 넘긴 장비 중 1위는 매달 실제로 사서 매장에 둔대. 써보고 싶은 거 눌러줘\nhttps://playn.kr/?from=gear#gear`;
+  let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){}const o=b.textContent;b.textContent=ok?"✓ 복사됨 · 단톡방에 붙여넣기":"복사가 안 됐어요";setTimeout(()=>b.textContent=o,2200)}})();</script>
 <script>(function(){const b=document.getElementById("stepsTg");if(b)b.onclick=()=>{const w=b.parentNode,o=w.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"이용 방법 접기 ▴":"이용 방법 5단계 보기 ▾"}})();</script>
 <script>(function(){const l=document.getElementById("faqList"),b=document.getElementById("faqMore");if(!l||!b)return;const n=l.querySelectorAll("details").length;if(n<=5){b.hidden=true;return}l.classList.add("fold");b.textContent=`질문 ${n-5}개 더 보기`;b.onclick=()=>{const f=l.classList.toggle("fold");b.textContent=f?`질문 ${n-5}개 더 보기`:"접기"}})();</script>
 <div class="qbar" id="qbar" role="region" aria-label="1/N 견적">
