@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/assets/base.css">
+<title>지점 이용 안내 | 플레이앤</title>
+<meta name="description" content="플레이앤 게임파티룸 이용 안내. 오시는 길, 입실 방법, 게임방·TV방·루프탑 바베큐 사용법, 셀프 결제 물품, 퇴실 체크리스트와 보증금 규정을 한 페이지에서 확인하세요.">
+<style>
+/* 2026-10-18 노션 안내 페이지(notion.site) 대체 */
+.gw{max-width:640px;margin:0 auto;padding-bottom:48px}
+.hero{position:relative;margin:16px 0 0;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:16/7;background:var(--panel)}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.gw h1{font-size:30px;margin-top:18px}
+.brs{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.brs a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink);text-decoration:none;font:600 14px Pretendard,sans-serif}
+.brs a[aria-current=page]{background:var(--ink);color:var(--night);border-color:var(--ink)}
+.call{margin-top:12px;border-radius:var(--r-md);padding:13px 15px;line-height:1.6;font-size:15px;background:var(--panel)}
+.call.y{background:rgba(255,181,71,.14)}.call.r{background:rgba(255,90,95,.14)}.call.b{background:rgba(143,163,255,.14)}.call.p{background:rgba(255,46,110,.12)}
+.call a{color:var(--lamp);font-weight:700}
+.door{margin-top:14px;border-radius:16px;padding:16px 18px;line-height:1.55;font-weight:700;background:#2A2560;color:#E9E6FF;border:1.5px dashed var(--lamp)}
+.door .btn{margin-top:10px}
+.toc{display:flex;gap:6px;overflow-x:auto;margin-top:16px;padding-bottom:4px;position:sticky;top:58px;z-index:5;background:var(--night)}
+.toc a{flex:none;min-height:40px;display:inline-flex;align-items:center;padding:0 12px;border-radius:999px;background:var(--panel);color:var(--mute);text-decoration:none;font:600 13.5px Pretendard,sans-serif}
+.gs{margin-top:26px;scroll-margin-top:110px}
+.gs h2{font-size:23px;color:var(--brand)}
+.gs h3{font-size:17px;margin-top:16px;font-family:Pretendard,sans-serif;font-weight:800}
+.gs ul,.gs ol{margin:8px 0 0 20px;line-height:1.65;font-size:15.5px}.gs li{margin-top:4px}
+.gs p{margin-top:8px;line-height:1.65;font-size:15.5px}
+.gs img{width:100%;height:auto;border-radius:12px;margin-top:10px;display:block;background:var(--panel)}
+table.t{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:9px 6px;text-align:left;vertical-align:top;line-height:1.5}
+table.t th{color:var(--mute);font-weight:700;white-space:nowrap}
+.ck li{list-style:none;margin-left:-20px}
+.sig{margin-top:28px;color:var(--mute);font-size:14.5px;line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a></div></header>
+<main class="wrap"><div class="gw" id="g">
+  <h1 class="disp">지점 이용 안내</h1>
+  <p class="call">이용하실 지점을 골라 주세요.</p>
+  <div class="brs" id="brs"></div>
+</div></main>
+<script>
+const IMG="https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/notion/";
+const COMMON={
+ hours:"통대관 12:00 ~ 익일 10:00 (22시간) · 주간 11:00 ~ 17:30 (6시간 30분) · 야간 19:00 ~ 익일 09:30 (14시간 30분)",
+ host:"010-8339-5818 (문자·전화, 저녁 9시 전까지 원활)",
+};
+const B={
+ hongdae:{name:"홍대루프탑점",help:"hongdae",addr:"서울 마포구 동교동 158-19 몽달건물 4층",addr2:"몽달 출입문 왼쪽 유리문으로 들어와서 4층",map:IMG+"329f13b4-9cff-80c9-818c-dffbb000f06b.png",
+  door:"입실 비밀번호 · 와이파이",
+  game:[],
+  gameImg:[IMG+"224f13b4-9cff-80c7-8994-d24738cf8acd.png",IMG+"224f13b4-9cff-8055-95f7-d89f58a5a313.png"],
+  tv:["노래방: 유튜브에서 '노래제목 + 노래방' 검색 → 볼륨은 TV에서 조절, 마이크는 전원만 켜면 돼요","콘솔(플스·닌텐도): 자동 인식되거나, 리모컨 외부입력으로 HDMI를 바꿔주세요"],
+  living:["가스레인지는 가운데 불을 먼저 켠 뒤 왼쪽·오른쪽을 켜면 정상 작동해요","TV방 온수 컨트롤러는 설정이 되어 있으니 조작하지 마세요 (온수는 자동으로 나와요)","바닥난방이 없는 구조예요. 거실·컴퓨터방 벽걸이 냉난방기로 사계절 충분해요"],
+  roof:["불멍 화로대에서 고기 굽기는 금지예요","조명: TV방 에어컨 밑 검은색 선이 외부 조명 콘센트예요. 실내 전원선을 연결한 뒤 테라스 콘센트를 확인해 주세요","사용 후 TV방 스위치를 끄거나 플러그를 뽑아주세요 (테라스 콘센트 선은 빼지 않아도 돼요)"],
+  slip:"외부용은 삼선 슬리퍼(2켤레), 실내용은 검은색 실내화예요",
+  snack:"생수·핫식스·라면",rice:"토닉워터·일회용 큰밥",fire:["고체 착화제","1,000원"],
+  trouble:[["3대 있는 쪽 맨 오른쪽 PC 모니터가 가끔 안 들어오면","모니터 뒤 DC 전원선(동그란 플러그)을 뽑고 10초 기다린 뒤 다시 꽂아주세요. 바로 들어와요.",IMG+"playn_dc.jpg"]],
+  light:"루프탑 조명 꼭 끄기 (켜두면 건물 정전·화재 위험)",
+  trash:"싱크대 위쪽에 일반·음식물 쓰레기봉투가 있어요. 기본 봉투 4,000원은 보증금에서 기본 차감돼요."},
+ yeonnam:{name:"연남루프탑점",help:"yeonnam",addr:"서울 마포구 동교동 147-6 꼬꼬순이건물 3층",addr2:"꼬꼬순이 2층 계단으로 올라와서 3층",map:IMG+"329f13b4-9cff-8094-8ceb-f1be1c67110a.png",
+  door:"입실 비밀번호 · 와이파이",
+  game:["장비 USB에는 기호·알파벳·숫자가 표시돼 있어요. 같은 표시끼리 모아 진열대에 두고, 키보드는 짝을 맞춰 꽂아주세요"],
+  gameExtraImg:IMG+"224f13b4-9cff-80a3-ac30-c6028760bcac.jpg",
+  gameImg:[IMG+"224f13b4-9cff-813c-b78a-d7829a01e229.png",IMG+"224f13b4-9cff-81f6-b6a8-f53176da89fb.png"],
+  tv:["빔프로젝터: ① 전원 버튼을 꾹 누르기 ② 샤오미 스틱이 HDMI에 꽂혀 있는지 확인 ③ 스틱 옆에 USB 8핀을 꽂으면 하얀불 → 리모컨으로 유튜브·넷플릭스","노래방: 유튜브에서 '노래제목 + 노래방' 검색, 마이크는 전원만 켜면 돼요","마이크 스피커 LED가 안 켜지면: 전원 끄고 옆 USB-C로 잠시 충전 (마이크 충전 포트는 마이크 아래쪽)","콘솔: ① HDMI 2에 콘솔 연결 ② 콘솔 전원 켜기 ③ 빔 Source 버튼으로 HDMI 2 선택 ④ 꼭 'PLAYN' 프로필로 접속. 플스 계정에 없는 게임은 왼쪽 벽 진열장 CD로 플레이"],
+  living:[],
+  roof:["조명: 출입문 오른쪽 조명 플러그를 콘센트에 연결하면 켜져요","멀티탭은 밖으로 꺼내지 말고 안쪽에 두세요 (화재·정전 예방)","사용 후 조명 플러그는 뽑아주세요"],
+  slip:"외부용은 검은색 슬리퍼, 실내용은 회색 슬리퍼예요",
+  snack:"생수·핫식스·라면·과자",rice:"토닉워터·일회용 큰밥",fire:["번개탄","2,000원"],
+  trouble:[],
+  light:"루프탑 조명 플러그 뽑기 (켜두면 정전·화재 위험)",
+  trash:"들어오자마자 있는 선반에 일반·음식물 쓰레기봉투가 있어요. 봉투가 없으면 분리수거 봉투에 담아 3층 입구에 두세요 (음식물은 분리수거 봉투 2장을 겹쳐서). 기본 봉투 4,000원은 보증금에서 기본 차감돼요."},
+ yeontral:{name:"연트럴파크점",help:"yeontral",addr:"서울 마포구 연남동 260-28 계림빌딩 5층",addr2:"1층 유키모찌 연남점, 2층 유언비어가 있는 건물의 맨 위층(5층)",map:IMG+"329f13b4-9cff-8043-8853-e21c0d5502c3.png",
+  door:"1층·5층 출입문 · 2층 화장실 비밀번호 · 와이파이",
+  toilet:"실내에는 소변기만 있어요 (사용 후 물 내리기). 좌변기는 2층 유언비어 층 플레이앤 전용 화장실을 써주세요 (비밀번호는 체크인 화면에 같이 나와요)",
+  game:["모든 게이밍 장비는 벽면의 '게이밍 장비 허브'에만 연결해 주세요","MSI 프로그램·오버 세팅은 절대 수정하지 마세요 (윈도우 바탕화면 사용 설명서 참고)","좌식 전동 데스크는 50cm 이상 올리지 마세요 (케이블·모니터 파손 위험)","모니터암은 화면을 손가락으로 누르지 말고, 테두리를 손바닥으로 잡고 조절해 주세요","진열대 장비를 꺼내 쓸 때 떨어뜨리지 않게 조심해 주세요 (파손·박스 훼손 시 구매가 청구)"],
+  gameImg:[IMG+"224f13b4-9cff-81c9-90e0-ec6410bf1956.png",IMG+"224f13b4-9cff-8121-8fb4-d1fbb023f1c8.png"],
+  tv:["노래방: 유튜브에서 '노래제목 + 노래방' 검색, 마이크는 전원만 켜면 돼요","마이크 스피커 LED가 안 켜지면: 전원 끄고 옆 USB-C로 잠시 충전 (마이크 충전 포트는 마이크 아래쪽)","빔프로젝터: 연트럴파크점은 사용 방법이 달라요. 호스트에게 문의해 주세요 (010-8339-5818)"],
+  living:[],
+  roof:["조명: 조명 스위치의 2번째 스위치예요. 사용 후 꺼주세요","건물 에어컨 수리로 기사님이 방문할 수 있어요. 양해 부탁드려요"],
+  slip:"외부용은 검은색 슬리퍼, 실내용은 회색 슬리퍼예요",
+  snack:"생수·핫식스·라면·과자",rice:"토닉워터·일회용 밥",fire:["번개탄","2,000원"],
+  trouble:[],
+  light:"루프탑 조명 끄기 (LED 조명은 켜둬도 돼요)",
+  trash:"선반에 일반·음식물·분리수거 봉투가 있어요. 봉투가 없으면 분리수거 봉투에 담아 1층 오른쪽 건물 모노멘션 앞 길가에 두세요. 기본 봉투 4,000원은 보증금에서 기본 차감돼요."}
+};
+const Q=new URLSearchParams(location.search),key=Q.get("b"),tok=Q.get("k");
+const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const li=a=>a.map(x=>"<li>"+x+"</li>").join("");
+const brs=document.getElementById("brs");
+brs.innerHTML=Object.entries(B).map(([k,v])=>'<a href="?b='+k+(tok?"&k="+encodeURIComponent(tok):"")+'"'+(k===key?' aria-current="page"':'')+'>'+v.name+'</a>').join("");
+const g=B[key];
+if(g){
+ document.title=g.name+" 이용 안내 | 플레이앤";
+ const inUrl=tok?"/in/?k="+encodeURIComponent(tok):null;
+ const doorBox=inUrl?'<div class="door">🔐 '+g.door+'는 <b>체크인 화면</b>에서 입실 시간에 맞춰 열려요<br><a class="btn lamp" href="'+inUrl+'">체크인 화면 열기</a></div>'
+  :'<div class="door">🔐 '+g.door+'는 <b>예약 확정 문자에 있는 체크인 링크(playn.kr/in)</b>에서 체크인을 마치면 입실 시간에 맞춰 보여요</div>';
+ const H=`
+ <div class="hero"><img src="${IMG}playn_cover.jpg" alt="플레이앤 ${g.name} 공간" width="1280" height="560"></div>
+ <h1 class="disp">${g.name} 이용 안내</h1>
+ <div class="brs">${brs.innerHTML}</div>
+ <p class="call y">📢 예약해 주셔서 감사합니다 😊 이 안내는 <b>함께 오시는 모든 분께 꼭 공유</b>해 주세요. 미숙지로 인한 패널티는 책임지기 어려워요.</p>
+ ${doorBox}
+ <p class="call b">🤖 <b>궁금한 점·장비 문제는 AI 상담사에게 먼저 물어보세요 (24시간)</b><br><a href="/help/?b=${g.help}">👉 바로 열기</a></p>
+ <p class="call p">👑 <b>N CREW 가입하면</b> 빈자리 특가 20% · 당일 예약 35%, 2번 오면 음료·물 무료, 10번 오면 모든 예약 20% 할인 · 군인 인증 시 5만원 할인 (할인은 playn.kr 예약 전용 · 가입비 0원)<br><a href="/?from=guide#crew">N CREW 가입하기 →</a></p>
+ <nav class="toc" aria-label="안내 목차"><a href="#s0">30초 요약</a><a href="#s1">오시는 길</a><a href="#s2">후기 이벤트</a><a href="#s3">공간 이용</a><a href="#s4">셀프 결제</a><a href="#s5">문제 해결</a><a href="#s6">퇴실 체크</a><a href="#s7">보증금·규정</a></nav>
+ <section class="gs" id="s0"><h2 class="disp">⚡ 30초 요약</h2>
+  <table class="t"><tr><th>주소</th><td>${g.addr}<br><small style="color:var(--mute)">${g.addr2}</small></td></tr>
+  <tr><th>🔐 비밀번호</th><td>체크인을 마치면 체크인 화면·문자로 보내드려요 (${g.door})</td></tr>
+  <tr><th>⏰ 이용 시간</th><td>${COMMON.hours}</td></tr>
+  ${g.toilet?`<tr><th>🚻 화장실</th><td>${g.toilet}</td></tr>`:""}
+  <tr><th>💰 보증금</th><td>20만원 · 입실 전 입금 · 퇴실 1~2일 뒤 환급</td></tr>
+  <tr><th>📞 호스트</th><td><a href="tel:01083395818" style="color:var(--lamp)">${COMMON.host}</a></td></tr></table>
+  <p class="call r">⏰ 퇴실 시간을 넘기면 청소 인력이 밖에서 대기하게 돼서, 연장 비용과 별도로 <b>30분당 1만원</b> 청소 패널티가 있어요.</p></section>
+ <section class="gs" id="s1"><h2 class="disp">1. 오시는 길 · 입실</h2>
+  <ul><li>🏠 ${g.addr}<br>↳ ${g.addr2}</li></ul>
+  <img src="${g.map}" alt="${g.name} 건물 입구 사진" loading="lazy">
+  <ul><li>🔐 ${g.door}: 체크인을 마치면 화면·문자로 바로 드려요 → 예약 확정 문자의 체크인 링크 (playn.kr/in)</li>
+  <li>🚗 주차: 건물 주차는 안 돼요. 주변 공영주차장을 이용해 주세요 ('모두의주차장' 앱 추천)</li>
+  <li>🛵 배달: 위 주소(건물명·층)를 그대로 적으시면 돼요</li>
+  <li>🧳 입실 전 짐 보관: 앞 예약 상황에 따라 가능해요. 호스트에게 먼저 연락 주세요</li></ul></section>
+ <section class="gs" id="s2"><h2 class="disp">2. 🎁 사진 후기 이벤트</h2>
+  <p>사진 후기를 약속해 주시면 아래 혜택 중 <b>1가지</b>를 드려요.</p>
+  <p class="call p">👑 <b>N CREW에 가입하고 후기까지 남기면 2가지 모두</b> 드려요. 가입은 playn.kr 에서 30초면 끝나요.</p>
+  <table class="t"><tr><th>혜택</th><th>내용</th><th>방법</th></tr>
+  <tr><td>⏰ 조기입실 1시간 무료</td><td>예약 시간보다 최대 1시간 일찍 입실 (예: 7시 예약 → 6시 입실)</td><td>입실 후 "조기입실했어요" 문자</td></tr>
+  <tr><td>🥤 음료 증정</td><td>1.5L 음료·생수 중 2병</td><td>드신 음료 사진을 문자로</td></tr></table>
+  <h3>참여 순서</h3>
+  <ol><li>입실 전 "후기 이벤트 참여할게요!" 문자 보내기</li><li>위 혜택 중 1가지 이용하기</li><li>퇴실 후 예약하신 플랫폼(네이버 구매확정 후 후기 / 스페이스클라우드 이용후기)에 사진 후기 작성</li><li>후기 캡처를 체크인 링크(playn.kr/in) ② 퇴실 후 정산 탭에 올리면 보증금 정산 완료</li></ol>
+  <p class="call">💡 냉장고에 이전 손님이 두고 간 미개봉 술이 있으면 후기 참여자는 무료로 드셔도 돼요 (개봉 여부 꼭 확인 · 미성년자 음주 적발 시 보증금 몰수 후 퇴실).</p></section>
+ <section class="gs" id="s3"><h2 class="disp">3. 공간 이용 방법</h2>
+  <h3>🎮 게임방</h3>
+  <ul>${li(["게임은 <b>본인 아이디로 로그인</b>하고, 이용 후 꼭 로그아웃해 주세요 (타인 계정·불법 프로그램 금지, 디스코드 포함)","장비는 원하는 자리로 옮겨 써도 돼요. 사용 후 <b>원래 자리에 짝을 맞춰</b> 정리해 주세요 (이용 전 사진을 찍어두면 편해요)"].concat(g.game))}</ul>
+  ${g.gameExtraImg?`<img src="${g.gameExtraImg}" alt="장비 USB 표시 예시" loading="lazy">`:""}
+  <ul>${li(["듀얼 모니터를 한 화면만 쓰도록 바꿨다면 퇴실 전 <b>윈도우키 + P → '확장'</b>으로 되돌려주세요 (다음 손님이 화면이 안 나온다고 착각해요)","본체 내부 설정 변경 금지 · 키보드 샷건·마우스 던지기는 CCTV·로그로 확인돼요","🎧 헤드셋 연결: 화면 오른쪽 아래 스피커 아이콘 우클릭 → 볼륨 믹서 → 출력 장치에서 헤드셋 선택 (헤드셋 전원 켠 상태에서)"])}</ul>
+  ${g.gameImg.map((u,i)=>`<img src="${u}" alt="헤드셋 연결 화면 ${i+1}" loading="lazy">`).join("")}
+  <h3>📺 TV방 (노래방·콘솔)</h3>
+  <ul>${li(g.tv.concat(["🎵 노래·음악 소리 제한 시간은 없어요. <b>창문만 닫고</b> 이용해 주세요","소파·러그·의자 오염은 바로 알려주세요 (숨기면 세탁비가 아닌 구매가로 청구)"]))}</ul>
+  <h3>🛋 거실 · 냉난방</h3>
+  <ul>${li(["냉난방은 켠 뒤 예열 시간이 필요해요. 잠시 기다려 주세요"].concat(g.living,["보드게임은 이용 후 정리해 주세요"]))}</ul>
+  <h3>🌿 루프탑 · 바베큐</h3>
+  <ul>${li(["고객 전용 공간이에요 (외부인 출입 불가)","🔥 바베큐: 당일 신청 가능 (인당 1만원, 문자·전화로 신청). 구비된 장작·불판으로 원하는 시간에 셀프 이용","사용 후 불은 꼭 끄고 <b>사진을 보내주세요</b>"].concat(g.roof,["🚬 흡연은 <b>테라스에서만</b>, 흡연 후 문 꼭 닫기 (실내 흡연·전자담배 적발 시 보증금 전액 몰수·즉시 퇴실)","👟 "+g.slip+". 실내화를 신고 밖에 나가면 바닥 청소비·실내화 구매가가 청구돼요"]))}</ul></section>
+ <section class="gs" id="s4"><h2 class="disp">4. 🛒 셀프 결제 물품</h2>
+  <p>쓰신 물품은 <b>퇴실 전 체크인 링크 ② 퇴실 후 정산 탭</b>에서 체크해 주세요.</p>
+  <table class="t"><tr><th>품목</th><th>가격</th><th>비고</th></tr>
+  <tr><td>일회용품 무제한 (종이컵·수저·앞접시)</td><td>1인 1,000원</td><td>인원수대로</td></tr>
+  <tr><td>수건</td><td>장당 5,000원</td><td>문 앞에 모아두기</td></tr>
+  <tr><td>${g.snack}</td><td>2,000원</td><td>종류 상관없음</td></tr>
+  <tr><td>1.5L 음료 (콜라·사이다 등)</td><td>3,000원</td><td></td></tr>
+  <tr><td>${g.rice}</td><td>2,000원</td><td></td></tr>
+  <tr><td>${g.fire[0]}</td><td>${g.fire[1]}</td><td>바베큐용</td></tr>
+  <tr><td>쓰레기봉투 (일반·음식물)</td><td>장당 2,000원</td><td>기본 차감 외 추가분</td></tr>
+  <tr><td>바베큐</td><td>인당 10,000원</td><td>문자로 신청</td></tr></table>
+  <p class="call">🙅 수건 외 샴푸·드라이기 등은 숙박업이 아니라서 제공하지 않아요. 충전기는 있어요.</p></section>
+ <section class="gs" id="s5"><h2 class="disp">5. 🆘 문제가 생겼을 때</h2>
+  <p class="call b">🤖 먼저 AI 상담사에게 물어보시면 바로 해결 방법을 알려드려요 → <a href="/help/?b=${g.help}">바로 열기</a></p>
+  ${g.trouble.map(t=>`<p class="call">🖥 <b>${t[0]}</b><br>${t[1]}</p>${t[2]?`<img src="${t[2]}" alt="모니터 DC 전원선 위치" loading="lazy">`:""}`).join("")}
+  <ul><li>모니터가 안 나와요: 마우스 움직이기 → 모니터 전원 확인 → 입력 소스(DP/HDMI) 확인</li></ul>
+  <p class="call">🖥 <b>듀얼 모니터인데 한쪽 화면만 안 나와요</b><br>키보드 <b>윈도우키 + P</b> → <b>'확장'</b> 선택 (이전 손님이 'PC 화면만'이나 '두 번째 화면만'으로 바꿔뒀을 수 있어요). 또는 바탕화면 우클릭 → 디스플레이 설정 → 여러 디스플레이 → '디스플레이 확장'</p>
+  <ul><li>에어컨이 안 켜져요: 리모컨을 본체 쪽으로 겨누고 한 번만 누르기 → 리모컨 건전지 확인</li><li>그래도 안 되면 호스트에게 연락 주세요</li></ul>
+  <p class="call r">🚨 불·연기·가스 냄새·누수 등 위험 상황은 <b>바로 대피 → 119 → 호스트 연락</b></p></section>
+ <section class="gs" id="s6"><h2 class="disp">6. ✅ 퇴실 전 체크리스트</h2>
+  <ul class="ck">${li(["☐ 🍽 설거지","☐ 🧹 분리수거 + 장비·가구 원위치","☐ 🔌 전원 끄기 (에어컨·TV·컴퓨터) · 듀얼 모니터 설정은 '확장'으로 원위치","☐ 💡 "+g.light,"☐ 🧾 체크인 링크 ② 퇴실 후 정산 탭에서 쓴 물품 체크","☐ 👑 오늘 재밌었으면 N CREW 가입하기 (playn.kr · 친구 초대하면 둘 다 2시간 연장권)"])}</ul>
+  <p class="call">🗑 쓰레기: ${g.trash}</p></section>
+ <section class="gs" id="s7"><h2 class="disp">7. 💰 보증금 · 규정</h2>
+  <ul>${li(["보증금 20만원 · 입실 전 입금 + 체크인 링크(playn.kr/in)에 이체 캡처 올리기 (올려야 입실 비밀번호가 나와요) · 퇴실 전 같은 링크에서 사용내역 체크해야 환급","퇴실 후 1~2일 뒤 환급 (사진 후기 참여자는 후기 캡처를 보내야 정산 완료)","기본 봉투 4,000원 차감 · 파손·오염 시 합리적으로 차감","입실 직후 문제를 발견하면 바로 사진으로 알려주세요","📸 CCTV는 화장실 외 전 구역 작동 중 · 전원 차단·가리기 시 보증금 전액 몰수","인원 추가: 5명까지 기본, 6번째 사람부터 1인당 2만원. 알리지 않고 추가하면 2배 요금","시간 연장: 다음 예약 확인이 필요해서 호스트에게 전화로 문의해 주세요","🐶 반려동물 동반 불가 · 분실물은 호스트에게 문의","불법 행위·피해 발생 시 보증금 몰수 후 추가 손해배상 청구"])}</ul></section>
+ <div class="sig"><b>💌 대표 인사</b><br>처음 보시면 "규정이 많네?" 싶으실 수 있지만 기본적인 정리정돈과 매너에 대한 부탁이에요. 실제로 패널티는 50건 중 1건 정도이고 적용될 때도 반드시 사진·영상으로 안내드려요. 플레이앤이 즐거운 추억이 남는 공간이 되길 바라요. 고맙습니다 😊<br><br>📞 010-8339-5818 · 💬 카카오채널 playn · 📷 @playn_no.1</div>
+ ${inUrl?`<p style="margin-top:20px"><a class="btn lamp" href="${inUrl}" style="width:100%">🔐 체크인 화면으로 돌아가기</a></p>`:`<p style="margin-top:20px"><a class="btn lamp" href="/" style="width:100%">플레이앤 예약하기</a></p>`}`;
+ document.getElementById("g").innerHTML=H;
+}
+</script>
+</body></html>

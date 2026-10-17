@@ -45,6 +45,7 @@
   <h1 class="disp" id="h1">체크인</h1>
   <p class="sub" id="lead">불러오는 중…</p>
   <span class="meta" id="meta" hidden></span>
+  <a class="btn ghost" id="gLink" hidden style="margin-top:10px;padding:10px 16px;font-size:14px">📖 지점 이용 안내 (오시는 길·장비·퇴실 방법)</a>
   <div class="door" id="door" hidden></div>
   <div class="fx" id="fxBox" hidden></div>
   <div class="tabs" id="tabs" hidden><button data-m="in">① 입실 전 체크인</button><button data-m="out">② 퇴실 후 정산</button></div>
@@ -148,7 +149,7 @@ async function load(){
   if(!k){$("lead").innerHTML='체크인은 예약 확정 문자에 있는 <b>개인 링크</b>로 들어와야 열려요.<br>문자를 못 찾겠다면 아래로 바로 연락 주세요.<span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><a class="btn lamp" href="sms:01083395818">문자로 링크 다시 받기</a><a class="btn ghost" href="/help/">AI 상담</a><a class="btn ghost" href="/">홈으로</a></span>';return}
   D=await post({action:"info"}).catch(()=>null);
   if(!D||!D.ok){$("lead").textContent=(D&&D.error)||"잠시 후 다시 시도해 주세요.";return}doorLoad();
-  const dt=new Date(D.date+"T00:00:00");$("meta").textContent=`${D.branch} · ${dt.getMonth()+1}/${dt.getDate()} ${D.pkg}`;$("meta").hidden=false;
+  const dt=new Date(D.date+"T00:00:00");$("meta").textContent=`${D.branch} · ${dt.getMonth()+1}/${dt.getDate()} ${D.pkg}`;$("meta").hidden=false;{const gs={"홍대루프탑점":"hongdae","연남루프탑점":"yeonnam","연트럴파크점":"yeontral"}[D.branch];if(gs){$("gLink").href="/guide/?b="+gs+"&k="+encodeURIComponent(k);$("gLink").hidden=false}}
   $("accTxt").textContent=D.account;$("depAmt").textContent=won(D.rules.deposit);
   if(D.exempt){$("depHint").hidden=true;$("exemptBox").hidden=false;$("exemptBox").innerHTML="👑 N CREW 레전드 멤버라 <b>보증금 없이</b> 이용하세요. 입금자명 칸엔 이름만 적어주시면 돼요. 퇴실 후 쓰신 물품 금액만 정산해요."}
   else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent=(D.checkin&&D.checkin.review==="drink")?"N CREW 혜택: 물 2병 무료 (음료는 후기 이벤트로 받아서 1회 방문 음료 2병 한도 적용)":"N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}

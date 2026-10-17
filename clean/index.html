@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="/assets/base.css">
-<title>청소 점검 | 플레이앤</title>
+<title>청소 일정·점검 | 플레이앤</title>
 <style>
 .cw{max-width:560px;margin:24px auto 0}
 .cw h1{font-size:30px}.cw .sub{color:var(--mute);font-size:14.5px;margin-top:6px;line-height:1.55}
@@ -20,13 +20,48 @@
 .pv{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.pv img{width:72px;height:72px;object-fit:cover;border-radius:8px}
 .res{margin-top:14px;border-radius:14px;padding:14px;font-weight:700;line-height:1.55}
 .ok{background:#DDF7EA;color:#14532D}.mi{background:#FFF3D6;color:#5A3A00}.ch{background:#FFE1E6;color:#8A1030}
+
+/* 2026-10-18 청소 일정 보드 (노션 청소 DB 대체) */
+.tabs{display:flex;gap:6px;margin-top:14px;background:var(--panel);padding:5px;border-radius:999px}
+.tabs button{flex:1;min-height:44px;border:0;border-radius:999px;background:transparent;color:var(--mute);font:700 15px Pretendard,sans-serif;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--lamp);color:#1a1300}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.chips button{min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 14px Pretendard,sans-serif;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--ink);color:var(--night);border-color:var(--ink)}
+.meta{font-size:13px;color:var(--dim);margin-top:10px}
+.day{margin-top:18px}.day h2{font-size:20px;display:flex;align-items:baseline;gap:8px}.day h2 small{font:600 13px Pretendard,sans-serif;color:var(--mute)}
+.it{margin-top:10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 14px 12px;border-left:5px solid var(--bc,#8FA3FF)}
+.it.done{opacity:.62}
+.it .row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bt{font:700 12.5px Pretendard,sans-serif;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--ink)}
+.it .ot{font:800 19px/1.3 Pretendard,sans-serif;margin-top:6px}
+.it .in{font-size:15px;color:var(--mute);margin-top:2px}
+.it .in b{color:var(--lamp)}
+.bd{display:inline-block;font:700 12px Pretendard,sans-serif;padding:2px 8px;border-radius:6px;margin-left:4px}
+.bd.ext{background:#FFB547;color:#1a1300}.bd.stay{background:#8FA3FF;color:#0E0C2C}.bd.tight{background:#FF5A5F;color:#fff}
+.nt{margin-top:8px;font-size:13.5px;color:#FFC977;background:rgba(255,181,71,.1);border-radius:8px;padding:6px 9px}
+.it textarea{width:100%;margin-top:10px;min-height:44px;border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;font:15px Pretendard,sans-serif;background:var(--deep);color:var(--ink);resize:vertical}
+.acts{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
+.acts button{min-height:44px;padding:0 14px;border-radius:999px;border:0;font:700 14px Pretendard,sans-serif;cursor:pointer}
+.acts .ok{background:#3DDC97;color:#0E0C2C}.acts .sv{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.acts small{color:var(--dim);font-size:12.5px}
+.empty{margin-top:16px;color:var(--mute);background:var(--panel);border-radius:var(--r-md);padding:16px;text-align:center}
+.who{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px;color:var(--mute)}.who input{flex:1;max-width:160px;min-height:40px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;background:var(--deep);color:var(--ink);font:15px Pretendard,sans-serif}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head><body>
 <header class="top"><div class="wrap"><a class="logo" href="/"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a></div></header>
 <main class="wrap"><div class="cw">
-  <h1 class="disp">청소 점검</h1>
-  <p class="sub">청소 <b>시작 전에</b> 방 상태를 2~4장 찍어 올려주세요 (거실 전체, 테이블, 주방·싱크대, 쓰레기 둔 곳). AI가 바로 보증금 반환 여부를 판단해서 사장님께 알려드려요. 재고 개수도 같이 적어주시면 발주를 자동으로 챙겨요.</p>
+  <h1 class="disp">청소 일정 · 점검</h1>
+  <div class="tabs" role="tablist"><button role="tab" id="tB" aria-selected="true">📅 청소 일정</button><button role="tab" id="tC" aria-selected="false">📸 점검 올리기</button></div>
+  <section id="secB">
+    <div class="chips" id="brs"></div>
+    <div class="who"><label for="me">내 이름</label><input id="me" placeholder="예: 김매니저" maxlength="20"></div>
+    <p class="meta" id="upd">불러오는 중…</p>
+    <div id="days"></div>
+  </section>
+  <section id="secC" hidden>
+  <p class="sub" style="margin-top:14px">청소 <b>시작 전에</b> 방 상태를 2~4장 찍어 올려주세요 (거실 전체, 테이블, 주방·싱크대, 쓰레기 둔 곳). AI가 바로 보증금 반환 여부를 판단해서 사장님께 알려드려요. 재고 개수도 같이 적어주시면 발주를 자동으로 챙겨요.</p>
   <div class="cb">
     <label for="br">지점</label><select id="br"><option value="">지점 선택</option><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select>
     <div id="body" hidden>
@@ -37,6 +72,7 @@
       <div id="out"></div>
     </div>
   </div>
+  </section>
 </div></main>
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto";const $=id=>document.getElementById(id);
@@ -62,5 +98,46 @@ $("go").onclick=async()=>{const o=$("out");$("go").disabled=true;o.innerHTML='<d
  if(j.stock_only){o.innerHTML='<div class="res ok">재고를 저장했어요.</div>';return}
  const cls={ok:"ok",minor:"mi",charge:"ch"}[j.verdict]||"mi",lab={ok:"깨끗해요 → 보증금 전액 반환",minor:"보통이에요 → 보증금 반환",charge:"추가 청소 필요 → 사장님께 알렸어요"}[j.verdict]||"확인 필요";
  o.innerHTML='<div class="res '+cls+'">'+lab+'<br><span style="font-weight:500">'+(j.notes||"")+'</span></div>';$("ph").value="";$("pv").innerHTML="";load()};
+</script>
+
+<script>
+(function(){
+const API2="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-clean";const $=id=>document.getElementById(id);
+const K=new URLSearchParams(location.search).get("k")||"";
+const BRS=[["","전체"],["홍대루프탑점","홍대"],["연남루프탑점","연남"],["연트럴파크점","연트럴"]];
+const COL={"홍대루프탑점":"#FF2E6E","연남루프탑점":"#3DDC97","연트럴파크점":"#8FA3FF"};
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k)||"";localStorage.setItem(k,v)}catch(e){return ""}};
+let BR=ls("pn_clean_board_br"),DATA=null;
+function tab(b){$("tB").setAttribute("aria-selected",b);$("tC").setAttribute("aria-selected",!b);$("secB").hidden=!b;$("secC").hidden=b;ls("pn_clean_tab",b?"b":"c")}
+$("tB").onclick=()=>tab(true);$("tC").onclick=()=>tab(false);if(ls("pn_clean_tab")==="c")tab(false);
+$("me").value=ls("pn_clean_me");$("me").onchange=()=>ls("pn_clean_me",$("me").value.trim());
+function chips(){$("brs").innerHTML=BRS.map(([v,n])=>'<button aria-pressed="'+(BR===v)+'" data-v="'+v+'">'+n+'</button>').join("");$("brs").querySelectorAll("button").forEach(b=>b.onclick=()=>{BR=b.dataset.v;ls("pn_clean_board_br",BR);chips();draw()})}
+const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const WD="일월화수목금토";
+function dlabel(d,today){const t=new Date(d+"T00:00:00");const n=Math.round((t-new Date(today+"T00:00:00"))/864e5);return (t.getMonth()+1)+"/"+t.getDate()+" ("+WD[t.getDay()]+")"+(n===0?" · 오늘":n===1?" · 내일":"")}
+function card(i){const n=i.note||{};const tight=i.gap_min!=null&&i.gap_min<=150;
+ return '<div class="it'+(n.done?" done":"")+'" style="--bc:'+(COL[i.branch]||"#8FA3FF")+'"><div class="row1"><span class="bt">'+esc(i.branch.replace("루프탑점","").replace("파크점",""))+'</span>'
+ +(i.pkg?'<span class="bt">'+esc(i.pkg)+' 손님</span>':'')+(i.ext?'<span class="bd ext">'+i.ext+'시간 연장</span>':'')+(i.stay||i.stay_prev?'<span class="bd stay">연박</span>':'')+(tight?'<span class="bd tight">청소 '+Math.floor(i.gap_min/60)+'시간'+(i.gap_min%60?(i.gap_min%60)+'분':'')+'</span>':'')+'</div>'
+ +'<div class="ot">'+esc(i.out_txt||i.title)+'</div>'+(i.in_txt?'<div class="in">→ <b>'+esc(i.in_txt)+'</b></div>':'')
+ +(i.notion_title?'<div class="nt">노션에 적혀 있던 내용: '+esc(i.notion_title)+'</div>':'')+(i.memo&&!i.out_txt?'<div class="nt">'+esc(i.memo)+'</div>':'')
+ +'<textarea data-k="'+esc(i.key)+'" placeholder="메모 (예: 수건 부족, 리모컨 건전지 교체)" aria-label="메모">'+esc(n.memo||"")+'</textarea>'
+ +'<div class="acts"><button class="ok" data-done="'+esc(i.key)+'" data-v="'+(n.done?0:1)+'">'+(n.done?"↩ 완료 취소":"✅ 청소 완료")+'</button><button class="sv" data-sv="'+esc(i.key)+'">메모 저장</button>'
+ +(n.done?'<small>'+esc(n.by_name||"")+' '+new Date(n.done_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})+' 완료</small>':(n.updated_at&&n.memo?'<small>메모 '+new Date(n.updated_at).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})+'</small>':''))+'</div></div>'}
+function draw(){if(!DATA)return;const all=DATA.items.concat((DATA.manual||[]).map(m=>({...m,out_txt:"",in_txt:"",memo:m.memo&&!m.memo.startsWith("자동|")?m.memo:""})));
+ const L=all.filter(i=>!BR||i.branch===BR);const by={};L.forEach(i=>(by[i.date]=by[i.date]||[]).push(i));
+ const ds=Object.keys(by).sort();
+ $("days").innerHTML=ds.length?ds.map(d=>'<div class="day"><h2 class="disp">'+dlabel(d,DATA.today)+' <small>'+by[d].length+'건</small></h2>'+by[d].map(card).join("")+'</div>').join(""):'<div class="empty">앞으로 7일 동안 청소 일정이 없어요</div>';
+ $("days").querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>save(b.dataset.done,{done:b.dataset.v==="1"},b));
+ $("days").querySelectorAll("[data-sv]").forEach(b=>b.onclick=()=>{const t=$("days").querySelector('textarea[data-k="'+CSS.escape(b.dataset.sv)+'"]');save(b.dataset.sv,{memo:t.value},b)})}
+async function save(key,patch,btn){btn.disabled=true;const o=btn.textContent;btn.textContent="저장 중…";
+ const j=await fetch(API2,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"note",k:K,key,by:$("me").value.trim()||undefined,...patch})}).then(r=>r.json()).catch(()=>({}));
+ btn.disabled=false;if(!j.ok){btn.textContent="다시 시도";setTimeout(()=>btn.textContent=o,1500);return}load()}
+async function load(){const j=await fetch(API2,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"board",k:K,days:7})}).then(r=>r.json()).catch(()=>({}));
+ if(!j.ok){$("upd").textContent=j.error||"불러오지 못했어요. 잠시 뒤 다시 열어 주세요";return}
+ const focused=document.activeElement&&document.activeElement.tagName==="TEXTAREA";DATA=j;
+ $("upd").textContent="예약 원장 기준 실시간 · "+new Date(j.now).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})+" 확인 (1분마다 새로고침)";
+ if(!focused)draw()}
+chips();load();setInterval(load,60000);
+})();
 </script>
 </body></html>
