@@ -265,3 +265,16 @@ flowchart LR
 - [Hostaway — Double booking](https://www.hostaway.com/glossary/double-booking/)
 - [토스페이먼츠 — 입금 알림 웹훅으로 간편하게 받는 방법](https://www.tosspayments.com/blog/articles/paytech-6)
 - 예약 플랫폼 iCal 통합 사례: [Reservation-Platform-MCP-Server iCal 가이드](https://glama.ai/mcp/servers/@pak3430/Reservation-Platform-MCP-Server/blob/fd75aad41ef2cd61bd3daa5bae72ec8b7bf1876b/ICAL_SETUP_GUIDE.md)
+
+---
+
+## 7. 적용 기록 (2026-10-17 사장님 승인 "다 업그레이드")
+
+| # | 상태 | 내용 |
+|---|---|---|
+| A1 | ✅ 적용 | `playand_watchdog()`: 호스트센터 읽기(host·ext_sync)가 3시간 넘게 없으면 ntfy 푸시 + 관제실 이슈 `rsv:phonebeat`(crit). 다시 들어오면 자동 해제. 6시간마다 최대 1번 |
+| A2 | ✅ 적용 | 같은 함수: 연락처 없는 외부예약(ext:)이 이용일 2일 안이면 사장님 문자 + 관제실 이슈 |
+| A3 | ✅ 적용 | `playand-intake` v10: 홈페이지 신청(pending)이 들어오면 스클 전 세부공간에 "홈페이지 예약 신청" 막음. 마감·만료되면 자동으로 삭제 대기 |
+| A4 | ✅ 적용 | `playn-site` v11: 입금 계좌·문의 번호를 `playand_config` `bank_account`·`host_phone` 키로 바꿀 수 있음(키가 없으면 기존 값) |
+| A5 | ✅ 적용 | `playand-sync` v7: 마지막으로 자동 작성한 제목과 노션 제목이 다르면 사람이 고친 것으로 보고 덮어쓰지 않음(`playand_notion_items.locked`). 그 항목은 이후 연장 등 자동 변경도 안 들어가니 다시 자동으로 돌리려면 locked=false |
+| B·C·D | 대기 | 네이버 알림 샘플·입금 문자 매크로 등 사장님 준비가 필요한 항목 |
