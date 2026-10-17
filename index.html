@@ -531,6 +531,82 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 .grid .cell.pop{animation:cellIn .45s var(--ease) backwards;animation-delay:calc(var(--i)*18ms)}
 @keyframes cellIn{from{opacity:0;transform:scale(.85)}}
 .rating b .cu{font-size:inherit;color:inherit}
+
+/* ── 2026-10-17 빈자리 매트릭스 보드 (제미나이 시안 → 구현) ── */
+.vm{padding:22px 18px 18px}
+.vm-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 18px;padding:0 4px 16px}
+.vm-tt{flex:1 1 420px;min-width:0}
+.vm-eye{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.vm-eye span{font-size:12px;font-weight:800;letter-spacing:.02em;padding:5px 10px;border-radius:var(--pill);color:var(--lamp);background:rgba(255,181,71,.12);box-shadow:inset 0 0 0 1px rgba(255,181,71,.35)}
+.vm-eye .vm-eye2{color:var(--mute);background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--line2);letter-spacing:0}
+.vm-head h2{font-size:clamp(24px,3vw,34px);line-height:1.2}
+.vm-head .sub{color:var(--mute);font-size:14px;margin-top:6px}
+.vm-tabs{display:flex;gap:4px;background:rgba(14,12,44,.7);padding:4px;border-radius:var(--pill);border:1px solid var(--line)}
+.vm-tabs button{border:0;background:none;color:var(--mute);font:700 14px Pretendard,sans-serif;min-height:44px;padding:0 16px;border-radius:var(--pill);cursor:pointer;white-space:nowrap;transition:background .25s,color .25s}
+.vm-tabs button:hover{color:var(--ink)}
+.vm-tabs button[aria-selected=true]{color:#fff;background:linear-gradient(135deg,#E0185E,#B3124C);box-shadow:0 8px 20px -8px rgba(224,24,94,.7)}
+.vm-tabs button:focus-visible,.vm-slot:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
+.vm-legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:0 4px 14px;padding:12px 16px;border-radius:16px;background:rgba(14,12,44,.6);box-shadow:inset 0 0 0 1px var(--line);font-size:13px;color:var(--mute)}
+.vm-legend span{display:inline-flex;align-items:center;gap:6px}
+.vm-legend i{width:10px;height:10px;border-radius:50%;flex:none}
+.vm-legend b{color:var(--ink)}
+.vm-legend em{font-style:normal;color:var(--dim)}
+.lg-flash i{background:#FF4D86}.lg-deal i{background:var(--lamp)}.lg-open i{background:#3DDC97}.lg-off i{background:#4A4680}
+.vm-legend .lg-tip{margin-left:auto;color:var(--dim)}
+.vm-scroll{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding:2px 2px 6px}
+.vm-grid{display:grid;grid-template-columns:repeat(7,minmax(132px,1fr));gap:8px}
+.vm-col{scroll-snap-align:start;display:flex;flex-direction:column;gap:6px;min-width:0}
+.vm-dh{padding:8px 8px 6px;border-radius:12px;background:rgba(255,255,255,.03);text-align:center}
+.vm-dh b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.vm-dh .tg{display:inline-block;margin-top:4px;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:var(--pill);color:var(--mute);background:rgba(255,255,255,.05)}
+.vm-dh .tg.wk{color:var(--lamp);background:rgba(255,181,71,.12)}.vm-dh .tg.fri{color:#8FA3FF;background:rgba(143,163,255,.12)}
+.vm-dh.today{box-shadow:inset 0 0 0 1px rgba(255,77,134,.45)}
+.vm-slot{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:2px;min-height:96px;padding:10px 10px 9px;border-radius:14px;cursor:pointer;background:linear-gradient(180deg,#262068,#1D1856);box-shadow:inset 0 0 0 1px rgba(61,220,151,.35);transition:transform .2s var(--ease),box-shadow .2s;font-variant-numeric:tabular-nums}
+.vm-slot:hover{transform:translateY(-2px)}
+.vm-slot .k{display:flex;align-items:center;justify-content:space-between;gap:4px;font-size:12.5px;font-weight:700;color:var(--mute)}
+.vm-slot .bd{font-size:11px;font-weight:800;padding:2px 7px;border-radius:var(--pill);white-space:nowrap}
+.vm-slot s{font-size:11.5px;color:var(--dim);margin-top:2px}
+.vm-slot .pr{font-size:17px;font-weight:800;color:var(--ink)}
+.vm-slot .pp{font-size:11.5px;color:var(--mute);line-height:1.35}
+.vm-slot.open .bd{color:#3DDC97;background:rgba(61,220,151,.12)}
+.vm-slot.deal{box-shadow:inset 0 0 0 1.5px rgba(255,181,71,.7)}
+.vm-slot.deal .bd{color:#1a1300;background:var(--lamp)}.vm-slot.deal .pr{color:var(--lamp)}
+.vm-slot.flash{box-shadow:inset 0 0 0 1.5px #FF4D86,0 0 22px -8px rgba(255,77,134,.8)}
+.vm-slot.flash .bd{color:#fff;background:#E0185E}.vm-slot.flash .pr{color:var(--lamp)}
+.vm-slot.off{cursor:default;background:rgba(58,53,128,.14);box-shadow:none;color:var(--dim);min-height:52px;justify-content:center}
+.vm-slot.off:hover{transform:none}
+.vm-slot.off .k{color:var(--dim)}
+.vm-slot[aria-pressed=true]{background:linear-gradient(180deg,#3A2F8A,#2A2275);box-shadow:inset 0 0 0 2px var(--ink),0 14px 30px -12px rgba(255,181,71,.6);transform:translateY(-2px)}
+.vm-skel{display:grid;grid-template-columns:repeat(7,minmax(132px,1fr));gap:8px}
+.vm-skel i{height:320px;border-radius:14px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.09),rgba(255,255,255,.04));background-size:200% 100%;animation:sh 1.4s linear infinite}
+.vm-swipe{display:none;margin:8px 0 0;text-align:center;font-size:12.5px;color:var(--dim)}
+@media(max-width:1100px){.vm-grid,.vm-skel{grid-template-columns:repeat(7,148px)}.vm-swipe{display:block}}
+@media(max-width:600px){.vm{padding:18px 12px 14px}.vm-tabs{width:100%}.vm-tabs button{flex:1;padding:0 6px;font-size:13.5px}.vm-legend{gap:6px 12px;padding:10px 12px;font-size:12.5px}.vm-legend .lg-tip{margin-left:0}}
+@media(prefers-reduced-motion:reduce){.vm-slot{transition:none}.vm-slot:hover,.vm-slot[aria-pressed=true]{transform:none}}
+/* 하단 견적·더치페이 바 2단 */
+.qmain{flex-wrap:wrap;border-radius:22px;padding:8px 8px 8px 12px;gap:8px}
+.qinfo{display:flex;align-items:center;gap:6px;flex:1 1 300px;min-width:0}
+.qsum{padding:2px 4px}
+.ql1{display:flex;align-items:center;gap:6px;min-width:0;font-size:13px;color:var(--mute);font-weight:700}
+.ql1 #qMeta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.qbolt{color:var(--lamp);flex:none}
+.sb{display:none}
+@media(max-width:600px){.vm-tabs .lb,.qbar .lb{display:none}.vm-tabs .sb,.qbar .sb{display:inline}.qbolt{display:none}.qstep button{width:40px}.qstep output{min-width:34px}}
+.qbadge{flex:none;font-size:11.5px;font-weight:800;padding:2px 8px;border-radius:var(--pill);color:#fff;background:#E0185E}
+.qbadge.deal{color:#1a1300;background:var(--lamp)}
+.ql2{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ql2 b{font-size:17px;color:var(--lamp);font-variant-numeric:tabular-nums}
+.ql2 small{font-size:12px;color:var(--dim);font-weight:600}
+.qact{display:flex;gap:6px;flex:0 0 auto}
+.qshare{all:unset;cursor:pointer;min-height:44px;padding:0 14px;display:flex;align-items:center;border-radius:var(--pill);font-size:14px;font-weight:700;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2);white-space:nowrap}
+.qshare:hover{background:rgba(255,255,255,.06)}
+.qshare:focus-visible,.qgo:focus-visible{outline:3px solid var(--lamp);outline-offset:2px}
+.qgo{white-space:nowrap}
+.qtoast{position:fixed;left:50%;bottom:calc(170px + env(safe-area-inset-bottom));transform:translate(-50%,10px);z-index:40;padding:12px 18px;border-radius:var(--pill);background:var(--ink);color:var(--night);font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.qtoast.on{opacity:1;transform:translate(-50%,0)}
+.qbar{width:min(1000px,calc(100vw - 340px))}
+@media(max-width:1000px){.qbar{width:min(1000px,calc(100vw - 200px))}}
+@media(max-width:760px){.qbar{width:auto}.qinfo{flex-basis:100%}.qact{flex-basis:100%}.qact>*{flex:1;justify-content:center}.qshare,.qgo{padding:0 10px;font-size:14px}body.has-qbar{padding-bottom:150px}}
 </style>
 <script src="/assets/pv.js" defer></script>
 </head>
@@ -582,13 +658,24 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 </div></div>
 
 <section class="blk" style="padding-top:clamp(40px,6vw,72px)"><div class="wrap">
-  <div class="board rv" id="deals" aria-live="polite">
-    <div class="board-head">
-      <div><h2 class="disp">이번 주 빈자리</h2><div class="sub" id="boardSub">빈자리를 불러오는 중이에요</div></div>
-      <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="board vm rv" id="deals">
+    <div class="vm-head">
+      <div class="vm-tt">
+        <p class="vm-eye"><span>⚡ REAL-TIME VACANCY MATRIX</span><span class="vm-eye2">칸을 누르면 아래 견적 바에 바로 반영</span></p>
+        <h2 class="disp">이번 주 빈자리 &amp; N CREW 번개 특가 보드</h2>
+        <div class="sub" id="boardSub">빈자리를 불러오는 중이에요</div>
+      </div>
+      <div class="vm-tabs" role="tablist" aria-label="지점 고르기" id="tabs"></div>
     </div>
-    <p id="dealNote" role="status"></p><div id="grid"><div class="skel" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-    <div class="legend"><span><i style="background:#2C2675;box-shadow:0 0 0 1px rgba(120,110,230,.6) inset"></i>예약 가능(멤버 특가)</span><span><i style="background:rgba(58,53,128,.25)"></i>마감</span><span><i style="background:var(--lamp)"></i>주말·연휴 요금</span></div>
+    <div class="vm-legend" id="vmLegend">
+      <span class="lg-flash"><i></i>⚡ 당일 번개 <b id="lgFlash">-35%</b> 오늘 남은 자리 1칸</span>
+      <span class="lg-deal"><i></i>🔥 N CREW 특가 <b id="lgDeal">-20%</b> <em id="lgDealNote">3일 뒤부터 빈자리</em></span>
+      <span class="lg-open"><i></i>예약 가능 정가·레벨·쿠폰 할인</span>
+      <span class="lg-off"><i></i>마감</span>
+      <span class="lg-tip">💡 칸을 누르면 아래 견적·더치페이 바에 바로 들어가요</span>
+    </div>
+    <div class="vm-scroll" id="grid" aria-live="polite"><div class="vm-skel" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <p class="vm-swipe" aria-hidden="true">← 옆으로 넘겨서 7일 모두 보기 →</p>
   </div>
 </div></section>
 
@@ -819,22 +906,32 @@ h+=`<circle cx="${x.toFixed(1)}" cy="${(y+7).toFixed(1)}" r="4.2" fill="#FFB547"
 
 /* 빈자리 보드 */
 let D=null,cur=(()=>{const q=new URLSearchParams(location.search).get("branch");return BR.includes(q)?q:null})()||store.get("pn_branch")||"홍대루프탑점";
-function tabs(){const t=$("tabs");t.innerHTML="";BR.forEach(b=>{const x=document.createElement("button");x.role="tab";x.textContent=b.replace("점","");x.setAttribute("aria-selected",b===cur);x.onclick=()=>{cur=b;store.set("pn_branch",b);tabs();grid()};t.appendChild(x)})}
-function grid(){const g=$("grid");if(!D){return}
-  let free=0;const el=document.createElement("div");el.className="grid";
-  el.innerHTML='<div></div>'+PK.map(p=>`<div class="h">${p[1]}<small>${p[2]}</small></div>`).join("");
-  D.days.forEach(d=>{const day=document.createElement("div");day.className="day"+(d.weekend?" wk":"");
-    const [md,w]=d.label.split("(");day.innerHTML=`${md}<small>${w.replace(")","")}${d.date===D.days[0].date?" 오늘":""}</small>`;el.appendChild(day);
-    PK.forEach(([k])=>{const s=d.branches[cur][k];
-      if(s.free){free++;const b=document.createElement("button");b.className="cell"+(d.weekend?" lit":"")+(s.rate>0?" deal":" reg");b.type="button";
-        b.setAttribute("aria-label",`${d.label} ${PK.find(p=>p[0]===k)[1]} ${s.deal?won(s.deal):"가격 문의"} 신청`);
-        b.innerHTML=!s.deal?`<span class="p">빈자리</span><span class="t">가격 문의</span>`:s.rate>0?`<s>${won(s.regular)}</s><span class="p">${(s.deal/10000).toLocaleString()}만</span>${s.kind==="flash"?'<span class="t">⚡오늘 1자리</span>':""}`:`<span class="p">${(s.deal/10000).toLocaleString()}만</span><span class="t" style="color:var(--mute)">정가</span>`;
-        b.onclick=()=>openSheet(d,k,s);b.classList.add("pop");b.style.setProperty("--i",el.children.length);el.appendChild(b)}
-      else{const c=document.createElement("div");c.className="cell";c.textContent="마감";el.appendChild(c)}})});
-  const dd=D.days.filter(d=>PK.some(([k])=>{const s=d.branches[cur][k];return s.free&&s.rate>0}));
-  const note=$("dealNote");if(note){note.innerHTML=dd.length?`🔥 이번 주 ${SHORT[cur]} 특가 날짜: <b>${dd.map(d=>d.label).join(" · ")}</b> <span>(오늘~모레·토요일·금요일 밤은 정가)</span>`:`이번 주 ${SHORT[cur]}은 특가 칸이 없어요 <span>(오늘~모레·토요일·금요일 밤은 정가 · 다른 지점도 확인해 보세요)</span>`}
-  g.innerHTML="";if(!free){g.innerHTML='<div class="empty">이번 주 '+SHORT[cur]+'은 빈자리가 없어요. 다른 지점을 확인해 보세요.</div>'}else g.appendChild(el);
-  $("boardSub").textContent=D.rules&&D.rules.mode!=="classic"?`N CREW 멤버 특가: ${D.rules.early_from}일 뒤부터 빈자리 ${D.discount}% · 오늘은 ⚡번개 ${D.rules.flash_per_day}자리만 ${D.discount_today}% · 칸을 누르면 바로 예약 신청`:`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}% · 칸을 누르면 바로 예약 신청`;}
+const BRI={"홍대루프탑점":"🔥","연남루프탑점":"⚡","연트럴파크점":"🎯"};let PICK=null;
+const ppl=()=>window.pnPpl||4,perOf=(deal,n)=>{const t=deal+Math.max(0,n-5)*20000;return{t,per:Math.ceil(t/n/100)*100}};
+function slotState(s){return !s.free?"off":s.kind==="flash"?"flash":s.rate>0?"deal":"open"}
+function tabs(){const t=$("tabs");t.innerHTML="";BR.forEach(b=>{const x=document.createElement("button");x.type="button";x.setAttribute("role","tab");x.innerHTML=`${BRI[b]} <span class="lb">${b}</span><span class="sb">${SHORT[b]}</span>`;x.setAttribute("aria-label",b);x.setAttribute("aria-selected",b===cur);x.dataset.track="vm_branch:"+SHORT[b];x.onclick=()=>{cur=b;store.set("pn_branch",b);tabs();grid()};t.appendChild(x)})}
+function grid(){const g=$("grid");if(!D)return;const n=ppl();let free=0;
+  const el=document.createElement("div");el.className="vm-grid";
+  D.days.forEach((d,i)=>{const col=document.createElement("div");col.className="vm-col";col.setAttribute("role","group");col.setAttribute("aria-label",d.label);
+    const [md,w]=d.label.split("(");const wd=w.replace(")","");const tg=d.grade==="C"||d.grade==="D"?["wk","주말·연휴"]:d.grade==="B"?["fri",wd==="금"?"금요일":"휴일 전날"]:["","평일"];
+    col.innerHTML=`<div class="vm-dh${i===0?" today":""}"><b>${i===0?"오늘":i===1?"내일":wd+"요일"} ${md}</b><span class="tg ${tg[0]}">${tg[1]}</span></div>`;
+    PK.forEach(([k,nm])=>{const s=d.branches[cur][k],st=slotState(s),b=document.createElement("button");b.type="button";b.className="vm-slot "+st;
+      if(st==="off"){b.disabled=true;b.innerHTML=`<span class="k">${nm}<span>마감</span></span>`;b.setAttribute("aria-label",`${d.label} ${nm} 마감`);col.appendChild(b);return}
+      free++;const q=perOf(s.deal,n);const bd=st==="flash"?`⚡ 번개 -${s.rate}%`:st==="deal"?`🔥 특가 -${s.rate}%`:"예약 가능";
+      b.innerHTML=`<span class="k">${nm}<span class="bd">${bd}</span></span>${s.rate>0?`<s>${(s.regular/10000).toLocaleString()}만</s>`:""}<span class="pr">${won(s.deal)}</span><span class="pp" data-deal="${s.deal}">${n}명이면 인당 ${q.per.toLocaleString()}원</span>`;
+      b.setAttribute("aria-label",`${d.label} ${nm} ${bd} ${won(s.deal)} 견적에 넣기`);
+      const on=PICK&&PICK.br===cur&&PICK.date===d.date&&PICK.pk===k;b.setAttribute("aria-pressed",on?"true":"false");
+      b.onclick=()=>{PICK={br:cur,date:d.date,label:d.label,pk:k,s,st};el.querySelectorAll(".vm-slot[aria-pressed]").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");
+        if(window.pnQbarSlot)window.pnQbarSlot(PICK);if(window.pnTrack)pnTrack("vm_slot:"+SHORT[cur]+":"+st)};
+      col.appendChild(b)});
+    el.appendChild(col)});
+  g.innerHTML="";g.appendChild(el);
+  if(!free){const e=document.createElement("div");e.className="empty";e.textContent="이번 주 "+SHORT[cur]+"은 빈자리가 없어요. 다른 지점을 확인해 보세요.";g.prepend(e)}
+  $("lgFlash").textContent="-"+(D.discount_today||35)+"%";$("lgDeal").textContent="-"+(D.discount||20)+"%";
+  $("lgDealNote").textContent=D.rules&&D.rules.mode!=="classic"?`${D.rules.early_from}일 뒤부터 빈자리`:"빈자리";
+  $("boardSub").textContent=D.rules&&D.rules.mode!=="classic"?`N CREW 멤버 특가: ${D.rules.early_from}일 뒤부터 빈자리 ${D.discount}% · 오늘은 ⚡번개 ${D.rules.flash_per_day}자리만 ${D.discount_today}% · 칸을 누르면 아래 견적 바에 바로 들어가요`:`N CREW 멤버 ${D.discount}% 특가 · 오늘 날짜는 ${D.discount_today||D.discount}%`}
+function vmPpl(){const n=ppl();document.querySelectorAll(".vm-slot .pp[data-deal]").forEach(x=>{x.textContent=`${n}명이면 인당 ${perOf(+x.dataset.deal,n).per.toLocaleString()}원`})}
+document.addEventListener("pn:ppl",vmPpl);
 fetch(API+"?deals=1").then(r=>r.json()).then(j=>{D=j;tabs();grid();homePulse()}).catch(()=>{$("boardSub").textContent="빈자리를 불러오지 못했어요. 새로고침하거나 010-8339-5818로 문의해 주세요."});
 tabs();
 
@@ -1005,9 +1102,11 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
   <div class="qlinks"><a href="#deals" data-track="qbar_deals">빈자리 특가 보기</a><a href="#crew" data-track="qbar_crew">N CREW 가입</a><a href="help/" data-track="qbar_help">AI 상담</a><a href="#calc" data-track="qbar_calc">자세한 요금 계산</a></div>
  </div>
  <div class="qmain">
-  <div class="qstep"><button type="button" data-d="-1" data-track="qbar_ppl_minus" aria-label="인원 한 명 줄이기">−</button><output id="qPpl" aria-live="polite">4명</output><button type="button" data-d="1" data-track="qbar_ppl_plus" aria-label="인원 한 명 늘리기">+</button></div>
-  <button type="button" class="qsum" id="qSum" data-track="qbar_sum" aria-expanded="false" aria-controls="qPanel"><span class="qper">1인 <b id="qPer">–</b></span><span class="qmeta" id="qMeta">요금 불러오는 중</span></button>
-  <a class="qgo" id="qGo" href="https://smartstore.naver.com/playn_/products/9434661597" target="_blank" rel="noopener" data-place="qbar">예약</a>
+  <div class="qinfo">
+   <button type="button" class="qsum" id="qSum" data-track="qbar_sum" aria-expanded="false" aria-controls="qPanel"><span class="ql1"><span class="qbolt" aria-hidden="true">⚡</span><span id="qMeta">요금 불러오는 중</span><span class="qbadge" id="qBadge" hidden></span></span><span class="ql2"><span id="qTot" class="lb">총 –</span><span id="qTotS" class="sb">총 –</span> · 1인<span class="lb">당 더치페이</span> <b id="qPer">–</b> <small class="lb">(보증금 20만원 별도 환급)</small></span></button>
+   <div class="qstep"><button type="button" data-d="-1" data-track="qbar_ppl_minus" aria-label="인원 한 명 줄이기">−</button><output id="qPpl" aria-live="polite">4명</output><button type="button" data-d="1" data-track="qbar_ppl_plus" aria-label="인원 한 명 늘리기">+</button></div>
+  </div>
+  <div class="qact"><button type="button" class="qshare" id="qShare" data-track="cta_estimate:share">📋 단톡방 공유 복사</button><a class="qgo" id="qGo" href="https://smartstore.naver.com/playn_/products/9434661597" target="_blank" rel="noopener" data-place="qbar">예약 확정 신청하기 →</a></div>
  </div>
 </div>
 <nav class="dock" id="dock" aria-label="빠른 메뉴"><a href="#deals">빈자리</a><a href="help/">AI 상담</a><a class="p" href="#crew">N CREW 가입</a></nav>
@@ -1038,14 +1137,29 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
  const ymd=x=>x.toISOString().slice(0,10);
  function dateOf(v){const t=new Date(Date.now()+9*36e5);if(v==="sat"){const dw=t.getUTCDay();t.setUTCDate(t.getUTCDate()+((6-dw+7)%7||7))}else t.setUTCDate(t.getUTCDate()+(+v));return ymd(t)}
  function label(ds){const d=new Date(ds+"T00:00:00Z");return`${d.getUTCMonth()+1}/${d.getUTCDate()}(${"일월화수목금토"[d.getUTCDay()]})`}
- function draw(){$q("qPpl").textContent=S.ppl+"명";bar.querySelector('[data-d="-1"]').disabled=S.ppl<=1;bar.querySelector('[data-d="1"]').disabled=S.ppl>=16;
+ const BRC={"홍대루프탑점":"hongdae","연남루프탑점":"yeonnam","연트럴파크점":"yeontral"};
+ function slotNow(){const p=S.slot;return p&&p.br===S.br&&p.pk===S.pk&&p.date===S.d?p:null}
+ function draw(){window.pnPpl=S.ppl;$q("qPpl").textContent=S.ppl+"명";bar.querySelector('[data-d="-1"]').disabled=S.ppl<=1;bar.querySelector('[data-d="1"]').disabled=S.ppl>=16;
   bar.querySelectorAll(".qrow").forEach(r=>r.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===String(S[r.dataset.k]))));
-  const ds=dateOf(S.d),q=window.pnQuote&&window.pnQuote(S.br,ds,S.pk,S.ppl);const go=$q("qGo");go.href=LINK[S.br];
-  if(!q){$q("qPer").textContent="–";$q("qMeta").textContent="요금 불러오는 중";return}
-  if(q.none){$q("qPer").textContent="문의";$q("qMeta").textContent=`${SHORT[S.br]} · ${PKN[S.pk]} 요금은 문의해 주세요`;return}
-  $q("qPer").textContent=q.per.toLocaleString()+"원";
-  $q("qMeta").innerHTML=`${label(ds)} ${SHORT[S.br]} ${PKN[S.pk]} · 총 ${q.total.toLocaleString()}원 <i>· 조건 바꾸기</i>`}
- function syncCalc(){if(!cBr)return;cBr.value=S.br;cPk.value=S.pk;cPpl.value=S.ppl;cDate.value=dateOf(S.d);cPpl.dispatchEvent(new Event("input"))}
+  const ds=/^\d{4}-/.test(S.d)?S.d:dateOf(S.d),sl=slotNow(),go=$q("qGo"),bd=$q("qBadge");
+  const base=sl?{total:sl.s.deal+Math.max(0,S.ppl-5)*20000}:window.pnQuote&&window.pnQuote(S.br,ds,S.pk,S.ppl);
+  if(sl&&sl.s.rate>0){bd.hidden=false;bd.className="qbadge"+(sl.st==="flash"?"":" deal");bd.innerHTML=sl.st==="flash"?`⚡ 번개 -${sl.s.rate}%<span class="lb"> 적용 중</span>`:`<span class="lb">N CREW </span>-${sl.s.rate}%<span class="lb"> 적용 중</span>`}else bd.hidden=true;
+  if(sl&&sl.s.rate>0){const q=new URLSearchParams({book:"1",branch:S.br,date:ds,pkg:S.pk,people:String(S.ppl)});go.href="/me/?"+q.toString()+"#book";go.removeAttribute("target");go.dataset.track="cta_reserve:playn:"+BRC[S.br]+":qbar"}
+  else{go.href=LINK[S.br];go.target="_blank";delete go.dataset.track}
+  const meta=`<span class="lb">${S.br}</span><span class="sb">${SHORT[S.br]}</span> · ${label(ds)} ${PKN[S.pk]} · ${S.ppl}명`;
+  if(!base){$q("qPer").textContent="–";$q("qTot").textContent="총 –";$q("qTotS").textContent="총 –";$q("qMeta").textContent="요금 불러오는 중";S.text="";return}
+  if(base.none){$q("qPer").textContent="문의";$q("qTot").textContent="요금 문의";$q("qTotS").textContent="요금 문의";$q("qMeta").innerHTML=meta;S.text="";return}
+  const per=Math.ceil(base.total/S.ppl/100)*100;
+  $q("qPer").textContent=per.toLocaleString()+"원";$q("qTot").textContent="총 "+base.total.toLocaleString()+"원";$q("qTotS").textContent="총 "+(Math.round(base.total/1000)/10).toLocaleString()+"만";$q("qMeta").innerHTML=meta;
+  const tag=sl&&sl.s.rate>0?(sl.st==="flash"?` (⚡ 당일 번개 -${sl.s.rate}%)`:` (N CREW -${sl.s.rate}% 특가)`):"";
+  S.text=`[플레이앤 ${S.br}] ${label(ds)} ${PKN[S.pk]}${tag}\n총 ${base.total.toLocaleString()}원 → ${S.ppl}명이면 1인 ${per.toLocaleString()}원 (보증금 20만원은 퇴실 후 환급)\n자리 있을 때 예약하자 👉 https://playn.kr/?branch=${encodeURIComponent(S.br)}&from=share#deals`;
+  document.dispatchEvent(new Event("pn:ppl"))}
+ window.pnQbarSlot=p=>{S.slot=p;S.br=p.br;S.pk=p.pk;S.d=p.date;bar.classList.remove("hide");draw();syncCalc();
+  const sum=$q("qSum");sum.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&bar.querySelector(".qmain").animate([{boxShadow:"inset 0 0 0 2px #FFB547,0 0 0 0 rgba(255,181,71,.6)"},{boxShadow:"inset 0 0 0 1px rgba(166,162,214,.28),0 0 0 14px rgba(255,181,71,0)"}],{duration:700})};
+ $q("qShare").addEventListener("click",async()=>{if(!S.text){return}let ok=false;try{await navigator.clipboard.writeText(S.text);ok=true}catch(e){try{const t=document.createElement("textarea");t.value=S.text;document.body.appendChild(t);t.select();ok=document.execCommand("copy");t.remove()}catch(_){}}
+  qToast(ok?"복사했어요. 단톡방에 붙여넣기 하세요":"복사가 안 됐어요. 다시 눌러 주세요")});
+ function qToast(m){let t=document.getElementById("qToast");if(!t){t=document.createElement("div");t.id="qToast";t.className="qtoast";t.setAttribute("role","status");document.body.appendChild(t)}t.textContent=m;t.classList.add("on");clearTimeout(qToast.h);qToast.h=setTimeout(()=>t.classList.remove("on"),2600)}
+ function syncCalc(){if(!cBr)return;cBr.value=S.br;cPk.value=S.pk;cPpl.value=S.ppl;cDate.value=/^\d{4}-/.test(S.d)?S.d:dateOf(S.d);cPpl.dispatchEvent(new Event("input"))}
  bar.querySelectorAll(".qstep button").forEach(b=>b.addEventListener("click",()=>{S.ppl=Math.min(16,Math.max(1,S.ppl+(+b.dataset.d)));draw();syncCalc()}));
  bar.querySelectorAll(".qrow").forEach(r=>r.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S[r.dataset.k]=b.dataset.v;draw();syncCalc()}));
  const sum=$q("qSum"),panel=$q("qPanel");sum.addEventListener("click",()=>{const o=panel.hidden;panel.hidden=!o;sum.setAttribute("aria-expanded",o)});
