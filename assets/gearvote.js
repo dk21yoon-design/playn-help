@@ -3,6 +3,8 @@
    규칙: 이번 달 10표 넘은 후보 중 최다 득표 1개를 매달 실제로 구매 */
 (() => {
   const API = "https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community";
+  const ICON = {"mouse": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"6\" y=\"2.5\" width=\"12\" height=\"19\" rx=\"6\"/><path d=\"M12 2.5v6.5M6 9h12\"/></svg>", "keyboard": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"2\" y=\"6\" width=\"20\" height=\"12\" rx=\"2.5\"/><path d=\"M6 10h.01M9.5 10h.01M13 10h.01M16.5 10h.01M6 14h.01M18 14h.01M9 14h6\"/></svg>", "headset": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4.5\" height=\"7\" rx=\"1.8\"/><rect x=\"16.5\" y=\"14\" width=\"4.5\" height=\"7\" rx=\"1.8\"/></svg>", "pc": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"2.5\" y=\"3.5\" width=\"19\" height=\"13\" rx=\"2\"/><path d=\"M8 21h8M12 16.5V21\"/></svg>", "etc": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"11\" rx=\"5.5\"/><path d=\"M7.5 12.5h3M9 11v3M15.5 11.5h.01M17.5 13.5h.01\"/></svg>"};
+  ICON.monitor = ICON.pc;
   const CAT = { mouse: "마우스", keyboard: "키보드", headset: "헤드셋", monitor: "모니터", etc: "기타" };
   const ls = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   let voter = ls.get("pn_voter");
@@ -41,7 +43,7 @@
         const ok = c.votes >= min, voted = done.includes(c.item), pct = Math.min(100, (c.votes / min) * 100);
         const el = document.createElement("div");
         el.className = "gv-c" + (ok ? " ok" : "") + (lead && lead.item === c.item ? " lead" : "");
-        el.innerHTML = `<div class="gv-top"><span class="gv-k">${esc(CAT[c.cat] || "장비")}${c.fresh ? ' · <em>새로 신청</em>' : ""}</span>
+        el.innerHTML = `<div class="gv-top"><span class="gv-k"><i class="gv-ic gv-${esc(c.cat || "etc")}">${ICON[c.cat] || ICON.etc}</i>${esc(CAT[c.cat] || "장비")}${c.fresh ? ' · <em>새로 신청</em>' : ""}</span>
             <b class="gv-n" aria-label="이번 달 ${c.votes}표">${c.votes}<small>표</small></b></div>
           <p class="gv-name">${esc(c.item)}</p>${c.reason ? `<p class="gv-why">“${esc(c.reason)}”</p>` : ""}
           <div class="gv-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${min}" aria-valuenow="${Math.min(c.votes, min)}" aria-label="입고 조건 ${min}표까지"><i style="width:${pct}%"></i></div>

@@ -36,3 +36,7 @@
 .gv-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media(max-width:480px){.gv-list{grid-template-columns:1fr}.gv-form select{flex:1 1 100%}}
 @media(prefers-reduced-motion:reduce){.gv-bar i{transition:none}}
+.gv-k{display:inline-flex;align-items:center;gap:6px}
+.gv-ic{width:26px;height:26px;border-radius:8px;display:inline-grid;place-items:center;background:rgba(255,255,255,.05);font-style:normal}
+.gv-ic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gv-mouse{color:#FFB547}.gv-keyboard{color:#FF7FA8}.gv-headset{color:#7EF0C3}.gv-monitor,.gv-pc{color:#8FA3FF}.gv-etc{color:#C79BFF}
