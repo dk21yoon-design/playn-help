@@ -277,7 +277,9 @@ flowchart LR
 | A3 | ✅ 적용 | `playand-intake` v10: 홈페이지 신청(pending)이 들어오면 스클 전 세부공간에 "홈페이지 예약 신청" 막음. 마감·만료되면 자동으로 삭제 대기 |
 | A4 | ✅ 적용 | `playn-site` v11: 입금 계좌·문의 번호를 `playand_config` `bank_account`·`host_phone` 키로 바꿀 수 있음(키가 없으면 기존 값) |
 | A5 | ✅ 적용 | `playand-sync` v7: 마지막으로 자동 작성한 제목과 노션 제목이 다르면 사람이 고친 것으로 보고 덮어쓰지 않음(`playand_notion_items.locked`). 그 항목은 이후 연장 등 자동 변경도 안 들어가니 다시 자동으로 돌리려면 locked=false |
-| B·C·D | 대기 | 네이버 알림 샘플·입금 문자 매크로 등 사장님 준비가 필요한 항목 |
+| B-1 · C-1 | 서버 준비 완료 (10/18) | `playn-sms` v5: 받은 입금 문구 → 보증금 자동 확인(`playn-settle` deposit_hook), 네이버 예약 문구 → `playand-intake`(source=naver) 샘플 수집. 운영폰 MacroDroid 매크로 2개만 켜면 됨 (옵시디언 「MacroDroid 입금·네이버 수집 설정」). 홈페이지 예약 결제 입금 대조는 아직 없음 |
+| 노션 탈출 | ✅ 10/18 | 안내 `/guide/`, 청소 `/clean/`, 노션 쓰기 off, 노션 공개 백업 비공개 이동 |
+| B·C 나머지·D | 대기 | 네이버 알림 샘플 수집 뒤 파서, 홈페이지 예약 입금 자동 확정 |
 
 ---
 
