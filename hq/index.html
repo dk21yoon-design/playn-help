@@ -637,7 +637,7 @@ function musicSection(){const s=el("section");s.id="music";const all=DATA.music|
       c.querySelector(".cp").onclick=()=>navigator.clipboard?.writeText(m.prompt||"").then(()=>toast("복사했어요. 수노 Custom 모드 Style 칸에 붙여넣기"));g2.appendChild(c)});s.appendChild(g2)}
   return s}
 
-const JST={queued:["queued","대기 중"],working:["working","만드는 중"],ready:["ready","확인 대기"],publishing:["working","발행 중"],published:["published","발행 완료"],failed:["failed","실패"]};
+const JST={queued:["queued","대기 중"],working:["working","만드는 중"],source_wait:["working","원본 받는 중"],ready:["ready","확인 대기"],publishing:["working","발행 중"],published:["published","발행 완료"],failed:["failed","실패"]};
 function perfTable(rows){if(!rows.length)return "";const ok=rows.filter(r=>r.views!=null);
   const best=k=>Math.max(...ok.map(r=>Number(r[k])||0));const bw=best("avg_watch_s"),bs=best("share_rate"),bv=best("views");
   const tr=rows.map(r=>`<tr><td>${H((r.reel_id||"")+" "+(r.title||"").replace(/^R\d+\s*/,"").replace(/\[[^\]]*\]\s*/g,"").slice(0,26))}</td><td${r.views==bv&&bv?' class="best"':""}>${r.views??"집계 전"}</td><td${Number(r.avg_watch_s)==bw&&bw?' class="best"':""}>${r.avg_watch_s!=null?r.avg_watch_s+"초":"–"}</td><td${Number(r.share_rate)==bs&&bs?' class="best"':""}>${r.share_rate!=null?r.share_rate+"%":"–"}</td><td>${r.yt_views??"–"}</td><td style="text-align:left">${H((r.song||"").replace(/\s*[-(].*$/,"").slice(0,18))}</td></tr>`).join("");
@@ -681,7 +681,7 @@ function makerSection(){const s=el("section");s.id="maker";const jobs=DATA.reel_
         ${q.perf&&q.perf.views!=null?`<div class="perf">📈 조회 ${q.perf.views} · 평균 시청 ${q.perf.avg_watch_s??"–"}초 · 공유율 ${q.perf.share_rate??"–"}% · 저장 ${q.perf.saved??0}${q.perf.yt_views!=null?` · 쇼츠 ${q.perf.yt_views}`:""}</div>`:(q.status==="published"?`<div class="perf">📈 성과는 발행 다음 날 06:20부터 채워져요</div>`:"")}
         ${q.permalink?`<a href="${H(q.permalink)}" target="_blank" rel="noopener" style="color:var(--lamp);font-size:14px">인스타에서 보기 ↗</a>`:""}
         ${j.status==="publishing"&&q.status==="published"?`<div class="pr" style="color:var(--ok)">발행 완료</div>`:""}</div></div>`}
-    else if(["queued","failed"].includes(j.status))body+=`<div class="acts"><button class="ghost" data-a="del">${j.status==="failed"?"지우기":"취소"}</button></div>`;
+    else if(["queued","failed","source_wait"].includes(j.status))body+=`<div class="acts"><button class="ghost" data-a="del">${j.status==="failed"?"지우기":"취소"}</button></div>`;
     c.innerHTML=body;
     c.querySelectorAll("button[data-a]").forEach(b=>b.onclick=async()=>{const a=b.dataset.a;let r;b.disabled=true;
       if(a==="pub"){r=await post({action:"reel_job_publish",id:j.id})}
