@@ -187,13 +187,9 @@ def main():
     print("자동 검사 통과", n, "장")
     if no_up:
         return
-    key = os.environ["PLAYN_KEY"]; urls = []
-    for i in range(1, n + 1):
-        path = f"promo/worlds_daily/{date}/{i:02d}.jpg"
-        r = subprocess.run(["curl", "-s", "-X", "POST", f"{BASE}/functions/v1/playn-publish?mode=upload&path={path}",
-                            "-H", f"x-playand-key: {key}", "-H", "content-type: image/jpeg", "--data-binary", f"@{work / f'{i:02d}.jpg'}"],
-                           capture_output=True, text=True)
-        j = json.loads(r.stdout); assert j.get("ok"), r.stdout[:200]; urls.append(j["url"])
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "reelkit"))
+    from upload import upload  # PLAYN_KEY 또는 PLAYN_TICKET(예약 작업용 3시간 티켓)
+    urls = [upload(str(work / f"{i:02d}.jpg"), f"promo/worlds_daily/{date}/{i:02d}.jpg") for i in range(1, n + 1)]
     q = lambda s: "$c$" + s + "$c$"
     sql = ("insert into playn_ig_queue(title,kind,status,publish_at,image_urls,caption,first_comment) values ("
            f"{q(spec['title'])},'carousel','{spec.get('status','ready')}','{spec['publish_at']}',array[{','.join(repr(u) for u in urls)}],"

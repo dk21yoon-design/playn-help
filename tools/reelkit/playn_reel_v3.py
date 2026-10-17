@@ -398,14 +398,18 @@ def scene_video(i, sc):
 import hashlib as _hl
 CLIPS_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-publish?mode=clips'
 def _reg_load():
-    k = os.environ.get('PLAYN_KEY')
+    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
+    if not k and t:  # 2026-10-18 예약 작업용 3시간 티켓 (SQL: select hq_issue_ticket('<용도>'))
+        return _hq({'action': 'clips_get'})['rows']
     if not k:
         if os.environ.get('CLIP_CHECK_OFF'): return []
-        print('❌ PLAYN_KEY 없음: 공용 클립 기록을 못 읽어서 중단 (playand_config.intake_key)', file=sys.stderr); sys.exit(3)
+        print('❌ PLAYN_KEY·PLAYN_TICKET 없음: 공용 클립 기록을 못 읽어서 중단', file=sys.stderr); sys.exit(3)
     r = urllib.request.urlopen(urllib.request.Request(CLIPS_API, headers={'x-playand-key': k}), timeout=30)
     return json.load(r)['rows']
 def _reg_save(rid, rows):
-    k = os.environ.get('PLAYN_KEY')
+    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
+    if not k and t:
+        print('클립 기록 저장:', _hq({'action': 'clips_set', 'reel': rid, 'rows': rows})); return
     if not k: return
     req = urllib.request.Request(CLIPS_API, data=json.dumps({'reel': rid, 'rows': rows}).encode(), headers={'x-playand-key': k, 'content-type': 'application/json'})
     print('클립 기록 저장:', urllib.request.urlopen(req, timeout=30).read().decode())
@@ -521,9 +525,10 @@ def mix_music(mspec, dst):
 #   auto = 조건에 맞는 곡 중 덜 쓴 곡 → 최근에 안 쓴 곡 순. start 생략 시 곡의 best_start(하이라이트). 캡션 credit은 결과 JSON music_credit.
 HQ_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq'
 def _hq(body):
-    k = os.environ.get('PLAYN_KEY')
-    if not k: raise SystemExit('❌ PLAYN_KEY 없음: 음악 보관함을 못 읽음')
-    req = urllib.request.Request(HQ_API, data=json.dumps({**body, 'intake': k}).encode(), headers={'content-type': 'application/json'})
+    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
+    if not k and not t: raise SystemExit('❌ PLAYN_KEY·PLAYN_TICKET 없음: 음악 보관함을 못 읽음')
+    auth = {'intake': k} if k else {'ticket': t}
+    req = urllib.request.Request(HQ_API, data=json.dumps({**body, **auth}).encode(), headers={'content-type': 'application/json'})
     return json.load(urllib.request.urlopen(req, timeout=30))
 def resolve_lib(mspec):
     if not mspec or not mspec.get('lib'): return mspec, None
