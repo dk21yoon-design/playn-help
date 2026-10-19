@@ -1,0 +1,100 @@
+{
+ "date": "20261019_picks",
+ "series": "롤드컵 픽 현황",
+ "title": "P18 롤드컵 픽 현황 스위스 D-5",
+ "publish_at": "2099-01-01T00:00:00Z",
+ "status": "draft",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-17_KC-MVK/kc_reaction.jpg",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "pill": "롤드컵 우승팀 아직 안 찍은 사람 필독",
+   "title": "16팀 다\n모였는데\n[아직] 안 찍었어{?}",
+   "size": 100,
+   "photo": "cover.jpg",
+   "pos": "center 40%",
+   "cap": "KC가 MVK *3:0*으로 잡고 스위스 막차\n10만원 픽 마감까지 D-15"
+  },
+  {
+   "type": "list",
+   "title": "지금 플레이앤\n[픽 순위]",
+   "items": [
+    [
+     "1위",
+     "T1",
+     "손님 픽 최다 · 사장님 픽도 여기"
+    ],
+    [
+     "2위",
+     "Gen.G",
+     "스위스 1라운드 상대는 IG"
+    ],
+    [
+     "대기",
+     "나머지 14팀",
+     "아직 아무도 안 찍음 · 찍는 순간 그 팀 단독 픽"
+    ],
+    [
+     "날아간 픽",
+     "C9 · FURIA · MVK 탈락",
+     "이 세 팀 찍은 손님은 없어서 피해 0"
+    ]
+   ]
+  },
+  {
+   "type": "steps",
+   "title": "사장님 픽도\n[T1]인데",
+   "steps": [
+    [
+     "사장님",
+     "T1",
+     "스위스 첫 상대는 브라질 LØS"
+    ],
+    [
+     "손님 1위",
+     "T1",
+     "지금은 사장님이랑 같은 편"
+    ],
+    [
+     "반대편",
+     "Gen.G · 한화생명 · DK · LPL",
+     "다른 팀 찍고 맞히면 사장님만 틀린 거"
+    ]
+   ],
+   "stats": [
+    [
+     "Gen.G",
+     "vs *IG*"
+    ],
+    [
+     "한화생명",
+     "vs *TES*"
+    ],
+    [
+     "T1",
+     "vs *LØS*"
+    ],
+    [
+     "DK",
+     "vs *G2*"
+    ]
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "네 픽은\n[어디]야{?}",
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "10/12~11/14 나이트·통대관 · 체크인 때 1팀 찍기\n팀원 전원 N CREW · 11/3까지 *10만원* · 이후 5만원",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "롤드컵 우승팀 다르게 찍을 친구 태그 🏆 16팀 다 모였는데 아직 안 찍었어? 홍대 게임파티룸 플레이앤 픽 현황\n\n롤드컵 2026 플레이인이 끝났어요. 스위스 마지막 자리는 KC(Karmine Corp)가 MVK를 3:0으로 꺾고 가져갔어요.\n✔ 플레이앤 픽 1위 T1 · 2위 Gen.G · 나머지 14팀은 아직 아무도 안 찍었어요\n✔ Cloud9 · FURIA · MVK 탈락. 이 세 팀 찍은 손님은 없어서 날아간 픽은 0\n✔ 사장님 픽도 T1. 다른 팀 찍고 맞히면 사장님만 틀리는 거예요\n✔ 스위스 10/24(토)부터. LCK 1라운드는 Gen.G vs IG · 한화생명 vs TES · T1 vs LØS · DK vs G2\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽하면 10만원 · 그 뒤는 5만원 · 결승 뒤 7일 안에 송금\n⏳ 10만원 구간 마감까지 D-15\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「KC vs MVK 매치 하이라이트 | 플레이-인 | 2026 월드 챔피언십」 장면\n경기 기록: 인벤 · Dot Esports · LoL Esports 순위표\n일정: LoL Esports 공식 일정 기준\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "너의 롤드컵 우승 픽은? 번호로 남겨줘 👇\n1 T1  2 Gen.G  3 한화생명  4 디플러스 기아  5 LPL팀  6 그 외 (팀 이름도 써줘)"
+}
