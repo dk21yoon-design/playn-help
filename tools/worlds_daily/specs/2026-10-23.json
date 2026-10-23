@@ -1,0 +1,98 @@
+{
+ "date": "2026-10-23",
+ "series": "롤드컵 데일리",
+ "title": "W10 [롤드컵 데일리] 새벽 2시 젠지부터 아침 8시 T1까지, 스위스 첫날 LCK 4팀",
+ "publish_at": "2026-10-23T09:50:00Z",
+ "status": "ready",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2025-10-31_al-t1/faker.jpg",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "pill": "롤드컵 스위스 첫날 밤샐 사람 필독",
+   "title": "LCK 4팀 경기\n[아침 8시]까지\n다 볼 거지{?}",
+   "size": 104,
+   "photo": "cover.jpg",
+   "photo_top": 680,
+   "pos": "center 35%",
+   "cap": "새벽 2시 젠지 vs IG로 시작\n마지막은 *아침 8시* LØS vs T1"
+  },
+  {
+   "type": "list",
+   "title": "오늘 밤 [LCK 시간표]",
+   "items": [
+    [
+     "새벽 2시",
+     "젠지 vs IG",
+     "스위스 개막전 · LCK 1시드 vs LPL 4시드"
+    ],
+    [
+     "새벽 3시",
+     "한화생명 vs TES",
+     "LCK 2시드 vs LPL 3시드"
+    ],
+    [
+     "아침 6시",
+     "G2 vs 디플러스 기아",
+     "유럽 1시드 vs LCK 4시드"
+    ],
+    [
+     "아침 8시",
+     "LØS vs T1",
+     "브라질 1시드 vs LCK 3시드"
+    ]
+   ],
+   "size": 80
+  },
+  {
+   "type": "steps",
+   "title": "보면서 찍으면\n[10만원]",
+   "steps": [
+    [
+     "예약",
+     "나이트·통대관으로 예약",
+     "10/12~11/14 · 홍대루프탑 · 연남루프탑 · 연트럴파크"
+    ],
+    [
+     "체크인",
+     "우승팀 1개 찍기",
+     "그룹당 1번 · 팀원 전원 N CREW 가입"
+    ],
+    [
+     "결승 뒤",
+     "맞히면 7일 안에 송금",
+     "11/3까지 찍으면 *10만원* · 그 뒤는 5만원"
+    ]
+   ],
+   "stats": [
+    [
+     "10만원 마감",
+     "*D-11*"
+    ],
+    [
+     "지금 픽 1위",
+     "T1"
+    ],
+    [
+     "결승",
+     "11/15"
+    ]
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "아침 8시 T1까지\n[같이 밤샐]\n사람{?}",
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "나이트·통대관 이용하고 우승팀 맞히면 *10만원 페이백*\n11/3까지 찍은 픽 기준 · 그 뒤는 5만원",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "LCK 4팀 경기 아침 8시까지 다 볼 거지? 롤드컵 2026 스위스 1라운드가 오늘 밤 새벽 2시 젠지 vs IG로 시작해요 🏆 홍대 게임파티룸 플레이앤에서 같이 봐요\n\n10/24(토) 스위스 1라운드 LCK 경기 시간 (한국시간 · 전부 단판)\n✔ 새벽 2시 젠지 vs IG · 스위스 개막전\n✔ 새벽 3시 한화생명 vs TES\n✔ 아침 6시 G2 vs 디플러스 기아\n✔ 아침 8시 LØS vs T1\n\n지금 플레이앤 픽 1위는 T1 · 2위는 젠지. 나머지 14팀은 아직 아무도 안 찍었어요.\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽하면 10만원 · 그 뒤는 5만원 · 결승 뒤 7일 안에 송금\n⏳ 10만원 구간 마감까지 D-11\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「어허, 정숙. | AL vs T1 게임 5 하이라이트 | 녹아웃 8강 Day4 | 2025 월드 챔피언십」 · T1 공식 유튜브 「2025 T1scord Ep.17 - VS AL」 장면\n경기 일정·대진: LoL Esports 공식 일정 · 스포츠경향 · Inven Global\n일정: LoL Esports 공식 일정 기준\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "아침 8시 T1 경기까지 같이 버틸 친구 태그해줘 👇"
+}
