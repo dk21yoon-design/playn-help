@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PLAY N 릴스 빌더 v3.20261017 (줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
+"""PLAY N 릴스 빌더 v3.20261024 (자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
   새 장면 옵션: "mic": true 또는 "mic": "T1 팀 보이스" → 그 장면은 원본 소리(선수 마이크·인게임 보이스)를 살리고 음악을 낮춤. clip.file 필요.
                "caption": "자막" → 영상 아래쪽 노란 자막(보이스 번역·대사용).
               "preview_music": {"url": "<인스타 음악 preview URL>", "start": "auto"} → out_preview.mp4 (사장님 확인용, 실제 인스타 곡). music.start도 "auto"면 드롭 지점 자동 탐색.
@@ -39,8 +39,14 @@ spec.json 예시
   spec "interrupt": true (또는 간격 초, 기본 1.75) → interrupt_min(기본 2.4초) 이상인 CTA 아닌 장면에서 간격마다 0.05 미니 줌(1.00↔1.05 번갈아, 0.15초 전환). q_interrupt2s
       장면 끝 0.5초·펀치 0.6초 안은 건너뜀. 장면 "interrupt": false 로 그 장면만 끔
   둘 다 없으면 이전 버전과 같은 결과. 결과 JSON "zoom" 에 펀치 위치(전체 기준 초)·미니 줌 개수가 나온다 → playn_reel_qa.notes·quality_items 에 그대로
+- [2026-10-24 자막 팝·핵심 단어] 지금까지 빌더 사본을 손으로 고쳐 넣던 두 가지를 빌더 옵션으로 흡수.
+  spec "caption_pop": true → 장면이 시작될 때 아래 자막(line·sub·narr·caption)이 0.15초 동안 크기 0.85→1.0 + 투명→불투명으로 툭 튀어나옴. q_caption_pop
+      세부: {"targets": ["line","sub","narr","caption","react"], "len": 0.15, "from": 0.85}  (react = 위쪽 밈 자막도 같이)
+      장면 "caption_pop": false 로 그 장면만 끔. 결과 JSON "caption_pop" 에 적용 장면 수. 옵션이 없으면 이전 버전과 같은 결과
+  자막 어디서든 ^단어^ → 노랑 #FFE45C 강조 (q_kwcolor: 한 줄에 노랑 1단어). ^ 를 안 쓰면 이전과 같음
+  버그 수정: PLAYN_TICKET 만 있을 때 클립 기록 조회에서 _hq NameError → _hq 정의를 위로 올림
 """
-BUILDER_VERSION = 'v3.20261017'
+BUILDER_VERSION = 'v3.20261024'
 import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil, base64
 
 FPS = 30
@@ -130,6 +136,7 @@ def source(c):
 def mark(t):
     t = H.escape(str(t)).replace('\\n', '<br>').replace('\n', '<br>')
     t = re.sub(r'\[(.+?)\]', r'<span class="gb">\1</span>', t)
+    t = re.sub(r'\^(.+?)\^', r'<em class="kw">\1</em>', t)  # 2026-10-24 q_kwcolor 핵심 단어 노랑
     return re.sub(r'\{(.+?)\}', r'<em>\1</em>', t)
 
 
@@ -138,6 +145,7 @@ CSS = '''
 html,body{width:1080px;height:1920px;background:transparent;overflow:hidden;font-family:'Pretendard',sans-serif;color:#fff;-webkit-font-smoothing:antialiased;word-break:keep-all}
 .num{font-family:'Chakra Petch','Pretendard',sans-serif}
 em{font-style:normal;color:#FF3D7F}
+em.kw{color:#FFE45C}
 .sh{text-shadow:0 3px 14px rgba(0,0,0,.75),0 1px 3px rgba(0,0,0,.85)}
 /* 가독성용 어두운 그라데이션 판 */
 .scrimT{position:absolute;left:0;right:0;top:0;height:640px;background:linear-gradient(180deg,rgba(8,8,14,.92) 0%,rgba(8,8,14,.78) 70%,rgba(8,8,14,0) 100%)}
@@ -198,6 +206,10 @@ em{font-style:normal;color:#FF3D7F}
 .cnt .d.on{background:#3DF2FF;box-shadow:0 0 10px #3DF2FF}
 .stroke .say,.stroke .sub,.stroke .name,.stroke .cta,.stroke .center .c,.stroke .title{-webkit-text-stroke:9px #08080E;paint-order:stroke fill}
 .stroke .gb,.react .gb{-webkit-text-stroke:0}
+.pp{scale:var(--ps,1);opacity:var(--pa,1);transform-origin:50% 50%}
+body.popbase .pp{visibility:hidden}
+body.poponly *{visibility:hidden}
+body.poponly .pp,body.poponly .pp *{visibility:visible}
 '''
 
 KIDS_CSS = '''
@@ -240,13 +252,31 @@ def img_uri(path):
     loc = path if not re.match(r'https?://', path) else fetch(path, f'{W}/logo_{abs(hash(path)) % 10**8}')
     return f'data:image/{ext};base64,' + base64.b64encode(open(loc, 'rb').read()).decode()
 
-def overlay_html(sc):
+# ---- 자막 팝 (2026-10-24 v3.20261024): q_caption_pop ----
+POP_LOG = {'scenes': 0}
+
+
+def _pop_cfg(sc):
+    cp = spec.get('caption_pop')
+    if not cp or sc.get('caption_pop') is False: return None
+    cfg = {'targets': ['line', 'sub', 'narr', 'caption'], 'len': 0.15, 'from': 0.85}
+    if isinstance(cp, dict): cfg.update(cp)
+    keys = [k for k in cfg['targets'] if sc.get(k) and not (k in ('line', 'sub') and sc.get('cta'))]
+    return {**cfg, 'keys': keys} if keys else None
+
+
+def overlay_html(sc, mode=None):
+    pc = _pop_cfg(sc) if mode else None
+    pk = set(pc['keys']) if pc else set()
+    PP = lambda k: ' pp' if k in pk else ''
     kids = spec.get('theme') == 'kids'
     t = spec.get('title', [])
     t = t if isinstance(t, list) else [t]
     head = HEAD.replace('</style>', KIDS_CSS + '</style>').replace('<link href="https://fonts.googleapis.com/css2?family=Chakra', '<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Chakra') if kids else HEAD
     if spec.get('stroke', True):  # 10/9 학습: 외곽선 자막 기본값
         head = head.replace('<body>', '<body class="stroke">')
+    if mode:  # popbase = 팝 자막만 숨긴 판, poponly = 팝 자막만
+        head = head.replace('<body class="stroke">', f'<body class="stroke {mode}">').replace('<body>', f'<body class="{mode}">')
     h = [head, '<div class="scrimT"></div><div class="scrimB"></div>']
     if kids:
         h.append('<div class="kframe"></div>')
@@ -274,7 +304,7 @@ def overlay_html(sc):
         h.append('<div class="cnt"><span class="k num">' + f'{k + 1}/{len(named)}</span>' + ''.join(f'<span class="d{" on" if j <= k else ""}"></span>' for j in range(len(named))) + '</div>')
     # 리액션 자막 (밈형 굵은 외곽선 글자)
     if sc.get('react'):
-        h.append(f'<div class="react"><span>{mark(sc["react"])}</span></div>')
+        h.append(f'<div class="react"><span class="{PP('react').strip()}">{mark(sc["react"])}</span></div>')
     if sc.get('mic'):
         h.append(f'<div class="mic">🎙 {H.escape(sc["mic"] if isinstance(sc["mic"], str) else "실제 팀 보이스")}</div>')
     if sc.get('center'):
@@ -293,9 +323,9 @@ def overlay_html(sc):
         h.append('<div style="position:absolute;left:0;right:0;top:618px;height:720px;background:#05050A;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 90px">'
                  f'<div style="font-size:54px;font-weight:700;line-height:1.5;color:#fff">{mark(sc["card"])}</div></div>')
     if sc.get('narr'):
-        h.append(f'<div class="cap"><span style="color:#fff">{mark(sc["narr"])}</span></div>')
+        h.append(f'<div class="cap"><span class="{PP('narr').strip()}" style="color:#fff">{mark(sc["narr"])}</span></div>')
     if sc.get('caption'):
-        h.append(f'<div class="cap"><span>{mark(sc["caption"])}</span></div>')
+        h.append(f'<div class="cap"><span class="{PP('caption').strip()}">{mark(sc["caption"])}</span></div>')
     if sc.get('review'):
         src = H.escape(sc.get('review_src', 'Steam 한국어 리뷰 · 추천'))
         h.append(f'<div class="review"><div class="bx"><div class="ic">👍</div><div><div class="src">{src}</div><div class="q">“{H.escape(sc["review"])}”</div></div></div></div>')
@@ -316,9 +346,9 @@ def overlay_html(sc):
         if sc.get('chips'):
             h.append('<div class="chips">' + ''.join(f'<span class="chip{" g" if re.search("무료|0원|할인|%", x) else ""}">{H.escape(x)}</span>' for x in sc['chips']) + '</div>')
         if sc.get('line'):
-            h.append(f'<div class="say">{mark(sc["line"])}</div>')
+            h.append(f'<div class="say{PP('line')}">{mark(sc["line"])}</div>')
         if sc.get('sub'):
-            h.append(f'<div class="sub">{mark(sc["sub"])}</div>')
+            h.append(f'<div class="sub{PP('sub')}">{mark(sc["sub"])}</div>')
         # 고정 모집 바 (spec["bar"]): 영상 아래 빈 공간에 매 장면 같은 문구
         if spec.get('bar') and not (sc.get('name') or sc.get('line') or sc.get('sub') or sc.get('chips')):
             h.append(f'<div style="margin-top:24px;font-size:30px;font-weight:700;letter-spacing:4px;color:#FF6E9A">{H.escape(spec["bar"].get("k", ""))}</div>'
@@ -346,6 +376,22 @@ async def render_overlays(scenes):
             await pg.evaluate('document.fonts.ready')
             await pg.wait_for_timeout(150)
             await pg.screenshot(path=f'{W}/o{i}.png', omit_background=True)
+            pc = _pop_cfg(sc)
+            if not pc: continue
+            # 팝 자막을 뺀 판(o{i}.png 덮어쓰기) + 팝 자막만 n프레임(p{i}_01..n.png, 크기·투명도 애니메이션)
+            for mode, f in (('popbase', f'{W}/o{i}.png'), ('poponly', None)):
+                open(f'{W}/o{i}_{mode}.html', 'w', encoding='utf-8').write(overlay_html(sc, mode))
+                await pg.goto('file://' + f'{W}/o{i}_{mode}.html', wait_until='networkidle')
+                await pg.evaluate('document.fonts.ready')
+                await pg.wait_for_timeout(150)
+                if f:
+                    await pg.screenshot(path=f, omit_background=True); continue
+                n = max(1, int(float(pc['len']) * FPS + 0.5)); s0 = float(pc['from'])
+                for k in range(1, n + 1):
+                    x = k / n; s_ = s0 + (1 - s0) * (1 - (1 - x) ** 3)  # ease-out
+                    await pg.evaluate(f"document.querySelectorAll('.pp').forEach(e=>{{e.style.setProperty('--ps','{s_:.4f}');e.style.setProperty('--pa','{x:.4f}')}})")
+                    await pg.screenshot(path=f'{W}/p{i}_{k:02d}.png', omit_background=True)
+            POP_LOG['scenes'] += 1
         await b.close()
 
 
@@ -416,7 +462,12 @@ def scene_video(i, sc):
           '[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=28:2,eq=brightness=-0.32:saturation=0.8[bg];'
           f'[b]scale=1080:720:force_original_aspect_ratio=increase,crop=1080:720{zoom_filter(i, sc, d)}[fg];'
           '[bg][fg]overlay=0:620[v];[v][1:v]overlay=0:0,format=yuv420p[o]')
-    run(['ffmpeg', '-y', '-loglevel', 'error', *inp, '-i', f'{W}/o{i}.png', '-filter_complex', fc, '-map', '[o]',
+    pin = []
+    if os.path.exists(f'{W}/p{i}_01.png'):  # 자막 팝: 장면 시작부터 팝 프레임 → 마지막 프레임 유지
+        pin = ['-framerate', str(FPS), '-start_number', '1', '-i', f'{W}/p{i}_%02d.png']
+        fc = fc.replace('[v][1:v]overlay=0:0,format=yuv420p[o]',
+                        f'[2:v]format=rgba,tpad=stop_mode=clone:stop_duration={d + 1:.2f}[pp];[v][1:v]overlay=0:0[v2];[v2][pp]overlay=0:0:eof_action=repeat,format=yuv420p[o]')
+    run(['ffmpeg', '-y', '-loglevel', 'error', *inp, '-i', f'{W}/o{i}.png', *pin, '-filter_complex', fc, '-map', '[o]',
          '-t', f'{d}', '-r', str(FPS), '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-an', outp])
     # 장면 오디오: mic(선수 보이스) 장면은 원본 소리, 나머지는 무음
     ap = f'{W}/a{i}.wav'
@@ -445,6 +496,14 @@ def scene_video(i, sc):
 # ⑤ 기록은 서버 공용(playn_clip_registry, playn-publish ?mode=clips) — 모든 시리즈(릴스·키즈·이벤트·e스포츠) 한 곳에서 검사
 #    환경변수 PLAYN_KEY(= playand_config.intake_key) 필수. 없으면 빌드 중단(CLIP_CHECK_OFF=1 일 때만 생략)
 import hashlib as _hl
+# (2026-10-24) _hq 를 클립 기록 조회보다 먼저 정의 — 티켓 경로 NameError 수정
+HQ_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq'
+def _hq(body):
+    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
+    if not k and not t: raise SystemExit('❌ PLAYN_KEY·PLAYN_TICKET 없음: 음악 보관함을 못 읽음')
+    auth = {'intake': k} if k else {'ticket': t}
+    req = urllib.request.Request(HQ_API, data=json.dumps({**body, **auth}).encode(), headers={'content-type': 'application/json'})
+    return json.load(urllib.request.urlopen(req, timeout=30))
 CLIPS_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-publish?mode=clips'
 def _reg_load():
     k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
@@ -572,13 +631,6 @@ def mix_music(mspec, dst):
 
 # 2026-10-16 릴스 음악 보관함(관제실 hq_music): "music": {"lib": "<slug>"} 또는 {"lib": "auto", "mood": "epic", "use_for": "롤드컵"}
 #   auto = 조건에 맞는 곡 중 덜 쓴 곡 → 최근에 안 쓴 곡 순. start 생략 시 곡의 best_start(하이라이트). 캡션 credit은 결과 JSON music_credit.
-HQ_API = 'https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-hq'
-def _hq(body):
-    k = os.environ.get('PLAYN_KEY'); t = os.environ.get('PLAYN_TICKET')
-    if not k and not t: raise SystemExit('❌ PLAYN_KEY·PLAYN_TICKET 없음: 음악 보관함을 못 읽음')
-    auth = {'intake': k} if k else {'ticket': t}
-    req = urllib.request.Request(HQ_API, data=json.dumps({**body, **auth}).encode(), headers={'content-type': 'application/json'})
-    return json.load(urllib.request.urlopen(req, timeout=30))
 def resolve_lib(mspec):
     if not mspec or not mspec.get('lib'): return mspec, None
     lib = _hq({'action': 'music_list'}).get('music', [])
@@ -639,4 +691,5 @@ if _mpick:
     try: _hq({'action': 'music_used', 'slug': _mpick['slug'], 'reel': _rid})
     except Exception as e: print('음악 사용 기록 실패:', e, file=sys.stderr)
 if ZOOM_LOG['punch_s'] or ZOOM_LOG['interrupt_n']: res_extra['zoom'] = ZOOM_LOG
+if POP_LOG['scenes']: res_extra['caption_pop'] = POP_LOG['scenes']
 print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), 'builder': BUILDER_VERSION, **res_extra}, ensure_ascii=False))
