@@ -1,0 +1,96 @@
+{
+ "date": "20261026_picks",
+ "series": "롤드컵 픽 현황",
+ "title": "P20 롤드컵 픽 현황 스위스 3라운드",
+ "publish_at": "2099-01-01T00:00:00Z",
+ "status": "draft",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-25_DK-T1/g1_nexus_cams.jpg",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "pill": "롤드컵 우승팀 아직 안 찍은 사람 필독",
+   "title": "3연승 DK\n찍은 손님\n[한 명도] 없어{?}",
+   "size": 100,
+   "photo": "cover.jpg",
+   "pos": "center 75%",
+   "cap": "젠지·DK 8강 확정 · T1은 1승 1패\n10만원 픽 마감 *D-8* · 넘겨보기 →"
+  },
+  {
+   "type": "list",
+   "title": "플레이앤 손님\n[픽 순위]",
+   "items": [
+    [
+     "1위",
+     "T1",
+     "손님 픽 대부분 · DK한테 지고 1승 1패"
+    ],
+    [
+     "2위",
+     "Gen.G",
+     "3연승 8강 확정 · 찍은 손님 웃는 중"
+    ],
+    [
+     "빈자리",
+     "디플러스 기아",
+     "3연승 8강인데 아무도 안 찍음"
+    ],
+    [
+     "날아간 픽",
+     "C9 · FURIA · MVK",
+     "플레이인 탈락 · 찍은 손님 없어서 피해 0"
+    ]
+   ]
+  },
+  {
+   "type": "steps",
+   "title": "사장님 T1\n[버틸까]{?}",
+   "steps": [
+    [
+     "사장님",
+     "T1",
+     "10/27(화) CTBC전 · 지면 1승 2패 벼랑"
+    ],
+    [
+     "손님 대부분",
+     "T1",
+     "사장님이랑 같은 배 탔음"
+    ],
+    [
+     "너",
+     "DK·젠지·나머지",
+     "지금 찍으면 네 픽이 그 팀 1위"
+    ]
+   ],
+   "stats": [
+    [
+     "10만원",
+     "*~11/3*"
+    ],
+    [
+     "5만원",
+     "~11/14"
+    ],
+    [
+     "결승",
+     "11/15"
+    ]
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "T1 흔들릴 때\n[갈아탈] 거야{?}",
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "10/12~11/14 나이트·통대관 · 체크인 때 1팀 찍기\n팀원 전원 N CREW · 11/3까지 *10만원* · 이후 5만원",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "DK 찍을 친구 태그 🏆 3연승 DK 찍은 손님 한 명도 없어? 롤드컵 2026 스위스 3라운드 홍대 게임파티룸 플레이앤 픽 현황\n4명이 모이면 플레이앤에서 → 프로필 링크\n\n젠지와 DK가 3연승으로 8강을 먼저 확정했어요.\n✔ 플레이앤 픽 1위는 여전히 T1. 그런데 T1은 DK에 지고 1승 1패예요\n✔ 2위 Gen.G는 8강 확정. 찍은 손님은 웃는 중\n✔ 3연승 DK는 아직 아무도 안 찍었어요. 지금 찍으면 네 픽이 DK 1위\n✔ 사장님 픽도 T1. 10/27(화) CTBC전에서 지면 1승 2패로 벼랑에 서요\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽하면 10만원 · 그 뒤는 5만원 · 결승 뒤 7일 안에 송금\n⏳ 10만원 구간 마감까지 D-8\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「DK vs T1 매치 하이라이트 | 스위스 Day2 | 2026 월드 챔피언십」 장면\n경기 기록: 인벤 · Liquipedia · Hotspawn\n일정: LoL Esports 공식 일정 기준\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "너는 누가 우승할 것 같아? 번호로 남겨줘 👇\n1 T1  2 Gen.G  3 디플러스 기아  4 한화생명  5 LPL팀  6 그 외 (팀 이름도 써줘)"
+}
