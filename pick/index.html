@@ -22,23 +22,23 @@ header p{margin:4px 0 0;font-size:14px;opacity:.85}
 .find{display:flex;gap:8px;margin:0 0 14px}
 .find input{flex:1;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .find button{font-size:16px;padding:0 16px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:700}
-.item{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;scroll-margin-top:12px}
+.item{display:flex;flex-wrap:wrap;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;scroll-margin-top:12px}
 .item.hit{outline:3px solid var(--orange)}
 .no{flex:none;width:52px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}
 .thumb{flex:none;width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--line)}
 .txt{flex:1;min-width:0}.name{font-weight:700;font-size:16px}.ben{font-size:13.5px;color:var(--sub)}
-.go{flex:none;text-decoration:none;background:var(--navy);color:#fff;font-weight:700;font-size:14px;padding:10px 12px;border-radius:10px}
+.go{flex:1 0 100%;text-align:center;text-decoration:none;background:var(--navy);color:#fff;font-weight:700;font-size:16px;padding:12px;min-height:44px;border-radius:10px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .go{background:var(--orange)}}
 footer{font-size:12px;color:var(--sub);text-align:center;padding:20px 16px 36px}
 footer a{color:var(--sub)}
 </style>
 </head>
 <body>
-<header><div class="wrap"><div class="logo">생활<b>공략집</b></div><p>영상 끝에 나온 <b>#번호</b>로 제품을 찾아보세요</p></div></header>
+<header><div class="wrap"><div class="logo">생활<b>공략집</b></div><p>영상 끝에 나온 <b>#번호</b>나 상품 이름으로 찾아보세요</p></div></header>
 <main class="wrap">
 <div class="notice">이 페이지의 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 <a class="sub" href="https://www.youtube.com/channel/UCPVlaD7mWbGT8o_60rupIdA?sub_confirmation=1" target="_blank" rel="noopener">🔔 매일 생활 공략 받기 — 유튜브 구독</a>
-<form class="find" onsubmit="go(event)"><input id="q" inputmode="numeric" placeholder="번호 입력 (예: 3)" aria-label="제품 번호"><button>찾기</button></form>
+<form class="find" onsubmit="go(event)"><input id="q" type="search" enterkeyhint="search" placeholder="번호 또는 이름 (예: 17, 핫팩)" aria-label="제품 번호 또는 상품 이름"><button>찾기</button></form>
 <p id="msg" class="notice" role="status" hidden></p>
 <div id="list"><p class="notice">불러오는 중…</p></div>
 </main>
@@ -48,11 +48,14 @@ function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt
 function render(P){
   const L=document.getElementById("list");
   if(!P.length){L.innerHTML='<p class="notice">곧 첫 제품이 올라와요.</p>';return}
-  L.innerHTML=P.map(p=>`<div class="item" id="n${+p.no}"><div class="no">#${+p.no}</div>${p.image?`<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy">`:""}<div class="txt"><div class="name">${esc(p.name)}</div><div class="ben">${esc(p.benefit)}</div></div><a class="go" href="${esc(p.link)}" data-no="${+p.no}" target="_blank" rel="sponsored nofollow noopener">보러가기</a></div>`).join("");
+  L.innerHTML=P.map(p=>`<div class="item" id="n${+p.no}"><div class="no">#${+p.no}</div>${p.image?`<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy">`:""}<div class="txt"><div class="name">${esc(p.name)}</div><div class="ben">${esc(p.benefit)}</div></div><a class="go" href="${esc(p.link)}" data-no="${+p.no}" target="_blank" rel="sponsored nofollow noopener">쿠팡에서 상품 확인</a></div>`).join("");
   const h=(location.hash.match(/\d+/)||[])[0]; if(h) mark(h);
 }
-function mark(n){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const m=document.getElementById("msg"),e=document.getElementById("n"+n);if(e){m.hidden=true;e.classList.add("hit");e.scrollIntoView({behavior:"smooth"})}else{m.textContent="#"+n+"번 해당 상품을 찾을 수 없습니다. 번호를 다시 확인해 주세요.";m.hidden=false;if(window.pnTrack)pnTrack("pick_miss:"+n)}}
-function go(ev){ev.preventDefault();const n=(document.getElementById("q").value.match(/\d+/)||[])[0];if(n){history.replaceState(null,"","#"+n);mark(n);if(window.pnTrack)pnTrack("pick_find:"+n)}}
+function msg(t){const m=document.getElementById("msg");if(t){m.textContent=t;m.hidden=false}else m.hidden=true}
+function mark(n){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const e=document.getElementById("n"+n);if(e){msg("");e.classList.add("hit");e.scrollIntoView({behavior:"smooth"});return true}msg("#"+n+"번 해당 상품을 찾을 수 없습니다. 번호를 다시 확인해 주세요.");return false}
+const norm=s=>String(s||"").toLowerCase().replace(/\s+/g,"");
+function findName(q){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const k=norm(q);const hits=[...document.querySelectorAll(".item")].filter(e=>norm(e.querySelector(".name").textContent+e.querySelector(".ben").textContent).includes(k));hits.forEach(e=>e.classList.add("hit"));if(hits.length){msg(hits.length>1?"‘"+q+"’ 상품 "+hits.length+"개를 찾았어요.":"");hits[0].scrollIntoView({behavior:"smooth"});return true}msg("‘"+q+"’에 맞는 상품을 찾을 수 없습니다. 번호나 다른 이름으로 찾아 주세요.");return false}
+function go(ev){ev.preventDefault();const q=document.getElementById("q").value.trim();if(!q)return;const n=(q.match(/^#?\s*(\d+)\s*(번)?$/)||[])[1];let ok;if(n){history.replaceState(null,"","#"+n);ok=mark(n);if(window.pnTrack)pnTrack((ok?"pick_find:":"pick_miss:")+n)}else{ok=findName(q);if(window.pnTrack)pnTrack((ok?"pick_find_name:":"pick_miss_name:")+q.slice(0,30))}}
 fetch("picks.json?"+Date.now()).then(r=>r.json()).then(P=>render(P.sort((a,b)=>b.no-a.no))).catch(()=>{document.getElementById("list").innerHTML='<p class="notice">목록을 불러오지 못했어요. 잠시 후 다시 열어주세요.</p>'});
 </script>
 <script src="/assets/pv.js" defer></script>
