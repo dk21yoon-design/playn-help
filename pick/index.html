@@ -18,6 +18,7 @@ header .wrap{padding:0}
 header p{margin:4px 0 0;font-size:14px;opacity:.85}
 .notice{font-size:12.5px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:14px 0}
 .sub{display:block;text-align:center;text-decoration:none;background:#FF0033;color:#fff;font-weight:800;font-size:16px;padding:13px;border-radius:12px;margin:0 0 14px}
+[hidden]{display:none!important}
 .find{display:flex;gap:8px;margin:0 0 14px}
 .find input{flex:1;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .find button{font-size:16px;padding:0 16px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:700}
@@ -38,6 +39,7 @@ footer a{color:var(--sub)}
 <div class="notice">이 페이지의 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 <a class="sub" href="https://www.youtube.com/channel/UCPVlaD7mWbGT8o_60rupIdA?sub_confirmation=1" target="_blank" rel="noopener">🔔 매일 생활 공략 받기 — 유튜브 구독</a>
 <form class="find" onsubmit="go(event)"><input id="q" inputmode="numeric" placeholder="번호 입력 (예: 3)" aria-label="제품 번호"><button>찾기</button></form>
+<p id="msg" class="notice" role="status" hidden></p>
 <div id="list"><p class="notice">불러오는 중…</p></div>
 </main>
 <footer>생활공략집 · <a href="https://www.youtube.com/channel/UCPVlaD7mWbGT8o_60rupIdA">YouTube</a> · <a href="https://www.instagram.com/saenghwal.gongryak">Instagram</a></footer>
@@ -49,7 +51,7 @@ function render(P){
   L.innerHTML=P.map(p=>`<div class="item" id="n${+p.no}"><div class="no">#${+p.no}</div>${p.image?`<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy">`:""}<div class="txt"><div class="name">${esc(p.name)}</div><div class="ben">${esc(p.benefit)}</div></div><a class="go" href="${esc(p.link)}" data-no="${+p.no}" target="_blank" rel="sponsored nofollow noopener">보러가기</a></div>`).join("");
   const h=(location.hash.match(/\d+/)||[])[0]; if(h) mark(h);
 }
-function mark(n){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const e=document.getElementById("n"+n);if(e){e.classList.add("hit");e.scrollIntoView({behavior:"smooth"})}}
+function mark(n){document.querySelectorAll(".hit").forEach(e=>e.classList.remove("hit"));const m=document.getElementById("msg"),e=document.getElementById("n"+n);if(e){m.hidden=true;e.classList.add("hit");e.scrollIntoView({behavior:"smooth"})}else{m.textContent="#"+n+"번 해당 상품을 찾을 수 없습니다. 번호를 다시 확인해 주세요.";m.hidden=false;if(window.pnTrack)pnTrack("pick_miss:"+n)}}
 function go(ev){ev.preventDefault();const n=(document.getElementById("q").value.match(/\d+/)||[])[0];if(n){history.replaceState(null,"","#"+n);mark(n);if(window.pnTrack)pnTrack("pick_find:"+n)}}
 fetch("picks.json?"+Date.now()).then(r=>r.json()).then(P=>render(P.sort((a,b)=>b.no-a.no))).catch(()=>{document.getElementById("list").innerHTML='<p class="notice">목록을 불러오지 못했어요. 잠시 후 다시 열어주세요.</p>'});
 </script>
