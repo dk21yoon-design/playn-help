@@ -1,0 +1,36 @@
+{
+ "date": "2026-10-28",
+ "series": "롤드컵 데일리",
+ "title": "W11 [롤드컵 데일리] T1 2승 1패, 목요일 새벽 5시 MKOI 잡으면 8강",
+ "publish_at": "2026-10-28T09:50:00Z",
+ "status": "ready",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-27_T1-CFO/g1_nexus_cams.jpg",
+  "T1.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-27_T1-CFO/logo_T1.png",
+  "MKOI.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-26_DK-MKOI/logo_MKOI.png",
+  "G2.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-24_DK-G2/logo_G2.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": ["lounge.jpg"],
+ "slides": [
+  {"type": "cover", "pill": "롤드컵 새벽 경기 챙겨 보는 사람 필독", "title": "2승 1패 T1\n[1승만] 더 하면\n8강{?}", "size": 100, "photo": "cover.jpg", "pos": "center 100%",
+   "cap": "T1 *2승 1패* · 10/29(목) 새벽 5시 MKOI전\n이기면 8강 · 넘겨보기 →"},
+  {"type": "list", "title": "스위스 3라운드\n끝나고 [성적표]", "size": 80, "items": [
+    ["3승", "젠지 · 디플러스 기아", "LCK 두 팀 8강 먼저 확정"],
+    ["2승 1패", "T1 · BLG · TES · IG · LYON · MKOI", "한 판 더 이기면 8강"],
+    ["1승 2패", "한화생명 · TL · G2 · KC · CFO · LØS", "한 판 더 지면 탈락"],
+    ["3패", "AL · TSW", "여기서 짐 쌌어요"]]},
+  {"type": "next", "title": "4라운드\n[LCK 경기]만 보면", "matches": [
+    {"date": "10/29(목) 새벽 5시 · 이기면 8강", "a": {"logo": "MKOI.png", "name": "MKOI"}, "b": {"logo": "T1.png", "name": "T1"}, "note": "MKOI는 1라운드에서 BLG를 잡은 팀", "hot": true},
+    {"date": "10/31(토) 아침 8시 · 지면 탈락", "a": {"abbr": "HLE", "name": "한화생명"}, "b": {"logo": "G2.png", "name": "G2"}, "note": "한화생명 *1승 2패* · 벼랑 끝 단두대"}],
+   "chips": ["📌 4라운드 10/29~10/31", "🏆 결승 11/15"]},
+  {"type": "steps", "title": "T1 찍을 거면\n[11/3]까지", "size": 80, "steps": [
+    ["1", "10/12~11/14 나이트·통대관 이용", "홍대루프탑 · 연남루프탑 · 연트럴파크"],
+    ["2", "체크인 때 우승팀 1개 선택", "그룹당 1번 · 팀원 전원 N CREW 가입"],
+    ["3", "맞히면 결승 뒤 7일 안에 송금", "11/3까지 픽 10만원 · 그 뒤는 5만원"]],
+   "stats": [["10만원 마감", "*D-6*"], ["손님 픽 1위", "T1"], ["결승", "11/15"]]},
+  {"type": "cta", "title": "새벽 5시 T1전\n[같이 볼]\n사람{?}", "photo": "lounge.jpg", "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑", "line": "나이트·통대관 이용하고 우승팀 맞히면 *10만원 페이백*\n11/3까지 찍은 픽 기준 · 그 뒤는 5만원", "url": "playn.kr/worlds"}
+ ],
+ "caption": "T1 롤드컵 8강까지 1승 남았어요. 롤드컵 2026 스위스 4라운드 T1 vs MKOI는 10/29(목) 새벽 5시예요 🏆 홍대 게임파티룸 플레이앤에서 같이 봐요\n\n스위스 3라운드 끝나고 LCK 성적 (한국시간)\n✔ 젠지 · 디플러스 기아 3승으로 8강 확정\n✔ T1 2승 1패 · 10/29(목) 새벽 5시 MKOI전 이기면 8강\n✔ 한화생명 1승 2패 · 10/31(토) 아침 8시 G2전 지면 탈락\n✔ AL · TSW 3패 탈락\n\n지금 플레이앤 손님 픽 1위는 T1이에요. 디플러스 기아는 3연승인데 아직 아무도 안 찍었어요.\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽하면 10만원 · 그 뒤는 5만원 · 결승 뒤 7일 안에 송금\n⏳ 10만원 구간 마감까지 D-6\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「T1 vs CFO 매치 하이라이트 | 스위스 Day4 | 2026 월드 챔피언십」 장면\n경기 기록·대진: 인벤 · Liquipedia\n일정: LoL Esports 공식 일정 기준\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "목요일 새벽 5시 T1 vs MKOI 몇 대 몇? 👇\n같이 밤새울 친구도 태그해줘"
+}

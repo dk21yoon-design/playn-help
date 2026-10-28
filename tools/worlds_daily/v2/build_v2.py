@@ -74,6 +74,8 @@ def render_steps(s, i, n, series):
 def side(t, right=False):
     if t.get("logo"):
         img = f'<img src="{t["logo"]}" alt="">'
+    elif t.get("abbr"):  # 로고 없는 팀: 로고 자리에 약칭 텍스트
+        img = f'<span class="tbd" style="font-size:{34 if len(t["abbr"])>2 else 42}px;border-style:solid">{esc(t["abbr"])}</span>'
     else:
         img = '<span class="tbd">?</span>'
     nm = f'<span style="font-size:{32 if len(t["name"])>5 else 40}px">{esc(t["name"])}</span>'
