@@ -651,10 +651,10 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="#"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a>
-  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="meet/" class="evn">소셜링<i>NEW</i></a><a href="worlds/" class="evn">롤드컵 이벤트</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
+  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/" class="evn">롤드컵 이벤트</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
   <button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer"><span></span></button>
 </div></header>
-<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="meet/">🍾 롤드컵 밤샘 소셜링 <b style="color:#FF2E6E">NEW</b></a><a href="worlds/">🏆 롤드컵 우승 예언 이벤트</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
+<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/">🏆 롤드컵 우승 예언 이벤트</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
 
 <main>
 <section class="hero"><div class="wrap">
@@ -675,15 +675,8 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
   </div>
   <div class="evrot rv" id="evrot">
    <a class="event on" href="worlds/" data-track="home_ev_worlds"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span id="evW">10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
-   <a class="event meet" href="meet/" data-track="home_ev_meet"><b>🍾 롤드컵 밤샘 소셜링 · 10/24 토 연남루프탑</b><span id="evM">2:2 칼바람 · 바베큐 · 14명 한정</span><span class="go" aria-hidden="true">→</span></a>
   </div>
-  <div class="evdots" id="evdots"><button class="on" aria-label="롤드컵 예언 이벤트"></button><button aria-label="소셜링 이벤트"></button></div>
-  <a class="mlive" href="meet/" id="mlive" data-track="home_meet_live" hidden aria-live="polite">
-   <div class="mh"><span class="lvd" aria-hidden="true"></span><b>롤드컵 밤샘 소셜링 실시간 신청 현황</b><span class="mt" id="mlT"></span></div>
-   <div class="mrow f"><span class="g">여자</span><div class="bar" aria-hidden="true"><i id="mbF"></i></div><span class="n"><b id="mnF">0</b>명 신청</span></div>
-   <div class="mrow m"><span class="g">남자</span><div class="bar" aria-hidden="true"><i id="mbM"></i></div><span class="n"><b id="mnM">0</b>명 신청</span></div>
-   <div class="ms" id="mlS"></div>
-  </a>
+  <div class="evdots" id="evdots"><button class="on" aria-label="롤드컵 예언 이벤트"></button></div>
 </div></section>
 <nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
   <a href="#events" class="ev" data-events-open>🎉 이벤트 <i>2</i></a><a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#gear" data-s="gear">기어 월·입고 투표</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
@@ -1013,16 +1006,6 @@ function loadPulse(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v
 loadPulse();setInterval(loadPulse,60000);
 fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{if(!x.ok||!x.fan_total)return;
   const top=Object.entries(x.fan||{}).sort((a,b)=>b[1]-a[1])[0];$("evW").innerHTML=(x.fan_total>=20?`지금까지 <em>${x.fan_total}표</em> · `:"")+`지금 1위 <em>${top?top[0]:"-"}</em> · 너의 픽은?`}).catch(()=>{});
-/* 소셜링 실시간 신청 현황: 성별 신청자 수만 (이름·사진 등 개인정보는 서버가 보내지 않음) */
-function loadMeet(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-meetup?e=worlds1024").then(r=>r.json()).then(r=>{if(!r.ok||r.ev.status!=="open")return;const v=r.ev,L=v.left_f+v.left_m;
-  $("evM").innerHTML=L?`여 <em>${v.left_f}</em> · 남 <em>${v.left_m}</em>자리 남음 · 2:2 칼바람 · 바베큐`:"자리 마감 · 대기 신청 가능";
-  if(v.apply_f==null)return;const box=$("mlive");box.hidden=false;
-  $("mnF").textContent=v.apply_f;$("mnM").textContent=v.apply_m;
-  requestAnimationFrame(()=>{$("mbF").style.width=Math.min(100,v.apply_f/v.cap_f*100)+"%";$("mbM").style.width=Math.min(100,v.apply_m/v.cap_m*100)+"%"});
-  const ago=t=>{if(!t)return"";const m=Math.max(1,Math.round((Date.now()-new Date(t))/6e4));return m<60?m+"분 전":m<1440?Math.round(m/60)+"시간 전":Math.round(m/1440)+"일 전"};
-  $("mlT").textContent=v.last_apply_at?`마지막 신청 ${ago(v.last_apply_at)}`:"";
-  $("mlS").innerHTML=`정원 여 ${v.cap_f} · 남 ${v.cap_m} · 참가 확정 여 <em>${v.conf_f}</em> · 남 <em>${v.conf_m}</em> · 프로필 보고 사장님이 승인해요`}).catch(()=>{})}
-loadMeet();setInterval(()=>{if(!document.hidden)loadMeet()},30000);
 (function(){const ev=[...document.querySelectorAll("#evrot .event")],dt=[...document.querySelectorAll("#evdots button")];let i=0,t=null;
   const show=n=>{i=n;ev.forEach((e,j)=>e.classList.toggle("on",j===i));dt.forEach((d,j)=>d.classList.toggle("on",j===i))};
   const run=()=>{clearInterval(t);if(!HRM)t=setInterval(()=>show((i+1)%ev.length),5000)};

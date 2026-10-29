@@ -5,11 +5,6 @@
    - 다른 곳에서 열기: window.pnEvents.open()  /  data-events-open 속성이 있는 링크·버튼을 누르면 열림 */
 (function () {
   var EVENTS = [
-    { id: "meet1024", kick: "NEW · 14명 한정", title: "롤드컵 밤샘 소셜링",
-      sub: "루프탑 바베큐 + 프리드링크 + 혼성 2인 1팀 칼바람 토너먼트, 새벽엔 롤드컵 같이 보기",
-      meta: ["10/24(토) 19:00 → 일 12:00", "연남루프탑점", "1인 70,000원"], cta: "프로필 보내기",
-      href: "/meet/", img: "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/ugc/sc_1261339.jpg",
-      accent: "#FF2E6E", until: "2026-10-23T18:00:00+09:00" },
     { id: "military", kick: "국군장병 감사 이벤트", title: "자랑스러운 국군장병\n여러분, 감사합니다",
       sub: "군인 인증하면 첫 예약 5만원 할인 + 조기입실·늦은퇴실 2시간권. 시간이 안 되는 날엔 바베큐 무료로 바꿔드려요.",
       meta: ["밀리패스로 온라인 인증", "같이 온 인원 모두 N CREW 가입", "올 때마다 음료 2병"], cta: "군인 인증하러 가기",
