@@ -286,3 +286,8 @@ end $$;
 -- ── v3.7 (2026-10-30 17:00 KST): 신규 가입 준비. 원문은 migrations/party_v3_7_signup_security.sql 과 같음
 --    표 community_otp(RLS 켬, 공개 권한 없음) · community_members 열 terms_version·age14_confirmed_at·left_at
 --    함수 community_otp_issue · community_otp_verify · community_member_leave (service_role 만 실행)
+
+-- ── v3.8 (2026-10-30 17:20 KST): 인증 경계. 원문은 migrations/party_v3_8_auth_boundary.sql 과 같음
+--    표 community_sessions(RLS 켬, 공개 권한 없음)
+--    함수 교체 community_otp_issue(전체 발급 잠금) · community_member_leave(세션 종료 추가) · party_join · party_respond(수락 시 회원 FOR SHARE)
+--    함수 추가 community_otp_login · community_session_bridge · community_logout (service_role 만 실행)

@@ -38,3 +38,12 @@
 - `c_leave`/`community_member_leave`: 진행 중 신청이 있으면 막음. 상태 left · 닉네임 가림 · 문자 수신 모두 끔. 지난 신청 기록은 남김
 - 약관·개인정보 안내 초안: `party/terms/` (noindex, 사장님 확정 전 실제 가입 받지 않음)
 - 실제 발송을 켜려면 `playand_config.party_otp_send = on` (사장님 결정)
+
+## 인증 경계 (v3.8 DB · v5 서버 함수, 2026-10-30 T7R)
+- 세션: 게임 모임은 `community_sessions` 만 인정. N CREW 세션(`playn_sessions`)은 받지 않고, 게임 모임 세션은 N CREW 서버가 모름
+- N CREW 로그인 이어받기 `c_bridge`: 화면의 'N CREW 로그인으로 계속하기'를 눌렀을 때만. N CREW 세션은 읽기만, 새 게임 모임 세션 발급(만료는 N CREW 세션보다 늦지 않음). 가입·동의는 넘어오지 않음
+- 로그아웃 `c_logout`: `community_sessions` 그 토큰만 revoked. N CREW 토큰을 넣어도 변화 0. 화면은 gm_token 만 쓰고 pn_token 은 그대로 둠
+- 로그인 `community_otp_login`: 인증번호 확인 + 세션 저장을 한 트랜잭션에서. 저장 실패 시 인증번호 미소모로 되돌아감
+- 발급 `community_otp_issue`: 모든 발급을 잠금 키 하나로 직렬화 → 번호·접속·전체 한도를 동시 요청에도 넘지 않음
+- 접속 구분: `cf-connecting-ip` 만 사용 (클라이언트가 이 헤더를 보내면 Cloudflare 가 요청을 막음, x-forwarded-for 는 쓰지 않음)
+- 탈퇴·신청: `party_join`·`party_respond(수락)` 은 모임 잠금 뒤 회원 행 FOR SHARE 로 active 확인, 탈퇴는 회원 행 FOR UPDATE. 탈퇴 먼저면 신청 거절, 신청 먼저면 탈퇴 차단. 탈퇴 시 게임 모임 세션 모두 끝냄
