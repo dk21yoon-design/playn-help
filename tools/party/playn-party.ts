@@ -1,4 +1,4 @@
-// playn-party: 독립 게임 커뮤니티 모임 신청 (v2 2026-10-30)
+// playn-party: 독립 게임 커뮤니티 모임 신청 (v3 2026-10-30: 전날 리마인드 기록 전용 · 발송 판단 DB 일원화)
 //  로그인 기술만 재사용: playn_otp(인증번호) · playn_sessions(세션 토큰). N CREW(playn_members)와 회원·동의는 완전히 별개
 //  커뮤니티 회원 = community_members (가입·약관·안내 문자 설정·광고 알림 설정 따로, 기본 꺼짐)
 //  public: list · info(e, token?) · c_otp_send · c_otp_verify · c_me · c_join(가입) · c_settings
@@ -7,6 +7,7 @@
 //  정원·대기·제안·수락은 DB 함수(party_join / party_respond / party_cancel / party_sweep)가 모임 행을 잠그고 처리
 //  안내 문자는 playn_party_notices 에 먼저 기록. 발송 모드 playand_config.party_sms_mode
 //    log(기본·현재) = 기록만 · test = 운영폰으로만 · live = 신청자에게(안내 수신 켠 회원만)
+//  전날 리마인드: 크론 admin_sweep → party_sweep → party_remind_scan(now) (모임 시작일 전날 18:00 KST부터 시작 전까지, 확정자만, 모임+회원+일정버전 1회)
 //  테스트 실행(test_run) 기록과 'party-test' 모임은 모드와 상관없이 절대 발송하지 않고 관제실 활동에도 남기지 않음
 import { createClient } from "npm:@supabase/supabase-js@2";
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
@@ -36,32 +37,30 @@ async function rawSms(cfg: Record<string, string>, to: string, msg: string) {
   u.searchParams.set("phone", to.replace(/\D/g, "")); u.searchParams.set("msg", msg);
   try { const r = await fetch(u.toString()); return { ok: r.ok, http: r.status }; } catch { return { ok: false, http: null }; }
 }
-// 기록된 안내를 모드에 따라 처리. pending 인 것만 한 번 처리(중복 발송 방지: 조건부 update)
+// 기록된 안내 처리. 판단은 DB 함수 party_dispatch_decide 한 곳에서 (pending 만, 선점 잠금)
+//  superseded(취소·일정 변경) / skipped_pref(안내 수신 꺼짐) / logged(테스트·기록 모드) / send(test·live 모드만)
+//  실제 문자 호출은 decision === "send" 일 때만. 현재 모드 log 라 send 는 나오지 않음
 async function dispatch(cfg: Record<string, string>, ids: number[]) {
   if (!ids.length) return [];
   const mode = cfg.party_sms_mode || "log";
-  const { data: rows } = await sb.from("playn_party_notices").select("*").in("id", ids).eq("status", "pending");
+  const { data: rows, error } = await sb.rpc("party_dispatch_decide", { p_ids: ids, p_mode: mode, p_dry: false });
+  if (error) return [{ error: "dispatch_decide 실패" }];
   const out: any[] = [];
   for (const n of rows ?? []) {
-    // 먼저 처리 중으로 선점 (동시 호출이 같은 안내를 두 번 보내지 않게)
-    const { data: claimed } = await sb.from("playn_party_notices").update({ status: "sending" }).eq("id", n.id).eq("status", "pending").select("id").maybeSingle();
-    if (!claimed) continue;
-    let status = "logged", http: number | null = null;
-    const test = !!n.test_run || isTestEv(n.event_id);
-    if (!test && mode === "test" && cfg.owner_phone) {
-      const r = await rawSms(cfg, cfg.owner_phone, `[테스트·실제 ${String(n.phone).slice(-4)}]\n${n.msg}`); http = r.http; status = r.ok ? "test_sent" : "failed";
-    } else if (!test && mode === "live") {
-      const m = await cMember(n.phone);
-      if (!m?.notify_sms) status = "skipped_pref";
-      else { const r = await rawSms(cfg, n.phone, n.msg); http = r.http; status = r.ok ? "sent" : "failed"; }
+    let status = n.decision, http: number | null = null;
+    if (n.decision === "send") {
+      const r = mode === "test" && cfg.owner_phone
+        ? await rawSms(cfg, cfg.owner_phone, `[테스트·실제 ${String(n.phone).slice(-4)}]\n${n.msg}`)
+        : mode === "live" ? await rawSms(cfg, n.phone, n.msg) : { ok: false, http: null };
+      http = r.http; status = r.ok ? (mode === "test" ? "test_sent" : "sent") : "failed";
+      await sb.from("playn_party_notices").update({ status, http, sent_at: r.ok ? new Date().toISOString() : null }).eq("id", n.id).eq("status", "sending");
     }
-    await sb.from("playn_party_notices").update({ status, http, sent_at: ["sent", "test_sent"].includes(status) ? new Date().toISOString() : null }).eq("id", n.id);
     out.push({ id: n.id, kind: n.kind, status });
   }
   return out;
 }
 async function counts(id: string) {
-  const { data } = await sb.from("playn_party_rsvps").select("id,name,status,created_at,offer_expires_at").eq("event_id", id).in("status", ["confirmed", "offered", "waitlist"]).order("created_at").order("id");
+  const { data } = await sb.from("playn_party_rsvps").select("id,name,status,created_at,offer_expires_at").eq("event_id", id).in("status", ["confirmed", "offered", "waitlist"]).order("id");
   const by = (s: string) => (data ?? []).filter((r) => r.status === s);
   return { conf: by("confirmed"), offer: by("offered"), wait: by("waitlist") };
 }
@@ -176,7 +175,7 @@ async function adminRoutes(b: any, action: string) {
   }
   if (action === "admin_list") {
     const ev = await getEv(b.e); if (!ev) return J({ ok: false, error: "모임을 찾지 못했어요" }, 404);
-    const { data: rs } = await sb.from("playn_party_rsvps").select("*").eq("event_id", ev.id).order("created_at").order("id");
+    const { data: rs } = await sb.from("playn_party_rsvps").select("*").eq("event_id", ev.id).order("id");
     const { data: ns } = await sb.from("playn_party_notices").select("id,rsvp_id,phone,kind,msg,status,http,created_at,sent_at,test_run").eq("event_id", ev.id).order("id", { ascending: false }).limit(300);
     return J({ ok: true, ev: pub(ev, await counts(ev.id)), rsvps: rs ?? [], notices: ns ?? [], mode: cfg.party_sms_mode || "log" });
   }
