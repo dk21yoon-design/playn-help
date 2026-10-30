@@ -787,9 +787,10 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
       <div class="field"><label for="jName">이름</label><input id="jName" autocomplete="name" maxlength="20" required></div>
       <div class="field"><label for="jPhone">휴대폰 번호</label><input id="jPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" required></div>
       <div class="field"><label for="jBranch">자주 가는 지점</label><select id="jBranch"><option value="">상관없어요</option><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></div>
-      <label class="chk"><input type="checkbox" id="jAgree"><span><em>(필수)</em> 공실 특가·이벤트 등 광고성 정보를 카카오톡·문자로 받는 데 동의해요</span></label>
-      <label class="chk"><input type="checkbox" id="jNight"><span>(선택) 밤 9시 ~ 아침 8시 사이에 오는 당일 특가 알림도 받을게요</span></label>
-      <details class="terms"><summary>개인정보 수집·이용 안내</summary><div>수집 항목: 이름, 휴대폰 번호, 자주 가는 지점<br>목적: 공실 특가·이벤트 알림, 특가 예약 확인 연락<br>보관 기간: N CREW 탈퇴 시까지 (광고 수신 거부는 탈퇴가 아니에요)<br>동의하지 않을 수 있지만, 그 경우 N CREW 가입과 특가 신청이 어려워요. 수신 거부는 이 페이지 맨 아래에서 언제든 할 수 있어요.</div></details>
+      <label class="chk"><input type="checkbox" id="jAgree"><span><em>(필수)</em> N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요</span></label>
+      <label class="chk"><input type="checkbox" id="jMk"><span>(선택) 공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요</span></label>
+      <label class="chk"><input type="checkbox" id="jNight"><span>(선택) 밤 9시~아침 8시 당일 특가 알림도 받을게요</span></label>
+      <details class="terms"><summary>개인정보 수집·이용 안내</summary><div>수집 항목: 이름, 휴대폰 번호, 자주 가는 지점<br>목적: N CREW 회원 확인·혜택 제공, 광고 문자에 동의한 분께만 공실 특가·이벤트 알림, 특가 예약 확인 연락<br>보관 기간: N CREW 탈퇴 시까지 (광고 수신 거부는 탈퇴가 아니에요)<br>필수 동의를 하지 않으면 N CREW 가입과 특가 신청이 어려워요. 광고 문자는 선택이에요. 수신 거부는 이 페이지 맨 아래에서 언제든 할 수 있어요.</div></details>
       <button class="btn pink" id="jBtn">가입하고 특가 받기</button>
       <div class="msg" id="jMsg" role="status"></div>
       <a class="btn kakao" id="kakaoBtn" target="_blank" rel="noopener" hidden>카카오톡 채널 친구 추가</a>
@@ -1035,11 +1036,12 @@ $("reqForm").onsubmit=e=>{e.preventDefault();
 const REF=(()=>{const q=new URLSearchParams(location.search).get("ref");if(q&&/^N[A-Z0-9]{5}$/i.test(q)){store.set("pn_ref",q.toUpperCase());return q.toUpperCase()}return store.get("pn_ref")})();
 if(REF){$("refNote").hidden=false;$("refNote").textContent="친구 초대로 오셨네요! 가입하고 첫 예약을 하면 두 분 모두 혜택을 받아요."}
 /* 가입 */
+$("jMk").onchange=()=>{$("jNight").disabled=!$("jMk").checked;if(!$("jMk").checked)$("jNight").checked=false};$("jNight").disabled=true;
 $("joinForm").onsubmit=async e=>{e.preventDefault();const m=$("jMsg");m.className="msg";
   if(!$("jName").value.trim()||$("jPhone").value.replace(/\D/g,"").length<10){m.className="msg err";m.textContent="이름과 휴대폰 번호를 확인해 주세요.";return}
-  if(!$("jAgree").checked){m.className="msg err";m.textContent="특가 알림을 받으려면 필수 동의에 체크해 주세요.";return}
+  if(!$("jAgree").checked){m.className="msg err";m.textContent="N CREW 가입 필수 동의에 체크해 주세요.";return}
   $("jBtn").disabled=true;m.textContent="가입하는 중…";
-  try{const j=await post({action:"join",name:$("jName").value,phone:$("jPhone").value,branch:$("jBranch").value,agree:true,night_agree:$("jNight").checked,source:new URLSearchParams(location.search).get("from")||"web"});
+  try{const j=await post({action:"join",name:$("jName").value,phone:$("jPhone").value,branch:$("jBranch").value,agree:true,marketing:$("jMk").checked,night_agree:$("jMk").checked&&$("jNight").checked,source:new URLSearchParams(location.search).get("from")||"web"});
     if(j.ok){store.set("pn_phone",$("jPhone").value);if(REF&&!j.again)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"ref_attach",phone:$("jPhone").value,ref:REF,ticket:j.ticket})}).catch(()=>{});m.className="msg ok";m.textContent=j.again?`${j.name}님, 이미 멤버예요. 정보를 업데이트했어요.`:`${j.name}님, N CREW에 오신 걸 환영해요! 이제 위 보드에서 특가를 신청할 수 있고, 내 N CREW에서 레벨과 초대 코드를 볼 수 있어요.`}
     else{m.className="msg err";m.textContent=j.error}}
   catch(_){m.className="msg err";m.textContent="네트워크가 불안정해요. 잠시 후 다시 시도해 주세요."}

@@ -146,13 +146,15 @@ $("send").onclick=async()=>{$("send").disabled=true;msg("보내는 중…",true)
 /* 멤버가 아니면 이 자리에서 바로 가입 → 인증번호 자동 발송 (예약 신청 내용은 그대로 유지) */
 function quickJoin(){const m=$("msg");m.className="msg";m.innerHTML=`<div class="qj"><b>아직 N CREW 멤버가 아니에요</b><span>여기서 30초 만에 가입하고 바로 이어서 진행할 수 있어요. (가입비 없음)</span>
 <label for="qjName">이름</label><input id="qjName" autocomplete="name" maxlength="20" placeholder="홍길동">
-<label class="ck"><input type="checkbox" id="qjAg"> <span><em>(필수)</em> 공실 특가·이벤트 등 광고성 정보를 카카오톡·문자로 받는 데 동의해요. 수집: 이름·휴대폰 번호 / 보관: 수신 거부 시까지</span></label>
-<label class="ck"><input type="checkbox" id="qjNt"> <span>(선택) 밤 9시~아침 8시 당일 특가 알림도 받을게요</span></label>
+<label class="ck"><input type="checkbox" id="qjAg"> <span><em>(필수)</em> N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요. 보관: N CREW 탈퇴 시까지</span></label>
+<label class="ck"><input type="checkbox" id="qjMk"> <span>(선택) 공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요</span></label>
+<label class="ck"><input type="checkbox" id="qjNt" disabled> <span>(선택) 밤 9시~아침 8시 당일 특가 알림도 받을게요</span></label>
 <button class="btn lamp" id="qjBtn" type="button">가입하고 인증번호 받기</button><div id="qjMsg"></div></div>`;
  $("qjName").focus();
+ $("qjMk").onchange=()=>{$("qjNt").disabled=!$("qjMk").checked;if(!$("qjMk").checked)$("qjNt").checked=false};
  $("qjBtn").onclick=async()=>{const e=$("qjMsg");if(!$("qjName").value.trim()){e.textContent="이름을 적어주세요";return}if(!$("qjAg").checked){e.textContent="필수 동의에 체크해 주세요";return}
   $("qjBtn").disabled=true;e.textContent="가입하는 중…";
-  const r=await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"join",name:$("qjName").value,phone:$("ph").value,branch:(BK&&BK.branch)||"",agree:true,night_agree:$("qjNt").checked,source:BK?"me_book":"me"})}).then(x=>x.json()).catch(()=>({}));
+  const r=await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"join",name:$("qjName").value,phone:$("ph").value,branch:(BK&&BK.branch)||"",agree:true,marketing:$("qjMk").checked,night_agree:$("qjMk").checked&&$("qjNt").checked,source:BK?"me_book":"me"})}).then(x=>x.json()).catch(()=>({}));
   if(!r.ok){$("qjBtn").disabled=false;e.textContent=r.error||"네트워크가 불안정해요. 다시 눌러주세요";return}
   try{window.pnTrack&&window.pnTrack("me_quickjoin")}catch(_){}
   $("send").click()}}

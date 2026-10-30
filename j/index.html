@@ -41,8 +41,9 @@
     <div class="row"><input id="ph" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" required><button type="button" id="otp">인증번호 받기</button></div>
     <label class="t" for="cd">인증번호 6자리</label>
     <input id="cd" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="문자로 받은 숫자">
-    <label class="ck"><input type="checkbox" id="ag"><span>N CREW 가입 (무료) · 특가·이벤트 알림 수신에 동의해요 (필수)<small>빈자리 특가 20% · 방문할수록 등급 혜택. 수집: 이름·휴대폰 번호 / 목적: 특가·이벤트 알림 / 보관: 수신 거부 시까지. 언제든 playn.kr 맨 아래에서 수신 거부할 수 있어요.</small></span></label>
-    <label class="ck"><input type="checkbox" id="nt"><span>밤 9시~아침 8시 당일 특가 알림도 받을게요<small>(선택)</small></span></label>
+    <label class="ck"><input type="checkbox" id="ag"><span>N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요 (필수)<small>빈자리 특가 20% · 방문할수록 등급 혜택. 수집: 이름·휴대폰 번호 / 보관: N CREW 탈퇴 시까지</small></span></label>
+    <label class="ck"><input type="checkbox" id="mk"><span>공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요<small>(선택) 언제든 playn.kr 맨 아래에서 수신 거부할 수 있어요.</small></span></label>
+    <label class="ck"><input type="checkbox" id="nt" disabled><span>밤 9시~아침 8시 당일 특가 알림도 받을게요<small>(선택)</small></span></label>
     <button class="btn pink go" id="go" type="submit">가입하고 인증 완료</button>
     <div id="m"></div>
   </form>
@@ -71,11 +72,12 @@ $("otp").onclick=async()=>{const ph=$("ph").value.replace(/\D/g,"");if(!/^01\d{8
   $("otp").disabled=true;const r=await post({action:"fx_otp",phone:ph}).catch(()=>({ok:false,error:"연결이 불안정해요"}));
   if(!r.ok){$("otp").disabled=false;return msg(r.error||"다시 시도해 주세요")}
   msg("인증번호를 문자로 보냈어요 (5분 안에 입력)",true);setTimeout(()=>{$("otp").disabled=false;$("otp").textContent="다시 받기"},30000);$("cd").focus()};
+$("mk").onchange=()=>{$("nt").disabled=!$("mk").checked;if(!$("mk").checked)$("nt").checked=false};
 $("fm").onsubmit=async e=>{e.preventDefault();
   if(!$("ag").checked)return msg("N CREW 가입 동의(필수)를 체크해 주세요");
   if(!/^\d{6}$/.test($("cd").value.trim()))return msg("문자로 받은 인증번호 6자리를 입력해 주세요");
   $("go").disabled=true;
-  const r=await post({action:"fx_join",name:$("nm").value,phone:$("ph").value,code:$("cd").value,agree:true,night_agree:$("nt").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
+  const r=await post({action:"fx_join",name:$("nm").value,phone:$("ph").value,code:$("cd").value,agree:true,marketing:$("mk").checked,night_agree:$("mk").checked&&$("nt").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("go").disabled=false;
   if(!r.ok)return msg(r.error||"다시 시도해 주세요");
   if(r.closed){paint(r);return}

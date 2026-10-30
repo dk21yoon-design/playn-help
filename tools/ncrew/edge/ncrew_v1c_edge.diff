@@ -1,0 +1,90 @@
+--- next/playn-site.ts	2026-10-30 21:47:54.798198660 +0900
++++ next2/playn-site.ts	2026-10-30 23:06:05.037363994 +0900
+@@ -169,19 +169,17 @@
+   if (b.action === "join") {
+     const phone = normPhone(b.phone), name = String(b.name ?? "").trim().slice(0, 20);
+     if (!phone || !name) return J({ ok: false, error: "이름과 휴대폰 번호를 확인해 주세요" });
++    // 가입 필수 동의(개인정보 수집·이용)와 광고 동의는 분리 (N CREW v1c). 광고 동의는 b.marketing === true 일 때만, 인증 스위치와 무관
++    if (!b.agree) return J({ ok: false, error: "N CREW 가입 필수 동의에 체크해 주세요" });
+     const joinOtp = cfg.ncrew_join_otp === "on";
+-    // 준비된 새 방식(설정 on): 번호 인증 필수, 광고 동의는 따로 선택(기본 꺼짐)
+-    // 지금 방식(설정 off): 기존과 같음. 수신 거부한 번호는 DB 보호 장치가 광고 동의를 켜지 않음
+-    let marketing = true;
+     if (joinOtp) {
+       const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "join" });
+       if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호를 확인해 주세요" });
+-      marketing = b.marketing === true;
+-    } else if (!b.agree) return J({ ok: false, error: "특가 알림 수신 동의가 필요해요" });
+-    const { data: ex } = await sb.from("playn_members").select("phone").eq("phone", phone).maybeSingle();
+-    const now = new Date().toISOString();
+-    await sb.from("playn_members").upsert({ phone, name, marketing_agree: marketing, night_agree: marketing && !!b.night_agree, agreed_at: now, source: String(b.source ?? "web").slice(0, 30), fav_branch: BR.includes(b.branch) ? b.branch : null, status: "active", updated_at: now });
+-    await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), again: !!ex, verified: joinOtp } });
++    }
++    const { data: jr } = await sb.rpc("playn_member_join", { p_phone: phone, p_name: name, p_source: String(b.source ?? "web").slice(0, 30), p_branch: BR.includes(b.branch) ? b.branch : null, p_marketing: b.marketing === true, p_night: b.night_agree === true });
++    if (!jr?.ok) return J({ ok: false, error: jr?.error ?? "잠시 후 다시 해 주세요" });
++    const ex = jr.again;
++    await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), again: !!ex, verified: joinOtp, marketing: b.marketing === true } });
+     const { data: ticket } = await sb.rpc("playn_join_ticket", { p_phone: phone }); // 초대 코드 연결용 1회 표(10분)
+     return J({ ok: true, again: !!ex, name, ticket });
+   }
+--- next/playn-community.ts	2026-10-30 21:47:54.799103633 +0900
++++ next2/playn-community.ts	2026-10-30 23:06:05.037618753 +0900
+@@ -457,7 +457,7 @@
+     if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호가 맞지 않거나 시간이 지났어요" });
+     const now = new Date().toISOString();
+     const { data: ex } = await sb.from("playn_members").select("phone,status").eq("phone", phone).maybeSingle();
+-    if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: true, night_agree: !!b.night_agree, agreed_at: now, source: "crew_check", status: "active", updated_at: now });
++    if (!ex || ex.status !== "active") await sb.rpc("playn_member_join", { p_phone: phone, p_name: name, p_source: "crew_check", p_branch: null, p_marketing: b.marketing === true, p_night: b.night_agree === true }); // 광고 동의 별도·기본 꺼짐 (v1c)
+     // 동시 인증 대비: 최신 상태 다시 읽고 추가
+     const { data: cur } = await sb.from("playn_crew_checks").select("phones,names,need").eq("code", code).single();
+     if (!cur.phones.includes(phone) && cur.phones.length < cur.need) {
+--- next/playn-settle.ts	2026-10-30 21:47:54.800023688 +0900
++++ next2/playn-settle.ts	2026-10-30 23:06:05.038521000 +0900
+@@ -294,7 +294,8 @@
+     let joined = false;
+     if (b.crew_join && s.phone && !(await isMember(s.phone))) {
+       const now = new Date().toISOString();
+-      await sb.from("playn_members").upsert({ phone: String(s.phone).replace(/\D/g, ""), name: String(s.guest || checkin.depositor).slice(0, 20), marketing_agree: true, night_agree: !!b.crew_night, agreed_at: now, source: "checkin", fav_branch: s.branch, status: "active", updated_at: now });
++      // 광고 동의 별도·기본 꺼짐 (v1c): crew_marketing === true 일 때만. 이미 활성 회원은 isMember 로 걸러져 체크인이 동의를 바꾸지 않음
++      await sb.rpc("playn_member_join", { p_phone: String(s.phone).replace(/\D/g, ""), p_name: String(s.guest || checkin.depositor).slice(0, 20), p_source: "checkin", p_branch: s.branch, p_marketing: b.crew_marketing === true, p_night: b.crew_night === true });
+       await sb.from("playand_log").insert({ source: "member_join", payload: { phone: String(s.phone).slice(-4), via: "checkin" } });
+       joined = true;
+     }
+@@ -364,17 +365,14 @@
+     if (b.action === "team_join") {
+       const phone = String(b.phone ?? "").replace(/\D/g, ""), name = String(b.name ?? "").trim().slice(0, 20);
+       if (!/^01\d{8,9}$/.test(phone) || !name) return J({ ok: false, error: "이름과 휴대폰 번호를 확인해 주세요" });
+-      // 준비(설정 ncrew_join_otp=on): 가입 인증번호 확인 필수, 광고 동의는 따로 선택(기본 꺼짐). 지금은 꺼짐 → 기존과 같음
+-      const joinOtp = cfg.ncrew_join_otp === "on";
+-      let marketing = true;
+-      if (joinOtp) {
++      // 가입 필수 동의와 광고 동의 분리 (v1c). 광고 동의는 b.marketing === true 일 때만, 인증 스위치와 무관
++      if (!b.agree) return J({ ok: false, error: "N CREW 가입 필수 동의에 체크해 주세요" });
++      if (cfg.ncrew_join_otp === "on") {
+         const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "join" });
+         if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호를 확인해 주세요" });
+-        marketing = b.marketing === true;
+-      } else if (!b.agree) return J({ ok: false, error: "특가·이벤트 알림 수신 동의가 필요해요" });
+-      const now = new Date().toISOString();
++      }
+       const { data: ex } = await sb.from("playn_members").select("phone,status").eq("phone", phone).maybeSingle();
+-      if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: marketing, night_agree: marketing && !!b.night_agree, agreed_at: now, source: "worlds_team", fav_branch: p.branch, status: "active", updated_at: now });
++      if (!ex || ex.status !== "active") await sb.rpc("playn_member_join", { p_phone: phone, p_name: name, p_source: "worlds_team", p_branch: p.branch, p_marketing: b.marketing === true, p_night: b.night_agree === true });
+       await sb.from("playn_worlds_crew").upsert({ group_code: p.group_code, phone, name });
+       await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), via: "worlds_team", again: !!ex } });
+     }
+@@ -461,12 +459,12 @@
+     }
+     // fx_join: 인증번호 확인 → N CREW 가입 → 그룹 인원 반영 → 전원이면 자동 처리
+     if (!name) return J({ ok: false, error: "이름을 적어주세요" });
+-    if (!b.agree) return J({ ok: false, error: "특가·이벤트 알림 수신 동의가 필요해요 (N CREW 가입 조건)" });
++    if (!b.agree) return J({ ok: false, error: "N CREW 가입 필수 동의에 체크해 주세요" });
+     const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "fx" });
+     if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호가 맞지 않거나 시간이 지났어요" });
+     const now = new Date().toISOString();
+     const { data: ex } = await sb.from("playn_members").select("status").eq("phone", phone).maybeSingle();
+-    if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: true, night_agree: !!b.night_agree, agreed_at: now, source: "fx_group", fav_branch: g.branch, status: "active", updated_at: now });
++    if (!ex || ex.status !== "active") await sb.rpc("playn_member_join", { p_phone: phone, p_name: name, p_source: "fx_group", p_branch: g.branch, p_marketing: b.marketing === true, p_night: b.night_agree === true }); // 광고 동의 별도·기본 꺼짐 (v1c)
+     await sb.from("playn_fx_members").upsert({ code: g.code, phone, name });
+     await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), via: "fx_group", again: !!ex } });
+     // 같이 온 친구로 기록 (다음 방문 때 N CREW 방문 횟수 인정)

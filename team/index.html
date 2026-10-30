@@ -35,8 +35,9 @@
   <form class="fm" id="f">
     <label class="t" for="nm">이름</label><input id="nm" type="text" required placeholder="홍길동">
     <label class="t" for="ph">휴대폰 번호</label><input id="ph" type="tel" inputmode="numeric" required placeholder="010-0000-0000">
-    <label class="ck"><input type="checkbox" id="ag"><span>N CREW 가입 · 특가·이벤트 문자 수신 동의 (필수)<small>멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택 · 빈자리 특가 알림. 언제든 수신 거부할 수 있어요.</small></span></label>
-    <label class="ck"><input type="checkbox" id="nt"><span>밤 9시~아침 8시 당일 특가 알림도 받을게요 <small>(선택)</small></span></label>
+    <label class="ck"><input type="checkbox" id="ag"><span>N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요 (필수)<small>멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택.</small></span></label>
+    <label class="ck"><input type="checkbox" id="mk"><span>공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요 <small>(선택) 언제든 수신 거부할 수 있어요.</small></span></label>
+    <label class="ck"><input type="checkbox" id="nt" disabled><span>밤 9시~아침 8시 당일 특가 알림도 받을게요 <small>(선택)</small></span></label>
     <button class="btn pink" style="width:100%;margin-top:16px" id="go">가입하고 우리 팀에 합류</button>
     <div id="m"></div>
   </form>
@@ -52,8 +53,9 @@ function show(r){if(!r.ok){$("h").textContent=r.error||"링크를 다시 확인�
   $("bar").style.width=Math.min(100,Math.round(r.joined/Math.max(1,r.need)*100))+"%";
   $("pr").innerHTML=r.valid?`팀원 ${r.joined}/${r.need}명 가입 완료 ✅ 페이백 대상이에요!`:`팀원 ${r.joined}/${r.need}명 가입 — <b>${r.need-r.joined}명</b> 더 가입하면 페이백 대상이 돼요.`}
 post({action:"team_info"}).then(show).catch(()=>show({ok:false}));
+$("mk").onchange=()=>{$("nt").disabled=!$("mk").checked;if(!$("mk").checked)$("nt").checked=false};
 $("f").onsubmit=async e=>{e.preventDefault();$("go").disabled=true;
-  const r=await post({action:"team_join",name:$("nm").value,phone:$("ph").value,agree:$("ag").checked,night_agree:$("nt").checked}).catch(()=>({ok:false,error:"연결이 불안정해요"}));
+  const r=await post({action:"team_join",name:$("nm").value,phone:$("ph").value,agree:$("ag").checked,marketing:$("mk").checked,night_agree:$("mk").checked&&$("nt").checked}).catch(()=>({ok:false,error:"연결이 불안정해요"}));
   $("go").disabled=false;
   if(!r.ok){$("m").innerHTML=`<div class="msg er">${r.error||"다시 시도해 주세요"}</div>`;return}
   show(r);$("m").innerHTML=`<div class="msg ok">가입 완료! 우리 팀 ${r.joined}/${r.need}명이에요. 아직 안 한 친구에게 이 링크를 보내주세요.</div>`;$("nm").value="";$("ph").value=""}

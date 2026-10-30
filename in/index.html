@@ -82,7 +82,8 @@
       <div id="wTeam" hidden style="margin-top:10px;background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px"></div>
     </div>
     <div class="crew" id="crBox" hidden>
-      <label><input type="checkbox" id="crJ"><span>N CREW 가입하기 (무료)<small>다음 예약 멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택 · 빈자리 특가 알림. 특가·이벤트 문자 수신에 동의해요. 언제든 수신 거부할 수 있어요.</small></span></label>
+      <label><input type="checkbox" id="crJ"><span>N CREW 가입하기 (무료)<small>다음 예약 멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택. 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요.</small></span></label>
+      <label id="crMl" hidden><input type="checkbox" id="crM"><span>공실 특가·이벤트 광고 문자도 받을게요<small>(선택) 체크하지 않아도 가입과 혜택은 그대로예요. 언제든 수신 거부할 수 있어요.</small></span></label>
       <label id="crNl" hidden><input type="checkbox" id="crN"><span>밤 9시~아침 8시 사이 당일 특가 알림도 받을게요<small>(선택)</small></span></label>
     </div>
     <button class="btn pink go" id="goIn" type="submit">체크인 완료</button>
@@ -162,7 +163,7 @@ async function load(){
     else if(!D.worlds.open){$("wp").innerHTML="<option>예측 마감됐어요</option>";$("wp").disabled=true}
     else D.worlds.teams.forEach(t=>{const o=document.createElement("option");o.textContent=t;$("wp").appendChild(o)})}
   if(D.bbq_coupon){$("bbqCpHint").hidden=false;$("bbqCpHint").innerHTML=`🍖 <b>N CREW 스탬프 바베큐 ${D.bbq_coupon.people}인분 무료권</b>이 있어요. '사용해요'를 고르면 퇴실 정산에서 자동으로 빠져요.`}
-  if(!D.member){$("crBox").hidden=false;$("crJ").onchange=()=>$("crNl").hidden=!$("crJ").checked}
+  if(!D.member){$("crBox").hidden=false;$("crJ").onchange=()=>{$("crMl").hidden=!$("crJ").checked;if(!$("crJ").checked){$("crM").checked=false;$("crN").checked=false;$("crNl").hidden=true}};$("crM").onchange=()=>{$("crNl").hidden=!$("crM").checked;if(!$("crM").checked)$("crN").checked=false}}
   if(D.status==="paid"||D.status==="submitted"||D.status==="hold"){return renderDone()}
   if(D.checkin){const c=D.checkin;$("hc").value=c.headcount;$("dp").value=c.depositor;$("bk").value=c.bank;$("ac").placeholder=c.account+" (다시 입력하면 바뀌어요)";$("ac").required=false;document.querySelectorAll("[name=fv]").forEach(x=>x.required=false);
     document.querySelector(`[name=rv][value=${c.review}]`).checked=true;document.querySelector(`[name=bq][value="${c.bbq?1:0}"]`).checked=true;$("hc").oninput()}
@@ -176,7 +177,7 @@ $("fin").onsubmit=async e=>{e.preventDefault();
   $("goIn").disabled=true;
   const acc=$("ac").value.trim();
   const fv=document.querySelector("[name=fv]:checked");if(fv)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-growth",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"found",k,found_via:fv.value})}).catch(()=>null);
-  const r=await post({action:"checkin",headcount:$("hc").value,depositor:$("dp").value,review:document.querySelector("[name=rv]:checked").value,bbq:document.querySelector("[name=bq]:checked").value==="1",platform:document.querySelector("[name=pf]:checked").value,bank:$("bk").value,account:acc||(D.checkin?"keep":""),holder:$("ho").value||$("dp").value,companions:$("cp").value,worlds_pick:$("wp").disabled?"":$("wp").value,crew_join:$("crJ").checked,crew_night:$("crN").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
+  const r=await post({action:"checkin",headcount:$("hc").value,depositor:$("dp").value,review:document.querySelector("[name=rv]:checked").value,bbq:document.querySelector("[name=bq]:checked").value==="1",platform:document.querySelector("[name=pf]:checked").value,bank:$("bk").value,account:acc||(D.checkin?"keep":""),holder:$("ho").value||$("dp").value,companions:$("cp").value,worlds_pick:$("wp").disabled?"":$("wp").value,crew_join:$("crJ").checked,crew_marketing:$("crJ").checked&&$("crM").checked,crew_night:$("crJ").checked&&$("crM").checked&&$("crN").checked}).catch(()=>({ok:false,error:"연결이 불안정해요. 다시 눌러주세요"}));
   $("goIn").disabled=false;
   if(!r.ok)return msg("mIn",r.error||"다시 시도해 주세요");
   doorLoad().then(()=>{if(!$("door").hidden)$("door").scrollIntoView({behavior:"smooth",block:"center"})});msg("mIn","체크인 완료! 위 카드에서 보증금 입금 캡처를 올리면 입실 비밀번호가 나와요 🙏<br>🎁 맨 위에서 친구들 전원 N CREW 가입하면 퇴실 1시간 무료 연장돼요<br>퇴실 후 이 링크 ② 탭에서 쓰신 물품만 체크해 주세요."+(r.joined?"<br>N CREW 가입 완료 🎉":"")+(r.picked?`<br>롤드컵 예측 <b>${r.picked}</b> 접수! 팀 링크를 단톡방에 공유해 주세요 (문자로도 보냈어요)`:""),true);
