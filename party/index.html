@@ -151,7 +151,7 @@ function bindSettings(){if(!$("#sN"))return;
 // ── 관리 화면 (#admin) ──
 const K=()=>ss.get("gm_admin");
 const LBL={confirmed:"확정",waitlist:"대기",offered:"제안 중",cancelled:"취소",declined:"거절",expired:"만료"};
-const NLBL={confirmed:"확정",waitlist:"대기",offered:"자리 제안",accepted:"수락",declined:"거절",expired:"기한 만료",cancelled:"취소"};
+const NLBL={confirmed:"확정",waitlist:"대기",offered:"자리 제안",accepted:"수락",declined:"거절",expired:"기한 만료",cancelled:"취소",reminder:"전날 안내",event_cancelled:"모임 취소"};
 async function admin(){
  if(!K()){app.innerHTML=`<h1>모임 관리</h1><div class="card"><div class="field"><label for="ak">관리 키</label><input id="ak" type="password" autocomplete="off"></div><div class="row"><button class="btn" id="akGo">들어가기</button></div><p class="msg" id="m"></p></div>`;
   $("#akGo").onclick=async()=>{ss.set("gm_admin",$("#ak").value);const j=await post({action:"admin_events",key:K()});if(j.ok)admin();else{ss.set("gm_admin",null);msg(j.error||"키가 맞지 않아요")}};return}
@@ -189,7 +189,7 @@ async function adminEvent(id){
  <h2>신청자</h2><div class="scroll"><table><thead><tr><th>#</th><th>닉네임</th><th>번호</th><th>상태</th><th>신청</th><th>제안 기한</th><th></th></tr></thead><tbody>
  ${j.rsvps.map(r=>`<tr><td>${r.id}</td><td>${esc(r.name)}${r.test_run?` <span class="tag">테스트</span>`:""}</td><td>${esc(String(r.phone).replace(/(\d{3})(\d+)(\d{4})/,"$1-****-$3"))}</td><td class="st ${r.status}">${LBL[r.status]||r.status}${r.accepted_at?" (제안 수락)":""}</td><td>${kfmt(r.created_at)}</td><td>${r.status==="offered"?kfmt(r.offer_expires_at):""}</td><td>${["confirmed","waitlist","offered"].includes(r.status)?`<button class="btn ghost" style="min-height:36px;padding:0 12px;font-size:14px" data-c="${esc(r.phone)}">취소</button>`:""}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">아직 신청자가 없어요</td></tr>`}</tbody></table></div>
  <h2>안내 기록</h2><div class="scroll"><table><thead><tr><th>#</th><th>종류</th><th>받는 사람</th><th>처리</th><th>내용</th></tr></thead><tbody>
- ${j.notices.map(n=>`<tr><td>${n.id}</td><td>${NLBL[n.kind]||n.kind}</td><td>${esc(String(n.phone).slice(-4))}</td><td>${{logged:"기록만",pending:"대기",sent:"발송",test_sent:"운영폰 발송",failed:"실패",skipped_pref:"수신 꺼둠",sending:"처리 중"}[n.status]||n.status}</td><td style="white-space:pre-line;color:var(--mute)">${esc(n.msg)}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">기록이 없어요</td></tr>`}</tbody></table></div>`;
+ ${j.notices.map(n=>`<tr><td>${n.id}</td><td>${NLBL[n.kind]||n.kind}</td><td>${esc(String(n.phone).slice(-4))}</td><td>${{logged:"기록만",pending:"대기",sent:"발송",test_sent:"운영폰 발송",failed:"실패",skipped_pref:"수신 꺼둠",sending:"처리 중",superseded:"무효"}[n.status]||n.status}</td><td style="white-space:pre-line;color:var(--mute)">${esc(n.msg)}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">기록이 없어요</td></tr>`}</tbody></table></div>`;
  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=async()=>{if(!confirm("이 신청을 운영자 취소할까요? 대기자가 있으면 다음 분께 제안이 가요"))return;const r=await post({action:"admin_cancel",key:K(),e:id,phone:b.dataset.c});if(!r.ok)alert(r.error||"실패");adminEvent(id)});
  box.querySelector("[data-s]").onclick=async ev=>{await post({action:"admin_set",key:K(),e:id,status:ev.target.dataset.s});admin()};
  $("#capUp").onclick=async()=>{await post({action:"admin_set",key:K(),e:id,cap:e.cap+1});admin()};

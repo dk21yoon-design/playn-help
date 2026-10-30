@@ -1,8 +1,9 @@
 -- 게임 모임(playn-party) 현재 DB 정의 — 검수 자료 (비밀정보 없음)
--- 출처: Supabase bjrgtoyjrggxmdexnwib 에서 pg_get_functiondef / pg_indexes / pg_get_triggerdef 로 2026-10-30 10:45 KST 추출, v3.4(11:05 KST)·v3.5(11:35 KST) 반영
+-- 출처: Supabase bjrgtoyjrggxmdexnwib 에서 pg_get_functiondef / pg_indexes / pg_get_triggerdef 로 2026-10-30 10:45 KST 추출, v3.4(11:05 KST)·v3.5(11:35 KST)·v3.6(13:20 KST) 반영
 -- 적용된 마이그레이션(순서): party_rsvp_waitlist_v1, party_v2_offer_accept_community_members, party_v2_1_queue_order_by_id,
 --   party_v3_day_before_reminder_log_only, party_v3_1_reminder_absolute_date_text, party_test_evidence_table,
---   party_v3_2_decide_at_and_stale_offer, party_v3_3_revoke_public_table_grants, party_v3_4_lifecycle_guards, party_v3_5_decide_after_lock_clock
+--   party_v3_2_decide_at_and_stale_offer, party_v3_3_revoke_public_table_grants, party_v3_4_lifecycle_guards, party_v3_5_decide_after_lock_clock,
+--   party_v3_6_event_cancelled_notice_log_only
 -- 이 파일은 실행용이 아니라 읽기용이다. 원문 그대로 붙였다.
 
 -- ── 함수 실행 권한 (모든 party_* 함수): anon=false authenticated=false service_role=true
@@ -11,6 +12,9 @@
 -- ── 시각 규칙(v3.5): party_join·party_respond·party_fill 은 모임·신청 잠금을 얻은 뒤 clock_timestamp()를 v_now 로 한 번 잡아
 --    시작·접수 마감·제안 기한 판단에 쓴다. now()는 트랜잭션 시작 시각(잠금 대기 시간 미반영). 기록용 시각은 now() 그대로
 --    party_dispatch_decide_at 의 p_now 는 비공개 시험용 주입 시각, 운영 경로(party_dispatch_decide)는 now()
+-- ── 모임 취소 안내(v3.6): open/closed→cancelled 전이 때 cancel_round+1, 그 시점 confirmed·offered·waitlist 신청자에게 event_cancelled 1건씩 기록
+--    중복 방지 = (event_id, phone, cancel_round) 고유. 신청 상태는 바꾸지 않음. 판단은 동의 꺼짐 skipped_pref, 그 외 모드와 무관하게 logged(send 없음)
+--    재개(cancelled→open/closed) 시 미처리 event_cancelled 는 superseded, 이미 logged 된 기록은 보존
 -- ── 크론: party-sweep-5min */5 * * * * → playn-party admin_sweep (변경 없음)
 
 -- ── 인덱스
@@ -18,13 +22,14 @@ CREATE UNIQUE INDEX playn_party_rsvps_active_uq ON public.playn_party_rsvps USIN
 CREATE INDEX playn_party_rsvps_ev_st ON public.playn_party_rsvps USING btree (event_id, status, created_at);
 CREATE INDEX playn_party_rsvps_offer_exp ON public.playn_party_rsvps USING btree (offer_expires_at) WHERE (status = 'offered'::text);
 CREATE UNIQUE INDEX playn_party_notices_dedupe ON public.playn_party_notices USING btree (dedupe_key) WHERE (dedupe_key IS NOT NULL);
-CREATE UNIQUE INDEX playn_party_notices_once ON public.playn_party_notices USING btree (rsvp_id, kind) WHERE ((test_run IS DISTINCT FROM 'T1-20261030-db-v1'::text) AND (kind <> 'reminder'::text));
+CREATE UNIQUE INDEX playn_party_notices_once ON public.playn_party_notices USING btree (rsvp_id, kind) WHERE ((test_run IS DISTINCT FROM 'T1-20261030-db-v1'::text) AND (kind <> ALL (ARRAY['reminder'::text, 'event_cancelled'::text])));
+CREATE UNIQUE INDEX playn_party_notices_event_cancel_once ON public.playn_party_notices USING btree (event_id, phone, cancel_round) WHERE (kind = 'event_cancelled'::text);
 CREATE INDEX playn_party_notices_ev ON public.playn_party_notices USING btree (event_id, created_at);
 CREATE INDEX playn_party_notices_pending ON public.playn_party_notices USING btree (status) WHERE (status = 'pending'::text);
 CREATE INDEX party_test_evidence_run ON public.party_test_evidence USING btree (test_run, id);
 
 -- ── 트리거 (playn_events)
-CREATE TRIGGER party_events_sched_bump BEFORE UPDATE OF start_at ON public.playn_events FOR EACH ROW EXECUTE FUNCTION party_events_sched_bump();
+CREATE TRIGGER party_events_sched_bump BEFORE UPDATE OF start_at, status ON public.playn_events FOR EACH ROW EXECUTE FUNCTION party_events_sched_bump();
 CREATE TRIGGER party_events_supersede AFTER UPDATE ON public.playn_events FOR EACH ROW EXECUTE FUNCTION party_events_supersede();
 
 -- ── 함수
@@ -184,10 +189,9 @@ begin
   return ids;
 end $function$;
 
-CREATE OR REPLACE FUNCTION public.party_dispatch_decide_at(p_ids bigint[], p_mode text, p_dry boolean, p_now timestamp with time zone)
- RETURNS TABLE(id bigint, kind text, phone text, msg text, decision text)
- LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public', 'pg_temp'
-AS $function$
+create or replace function public.party_dispatch_decide_at(p_ids bigint[], p_mode text, p_dry boolean, p_now timestamptz)
+returns table(id bigint, kind text, phone text, msg text, decision text)
+language plpgsql security definer set search_path = public, pg_temp as $$
 declare n playn_party_notices; ev playn_events; rs playn_party_rsvps; cm community_members; d text;
 begin
   for n in select * from playn_party_notices x where x.id = any(p_ids) and x.status = 'pending' order by x.id
@@ -199,8 +203,10 @@ begin
     if n.kind = 'reminder' and (ev.id is null or ev.status = 'cancelled' or ev.sched_version is distinct from n.sched_version
         or ev.start_at <= p_now or rs.status is distinct from 'confirmed') then d := 'superseded';
     elsif n.kind = 'offered' and (rs.status is distinct from 'offered' or rs.offer_expires_at <= p_now
-        or ev.id is null or ev.status not in ('open','closed') or ev.start_at <= p_now) then d := 'superseded';   -- v3.4: 모임 생명주기 검사 추가
+        or ev.id is null or ev.status not in ('open','closed') or ev.start_at <= p_now) then d := 'superseded';
+    elsif n.kind = 'event_cancelled' and (ev.id is null or ev.status is distinct from 'cancelled' or ev.cancel_round is distinct from n.cancel_round) then d := 'superseded';
     elsif cm.phone is null or cm.status <> 'active' or not cm.notify_sms then d := 'skipped_pref';
+    elsif n.kind = 'event_cancelled' then d := 'logged';
     elsif n.test_run is not null or n.event_id like 'party-test%' then d := 'logged';
     elsif p_mode in ('test','live') then d := 'send';
     else d := 'logged';
@@ -211,7 +217,7 @@ begin
     id := n.id; kind := n.kind; phone := n.phone; msg := n.msg; decision := d;
     return next;
   end loop;
-end $function$;
+end $$;
 
 CREATE OR REPLACE FUNCTION public.party_dispatch_decide(p_ids bigint[], p_mode text, p_dry boolean DEFAULT false)
  RETURNS TABLE(id bigint, kind text, phone text, msg text, decision text)
@@ -238,23 +244,41 @@ begin
   return jsonb_build_object('ok', true, 'notices', ids || rem, 'reminders', jsonb_array_length(rem));
 end $function$;
 
-CREATE OR REPLACE FUNCTION public.party_events_sched_bump()
- RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public', 'pg_temp'
-AS $function$
+create or replace function public.party_events_sched_bump()
+returns trigger language plpgsql security definer set search_path = public, pg_temp as $$
 begin
   if new.kind = 'party' and new.start_at is distinct from old.start_at then
     new.sched_version := old.sched_version + 1;
   end if;
+  if new.kind = 'party' and old.status in ('open','closed') and new.status = 'cancelled' then
+    new.cancel_round := old.cancel_round + 1;
+  end if;
   return new;
-end $function$;
+end $$;
 
-CREATE OR REPLACE FUNCTION public.party_events_supersede()
- RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public', 'pg_temp'
-AS $function$
+create or replace function public.party_events_supersede()
+returns trigger language plpgsql security definer set search_path = public, pg_temp as $$
 begin
-  if new.kind = 'party' and (new.sched_version <> old.sched_version or (new.status = 'cancelled' and old.status <> 'cancelled')) then
+  if new.kind <> 'party' then return null; end if;
+  if new.sched_version <> old.sched_version or (new.status = 'cancelled' and old.status <> 'cancelled') then
     update playn_party_notices set status = 'superseded'
      where event_id = new.id and kind = 'reminder' and status = 'pending';
   end if;
+  if old.status in ('open','closed') and new.status = 'cancelled' then
+    update playn_party_notices set status = 'superseded'
+     where event_id = new.id and kind = 'event_cancelled' and status = 'pending' and cancel_round is distinct from new.cancel_round;
+    insert into playn_party_notices(rsvp_id, event_id, phone, kind, msg, test_run, dedupe_key, cancel_round)
+    select r.id, new.id, r.phone, 'event_cancelled',
+      '[게임 모임] ' || r.name || '님 「' || new.title || '」 모임이 취소됐어요.'
+        || E'\n원래 일정: ' || party_kfmt(new.start_at) || ' · ' || new.branch
+        || E'\n내 신청: https://playn.kr/party/?e=' || new.id,
+      r.test_run, 'event_cancelled:' || new.id || ':' || r.phone || ':c' || new.cancel_round, new.cancel_round
+    from playn_party_rsvps r
+    where r.event_id = new.id and r.status in ('confirmed','offered','waitlist')
+    on conflict do nothing;
+  elsif old.status = 'cancelled' and new.status in ('open','closed') then
+    update playn_party_notices set status = 'superseded'
+     where event_id = new.id and kind = 'event_cancelled' and status = 'pending';
+  end if;
   return null;
-end $function$;
+end $$;

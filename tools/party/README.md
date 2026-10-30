@@ -19,3 +19,12 @@
   - logged·skipped·test·superseded 기록은 모드를 live 로 바꿔도 다시 꺼내지 않음 (드라이런 확인)
 - 테스트 경로: `party_remind_scan(가짜시각, test_run)` 는 서버 전용(공개 키 실행 불가)이고 그 test_run 모임만 봄
 - 마이그레이션 원문은 Supabase `supabase_migrations.schema_migrations` (party_* 4건)
+
+## 모임 취소 안내 (v3.6, 2026-10-30, 기록 전용)
+- 모임 상태가 open/closed → cancelled 로 실제 바뀔 때 `cancel_round`+1. 이미 취소된 모임을 다시 취소하면 회차 그대로, 안내 추가 없음
+- 대상: 그 시점 `confirmed`·`offered`·`waitlist` 신청자. 이미 개인 취소·거절·만료된 사람 제외. 신청 상태는 바꾸지 않음(자동 탈락·환불 없음)
+- 중복 방지: (모임, 회원, 취소 회차) 고유 인덱스 `playn_party_notices_event_cancel_once`, dedupe_key `event_cancelled:모임:회원:c회차`
+- 판단: 안내 수신 꺼짐·탈퇴면 skipped_pref, 그 외 logged. 발송 모드가 test·live 여도 send 없음
+- 재개(cancelled → open/closed): 미처리 취소 안내는 superseded, 이미 logged 된 기록은 남김. 다시 취소하면 다음 회차로 새로 기록
+- 관리 화면 `admin_set status=cancelled` 로 만든 안내는 다음 크론(5분)에 판단됨. 서버 함수 변경 없음
+- SQL 원문: `sql/migrations/party_v3_6_event_cancelled_notice_log_only.sql`
