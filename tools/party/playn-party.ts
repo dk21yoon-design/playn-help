@@ -1,10 +1,12 @@
-// playn-party: 독립 게임 커뮤니티 모임 신청 (v4 2026-10-30: 가입 보안 보완 — 커뮤니티 전용 인증번호·시도 제한·원자적 소모, 가입 동의 기록, 로그아웃·탈퇴)
+// playn-party: 독립 게임 커뮤니티 모임 신청 (v5 2026-10-30: 인증 경계 — 커뮤니티 전용 세션 community_sessions, 서비스별 로그아웃, N CREW 로그인은 명시적으로만 이어받기)
+//  v4: 가입 보안 보완 — 커뮤니티 전용 인증번호·시도 제한·원자적 소모, 가입 동의 기록, 로그아웃·탈퇴
 //  v3: 전날 리마인드 기록 전용 · 발송 판단 DB 일원화
-//  로그인 기술만 재사용: 휴대폰 인증번호 방식 · playn_sessions(세션 토큰). 인증번호 표는 v4부터 커뮤니티 전용(community_otp). N CREW(playn_members)와 회원·동의는 완전히 별개
+//  로그인 기술(휴대폰 인증번호 방식)만 재사용. 인증번호 community_otp · 세션 community_sessions 모두 커뮤니티 전용. N CREW(playn_members·playn_sessions)와 회원·동의·세션 분리
+//  N CREW 세션(playn_sessions)은 c_bridge 에서 읽기만 함(사용자가 'N CREW 로그인으로 계속하기'를 눌렀을 때). 쓰기·만료 없음
 //  커뮤니티 회원 = community_members (가입·약관·안내 문자 설정·광고 알림 설정 따로, 기본 꺼짐)
-//  public: list · info(e, token?) · c_otp_send · c_otp_verify · c_me · c_join(가입) · c_settings · c_logout · c_leave(탈퇴)
+//  public: list · info(e, token?) · c_otp_send · c_otp_verify · c_bridge · c_me · c_join(가입) · c_settings · c_logout · c_leave(탈퇴)
 //          join(e) · cancel(e) · accept(e) · decline(e)
-//  인증번호: community_otp 표 + DB 함수 community_otp_issue(한도)·community_otp_verify(5회 제한·1회 소모). 발송은 party_otp_send=on 일 때만(현재 꺼짐)
+//  인증번호: community_otp 표 + DB 함수 community_otp_issue(한도, 전체 발급 한 잠금)·community_otp_login(5회 제한·1회 소모+세션 저장 한 트랜잭션). 발송은 party_otp_send=on 일 때만(현재 꺼짐)
 //  admin(key): admin_list(e) · admin_create · admin_set · admin_cancel(e, phone) · admin_sweep · admin_dispatch
 //  정원·대기·제안·수락은 DB 함수(party_join / party_respond / party_cancel / party_sweep)가 모임 행을 잠그고 처리
 //  안내 문자는 playn_party_notices 에 먼저 기록. 발송 모드 playand_config.party_sms_mode
@@ -21,8 +23,12 @@ const rand = (n: number) => Array.from(crypto.getRandomValues(new Uint8Array(n))
 const isTestEv = (id: string) => String(id).startsWith("party-test");
 // 가입 화면에서 보여 준 약관 판. 바뀌면 화면과 함께 올림 (옛 화면으로 가입하면 다시 동의 받음)
 const TERMS_VERSION = "party-2026-10-30-draft";
+// 접속 구분값: Supabase 게이트웨이가 넣는 값만 씀. x-forwarded-for 첫 값은 사용자가 꾸밀 수 있어 쓰지 않음 (T7R 시험 근거)
+function clientIp(req: Request) {
+  return (req.headers.get("cf-connecting-ip") ?? "").trim() || null;
+}
 async function ipHash(req: Request) {
-  const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || req.headers.get("cf-connecting-ip") || "";
+  const ip = clientIp(req);
   if (!ip) return null;
   const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("party-otp:" + ip)));
   return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
@@ -32,10 +38,11 @@ async function cfgAll() {
   const { data } = await sb.from("playand_config").select("key,value").in("key", ["admin_key", "owner_phone", "macrodroid_webhook", "party_sms_mode", "party_otp_send"]);
   return Object.fromEntries((data ?? []).map((r) => [r.key, r.value])) as Record<string, string>;
 }
+// 커뮤니티 세션만 인정 (N CREW playn_sessions 토큰은 여기서 받지 않음)
 async function sessionPhone(token: unknown) {
-  const t = String(token ?? ""); if (t.length < 16) return null;
-  const { data: s } = await sb.from("playn_sessions").select("phone,expires_at").eq("token", t).maybeSingle();
-  return s && new Date(s.expires_at) >= new Date() ? s.phone as string : null;
+  const t = String(token ?? ""); if (t.length < 32) return null;
+  const { data: s } = await sb.from("community_sessions").select("phone,expires_at,revoked_at").eq("token", t).maybeSingle();
+  return s && !s.revoked_at && new Date(s.expires_at) > new Date() ? s.phone as string : null;
 }
 async function cMember(phone: string) {
   const { data } = await sb.from("community_members").select("phone,nick,status,notify_sms,marketing_sms,test_run,created_at").eq("phone", phone).maybeSingle();
@@ -121,18 +128,25 @@ Deno.serve(async (req) => {
   }
   if (action === "c_otp_verify") {
     const phone = normPhone(b.phone); if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
-    const { data: r, error } = await sb.rpc("community_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12) });
-    if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 해 주세요", left: r?.left });
-    const token = rand(32);
-    await sb.from("playn_sessions").insert({ token, phone, expires_at: new Date(Date.now() + 30 * 86400e3).toISOString() });
-    return J({ ok: true, token, member: !!(await cMember(phone)) });
+    // 인증번호 확인과 세션 저장을 DB 한 트랜잭션에서. 저장이 실패하면 인증번호도 소모되지 않음
+    const { data: r, error } = await sb.rpc("community_otp_login", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12) });
+    if (error) return J({ ok: false, reauth: true, error: "로그인을 마치지 못했어요. 잠시 후 같은 인증번호로 다시 해 보거나 새로 받아 주세요" }, 500);
+    if (!r?.ok || typeof r.token !== "string" || r.token.length < 32) return J({ ok: false, error: r?.error ?? "인증하지 못했어요", left: r?.left });
+    return J({ ok: true, token: r.token, member: !!(await cMember(phone)) });
+  }
+  if (action === "c_bridge") { // 사용자가 'N CREW 로그인으로 계속하기'를 눌렀을 때만. N CREW 회원 가입·동의는 넘어오지 않음
+    const { data: r, error } = await sb.rpc("community_session_bridge", { p_ncrew_token: String(b.ncrew_token ?? "") });
+    if (error) return J({ ok: false, error: "잠시 후 다시 해 주세요" }, 500);
+    if (!r?.ok || typeof r.token !== "string") return J({ ok: false, error: r?.error ?? "N CREW 로그인을 확인하지 못했어요" });
+    const ph = await sessionPhone(r.token);
+    return J({ ok: true, token: r.token, member: ph ? !!(await cMember(ph)) : false });
+  }
+  if (action === "c_logout") { // 커뮤니티 세션만 끝냄. N CREW 세션 토큰을 넣어도 아무것도 바뀌지 않음
+    const { data: r, error } = await sb.rpc("community_logout", { p_token: String(b.token ?? "") });
+    return J({ ok: !error, revoked: r?.revoked ?? 0 });
   }
   const phone = await sessionPhone(b.token);
   if (!phone) return adminRoutes(b, action);
-  if (action === "c_logout") { // 이 기기 세션만 끝냄 (기록은 지우지 않고 만료 처리)
-    await sb.from("playn_sessions").update({ expires_at: new Date().toISOString() }).eq("token", String(b.token));
-    return J({ ok: true });
-  }
   if (action === "c_me") {
     const m = await cMember(phone);
     if (!m) return J({ ok: true, member: null });

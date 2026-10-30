@@ -78,8 +78,8 @@ const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-party";
 const $=s=>document.querySelector(s), app=$("#app");
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
 const ss={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v)}catch(e){}}};
-// 로그인 기술 재사용: 같은 사이트의 휴대폰 인증 세션(pn_token)이 있으면 그대로 씀. 회원 가입은 이 커뮤니티에서 따로 받음
-const token=()=>st.get("gm_token")||st.get("pn_token");
+// 게임 모임 세션(gm_token)만 씀. N CREW 로그인(pn_token)은 자동으로 쓰지 않고, 사용자가 'N CREW 로그인으로 계속하기'를 눌렀을 때만 게임 모임 세션을 따로 받음
+const token=()=>st.get("gm_token");
 const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크가 불안정해요. 다시 눌러 주세요"}));
 // 관리 요청: 키 오류(401)·네트워크 실패를 구별
 const apost=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(async r=>{let j={};try{j=await r.json()}catch(e){}return {...j,ok:r.ok&&j.ok===true,auth:r.status===401}}).catch(()=>({ok:false,net:true}));
@@ -130,6 +130,7 @@ async function detail(){
  bindAct();bindLogin();bindJoin();
 }
 function loginHtml(){return `<div id="login"><p class="state">휴대폰 인증 후 신청할 수 있어요</p>
+ ${st.get("pn_token")?`<div class="row"><button class="btn ghost" id="bridge" type="button">N CREW 로그인으로 계속하기</button></div><p class="meta" style="margin-top:6px">휴대폰 확인만 이어받아요. 게임 모임 가입과 문자 설정은 따로 해요.</p>`:""}
  <div class="field"><label for="ph">휴대폰 번호</label><input id="ph" inputmode="numeric" autocomplete="tel" placeholder="01012345678"></div>
  <div class="row"><button class="btn ghost" id="otpSend" type="button">인증번호 받기</button></div>
  <div class="field"><label for="code">인증번호 6자리</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
@@ -155,7 +156,8 @@ function bindAct(){document.querySelectorAll("[data-a]").forEach(b=>b.onclick=as
  detail()})}
 function bindLogin(){if(!$("#otpSend"))return;
  $("#otpSend").onclick=async()=>{const j=await post({action:"c_otp_send",phone:$("#ph").value});msg(j.ok?"인증번호를 보냈어요":j.error||"다시 시도해 주세요",j.ok)};
- $("#otpOk").onclick=async()=>{const j=await post({action:"c_otp_verify",phone:$("#ph").value,code:$("#code").value});if(j.ok){st.set("gm_token",j.token);boot()}else msg(j.error||"다시 시도해 주세요")}}
+ $("#otpOk").onclick=async()=>{const j=await post({action:"c_otp_verify",phone:$("#ph").value,code:$("#code").value});if(j.ok&&j.token){st.set("gm_token",j.token);boot()}else msg(j.error||"다시 시도해 주세요")};
+ if($("#bridge"))$("#bridge").onclick=async()=>{const b=$("#bridge");b.disabled=true;const j=await post({action:"c_bridge",ncrew_token:st.get("pn_token")});b.disabled=false;if(j.ok&&j.token){st.set("gm_token",j.token);boot()}else msg(j.error||"다시 시도해 주세요")}}
 function bindJoin(){if(!$("#joinGo"))return;$("#joinGo").onclick=async()=>{
  if(!$("#age14").checked){msg("만 14세 이상만 가입할 수 있어요");return}
  if(!$("#terms").checked){msg("이용 약관 동의에 체크해 주세요");return}
@@ -166,7 +168,7 @@ function bindJoin(){if(!$("#joinGo"))return;$("#joinGo").onclick=async()=>{
 function bindSettings(){if(!$("#sN"))return;
  const save=async()=>{const j=await post({action:"c_settings",token:token(),notify_sms:$("#sN").checked,marketing_sms:$("#sM").checked});$("#sMsg").className="msg "+(j.ok?"ok":"err");$("#sMsg").textContent=j.ok?"저장했어요":"저장하지 못했어요"};
  $("#sN").onchange=save;$("#sM").onchange=save;
- // 게임 모임에서 로그인한 세션(gm_token)만 서버에서 끝냄. N CREW 화면 로그인(pn_token)은 건드리지 않음
+ // 게임 모임 세션만 서버에서 끝냄(서버도 커뮤니티 세션 표만 바꿈). N CREW 로그인(pn_token)은 그대로
  const out=async()=>{const g=st.get("gm_token");if(g)await post({action:"c_logout",token:g});st.set("gm_token",null);location.reload()};
  $("#logout").onclick=out;
  $("#leave").onclick=async()=>{if(!confirm("게임 모임에서 탈퇴할까요? 닉네임은 가려지고 문자 수신은 모두 꺼져요. N CREW에는 영향이 없어요"))return;
