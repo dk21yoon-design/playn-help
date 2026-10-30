@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<meta name="robots" content="noindex">
+<title>게임 모임 | 같이 할 사람 찾기</title>
+<meta name="description" content="롤 내전, 보드게임 밤샘, 신작 같이 하기. 정원이 차면 대기 순서대로 자리 제안을 받아요. 가입하고 원하는 게임 모임에 신청해 보세요.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--night:#16133F;--deep:#0E0C2C;--panel:#1C1850;--panel2:#241F63;--line:rgba(166,162,214,.16);--line2:rgba(166,162,214,.28);--ink:#F3F1FF;--mute:#B3AFDF;--dim:#9E9AD6;--lamp:#FFB547;--lamp2:#FFC977;--ok:#3DDC97;--warn:#FFB547;--crit:#FF5A5F;--info:#8FA3FF;--r:18px;--r-sm:10px;--pad:clamp(16px,4vw,32px);--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--night);color:var(--ink);font:16px/1.55 Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 var(--pad) 64px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 8px}
+.logo{font:400 22px "Black Han Sans",sans-serif;letter-spacing:.5px;color:var(--ink);text-decoration:none}
+.logo span{color:var(--lamp)}
+.who{font-size:14px;color:var(--mute)}
+h1{font:400 clamp(30px,7vw,44px)/1.15 "Black Han Sans",sans-serif;margin-top:22px}
+.lead{color:var(--mute);margin-top:10px}
+h2{font:400 22px "Black Han Sans",sans-serif;margin:34px 0 12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:12px}
+.card h3{font-size:19px;font-weight:800}
+.meta{color:var(--mute);font-size:14.5px;margin-top:4px}
+.tag{display:inline-block;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--panel2);color:var(--mute);margin-right:6px}
+.seat{margin-top:14px}
+.bar{height:10px;border-radius:999px;background:var(--deep);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}.bar .c{background:var(--ok)}.bar .o{background:var(--warn)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13.5px;color:var(--mute);margin-top:8px}
+.legend b{color:var(--ink)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.btn{appearance:none;border:0;border-radius:999px;min-height:46px;padding:0 20px;font:800 16px Pretendard,sans-serif;cursor:pointer;background:var(--lamp);color:#1a1300;transition:background .15s var(--ease)}
+.btn:hover{background:var(--lamp2)}.btn:disabled{opacity:.55;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line2)}
+.btn.ghost:hover{background:var(--panel2)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--info);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.state{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--deep);font-weight:700}
+.state.ok{color:var(--ok)}.state.wait{color:var(--info)}.state.offer{color:var(--warn)}
+.field{margin-top:12px}.field label{display:block;font-size:14px;font-weight:700;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:var(--deep);color:var(--ink);border:1.5px solid var(--line2);border-radius:12px;padding:12px 13px;font:16px Pretendard,sans-serif}
+.ck{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:15px;cursor:pointer}
+.ck input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--lamp)}
+.ck small{display:block;color:var(--dim);font-size:13px}
+.msg{margin-top:10px;font-size:14.5px;font-weight:600;min-height:1.2em}.msg.err{color:var(--crit)}.msg.ok{color:var(--ok)}
+.empty{color:var(--dim);padding:18px 0}
+a{color:var(--lamp2)}
+footer{margin-top:48px;color:var(--dim);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:700;font-size:13px}
+.st{font-weight:800}.st.confirmed{color:var(--ok)}.st.offered{color:var(--warn)}.st.waitlist{color:var(--info)}.st.cancelled,.st.declined,.st.expired{color:var(--dim)}
+.scroll{overflow-x:auto}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="./">게임 <span>모임</span></a><span class="who" id="who"></span></header>
+<main id="app"><p class="empty">불러오는 중이에요</p></main>
+<footer>정원이 차면 대기 순서대로 자리를 제안해요. 제안을 받으면 정해진 시간 안에 수락해야 확정되고, 답이 없으면 다음 분께 넘어가요.</footer>
+</div>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-party";
+const $=s=>document.querySelector(s), app=$("#app");
+const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+const ss={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v)}catch(e){}}};
+// 로그인 기술 재사용: 같은 사이트의 휴대폰 인증 세션(pn_token)이 있으면 그대로 씀. 회원 가입은 이 커뮤니티에서 따로 받음
+const token=()=>st.get("gm_token")||st.get("pn_token");
+const post=b=>fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크가 불안정해요. 다시 눌러 주세요"}));
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const kfmt=s=>{if(!s)return"";const d=new Date(s);return d.toLocaleString("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false})};
+const left=s=>{const m=Math.max(0,Math.round((new Date(s)-Date.now())/60000));return m>=60?`${Math.floor(m/60)}시간 ${m%60}분`:`${m}분`};
+const q=new URLSearchParams(location.search), EV=q.get("e");
+let ME=null;
+
+function seatHtml(e){const c=e.cap||1,cw=Math.min(100,e.confirmed/c*100),ow=Math.min(100-cw,e.offered/c*100);
+ return `<div class="seat"><div class="bar" role="img" aria-label="정원 ${e.cap}명 중 확정 ${e.confirmed}명, 제안 중 ${e.offered}명"><i class="c" style="width:${cw}%"></i><i class="o" style="width:${ow}%"></i></div>
+ <div class="legend"><span><i class="dot" style="background:var(--ok)"></i>확정 <b>${e.confirmed}</b>/${e.cap}</span>${e.offered?`<span><i class="dot" style="background:var(--warn)"></i>제안 중 <b>${e.offered}</b></span>`:""}<span>대기 <b>${e.waitlist}</b>명</span>${e.left?`<span>남은 자리 <b>${e.left}</b></span>`:""}</div></div>`}
+
+async function boot(){
+ if(location.hash==="#admin")return admin();
+ const t=token();
+ const me=t?post({action:"c_me",token:t}).then(j=>{if(j.ok){ME=j.member;$("#who").textContent=ME?`${ME.nick}님`:""}}):Promise.resolve();
+ if(EV)detail();else{await me;list()}
+}
+async function list(){
+ const j=await post({action:"list"});
+ app.innerHTML=`<h1>오늘 같이 할 사람, 여기서 모아요</h1><p class="lead">롤 내전부터 보드게임 밤샘까지. 정원이 차도 대기 순서대로 자리가 돌아와요.</p>
+ <h2>모집 중인 모임</h2>${(j.events||[]).length?j.events.map(e=>`<a class="card" style="display:block;color:inherit;text-decoration:none" href="?e=${encodeURIComponent(e.id)}">
+ <h3>${esc(e.title)}</h3><p class="meta">${e.info?.game?`<span class="tag">${esc(e.info.game)}</span>`:""}${kfmt(e.start_at)} · ${esc(e.place)}</p>${seatHtml(e)}</a>`).join(""):`<p class="empty">지금 모집 중인 모임이 없어요. 새 모임이 열리면 여기에 올라와요.</p>`}
+ ${ME?settingsHtml():""}`;
+ bindSettings();
+}
+async function detail(){
+ const j=await post({action:"info",e:EV,token:token()});
+ if(!j.ok){app.innerHTML=`<h1>모임을 찾지 못했어요</h1><p class="lead"><a href="./">모집 중인 모임 보기</a></p>`;return}
+ const e=j.ev, r=j.rsvp;
+ document.title=`${e.title} | 게임 모임`;
+ let act="";
+ if(!j.login)act=loginHtml();
+ else if(!j.member)act=joinHtml();
+ else if(!r)act=e.status==="open"?`<div class="row"><button class="btn" data-a="join">${e.left?"참가 신청":"대기 신청"}</button></div>`:`<p class="state">지금은 신청을 받지 않아요</p>`;
+ else if(r.status==="confirmed")act=`<p class="state ok">참가 확정${r.via_offer?" (대기에서 확정)":""}</p><div class="row"><button class="btn ghost" data-a="cancel">참가 취소</button></div>`;
+ else if(r.status==="waitlist")act=`<p class="state wait">대기 ${r.position}번이에요. 자리가 나면 순서대로 제안을 드려요.</p><div class="row"><button class="btn ghost" data-a="cancel">대기 취소</button></div>`;
+ else if(r.status==="offered")act=`<p class="state offer">자리가 났어요. ${kfmt(r.offer_expires_at)}까지(${left(r.offer_expires_at)} 남음) 수락하면 확정돼요.</p><div class="row"><button class="btn" data-a="accept">수락하고 확정</button><button class="btn ghost" data-a="decline">이번엔 안 갈게요</button></div>`;
+ app.innerHTML=`<p class="meta" style="margin-top:22px"><a href="./">← 모임 목록</a></p><h1>${esc(e.title)}</h1>
+ <p class="lead">${e.info?.game?`<span class="tag">${esc(e.info.game)}</span>`:""}${kfmt(e.start_at)} ~ ${kfmt(e.end_at)} · ${esc(e.place)}${e.price?` · 참가비 ${e.price.toLocaleString()}원`:""}</p>
+ ${e.info?.desc?`<div class="card"><p style="white-space:pre-line">${esc(e.info.desc)}</p></div>`:""}
+ <div class="card">${seatHtml(e)}${e.names?.length?`<p class="meta" style="margin-top:10px">함께하는 사람: ${e.names.map(esc).join(", ")}</p>`:""}${act}<p class="msg" id="m" role="status"></p></div>
+ <p class="meta" style="margin-top:10px">제안 수락 시간은 ${e.offer_minutes>=60?Math.round(e.offer_minutes/6)/10+"시간":e.offer_minutes+"분"}이에요.${e.cancel_until?` 취소는 ${kfmt(e.cancel_until)}까지 할 수 있어요.`:""}</p>`;
+ bindAct();bindLogin();bindJoin();
+}
+function loginHtml(){return `<div id="login"><p class="state">휴대폰 인증 후 신청할 수 있어요</p>
+ <div class="field"><label for="ph">휴대폰 번호</label><input id="ph" inputmode="numeric" autocomplete="tel" placeholder="01012345678"></div>
+ <div class="row"><button class="btn ghost" id="otpSend" type="button">인증번호 받기</button></div>
+ <div class="field"><label for="code">인증번호 6자리</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+ <div class="row"><button class="btn" id="otpOk" type="button">확인</button></div></div>`}
+function joinHtml(){return `<div id="join"><p class="state">게임 모임은 따로 가입해요 (닉네임만 있으면 돼요)</p>
+ <div class="field"><label for="nick">닉네임 (2~12자)</label><input id="nick" maxlength="12" autocomplete="nickname"></div>
+ <label class="ck"><input type="checkbox" id="terms"><span>(필수) 이용 약관과 개인정보(휴대폰 번호·닉네임) 수집에 동의해요<small>모임 운영과 본인 확인에만 써요. 탈퇴하면 지워요.</small></span></label>
+ <label class="ck"><input type="checkbox" id="nsms"><span>(선택) 신청한 모임 안내 문자 받기<small>확정·대기·자리 제안 소식. 언제든 끌 수 있어요.</small></span></label>
+ <label class="ck"><input type="checkbox" id="msms"><span>(선택) 새 모임·이벤트 광고 문자 받기</span></label>
+ <div class="row"><button class="btn" id="joinGo" type="button">가입하고 계속</button></div></div>`}
+function settingsHtml(){return `<h2>내 알림 설정</h2><div class="card"><label class="ck"><input type="checkbox" id="sN" ${ME.notify_sms?"checked":""}><span>신청한 모임 안내 문자</span></label>
+ <label class="ck"><input type="checkbox" id="sM" ${ME.marketing_sms?"checked":""}><span>새 모임·이벤트 광고 문자</span></label><p class="msg" id="sMsg" role="status"></p>
+ <div class="row"><button class="btn ghost" id="logout" type="button">로그아웃</button></div></div>`}
+const msg=(t,ok)=>{const m=$("#m");if(m){m.className="msg "+(ok?"ok":"err");m.textContent=t}};
+function bindAct(){document.querySelectorAll("[data-a]").forEach(b=>b.onclick=async()=>{
+ const a=b.dataset.a;if(a==="cancel"&&!confirm("정말 취소할까요? 대기 중인 다음 분께 자리가 넘어가요"))return;
+ document.querySelectorAll("[data-a]").forEach(x=>x.disabled=true);msg("처리 중…",true);
+ const j=await post({action:a,e:EV,token:token()});
+ if(j.need_join||j.expired){detail();return}
+ if(!j.ok){msg(j.error||"다시 시도해 주세요");setTimeout(detail,1500);return}
+ detail()})}
+function bindLogin(){if(!$("#otpSend"))return;
+ $("#otpSend").onclick=async()=>{const j=await post({action:"c_otp_send",phone:$("#ph").value});msg(j.ok?"인증번호를 보냈어요":j.error||"다시 시도해 주세요",j.ok)};
+ $("#otpOk").onclick=async()=>{const j=await post({action:"c_otp_verify",phone:$("#ph").value,code:$("#code").value});if(j.ok){st.set("gm_token",j.token);boot()}else msg(j.error||"다시 시도해 주세요")}}
+function bindJoin(){if(!$("#joinGo"))return;$("#joinGo").onclick=async()=>{
+ if(!$("#terms").checked){msg("필수 동의에 체크해 주세요");return}
+ const j=await post({action:"c_join",token:token(),nick:$("#nick").value,terms:true,notify_sms:$("#nsms").checked,marketing_sms:$("#msms").checked});
+ if(j.ok)boot();else msg(j.error||"다시 시도해 주세요")}}
+function bindSettings(){if(!$("#sN"))return;
+ const save=async()=>{const j=await post({action:"c_settings",token:token(),notify_sms:$("#sN").checked,marketing_sms:$("#sM").checked});$("#sMsg").className="msg "+(j.ok?"ok":"err");$("#sMsg").textContent=j.ok?"저장했어요":"저장하지 못했어요"};
+ $("#sN").onchange=save;$("#sM").onchange=save;$("#logout").onclick=()=>{st.set("gm_token",null);location.reload()}}
+
+// ── 관리 화면 (#admin) ──
+const K=()=>ss.get("gm_admin");
+const LBL={confirmed:"확정",waitlist:"대기",offered:"제안 중",cancelled:"취소",declined:"거절",expired:"만료"};
+const NLBL={confirmed:"확정",waitlist:"대기",offered:"자리 제안",accepted:"수락",declined:"거절",expired:"기한 만료",cancelled:"취소"};
+async function admin(){
+ if(!K()){app.innerHTML=`<h1>모임 관리</h1><div class="card"><div class="field"><label for="ak">관리 키</label><input id="ak" type="password" autocomplete="off"></div><div class="row"><button class="btn" id="akGo">들어가기</button></div><p class="msg" id="m"></p></div>`;
+  $("#akGo").onclick=async()=>{ss.set("gm_admin",$("#ak").value);const j=await post({action:"admin_events",key:K()});if(j.ok)admin();else{ss.set("gm_admin",null);msg(j.error||"키가 맞지 않아요")}};return}
+ const j=await post({action:"admin_events",key:K()});
+ if(!j.ok){ss.set("gm_admin",null);return admin()}
+ const sel=q.get("e");
+ app.innerHTML=`<h1>모임 관리</h1><p class="lead">안내 문자 모드: <b>${j.mode==="log"?"기록만 (발송 안 함)":j.mode==="test"?"운영폰 테스트":"실제 발송"}</b></p>
+ <h2>모임</h2><div class="scroll"><table><thead><tr><th>모임</th><th>시작</th><th>확정</th><th>제안</th><th>대기</th><th>상태</th></tr></thead><tbody>
+ ${j.events.map(e=>`<tr><td><a href="?e=${encodeURIComponent(e.id)}#admin">${esc(e.title)}</a></td><td>${kfmt(e.start_at)}</td><td>${e.confirmed}/${e.cap}</td><td>${e.offered}</td><td>${e.waitlist}</td><td>${esc(e.status)}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">아직 모임이 없어요</td></tr>`}</tbody></table></div>
+ <div id="evd"></div>
+ <h2>새 모임 열기</h2><div class="card" id="nf">
+ <div class="field"><label for="nId">주소용 이름 (영문·숫자·-)</label><input id="nId" placeholder="lol-1107"></div>
+ <div class="field"><label for="nT">제목</label><input id="nT" maxlength="60"></div>
+ <div class="field"><label for="nG">게임</label><input id="nG" maxlength="30" placeholder="리그 오브 레전드"></div>
+ <div class="field"><label for="nP">장소</label><input id="nP" maxlength="40" placeholder="온라인 디스코드 / 장소명"></div>
+ <div class="field"><label for="nS">시작</label><input id="nS" type="datetime-local"></div>
+ <div class="field"><label for="nE">끝</label><input id="nE" type="datetime-local"></div>
+ <div class="field"><label for="nC">정원</label><input id="nC" type="number" min="1" max="500" value="10"></div>
+ <div class="field"><label for="nO">제안 수락 시간 (분)</label><input id="nO" type="number" min="10" max="2880" value="720"></div>
+ <div class="field"><label for="nX">취소 마감 (비우면 시작 전까지)</label><input id="nX" type="datetime-local"></div>
+ <div class="field"><label for="nD">소개</label><textarea id="nD" rows="4" maxlength="600"></textarea></div>
+ <div class="row"><button class="btn" id="nGo">모임 열기</button></div><p class="msg" id="m" role="status"></p></div>
+ <div class="row"><button class="btn ghost" id="akOut">관리 화면 나가기</button></div>`;
+ const iso=v=>v?new Date(v).toISOString():null;
+ $("#nGo").onclick=async()=>{const r=await post({action:"admin_create",key:K(),id:$("#nId").value,title:$("#nT").value,game:$("#nG").value,place:$("#nP").value,start_at:iso($("#nS").value),end_at:iso($("#nE").value),cap:$("#nC").value,offer_minutes:$("#nO").value,cancel_until:iso($("#nX").value),desc:$("#nD").value});
+  if(r.ok){location.href="?e="+encodeURIComponent(r.id)+"#admin";location.reload()}else msg(r.error||"다시 확인해 주세요")};
+ $("#akOut").onclick=()=>{ss.set("gm_admin",null);location.hash="";location.reload()};
+ if(sel)adminEvent(sel);
+}
+async function adminEvent(id){
+ const j=await post({action:"admin_list",key:K(),e:id});const box=$("#evd");if(!j.ok){box.innerHTML=`<p class="msg err">${esc(j.error)}</p>`;return}
+ const e=j.ev;
+ box.innerHTML=`<h2>${esc(e.title)}</h2><div class="card">${seatHtml(e)}
+ <div class="row"><button class="btn ghost" data-s="${e.status==="open"?"closed":"open"}">${e.status==="open"?"신청 마감":"신청 다시 열기"}</button><button class="btn ghost" id="capUp">정원 +1</button><a class="btn ghost" style="display:inline-flex;align-items:center;text-decoration:none" href="?e=${encodeURIComponent(e.id)}">회원 화면 보기</a></div></div>
+ <h2>신청자</h2><div class="scroll"><table><thead><tr><th>#</th><th>닉네임</th><th>번호</th><th>상태</th><th>신청</th><th>제안 기한</th><th></th></tr></thead><tbody>
+ ${j.rsvps.map(r=>`<tr><td>${r.id}</td><td>${esc(r.name)}${r.test_run?` <span class="tag">테스트</span>`:""}</td><td>${esc(String(r.phone).replace(/(\d{3})(\d+)(\d{4})/,"$1-****-$3"))}</td><td class="st ${r.status}">${LBL[r.status]||r.status}${r.accepted_at?" (제안 수락)":""}</td><td>${kfmt(r.created_at)}</td><td>${r.status==="offered"?kfmt(r.offer_expires_at):""}</td><td>${["confirmed","waitlist","offered"].includes(r.status)?`<button class="btn ghost" style="min-height:36px;padding:0 12px;font-size:14px" data-c="${esc(r.phone)}">취소</button>`:""}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">아직 신청자가 없어요</td></tr>`}</tbody></table></div>
+ <h2>안내 기록</h2><div class="scroll"><table><thead><tr><th>#</th><th>종류</th><th>받는 사람</th><th>처리</th><th>내용</th></tr></thead><tbody>
+ ${j.notices.map(n=>`<tr><td>${n.id}</td><td>${NLBL[n.kind]||n.kind}</td><td>${esc(String(n.phone).slice(-4))}</td><td>${{logged:"기록만",pending:"대기",sent:"발송",test_sent:"운영폰 발송",failed:"실패",skipped_pref:"수신 꺼둠",sending:"처리 중"}[n.status]||n.status}</td><td style="white-space:pre-line;color:var(--mute)">${esc(n.msg)}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">기록이 없어요</td></tr>`}</tbody></table></div>`;
+ box.querySelectorAll("[data-c]").forEach(b=>b.onclick=async()=>{if(!confirm("이 신청을 운영자 취소할까요? 대기자가 있으면 다음 분께 제안이 가요"))return;const r=await post({action:"admin_cancel",key:K(),e:id,phone:b.dataset.c});if(!r.ok)alert(r.error||"실패");adminEvent(id)});
+ box.querySelector("[data-s]").onclick=async ev=>{await post({action:"admin_set",key:K(),e:id,status:ev.target.dataset.s});admin()};
+ $("#capUp").onclick=async()=>{await post({action:"admin_set",key:K(),e:id,cap:e.cap+1});admin()};
+}
+addEventListener("hashchange",()=>location.reload());
+boot();
+</script>
+</body></html>
