@@ -1,13 +1,16 @@
 -- 게임 모임(playn-party) 현재 DB 정의 — 검수 자료 (비밀정보 없음)
--- 출처: Supabase bjrgtoyjrggxmdexnwib 에서 pg_get_functiondef / pg_indexes / pg_get_triggerdef 로 2026-10-30 10:45 KST 추출, v3.4(11:05 KST) 반영
+-- 출처: Supabase bjrgtoyjrggxmdexnwib 에서 pg_get_functiondef / pg_indexes / pg_get_triggerdef 로 2026-10-30 10:45 KST 추출, v3.4(11:05 KST)·v3.5(11:35 KST) 반영
 -- 적용된 마이그레이션(순서): party_rsvp_waitlist_v1, party_v2_offer_accept_community_members, party_v2_1_queue_order_by_id,
 --   party_v3_day_before_reminder_log_only, party_v3_1_reminder_absolute_date_text, party_test_evidence_table,
---   party_v3_2_decide_at_and_stale_offer, party_v3_3_revoke_public_table_grants, party_v3_4_lifecycle_guards
+--   party_v3_2_decide_at_and_stale_offer, party_v3_3_revoke_public_table_grants, party_v3_4_lifecycle_guards, party_v3_5_decide_after_lock_clock
 -- 이 파일은 실행용이 아니라 읽기용이다. 원문 그대로 붙였다.
 
 -- ── 함수 실행 권한 (모든 party_* 함수): anon=false authenticated=false service_role=true
 -- ── 표: playn_party_rsvps / playn_party_notices / community_members / party_test_evidence
 --    RLS 켬(정책 없음), anon·authenticated 표 권한 없음(v3.3 회수). 공개 키 직접 조회 시 42501
+-- ── 시각 규칙(v3.5): party_join·party_respond·party_fill 은 모임·신청 잠금을 얻은 뒤 clock_timestamp()를 v_now 로 한 번 잡아
+--    시작·접수 마감·제안 기한 판단에 쓴다. now()는 트랜잭션 시작 시각(잠금 대기 시간 미반영). 기록용 시각은 now() 그대로
+--    party_dispatch_decide_at 의 p_now 는 비공개 시험용 주입 시각, 운영 경로(party_dispatch_decide)는 now()
 -- ── 크론: party-sweep-5min */5 * * * * → playn-party admin_sweep (변경 없음)
 
 -- ── 인덱스
@@ -63,16 +66,19 @@ end $function$;
 CREATE OR REPLACE FUNCTION public.party_fill(ev playn_events)
  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public', 'pg_temp'
 AS $function$
-declare held int; w playn_party_rsvps; ids jsonb := '[]'::jsonb; nid bigint; exp timestamptz;
+declare held int; w playn_party_rsvps; ids jsonb := '[]'::jsonb; nid bigint; exp timestamptz; v_now timestamptz;
 begin
-  if ev.start_at <= now() or ev.status not in ('open','closed') then return ids; end if;
+  if ev.status not in ('open','closed') then return ids; end if;
   loop
+    v_now := clock_timestamp();   -- v3.5
+    exit when ev.start_at <= v_now;
     select count(*) into held from playn_party_rsvps where event_id = ev.id and status in ('confirmed','offered');
     exit when held >= ev.cap;
     select * into w from playn_party_rsvps where event_id = ev.id and status = 'waitlist' order by id limit 1 for update skip locked;
     exit when not found;
-    exp := least(clock_timestamp() + make_interval(mins => ev.offer_minutes), ev.start_at);
-    update playn_party_rsvps set status = 'offered', offered_at = clock_timestamp(), offer_expires_at = exp where id = w.id returning * into w;
+    exp := least(v_now + make_interval(mins => ev.offer_minutes), ev.start_at);
+    exit when exp <= v_now;
+    update playn_party_rsvps set status = 'offered', offered_at = v_now, offer_expires_at = exp where id = w.id returning * into w;
     nid := party_notice(w, ev, 'offered');
     if nid is not null then ids := ids || to_jsonb(nid); end if;
   end loop;
@@ -82,13 +88,14 @@ end $function$;
 CREATE OR REPLACE FUNCTION public.party_join(p_event text, p_phone text, p_name text, p_test text DEFAULT NULL::text)
  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public', 'pg_temp'
 AS $function$
-declare ev playn_events; r playn_party_rsvps; held int; waiting int; pos int; nid bigint;
+declare ev playn_events; r playn_party_rsvps; held int; waiting int; pos int; nid bigint; v_now timestamptz;
 begin
   select * into ev from playn_events where id = p_event and kind = 'party' for update;
   if not found then return jsonb_build_object('ok', false, 'error', '모임을 찾지 못했어요'); end if;
+  v_now := clock_timestamp();   -- v3.5: 모임 잠금 획득 뒤 판단 시각
   if ev.status <> 'open' then return jsonb_build_object('ok', false, 'error', '지금은 신청을 받지 않아요'); end if;
-  if ev.start_at <= now() then return jsonb_build_object('ok', false, 'error', '이미 시작된 모임이에요'); end if;   -- v3.4: 접수 마감과 별개로 시작 시각 검사
-  if coalesce(ev.apply_until, ev.start_at) < now() then return jsonb_build_object('ok', false, 'error', '신청이 마감됐어요'); end if;
+  if ev.start_at <= v_now then return jsonb_build_object('ok', false, 'error', '이미 시작된 모임이에요'); end if;
+  if coalesce(ev.apply_until, ev.start_at) < v_now then return jsonb_build_object('ok', false, 'error', '신청이 마감됐어요'); end if;
   select * into r from playn_party_rsvps where event_id = p_event and phone = p_phone and status in ('confirmed','waitlist','offered');
   if found then return jsonb_build_object('ok', true, 'dup', true, 'status', r.status, 'rsvp_id', r.id); end if;
   select count(*) filter (where status in ('confirmed','offered')), count(*) filter (where status = 'waitlist')
@@ -107,17 +114,17 @@ end $function$;
 CREATE OR REPLACE FUNCTION public.party_respond(p_event text, p_phone text, p_accept boolean)
  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public', 'pg_temp'
 AS $function$
-declare ev playn_events; r playn_party_rsvps; ids jsonb := '[]'::jsonb; nid bigint;
+declare ev playn_events; r playn_party_rsvps; ids jsonb := '[]'::jsonb; nid bigint; v_now timestamptz;
 begin
   select * into ev from playn_events where id = p_event and kind = 'party' for update;
   if not found then return jsonb_build_object('ok', false, 'error', '모임을 찾지 못했어요'); end if;
   select * into r from playn_party_rsvps where event_id = p_event and phone = p_phone and status = 'offered' for update;
   if not found then return jsonb_build_object('ok', false, 'error', '응답할 참여 제안이 없어요'); end if;
-  -- v3.4: 수락은 유효한 모임(open/closed)이고 시작 전일 때만. 신청 상태는 바꾸지 않고 거절만 돌려줌 (자동 탈락 없음). 거절(decline)은 기존대로 허용
-  if p_accept and (ev.status not in ('open','closed') or ev.start_at <= now()) then
+  v_now := clock_timestamp();   -- v3.5: 모임·신청 잠금 획득 뒤 판단 시각
+  if p_accept and (ev.status not in ('open','closed') or ev.start_at <= v_now) then
     return jsonb_build_object('ok', false, 'error', case when ev.status not in ('open','closed') then '취소된 모임이라 수락할 수 없어요' else '이미 시작된 모임이라 수락할 수 없어요' end);
   end if;
-  if r.offer_expires_at <= now() then
+  if r.offer_expires_at <= v_now then
     update playn_party_rsvps set status = 'expired', closed_at = now() where id = r.id returning * into r;
     nid := party_notice(r, ev, 'expired'); if nid is not null then ids := ids || to_jsonb(nid); end if;
     ids := ids || party_fill(ev);
