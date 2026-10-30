@@ -1,8 +1,10 @@
-// playn-party: 독립 게임 커뮤니티 모임 신청 (v3 2026-10-30: 전날 리마인드 기록 전용 · 발송 판단 DB 일원화)
-//  로그인 기술만 재사용: playn_otp(인증번호) · playn_sessions(세션 토큰). N CREW(playn_members)와 회원·동의는 완전히 별개
+// playn-party: 독립 게임 커뮤니티 모임 신청 (v4 2026-10-30: 가입 보안 보완 — 커뮤니티 전용 인증번호·시도 제한·원자적 소모, 가입 동의 기록, 로그아웃·탈퇴)
+//  v3: 전날 리마인드 기록 전용 · 발송 판단 DB 일원화
+//  로그인 기술만 재사용: 휴대폰 인증번호 방식 · playn_sessions(세션 토큰). 인증번호 표는 v4부터 커뮤니티 전용(community_otp). N CREW(playn_members)와 회원·동의는 완전히 별개
 //  커뮤니티 회원 = community_members (가입·약관·안내 문자 설정·광고 알림 설정 따로, 기본 꺼짐)
-//  public: list · info(e, token?) · c_otp_send · c_otp_verify · c_me · c_join(가입) · c_settings
+//  public: list · info(e, token?) · c_otp_send · c_otp_verify · c_me · c_join(가입) · c_settings · c_logout · c_leave(탈퇴)
 //          join(e) · cancel(e) · accept(e) · decline(e)
+//  인증번호: community_otp 표 + DB 함수 community_otp_issue(한도)·community_otp_verify(5회 제한·1회 소모). 발송은 party_otp_send=on 일 때만(현재 꺼짐)
 //  admin(key): admin_list(e) · admin_create · admin_set · admin_cancel(e, phone) · admin_sweep · admin_dispatch
 //  정원·대기·제안·수락은 DB 함수(party_join / party_respond / party_cancel / party_sweep)가 모임 행을 잠그고 처리
 //  안내 문자는 playn_party_notices 에 먼저 기록. 발송 모드 playand_config.party_sms_mode
@@ -17,6 +19,14 @@ const normPhone = (p: unknown) => { const d = String(p ?? "").replace(/\D/g, "")
 const mask = (n: string) => n.length <= 1 ? n : n[0] + "*".repeat(Math.max(1, n.length - 2)) + (n.length > 2 ? n[n.length - 1] : "");
 const rand = (n: number) => Array.from(crypto.getRandomValues(new Uint8Array(n))).map((x) => "abcdefghijklmnopqrstuvwxyz0123456789"[x % 36]).join("");
 const isTestEv = (id: string) => String(id).startsWith("party-test");
+// 가입 화면에서 보여 준 약관 판. 바뀌면 화면과 함께 올림 (옛 화면으로 가입하면 다시 동의 받음)
+const TERMS_VERSION = "party-2026-10-30-draft";
+async function ipHash(req: Request) {
+  const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || req.headers.get("cf-connecting-ip") || "";
+  if (!ip) return null;
+  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("party-otp:" + ip)));
+  return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
+}
 
 async function cfgAll() {
   const { data } = await sb.from("playand_config").select("key,value").in("key", ["admin_key", "owner_phone", "macrodroid_webhook", "party_sms_mode", "party_otp_send"]);
@@ -104,24 +114,25 @@ Deno.serve(async (req) => {
     const cfg = await cfgAll();
     if (cfg.party_otp_send !== "on") return J({ ok: false, error: "인증 문자는 아직 준비 중이에요" });
     const phone = normPhone(b.phone); if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
-    const { count } = await sb.from("playn_otp").select("phone", { count: "exact", head: true }).eq("phone", phone).gte("created_at", new Date(Date.now() - 3600e3).toISOString());
-    if ((count ?? 0) >= 3) return J({ ok: false, error: "인증번호는 1시간에 3번까지 받을 수 있어요" });
-    const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
-    await sb.from("playn_otp").insert({ phone, code });
-    const r = await rawSms(cfg, phone, `[게임 모임] 인증번호 ${code} (5분 안에 입력해 주세요)`);
-    return J({ ok: r.ok, error: r.ok ? undefined : "문자를 보내지 못했어요" });
+    const { data: r, error } = await sb.rpc("community_otp_issue", { p_phone: phone, p_ip_hash: await ipHash(req) });
+    if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 해 주세요" });
+    const s = await rawSms(cfg, phone, `[게임 모임] 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
+    return J({ ok: s.ok, error: s.ok ? undefined : "문자를 보내지 못했어요" });
   }
   if (action === "c_otp_verify") {
     const phone = normPhone(b.phone); if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
-    const { data: o } = await sb.from("playn_otp").select("code").eq("phone", phone).eq("used", false).gte("created_at", new Date(Date.now() - 5 * 60e3).toISOString()).order("created_at", { ascending: false }).limit(1).maybeSingle();
-    if (!o || o.code !== String(b.code ?? "").trim()) return J({ ok: false, error: "인증번호가 맞지 않거나 시간이 지났어요" });
-    await sb.from("playn_otp").update({ used: true }).eq("phone", phone).eq("code", o.code);
+    const { data: r, error } = await sb.rpc("community_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12) });
+    if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 해 주세요", left: r?.left });
     const token = rand(32);
     await sb.from("playn_sessions").insert({ token, phone, expires_at: new Date(Date.now() + 30 * 86400e3).toISOString() });
     return J({ ok: true, token, member: !!(await cMember(phone)) });
   }
   const phone = await sessionPhone(b.token);
   if (!phone) return adminRoutes(b, action);
+  if (action === "c_logout") { // 이 기기 세션만 끝냄 (기록은 지우지 않고 만료 처리)
+    await sb.from("playn_sessions").update({ expires_at: new Date().toISOString() }).eq("token", String(b.token));
+    return J({ ok: true });
+  }
   if (action === "c_me") {
     const m = await cMember(phone);
     if (!m) return J({ ok: true, member: null });
@@ -130,12 +141,14 @@ Deno.serve(async (req) => {
   }
   if (action === "c_join") {
     if (await cMember(phone)) return J({ ok: true, already: true });
-    const nick = String(b.nick ?? "").replace(/\s+/g, " ").trim().slice(0, 12);
+    const nick = String(b.nick ?? "").replace(/[\u0000-\u001f\u007f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 12);
     if (nick.length < 2) return J({ ok: false, error: "닉네임을 2자 이상 적어 주세요" });
-    if (!b.terms) return J({ ok: false, error: "이용 약관과 개인정보 수집에 동의해 주세요" });
+    if (b.age14 !== true) return J({ ok: false, error: "만 14세 이상만 가입할 수 있어요" });
+    if (b.terms !== true) return J({ ok: false, error: "이용 약관에 동의해 주세요" });
+    if (b.terms_version !== TERMS_VERSION) return J({ ok: false, error: "약관이 바뀌었어요. 새로고침한 뒤 다시 동의해 주세요", reload: true });
     const now = new Date().toISOString();
     const { data: prev } = await sb.from("community_members").select("test_run").eq("phone", phone).maybeSingle();
-    const { error } = await sb.from("community_members").upsert({ phone, nick, status: "active", terms_agreed_at: now, notify_sms: !!b.notify_sms, notify_changed_at: now, marketing_sms: !!b.marketing_sms, marketing_changed_at: now, source: String(b.source ?? "party").slice(0, 20), test_run: prev?.test_run ?? null, updated_at: now });
+    const { error } = await sb.from("community_members").upsert({ phone, nick, status: "active", terms_agreed_at: now, terms_version: TERMS_VERSION, age14_confirmed_at: now, left_at: null, notify_sms: b.notify_sms === true, notify_changed_at: now, marketing_sms: b.marketing_sms === true, marketing_changed_at: now, source: String(b.source ?? "party").slice(0, 20), test_run: prev?.test_run ?? null, updated_at: now });
     return J({ ok: !error, error: error ? "가입하지 못했어요. 잠시 후 다시 해주세요" : undefined });
   }
   const m = await cMember(phone);
@@ -146,6 +159,11 @@ Deno.serve(async (req) => {
     if (typeof b.marketing_sms === "boolean" && b.marketing_sms !== m.marketing_sms) { patch.marketing_sms = b.marketing_sms; patch.marketing_changed_at = now; }
     await sb.from("community_members").update(patch).eq("phone", phone);
     return J({ ok: true });
+  }
+  if (action === "c_leave") {
+    const { data: r, error } = await sb.rpc("community_member_leave", { p_phone: phone });
+    if (error) return J({ ok: false, error: "처리하지 못했어요. 잠시 후 다시 해주세요" }, 500);
+    return J(r);
   }
   if (["join", "cancel", "accept", "decline"].includes(action)) {
     const e = String(b.e ?? "");

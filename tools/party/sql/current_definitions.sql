@@ -282,3 +282,7 @@ begin
   end if;
   return null;
 end $$;
+
+-- ── v3.7 (2026-10-30 17:00 KST): 신규 가입 준비. 원문은 migrations/party_v3_7_signup_security.sql 과 같음
+--    표 community_otp(RLS 켬, 공개 권한 없음) · community_members 열 terms_version·age14_confirmed_at·left_at
+--    함수 community_otp_issue · community_otp_verify · community_member_leave (service_role 만 실행)

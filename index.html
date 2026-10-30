@@ -649,12 +649,13 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 <script src="/assets/gearvote.js" defer></script>
 </head>
 <body>
+<!-- 게임 모임 메뉴: 준비만 해 둠(hidden). 첫 실제 모임 등록·신청 흐름 검증 뒤 data-party-menu 두 곳의 hidden 을 지워 공개 -->
 <header class="top"><div class="wrap">
   <a class="logo" href="#"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a>
-  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/" class="evn">롤드컵 이벤트</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
+  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/" class="evn">롤드컵 이벤트</a><a href="party/" data-party-menu hidden>게임 모임</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
   <button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer"><span></span></button>
 </div></header>
-<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/">🏆 롤드컵 우승 예언 이벤트</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
+<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/">🏆 롤드컵 우승 예언 이벤트</a><a href="party/" data-party-menu hidden>게임 모임</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
 
 <main>
 <section class="hero"><div class="wrap">

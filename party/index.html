@@ -71,7 +71,7 @@ dialog li{margin-top:4px}
 <div class="wrap">
 <header><a class="logo" href="./">게임 <span>모임</span></a><span class="who" id="who"></span></header>
 <main id="app"><p class="empty">불러오는 중이에요</p></main>
-<footer>정원이 차면 대기 순서대로 자리를 제안해요. 제안을 받으면 정해진 시간 안에 수락해야 확정되고, 답이 없으면 다음 분께 넘어가요.</footer>
+<footer>정원이 차면 대기 순서대로 자리를 제안해요. 제안을 받으면 정해진 시간 안에 수락해야 확정되고, 답이 없으면 다음 분께 넘어가요.<br><a href="terms/">이용 약관·개인정보 안내</a> · 플레이앤 홈페이지에서 운영해요 · <a href="/">플레이앤 홈</a></footer>
 </div>
 <script>
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-party";
@@ -87,6 +87,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const kfmt=s=>{if(!s)return"";const d=new Date(s);return d.toLocaleString("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false})};
 const left=s=>{const m=Math.max(0,Math.round((new Date(s)-Date.now())/60000));return m>=60?`${Math.floor(m/60)}시간 ${m%60}분`:`${m}분`};
 const q=new URLSearchParams(location.search), EV=q.get("e");
+const TERMS_V="party-2026-10-30-draft"; // 서버 TERMS_VERSION 과 같아야 가입됨
 let ME=null;
 
 function seatHtml(e){const c=e.cap||1,cw=Math.min(100,e.confirmed/c*100),ow=Math.min(100-cw,e.offered/c*100);
@@ -133,15 +134,17 @@ function loginHtml(){return `<div id="login"><p class="state">휴대폰 인증 �
  <div class="row"><button class="btn ghost" id="otpSend" type="button">인증번호 받기</button></div>
  <div class="field"><label for="code">인증번호 6자리</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
  <div class="row"><button class="btn" id="otpOk" type="button">확인</button></div></div>`}
-function joinHtml(){return `<div id="join"><p class="state">게임 모임은 따로 가입해요 (닉네임만 있으면 돼요)</p>
+function joinHtml(){return `<div id="join"><p class="state">게임 모임은 따로 가입해요. N CREW 가입·문자 동의와는 별개예요</p>
  <div class="field"><label for="nick">닉네임 (2~12자)</label><input id="nick" maxlength="12" autocomplete="nickname"></div>
- <label class="ck"><input type="checkbox" id="terms"><span>(필수) 이용 약관과 개인정보(휴대폰 번호·닉네임) 수집에 동의해요<small>모임 운영과 본인 확인에만 써요. 탈퇴하면 지워요.</small></span></label>
- <label class="ck"><input type="checkbox" id="nsms"><span>(선택) 신청한 모임 안내 문자 받기<small>확정·대기·자리 제안 소식. 언제든 끌 수 있어요.</small></span></label>
- <label class="ck"><input type="checkbox" id="msms"><span>(선택) 새 모임·이벤트 광고 문자 받기</span></label>
+ <label class="ck"><input type="checkbox" id="age14"><span>(필수) 만 14세 이상이에요</span></label>
+ <label class="ck"><input type="checkbox" id="terms"><span>(필수) <a href="terms/#terms" target="_blank" rel="noopener">이용 약관</a>에 동의해요</span></label>
+ <p class="meta" style="margin-top:8px">휴대폰 번호·닉네임·신청 기록은 모임 운영에 꼭 필요해서 받아요. 보관 기간과 쓰는 곳은 <a href="terms/#privacy" target="_blank" rel="noopener">개인정보 처리 안내</a>에 있어요.</p>
+ <label class="ck"><input type="checkbox" id="nsms"><span>(선택) 신청한 모임 안내 문자 받기<small>확정·대기·자리 제안·취소 소식. 꺼도 가입과 신청은 그대로 돼요.</small></span></label>
+ <label class="ck"><input type="checkbox" id="msms"><span>(선택) 새 모임·이벤트 광고 문자 받기<small>밤 9시~아침 8시에는 보내지 않아요. 언제든 끌 수 있어요.</small></span></label>
  <div class="row"><button class="btn" id="joinGo" type="button">가입하고 계속</button></div></div>`}
 function settingsHtml(){return `<h2>내 알림 설정</h2><div class="card"><label class="ck"><input type="checkbox" id="sN" ${ME.notify_sms?"checked":""}><span>신청한 모임 안내 문자</span></label>
  <label class="ck"><input type="checkbox" id="sM" ${ME.marketing_sms?"checked":""}><span>새 모임·이벤트 광고 문자</span></label><p class="msg" id="sMsg" role="status"></p>
- <div class="row"><button class="btn ghost" id="logout" type="button">로그아웃</button></div></div>`}
+ <div class="row"><button class="btn ghost" id="logout" type="button">로그아웃</button><button class="btn ghost" id="leave" type="button">탈퇴하기</button></div></div>`}
 const msg=(t,ok)=>{const m=$("#m");if(m){m.className="msg "+(ok?"ok":"err");m.textContent=t}};
 function bindAct(){document.querySelectorAll("[data-a]").forEach(b=>b.onclick=async()=>{
  const a=b.dataset.a;if(a==="cancel"&&!confirm("정말 취소할까요? 대기 중인 다음 분께 자리가 넘어가요"))return;
@@ -154,12 +157,22 @@ function bindLogin(){if(!$("#otpSend"))return;
  $("#otpSend").onclick=async()=>{const j=await post({action:"c_otp_send",phone:$("#ph").value});msg(j.ok?"인증번호를 보냈어요":j.error||"다시 시도해 주세요",j.ok)};
  $("#otpOk").onclick=async()=>{const j=await post({action:"c_otp_verify",phone:$("#ph").value,code:$("#code").value});if(j.ok){st.set("gm_token",j.token);boot()}else msg(j.error||"다시 시도해 주세요")}}
 function bindJoin(){if(!$("#joinGo"))return;$("#joinGo").onclick=async()=>{
- if(!$("#terms").checked){msg("필수 동의에 체크해 주세요");return}
- const j=await post({action:"c_join",token:token(),nick:$("#nick").value,terms:true,notify_sms:$("#nsms").checked,marketing_sms:$("#msms").checked});
+ if(!$("#age14").checked){msg("만 14세 이상만 가입할 수 있어요");return}
+ if(!$("#terms").checked){msg("이용 약관 동의에 체크해 주세요");return}
+ const b=$("#joinGo");b.disabled=true;
+ const j=await post({action:"c_join",token:token(),nick:$("#nick").value,age14:true,terms:true,terms_version:TERMS_V,notify_sms:$("#nsms").checked,marketing_sms:$("#msms").checked});
+ b.disabled=false;if(j.reload){msg(j.error);setTimeout(()=>location.reload(),1500);return}
  if(j.ok)boot();else msg(j.error||"다시 시도해 주세요")}}
 function bindSettings(){if(!$("#sN"))return;
  const save=async()=>{const j=await post({action:"c_settings",token:token(),notify_sms:$("#sN").checked,marketing_sms:$("#sM").checked});$("#sMsg").className="msg "+(j.ok?"ok":"err");$("#sMsg").textContent=j.ok?"저장했어요":"저장하지 못했어요"};
- $("#sN").onchange=save;$("#sM").onchange=save;$("#logout").onclick=()=>{st.set("gm_token",null);location.reload()}}
+ $("#sN").onchange=save;$("#sM").onchange=save;
+ // 게임 모임에서 로그인한 세션(gm_token)만 서버에서 끝냄. N CREW 화면 로그인(pn_token)은 건드리지 않음
+ const out=async()=>{const g=st.get("gm_token");if(g)await post({action:"c_logout",token:g});st.set("gm_token",null);location.reload()};
+ $("#logout").onclick=out;
+ $("#leave").onclick=async()=>{if(!confirm("게임 모임에서 탈퇴할까요? 닉네임은 가려지고 문자 수신은 모두 꺼져요. N CREW에는 영향이 없어요"))return;
+  const j=await post({action:"c_leave",token:token()});const m=$("#sMsg");
+  if(!j.ok){m.className="msg err";m.textContent=j.error||"탈퇴하지 못했어요";return}
+  out()}}
 
 // ── 관리 화면 (#admin) ──
 const K=()=>ss.get("gm_admin");
@@ -210,7 +223,7 @@ async function adminEvent(id){
  <h2>안내 기록</h2>${j.notices.some(n=>n.status==="pending")?`<p class="meta">처리 대기 안내는 정기 처리(5분 간격 예약 작업)에서 판단돼요. 잠시 뒤 새로고침해 확인해 주세요.</p>`:""}<div class="row"><button class="btn ghost sm" id="nRe" type="button">안내 기록 새로고침</button></div><div class="scroll"><table><thead><tr><th>#</th><th>종류</th><th>받는 사람</th><th>처리</th><th>내용</th></tr></thead><tbody>
  ${j.notices.map(n=>`<tr><td>${n.id}</td><td>${NLBL[n.kind]||n.kind}</td><td>${esc(String(n.phone).slice(-4))}</td><td>${NSTL[n.status]||esc(n.status)}</td><td style="white-space:pre-line;color:var(--mute)">${esc(n.msg)}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">기록이 없어요</td></tr>`}</tbody></table></div>`;
  const em=(t,ok)=>{const m=$("#em");if(m){m.className="msg "+(ok?"ok":"err");m.textContent=t}};
- box.querySelectorAll("[data-c]").forEach(b=>b.onclick=async()=>{if(!confirm("이 사람의 신청 하나만 취소해요. 모임은 그대로 열려 있고, 대기자가 있으면 다음 분께 제안이 가요"))return;const r=await post({action:"admin_cancel",key:K(),e:id,phone:b.dataset.c});if(!r.ok)alert(r.error||"실패");adminEvent(id)});
+ box.querySelectorAll("[data-c]").forEach(b=>b.onclick=async()=>{if(!confirm(live?"이 사람의 신청 하나만 취소해요. 모임은 그대로 열려 있고, 대기자가 있으면 다음 분께 제안이 가요":"이 사람의 신청만 취소해요. 모임은 취소 상태로 유지돼요"))return;const r=await post({action:"admin_cancel",key:K(),e:id,phone:b.dataset.c});if(!r.ok)alert(r.error||"실패");adminEvent(id)});
  $("#nRe").onclick=()=>adminEvent(id);
  if(!live)return;
  box.querySelector("[data-s]").onclick=async ev=>{await post({action:"admin_set",key:K(),e:id,status:ev.target.dataset.s});admin()};

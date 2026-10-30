@@ -28,3 +28,13 @@
 - 재개(cancelled → open/closed): 미처리 취소 안내는 superseded, 이미 logged 된 기록은 남김. 다시 취소하면 다음 회차로 새로 기록
 - 관리 화면 `admin_set status=cancelled` 로 만든 안내는 다음 크론(5분)에 판단됨. 서버 함수 변경 없음
 - SQL 원문: `sql/migrations/party_v3_6_event_cancelled_notice_log_only.sql`
+
+## 신규 가입 준비 (v3.7 DB · v4 서버 함수, 2026-10-30) — 인증 문자 발송은 계속 꺼짐
+- 인증번호는 커뮤니티 전용 표 `community_otp` (N CREW `playn_otp` 와 분리). 세션 표 `playn_sessions` 는 그대로 재사용
+- 발급 `community_otp_issue`: 번호 단위 잠금 → 60초 재발송 대기 · 번호당 1시간 3회 · 하루 5회 · 같은 접속(IP 해시) 1시간 10회 · 전체 1시간 30회(설정 `party_otp_hourly_cap`) → 이전 미사용 번호 무효화 → 5분 유효
+- 확인 `community_otp_verify`: 최근 유효 번호 1건을 잠그고 판단. 5번 틀리면 무효. 맞으면 1번만 소모(동시 확인도 1건만 성공)
+- 가입 `c_join`: 만 14세 이상(필수) · 이용 약관(필수) · 약관 판 `TERMS_VERSION` 일치 필요. 기록 열 terms_version · age14_confirmed_at. 안내·광고 문자는 선택, 기본 꺼짐
+- `c_logout`: 세션 만료 처리(삭제 아님). 화면은 게임 모임에서 로그인한 세션(gm_token)만 끝냄. N CREW 로그인(pn_token)은 건드리지 않음
+- `c_leave`/`community_member_leave`: 진행 중 신청이 있으면 막음. 상태 left · 닉네임 가림 · 문자 수신 모두 끔. 지난 신청 기록은 남김
+- 약관·개인정보 안내 초안: `party/terms/` (noindex, 사장님 확정 전 실제 가입 받지 않음)
+- 실제 발송을 켜려면 `playand_config.party_otp_send = on` (사장님 결정)
