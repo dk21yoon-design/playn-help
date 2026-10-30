@@ -1,0 +1,380 @@
+--- src/playn-site.ts	2026-10-30 20:49:36.970410818 +0900
++++ next/playn-site.ts	2026-10-30 21:47:54.798198660 +0900
+@@ -25,6 +25,16 @@
+ const ymd = (d: Date) => d.toISOString().slice(0, 10);
+ const addDays = (s: string, n: number) => ymd(new Date(new Date(s + "T00:00:00Z").getTime() + n * 86400e3));
+ const normPhone = (p: unknown) => { const d = String(p ?? "").replace(/\D/g, ""); return /^01\d{8,9}$/.test(d) ? d : null; };
++
++// ── N CREW v1 (2026-10-30): 광고 판단·수신 거부 링크·접속 구분 (DB 함수 playn_ad_ok / playn_optout_link)
++async function adOk(phone: string) { const { data } = await sb.rpc("playn_ad_ok", { p_phone: phone }); return data === true; }
++async function adFooter(phone: string) { const { data: t } = await sb.rpc("playn_optout_link", { p_phone: phone }); return t ? `수신거부 playn.kr/stop/?t=${t}` : "수신거부: playn.kr 맨 아래"; }
++async function withFooter(msg: string, phone: string) { return msg.replace("수신거부: playn.kr 맨 아래", await adFooter(phone)); }
++async function otpIpHash(req: Request) {
++  const ip = (req.headers.get("cf-connecting-ip") ?? "").trim(); if (!ip) return null;
++  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("ncrew-otp:" + ip)));
++  return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
++}
+ const fmtPhone = (d: string) => d.replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
+ function label(s: string) { const d = new Date(s + "T00:00:00Z"); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}(${"일월화수목금토"[d.getUTCDay()]})`; }
+ 
+@@ -140,22 +150,40 @@
+   if (req.method === "GET") {
+     const u = new URL(req.url);
+     if (u.searchParams.has("deals")) return J(await deals(cfg));
+-    return J({ ok: true, kakao: cfg.kakao_channel_url ?? null });
++    return J({ ok: true, kakao: cfg.kakao_channel_url ?? null, optout_mode: cfg.ncrew_optout_mode === "verified" ? "verified" : "legacy", join_otp: cfg.ncrew_join_otp === "on" });
+   }
+   let b: any;
+   try { b = await req.json(); } catch { return J({ error: "bad json" }, 400); }
+ 
+   if (b.action === "slot") return J(await slotInfo(cfg, String(b.date ?? ""), String(b.branch ?? ""), String(b.pkg ?? "")));
+ 
++  // 가입 인증번호 (준비: 설정 ncrew_join_otp=on 일 때만. 지금은 꺼짐 → 문자 안 나감)
++  if (b.action === "join_otp") {
++    if (cfg.ncrew_join_otp !== "on") return J({ ok: false, error: "가입 인증은 아직 준비 중이에요" });
++    const phone = normPhone(b.phone); if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
++    const { data: r, error } = await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "join", p_ip_hash: await otpIpHash(req) });
++    if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 해 주세요" });
++    const sent = await sms(cfg, phone, `[플레이앤 N CREW] 가입 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
++    return J({ ok: sent, error: sent ? undefined : "문자를 보내지 못했어요. 잠시 후 다시 시도해 주세요" });
++  }
+   if (b.action === "join") {
+     const phone = normPhone(b.phone), name = String(b.name ?? "").trim().slice(0, 20);
+     if (!phone || !name) return J({ ok: false, error: "이름과 휴대폰 번호를 확인해 주세요" });
+-    if (!b.agree) return J({ ok: false, error: "특가 알림 수신 동의가 필요해요" });
++    const joinOtp = cfg.ncrew_join_otp === "on";
++    // 준비된 새 방식(설정 on): 번호 인증 필수, 광고 동의는 따로 선택(기본 꺼짐)
++    // 지금 방식(설정 off): 기존과 같음. 수신 거부한 번호는 DB 보호 장치가 광고 동의를 켜지 않음
++    let marketing = true;
++    if (joinOtp) {
++      const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "join" });
++      if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호를 확인해 주세요" });
++      marketing = b.marketing === true;
++    } else if (!b.agree) return J({ ok: false, error: "특가 알림 수신 동의가 필요해요" });
+     const { data: ex } = await sb.from("playn_members").select("phone").eq("phone", phone).maybeSingle();
+     const now = new Date().toISOString();
+-    await sb.from("playn_members").upsert({ phone, name, marketing_agree: true, night_agree: !!b.night_agree, agreed_at: now, source: String(b.source ?? "web").slice(0, 30), fav_branch: BR.includes(b.branch) ? b.branch : null, status: "active", updated_at: now });
+-    await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), again: !!ex } });
+-    return J({ ok: true, again: !!ex, name });
++    await sb.from("playn_members").upsert({ phone, name, marketing_agree: marketing, night_agree: marketing && !!b.night_agree, agreed_at: now, source: String(b.source ?? "web").slice(0, 30), fav_branch: BR.includes(b.branch) ? b.branch : null, status: "active", updated_at: now });
++    await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), again: !!ex, verified: joinOtp } });
++    const { data: ticket } = await sb.rpc("playn_join_ticket", { p_phone: phone }); // 초대 코드 연결용 1회 표(10분)
++    return J({ ok: true, again: !!ex, name, ticket });
+   }
+ 
+   if (b.action === "check") {
+@@ -165,12 +193,29 @@
+     return J({ ok: !!m && m.status === "active" }); // 이름은 돌려주지 않음 (번호만으로 남의 이름 조회 방지)
+   }
+ 
++  // 광고 수신 거부: 광고 동의 끄기 + 수신 거부 기록만. 회원 자격·로그인·예약·혜택은 그대로 (N CREW v1)
++  //  verified(본인 확인): 인증번호 확인 뒤 처리 / legacy(전환 전 임시): 기존 홈페이지 경로 유지, 광고만 끔
++  if (b.action === "optout_link") {
++    const { data: r } = await sb.rpc("playn_optout_by_link", { p_token: String(b.t ?? "").slice(0, 40) });
++    return J(r ?? { ok: false, error: "잠시 후 다시 해 주세요" });
++  }
++  if (b.action === "optout_otp") {
++    if (cfg.ncrew_optout_mode !== "verified") return J({ ok: false, error: "본인 확인 수신 거부는 아직 준비 중이에요" });
++    const phone = normPhone(b.phone); if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
++    const { data: r, error } = await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "optout", p_ip_hash: await otpIpHash(req) });
++    if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 해 주세요" });
++    const sent = await sms(cfg, phone, `[플레이앤] 수신 거부 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
++    return J({ ok: sent, error: sent ? undefined : "문자를 보내지 못했어요. 잠시 후 다시 시도해 주세요" });
++  }
+   if (b.action === "leave") {
+     const phone = normPhone(b.phone);
+-    if (phone) {
+-      await sb.from("playn_members").update({ marketing_agree: false, status: "left", updated_at: new Date().toISOString() }).eq("phone", phone);
+-      await sb.from("playn_optout").upsert({ phone, source: "site" }); // 멤버가 아닌 단체문자 수신자도 거부 기록
++    if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
++    if (cfg.ncrew_optout_mode === "verified") {
++      if (!b.code) return J({ ok: false, need_code: true, error: "본인 확인 인증번호를 받아 주세요" });
++      const { data: r } = await sb.rpc("playn_optout_verified", { p_phone: phone, p_code: String(b.code).slice(0, 12) });
++      return J(r ?? { ok: false, error: "잠시 후 다시 해 주세요" });
+     }
++    await sb.rpc("playn_optout_apply", { p_phone: phone, p_method: "site_legacy" });
+     return J({ ok: true });
+   }
+ 
+--- src/playn-community.ts	2026-10-30 20:49:36.970772049 +0900
++++ next/playn-community.ts	2026-10-30 21:47:54.799103633 +0900
+@@ -30,6 +30,16 @@
+ }
+ const BR = ["홍대루프탑점", "연남루프탑점", "연트럴파크점"];
+ const normPhone = (p: unknown) => { const d = String(p ?? "").replace(/\D/g, ""); return /^01\d{8,9}$/.test(d) ? d : null; };
++
++// ── N CREW v1 (2026-10-30): 광고 판단·수신 거부 링크·접속 구분 (DB 함수 playn_ad_ok / playn_optout_link)
++async function adOk(phone: string) { const { data } = await sb.rpc("playn_ad_ok", { p_phone: phone }); return data === true; }
++async function adFooter(phone: string) { const { data: t } = await sb.rpc("playn_optout_link", { p_phone: phone }); return t ? `수신거부 playn.kr/stop/?t=${t}` : "수신거부: playn.kr 맨 아래"; }
++async function withFooter(msg: string, phone: string) { return msg.replace("수신거부: playn.kr 맨 아래", await adFooter(phone)); }
++async function otpIpHash(req: Request) {
++  const ip = (req.headers.get("cf-connecting-ip") ?? "").trim(); if (!ip) return null;
++  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("ncrew-otp:" + ip)));
++  return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
++}
+ const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+ const rand = (n: number, set = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789") => Array.from(crypto.getRandomValues(new Uint8Array(n))).map((x) => set[x % set.length]).join("");
+ 
+@@ -85,7 +95,8 @@
+   const { data, error } = await sb.from("playn_coupons").insert({ phone, source, kind: c.kind, title: c.title, detail: c.detail ?? null, amount: c.amount ?? null, expires_at: c.expires ?? addMonths(rules.coupon_months ?? 6) }).select("id").maybeSingle();
+   if (error || !data) return false; // 이미 받음
+   const h = new Date(Date.now() + 9 * 3600e3).getUTCHours();
+-  if (notify && h >= 8 && h < 21) await sms(cfg, phone, `(광고)[플레이앤 N CREW] 🎁 ${c.title} 지급\n${c.detail ?? ""}\n내 쿠폰: https://playn.kr/me/\n수신거부: playn.kr 맨 아래`);
++  // N CREW v1: 쿠폰은 그대로 지급, (광고) 문자는 광고 판단(동의·수신 거부·활성·08~21시)을 통과할 때만
++  if (notify && h >= 8 && h < 21 && (await adOk(phone))) await sms(cfg, phone, await withFooter(`(광고)[플레이앤 N CREW] 🎁 ${c.title} 지급\n${c.detail ?? ""}\n내 쿠폰: https://playn.kr/me/\n수신거부: playn.kr 맨 아래`, phone));
+   return true;
+ }
+ const addDaysStr = (s: string, n: number) => new Date(new Date(s + "T00:00:00Z").getTime() + n * 86400e3).toISOString().slice(0, 10);
+@@ -347,31 +358,25 @@
+     return J({ ok: true, item, existed: !!dup, voted: !error, ...(await gearBoard(await cfgAll())) });
+   }
+ 
+-  // 문자 인증번호 보내기 (가입한 번호만, 1시간 3회)
++  // 문자 인증번호 보내기 (가입한 번호만). N CREW v1: 로그인 용도 번호, 발급 한도·5회 제한·1회 사용은 DB 함수
+   if (b.action === "otp_send") {
+     const phone = normPhone(b.phone);
+     if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
+-    const { data: m } = await sb.from("playn_members").select("status").eq("phone", phone).maybeSingle();
+-    if (!m || m.status !== "active") return J({ ok: false, need_join: true, error: "N CREW 멤버가 아니에요. 먼저 가입해 주세요" });
+-    const since = new Date(Date.now() - 3600e3).toISOString();
+-    const { count } = await sb.from("playn_otp").select("phone", { count: "exact", head: true }).eq("phone", phone).gte("created_at", since);
+-    if ((count ?? 0) >= 3) return J({ ok: false, error: "인증번호는 1시간에 3번까지 받을 수 있어요" });
+-    const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+-    await sb.from("playn_otp").insert({ phone, code });
++    const { data: okm } = await sb.rpc("playn_member_ok", { p_phone: phone });
++    if (okm !== true) return J({ ok: false, need_join: true, error: "N CREW 멤버가 아니에요. 먼저 가입해 주세요" });
++    const { data: r, error } = await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "login", p_ip_hash: await otpIpHash(req) });
++    if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 시도해 주세요" });
+     const cfg = await cfgAll();
+-    const sent = await sms(cfg, phone, `[플레이앤 N CREW] 인증번호 ${code} (5분 안에 입력해 주세요)`);
++    const sent = await sms(cfg, phone, `[플레이앤 N CREW] 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
+     return J({ ok: sent, error: sent ? undefined : "문자를 보내지 못했어요. 잠시 후 다시 시도해 주세요" });
+   }
+   if (b.action === "otp_verify") {
+     const phone = normPhone(b.phone);
+     if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
+-    const since = new Date(Date.now() - 5 * 60e3).toISOString();
+-    const { data: o } = await sb.from("playn_otp").select("code,created_at").eq("phone", phone).eq("used", false).gte("created_at", since).order("created_at", { ascending: false }).limit(1).maybeSingle();
+-    if (!o || o.code !== String(b.code ?? "").trim()) return J({ ok: false, error: "인증번호가 맞지 않거나 시간이 지났어요" });
+-    await sb.from("playn_otp").update({ used: true }).eq("phone", phone).eq("code", o.code);
+-    const token = rand(32, "abcdefghijklmnopqrstuvwxyz0123456789");
+-    await sb.from("playn_sessions").insert({ token, phone, expires_at: new Date(Date.now() + 30 * 86400e3).toISOString() });
+-    return J({ ok: true, token });
++    const { data: r, error } = await sb.rpc("member_otp_login", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12) });
++    if (error) return J({ ok: false, error: "로그인을 마치지 못했어요. 잠시 후 다시 해 주세요" });
++    if (!r?.ok || typeof r.token !== "string") return J({ ok: false, need_join: r?.need_join, error: r?.error ?? "인증번호가 맞지 않거나 시간이 지났어요", left: r?.left });
++    return J({ ok: true, token: r.token });
+   }
+   if (b.action === "me") {
+     const { data: s } = await sb.from("playn_sessions").select("phone,expires_at").eq("token", String(b.token ?? "")).maybeSingle();
+@@ -414,16 +419,12 @@
+     await sb.from("playn_members").update({ birthday: v }).eq("phone", phone);
+     return J({ ok: true });
+   }
+-  // 가입 직후 친구 초대 코드 연결 (가입 10분 이내, 한 번만)
++  // 가입 직후 친구 초대 코드 연결: 가입 때 받은 1회용 표(10분)가 있어야 함 (N CREW v1, 번호만으로는 불가)
+   if (b.action === "ref_attach") {
+     const phone = normPhone(b.phone), code = String(b.ref ?? "").trim().toUpperCase();
+-    if (!phone || !/^N[A-Z0-9]{5}$/.test(code)) return J({ ok: false });
+-    const { data: m } = await sb.from("playn_members").select("created_at,referred_by,ref_code").eq("phone", phone).maybeSingle();
+-    if (!m || m.referred_by || m.ref_code === code || Date.now() - new Date(m.created_at).getTime() > 10 * 60e3) return J({ ok: false });
+-    const { data: inviter } = await sb.from("playn_members").select("phone").eq("ref_code", code).maybeSingle();
+-    if (!inviter || inviter.phone === phone) return J({ ok: false });
+-    await sb.from("playn_members").update({ referred_by: code }).eq("phone", phone);
+-    return J({ ok: true });
++    if (!phone) return J({ ok: false });
++    const { data: r } = await sb.rpc("playn_ref_attach", { p_phone: phone, p_code: code, p_ticket: String(b.ticket ?? "").slice(0, 64) });
++    return J({ ok: r?.ok === true });
+   }
+ 
+   // ── 50% 할인 예약: 같이 오는 사람 전원 N CREW 인증 ──
+@@ -442,23 +443,18 @@
+     if (ck.phones.includes(phone)) return J({ ...pub(), already: true });
+     if (ck.phones.length >= ck.need) return J({ ok: false, error: "인원만큼 인증이 다 끝났어요" });
+     if (b.action === "crew_otp") {
+-      const since = new Date(Date.now() - 3600e3).toISOString();
+-      const { count } = await sb.from("playn_otp").select("phone", { count: "exact", head: true }).eq("phone", phone).gte("created_at", since);
+-      if ((count ?? 0) >= 3) return J({ ok: false, error: "인증번호는 1시간에 3번까지 받을 수 있어요" });
+-      const otp = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+-      await sb.from("playn_otp").insert({ phone, code: otp });
++      const { data: r, error } = await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "crew", p_ip_hash: await otpIpHash(req) });
++      if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 시도해 주세요" });
+       const cfg = await cfgAll();
+-      const sent = await sms(cfg, phone, `[플레이앤 N CREW] 인증번호 ${otp} (5분 안에 입력해 주세요)`);
++      const sent = await sms(cfg, phone, `[플레이앤 N CREW] 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
+       return J({ ok: sent, error: sent ? undefined : "문자를 보내지 못했어요. 잠시 후 다시 시도해 주세요" });
+     }
+     // crew_verify
+     const name = String(b.name ?? "").trim().slice(0, 20);
+     if (!name) return J({ ok: false, error: "이름을 적어 주세요" });
+     if (!b.agree) return J({ ok: false, error: "N CREW 가입 동의가 필요해요" });
+-    const since = new Date(Date.now() - 5 * 60e3).toISOString();
+-    const { data: o } = await sb.from("playn_otp").select("code").eq("phone", phone).eq("used", false).gte("created_at", since).order("created_at", { ascending: false }).limit(1).maybeSingle();
+-    if (!o || o.code !== String(b.code ?? "").trim()) return J({ ok: false, error: "인증번호가 맞지 않거나 시간이 지났어요" });
+-    await sb.from("playn_otp").update({ used: true }).eq("phone", phone).eq("code", o.code);
++    const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "crew" });
++    if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호가 맞지 않거나 시간이 지났어요" });
+     const now = new Date().toISOString();
+     const { data: ex } = await sb.from("playn_members").select("phone,status").eq("phone", phone).maybeSingle();
+     if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: true, night_agree: !!b.night_agree, agreed_at: now, source: "crew_check", status: "active", updated_at: now });
+--- src/playn-settle.ts	2026-10-30 20:49:36.972699270 +0900
++++ next/playn-settle.ts	2026-10-30 21:47:54.800023688 +0900
+@@ -1,6 +1,16 @@
+ // playn-settle: 보증금 자동 정산 (입실 전 체크인 → 퇴실 후 사용 내역 → 자동 계산 → 사장님 송금 확인 → 손님 문자)
+ import { createClient } from "npm:@supabase/supabase-js@2";
+ const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
++
++// ── N CREW v1 (2026-10-30): 광고 판단·수신 거부 링크·접속 구분 (DB 함수 playn_ad_ok / playn_optout_link)
++async function adOk(phone: string) { const { data } = await sb.rpc("playn_ad_ok", { p_phone: phone }); return data === true; }
++async function adFooter(phone: string) { const { data: t } = await sb.rpc("playn_optout_link", { p_phone: phone }); return t ? `수신거부 playn.kr/stop/?t=${t}` : "수신거부: playn.kr 맨 아래"; }
++async function withFooter(msg: string, phone: string) { return msg.replace("수신거부: playn.kr 맨 아래", await adFooter(phone)); }
++async function otpIpHash(req: Request) {
++  const ip = (req.headers.get("cf-connecting-ip") ?? "").trim(); if (!ip) return null;
++  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("ncrew-otp:" + ip)));
++  return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
++}
+ const CORS = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type", "access-control-allow-methods": "GET,POST,OPTIONS" };
+ const J = (o: unknown, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...CORS, "content-type": "application/json; charset=utf-8" } });
+ const ACCOUNT = "토스뱅크 100008287587 (예금주 윤도권)";
+@@ -354,10 +364,17 @@
+     if (b.action === "team_join") {
+       const phone = String(b.phone ?? "").replace(/\D/g, ""), name = String(b.name ?? "").trim().slice(0, 20);
+       if (!/^01\d{8,9}$/.test(phone) || !name) return J({ ok: false, error: "이름과 휴대폰 번호를 확인해 주세요" });
+-      if (!b.agree) return J({ ok: false, error: "특가·이벤트 알림 수신 동의가 필요해요" });
++      // 준비(설정 ncrew_join_otp=on): 가입 인증번호 확인 필수, 광고 동의는 따로 선택(기본 꺼짐). 지금은 꺼짐 → 기존과 같음
++      const joinOtp = cfg.ncrew_join_otp === "on";
++      let marketing = true;
++      if (joinOtp) {
++        const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "join" });
++        if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호를 확인해 주세요" });
++        marketing = b.marketing === true;
++      } else if (!b.agree) return J({ ok: false, error: "특가·이벤트 알림 수신 동의가 필요해요" });
+       const now = new Date().toISOString();
+       const { data: ex } = await sb.from("playn_members").select("phone,status").eq("phone", phone).maybeSingle();
+-      if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: true, night_agree: !!b.night_agree, agreed_at: now, source: "worlds_team", fav_branch: p.branch, status: "active", updated_at: now });
++      if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: marketing, night_agree: marketing && !!b.night_agree, agreed_at: now, source: "worlds_team", fav_branch: p.branch, status: "active", updated_at: now });
+       await sb.from("playn_worlds_crew").upsert({ group_code: p.group_code, phone, name });
+       await sb.from("playand_log").insert({ source: "member_join", payload: { phone: phone.slice(-4), via: "worlds_team", again: !!ex } });
+     }
+@@ -437,21 +454,16 @@
+     const phone = String(b.phone ?? "").replace(/\D/g, ""), name = String(b.name ?? "").trim().slice(0, 20);
+     if (!/^01\d{8,9}$/.test(phone)) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
+     if (b.action === "fx_otp") {
+-      const since = new Date(Date.now() - 3600e3).toISOString();
+-      const { count } = await sb.from("playn_otp").select("phone", { count: "exact", head: true }).eq("phone", phone).gte("created_at", since);
+-      if ((count ?? 0) >= 3) return J({ ok: false, error: "인증번호는 1시간에 3번까지 받을 수 있어요" });
+-      const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+-      await sb.from("playn_otp").insert({ phone, code });
+-      const sent = await sms(cfg, phone, `[플레이앤 N CREW] 인증번호 ${code} (5분 안에 입력해 주세요)`);
++      const { data: r, error } = await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "fx", p_ip_hash: await otpIpHash(req) });
++      if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 시도해 주세요" });
++      const sent = await sms(cfg, phone, `[플레이앤 N CREW] 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
+       return J({ ok: sent, error: sent ? undefined : "문자를 보내지 못했어요. 잠시 후 다시 시도해 주세요" });
+     }
+     // fx_join: 인증번호 확인 → N CREW 가입 → 그룹 인원 반영 → 전원이면 자동 처리
+     if (!name) return J({ ok: false, error: "이름을 적어주세요" });
+     if (!b.agree) return J({ ok: false, error: "특가·이벤트 알림 수신 동의가 필요해요 (N CREW 가입 조건)" });
+-    const since = new Date(Date.now() - 5 * 60e3).toISOString();
+-    const { data: o } = await sb.from("playn_otp").select("code").eq("phone", phone).eq("used", false).gte("created_at", since).order("created_at", { ascending: false }).limit(1).maybeSingle();
+-    if (!o || o.code !== String(b.code ?? "").trim()) return J({ ok: false, error: "인증번호가 맞지 않거나 시간이 지났어요" });
+-    await sb.from("playn_otp").update({ used: true }).eq("phone", phone).eq("code", o.code);
++    const { data: v } = await sb.rpc("member_otp_verify", { p_phone: phone, p_code: String(b.code ?? "").slice(0, 12), p_purpose: "fx" });
++    if (!v?.ok) return J({ ok: false, error: v?.error ?? "인증번호가 맞지 않거나 시간이 지났어요" });
+     const now = new Date().toISOString();
+     const { data: ex } = await sb.from("playn_members").select("status").eq("phone", phone).maybeSingle();
+     if (!ex || ex.status !== "active") await sb.from("playn_members").upsert({ phone, name, marketing_agree: true, night_agree: !!b.night_agree, agreed_at: now, source: "fx_group", fav_branch: g.branch, status: "active", updated_at: now });
+--- src/playn-auto.ts	2026-10-30 20:49:36.971238267 +0900
++++ next/playn-auto.ts	2026-10-30 21:47:54.800476568 +0900
+@@ -21,6 +21,16 @@
+ const kstToday = () => kst().toISOString().slice(0, 10);
+ const addDays = (s: string, n: number) => new Date(new Date(s + "T00:00:00Z").getTime() + n * 86400e3).toISOString().slice(0, 10);
+ const normPhone = (p: unknown) => { const d = String(p ?? "").replace(/\D/g, ""); return /^01\d{8,9}$/.test(d) ? d : null; };
++
++// ── N CREW v1 (2026-10-30): 광고 판단·수신 거부 링크·접속 구분 (DB 함수 playn_ad_ok / playn_optout_link)
++async function adOk(phone: string) { const { data } = await sb.rpc("playn_ad_ok", { p_phone: phone }); return data === true; }
++async function adFooter(phone: string) { const { data: t } = await sb.rpc("playn_optout_link", { p_phone: phone }); return t ? `수신거부 playn.kr/stop/?t=${t}` : "수신거부: playn.kr 맨 아래"; }
++async function withFooter(msg: string, phone: string) { return msg.replace("수신거부: playn.kr 맨 아래", await adFooter(phone)); }
++async function otpIpHash(req: Request) {
++  const ip = (req.headers.get("cf-connecting-ip") ?? "").trim(); if (!ip) return null;
++  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("ncrew-otp:" + ip)));
++  return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
++}
+ const fmtPhone = (d: string) => d.replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
+ const rand = (n: number) => Array.from(crypto.getRandomValues(new Uint8Array(n))).map((x) => "abcdefghjkmnpqrstuvwxyz23456789"[x % 31]).join("");
+ // 예약 종료 시각(한국 시간, ms 기준값: UTC 필드에 KST를 담은 값)
+@@ -103,12 +113,14 @@
+   if (!free.length) return { ok: true, free: 0, sent: 0 };
+   const msg = `(광고)[플레이앤 N CREW] 오늘 빈자리 당일 ${d.discount_today}% 특가 🎮\n${free.slice(0, 4).join("\n")}\n선착순 신청 👉 https://playn.kr/#deals\n수신거부: playn.kr 맨 아래`;
+   if (dry) return { ok: true, free: free.length, preview: msg };
+-  const { data: ms } = await sb.from("playn_members").select("phone").eq("status", "active").eq("marketing_agree", true);
++  // N CREW v1: 광고 대상은 공통 판단(playn_ad_audience + playn_ad_ok: 활성·동의·수신 거부 없음·08~21시)
++  const { data: ms } = await sb.from("playn_ad_audience").select("phone");
+   const since = new Date(Date.now() - 7 * 86400e3).toISOString(); let sent = 0;
+   for (const m of ms ?? []) {
++    if (!(await adOk(m.phone))) continue;
+     const { count } = await sb.from("playn_alert_log").select("id", { count: "exact", head: true }).eq("phone", m.phone).eq("kind", "vacancy").gte("sent_at", since);
+     if ((count ?? 0) >= (rules.vacancy_weekly_max ?? 2)) continue;
+-    if (await sms(cfg, m.phone, msg)) { await sb.from("playn_alert_log").insert({ phone: m.phone, kind: "vacancy" }); sent++; }
++    if (await sms(cfg, m.phone, await withFooter(msg, m.phone))) { await sb.from("playn_alert_log").insert({ phone: m.phone, kind: "vacancy" }); sent++; }
+   }
+   return { ok: true, free: free.length, sent };
+ }
+--- src/playn-growth.ts	2026-10-30 20:49:36.970983899 +0900
++++ next/playn-growth.ts	2026-10-30 21:47:54.800859188 +0900
+@@ -4,6 +4,16 @@
+ // 모든 광고 문자: 마케팅 동의 멤버만, (광고) 표기, 수신거부 안내, 08~21시만, 1인 주 2회 이하
+ import { createClient } from "npm:@supabase/supabase-js@2";
+ const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
++
++// ── N CREW v1 (2026-10-30): 광고 판단·수신 거부 링크·접속 구분 (DB 함수 playn_ad_ok / playn_optout_link)
++async function adOk(phone: string) { const { data } = await sb.rpc("playn_ad_ok", { p_phone: phone }); return data === true; }
++async function adFooter(phone: string) { const { data: t } = await sb.rpc("playn_optout_link", { p_phone: phone }); return t ? `수신거부 playn.kr/stop/?t=${t}` : "수신거부: playn.kr 맨 아래"; }
++async function withFooter(msg: string, phone: string) { return msg.replace("수신거부: playn.kr 맨 아래", await adFooter(phone)); }
++async function otpIpHash(req: Request) {
++  const ip = (req.headers.get("cf-connecting-ip") ?? "").trim(); if (!ip) return null;
++  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("ncrew-otp:" + ip)));
++  return Array.from(d.slice(0, 8)).map((x) => x.toString(16).padStart(2, "0")).join("");
++}
+ const CORS = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type", "access-control-allow-methods": "POST,OPTIONS" };
+ const J = (o: unknown, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json; charset=utf-8", ...CORS } });
+ // 유입 경로 (2026-10-09): 체크인 때 "어떻게 알게 되셨어요?" 한 번 탭 → 콘텐츠·채널별 예약 기여 측정
+@@ -54,12 +64,13 @@
+   ];
+   const msg = `(광고)[플레이앤 N CREW] 빈자리 특가 🎮\n${lines.join("\n")}\n선착순 신청 👉 https://playn.kr/?from=sms#deals\n수신거부: playn.kr 맨 아래`;
+   if (dry) return { ok: true, flash: flash.length, early: early.length, preview: msg };
+-  const { data: ms } = await sb.from("playn_members").select("phone").eq("status", "active").eq("marketing_agree", true);
++  // N CREW v1: 광고 대상은 공통 판단(playn_ad_audience + playn_ad_ok)
++  const { data: ms } = await sb.from("playn_ad_audience").select("phone");
+   const out = await optoutSet(); let sent = 0;
+   for (const m of ms ?? []) {
+-    if (out.has(digits(m.phone))) continue;
++    if (out.has(digits(m.phone)) || !(await adOk(m.phone))) continue;
+     if ((await weekCount(m.phone)) >= (rules.vacancy_weekly_max ?? 2)) continue;
+-    if (await sms(cfg, m.phone, msg)) { await sb.from("playn_alert_log").insert({ phone: m.phone, kind: "vacancy" }); sent++; }
++    if (await sms(cfg, m.phone, await withFooter(msg, m.phone))) { await sb.from("playn_alert_log").insert({ phone: m.phone, kind: "vacancy" }); sent++; }
+   }
+   return { ok: true, flash: flash.length, early: early.length, sent };
+ }
+@@ -68,11 +79,11 @@
+ async function winback(cfg: Record<string, string>, rules: any, dry = false) {
+   const W = { on: true, after_days: 60, until_days: 120, amount: 20000, valid_days: 30, gap_days: 120, per_run: 5, ...(rules.winback ?? {}) };
+   const h = kst().getUTCHours(); if (!W.on || (!dry && (h < 10 || h >= 20))) return { ok: true, skipped: true };
+-  const { data: ms } = await sb.from("playn_members").select("phone,name").eq("status", "active").eq("marketing_agree", true);
++  const { data: ms } = await sb.from("playn_ad_audience").select("phone,name");
+   const out = await optoutSet(), today = kstToday(), res: any[] = [];
+   for (const m of ms ?? []) {
+     if (res.length >= W.per_run) break;
+-    const p = digits(m.phone); if (out.has(p)) continue;
++    const p = digits(m.phone); if (out.has(p) || !(await adOk(m.phone))) continue;
+     const { data: last } = await sb.from("playand_reservations").select("use_date").in("phone", variants(p)).eq("status", "confirmed").lt("use_date", today).order("use_date", { ascending: false }).limit(1);
+     const lu = last?.[0]?.use_date; if (!lu) continue;
+     const ago = Math.round((new Date(today + "T00:00:00Z").getTime() - new Date(lu + "T00:00:00Z").getTime()) / 86400e3);
+@@ -87,7 +98,7 @@
+     const { data: c } = await sb.from("playn_coupons").insert({ phone: p, source: "winback:" + today.slice(0, 7), kind: "won", title: `다시 만나요 쿠폰 ${W.amount.toLocaleString()}원`, detail: `${md}까지 홈페이지 멤버 예약에 1번 사용 (다른 할인과 중복 불가)`, amount: W.amount, status: "active", expires_at: exp }).select("id").maybeSingle();
+     if (!c) continue;
+     const nm = String(m.name ?? "").trim();
+-    const ok = await sms(cfg, p, `(광고)[플레이앤 N CREW] ${nm ? nm + "님, " : ""}오랜만이에요 🎮\n다시 만나요 쿠폰 ${W.amount.toLocaleString()}원을 넣어드렸어요 (${md}까지 1회)\n내 쿠폰·예약: https://playn.kr/me/?from=winback\n수신거부: playn.kr 맨 아래`);
++    const ok = await sms(cfg, p, await withFooter(`(광고)[플레이앤 N CREW] ${nm ? nm + "님, " : ""}오랜만이에요 🎮\n다시 만나요 쿠폰 ${W.amount.toLocaleString()}원을 넣어드렸어요 (${md}까지 1회)\n내 쿠폰·예약: https://playn.kr/me/?from=winback\n수신거부: playn.kr 맨 아래`, p));
+     await sb.from("playn_alert_log").insert({ phone: m.phone, kind: "winback" });
+     res.push({ phone: "***" + p.slice(-4), ago, sms: ok });
+   }

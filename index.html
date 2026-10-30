@@ -789,7 +789,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
       <div class="field"><label for="jBranch">자주 가는 지점</label><select id="jBranch"><option value="">상관없어요</option><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></div>
       <label class="chk"><input type="checkbox" id="jAgree"><span><em>(필수)</em> 공실 특가·이벤트 등 광고성 정보를 카카오톡·문자로 받는 데 동의해요</span></label>
       <label class="chk"><input type="checkbox" id="jNight"><span>(선택) 밤 9시 ~ 아침 8시 사이에 오는 당일 특가 알림도 받을게요</span></label>
-      <details class="terms"><summary>개인정보 수집·이용 안내</summary><div>수집 항목: 이름, 휴대폰 번호, 자주 가는 지점<br>목적: 공실 특가·이벤트 알림, 특가 예약 확인 연락<br>보관 기간: 탈퇴(수신 거부) 시까지<br>동의하지 않을 수 있지만, 그 경우 N CREW 가입과 특가 신청이 어려워요. 수신 거부는 이 페이지 맨 아래에서 언제든 할 수 있어요.</div></details>
+      <details class="terms"><summary>개인정보 수집·이용 안내</summary><div>수집 항목: 이름, 휴대폰 번호, 자주 가는 지점<br>목적: 공실 특가·이벤트 알림, 특가 예약 확인 연락<br>보관 기간: N CREW 탈퇴 시까지 (광고 수신 거부는 탈퇴가 아니에요)<br>동의하지 않을 수 있지만, 그 경우 N CREW 가입과 특가 신청이 어려워요. 수신 거부는 이 페이지 맨 아래에서 언제든 할 수 있어요.</div></details>
       <button class="btn pink" id="jBtn">가입하고 특가 받기</button>
       <div class="msg" id="jMsg" role="status"></div>
       <a class="btn kakao" id="kakaoBtn" target="_blank" rel="noopener" hidden>카카오톡 채널 친구 추가</a>
@@ -928,8 +928,9 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lTitle">
     <button class="x" data-close aria-label="닫기">×</button>
     <h3 class="disp" id="lTitle">특가 알림 수신 거부</h3>
-    <p style="margin-top:6px;font-size:14.5px">번호를 입력하면 더 이상 특가·이벤트 알림을 보내지 않아요.</p>
+    <p style="margin-top:6px;font-size:14.5px">특가·이벤트 광고 문자만 끊어져요. N CREW 회원 자격, 쿠폰, 예약 혜택은 그대로예요.</p>
     <div class="field"><label for="lPhone">휴대폰 번호</label><input id="lPhone" type="tel" inputmode="numeric" placeholder="010-0000-0000"></div>
+    <div class="field" id="lCodeBox" hidden><label for="lCode">인증번호</label><input id="lCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="문자로 받은 6자리"></div>
     <button class="btn ghost" id="lBtn" style="width:100%;margin-top:14px;color:var(--night);box-shadow:inset 0 0 0 1.5px #C9C5EE">수신 거부하기</button>
     <div class="msg" id="lMsg" role="status"></div>
   </div>
@@ -1039,7 +1040,7 @@ $("joinForm").onsubmit=async e=>{e.preventDefault();const m=$("jMsg");m.classNam
   if(!$("jAgree").checked){m.className="msg err";m.textContent="특가 알림을 받으려면 필수 동의에 체크해 주세요.";return}
   $("jBtn").disabled=true;m.textContent="가입하는 중…";
   try{const j=await post({action:"join",name:$("jName").value,phone:$("jPhone").value,branch:$("jBranch").value,agree:true,night_agree:$("jNight").checked,source:new URLSearchParams(location.search).get("from")||"web"});
-    if(j.ok){store.set("pn_phone",$("jPhone").value);if(REF&&!j.again)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"ref_attach",phone:$("jPhone").value,ref:REF})}).catch(()=>{});m.className="msg ok";m.textContent=j.again?`${j.name}님, 이미 멤버예요. 정보를 업데이트했어요.`:`${j.name}님, N CREW에 오신 걸 환영해요! 이제 위 보드에서 특가를 신청할 수 있고, 내 N CREW에서 레벨과 초대 코드를 볼 수 있어요.`}
+    if(j.ok){store.set("pn_phone",$("jPhone").value);if(REF&&!j.again)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"ref_attach",phone:$("jPhone").value,ref:REF,ticket:j.ticket})}).catch(()=>{});m.className="msg ok";m.textContent=j.again?`${j.name}님, 이미 멤버예요. 정보를 업데이트했어요.`:`${j.name}님, N CREW에 오신 걸 환영해요! 이제 위 보드에서 특가를 신청할 수 있고, 내 N CREW에서 레벨과 초대 코드를 볼 수 있어요.`}
     else{m.className="msg err";m.textContent=j.error}}
   catch(_){m.className="msg err";m.textContent="네트워크가 불안정해요. 잠시 후 다시 시도해 주세요."}
   $("jBtn").disabled=false};
@@ -1047,7 +1048,11 @@ $("joinForm").onsubmit=async e=>{e.preventDefault();const m=$("jMsg");m.classNam
 /* 수신 거부 */
 $("leaveBtn").onclick=()=>{lastFocus=$("leaveBtn");$("leaveBg").hidden=false;$("lPhone").focus()};
 $("lBtn").onclick=async()=>{const m=$("lMsg");if($("lPhone").value.replace(/\D/g,"").length<10){m.className="msg err";m.textContent="휴대폰 번호를 확인해 주세요.";return}
-  await post({action:"leave",phone:$("lPhone").value});m.className="msg ok";m.textContent="수신 거부됐어요. 더 이상 알림을 보내지 않아요."};
+  const code=$("lCodeBox").hidden?undefined:$("lCode").value.trim();
+  const j=await post({action:"leave",phone:$("lPhone").value,code}).catch(()=>({ok:false,error:"잠시 후 다시 해 주세요."}));
+  if(j.need_code){const o=await post({action:"optout_otp",phone:$("lPhone").value}).catch(()=>({ok:false}));$("lCodeBox").hidden=false;$("lCode").focus();m.className=o.ok?"msg ok":"msg err";m.textContent=o.ok?"본인 확인 인증번호를 보냈어요. 입력 후 다시 눌러 주세요.":(o.error||"인증번호를 보내지 못했어요.");return}
+  if(!j.ok){m.className="msg err";m.textContent=j.error||"잠시 후 다시 해 주세요.";return}
+  m.className="msg ok";m.textContent="광고 문자 수신을 거부했어요. 회원 혜택은 그대로예요."};
 
 /* 카카오 채널 */
 fetch(API).then(r=>r.json()).then(j=>{const k=$("kakaoBtn");if(j.kakao){k.href=j.kakao}else{k.removeAttribute("target");k.href="#";k.textContent="카카오톡 채널 'playn' 검색 (ID 복사)";k.onclick=async e=>{e.preventDefault();try{await navigator.clipboard.writeText("playn")}catch(_){}k.textContent="복사됨 · 카카오톡 검색창에 붙여넣기 하세요"}}k.hidden=false}).catch(()=>{});

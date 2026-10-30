@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#16133F">
+<title>광고 문자 수신 거부 | Play N</title>
+<meta name="description" content="플레이앤 N CREW 광고 문자를 그만 받는 페이지예요. 문자에 있던 링크로 들어오면 버튼 한 번으로 끝나고 회원 자격과 쿠폰, 예약 혜택은 그대로 남아요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--night:#16133F;--panel:#1C1850;--line:rgba(166,162,214,.16);--ink:#F3F1FF;--mute:#B3AFDF;--lamp:#FFB547;--lamp2:#FFC977;--ok:#3DDC97;--crit:#FF5A5F;--info:#8FA3FF;--pad:clamp(16px,4vw,32px);--r:18px}
+*{box-sizing:border-box;margin:0}
+body{background:var(--night);color:var(--ink);font:16px/1.6 Pretendard,system-ui,sans-serif;min-height:100vh}
+main{max-width:520px;margin:0 auto;padding:40px var(--pad) 64px}
+h1{font-size:24px;font-weight:800}
+p{color:var(--mute);margin-top:10px}
+.card{margin-top:22px;padding:20px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line)}
+button,.btn{display:block;width:100%;min-height:48px;margin-top:16px;border:0;border-radius:999px;background:var(--lamp);color:#1a1300;font:700 16px Pretendard,system-ui,sans-serif;cursor:pointer;text-align:center;line-height:48px;text-decoration:none}
+button:disabled{opacity:.6;cursor:default}
+button:focus-visible,a:focus-visible{outline:3px solid var(--info);outline-offset:3px}
+.msg{margin-top:14px;font-weight:600;min-height:1.6em}.msg.ok{color:var(--ok)}.msg.err{color:var(--crit)}
+a{color:var(--lamp2)}
+small{display:block;margin-top:18px;color:var(--mute);font-size:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body><main>
+<h1>광고 문자 수신 거부</h1>
+<p>플레이앤 N CREW 특가·이벤트 광고 문자만 끊어져요. 회원 자격, 쿠폰, 예약 혜택은 그대로예요.</p>
+<div class="card" id="withLink" hidden>
+  <p style="margin-top:0">받은 문자의 링크로 들어오셨어요. 아래 버튼을 누르면 바로 처리돼요.</p>
+  <button id="go" type="button">광고 문자 그만 받기</button>
+  <div class="msg" id="msg" role="status" aria-live="polite"></div>
+</div>
+<div class="card" id="noLink" hidden>
+  <p style="margin-top:0">링크 정보가 없어요. 홈페이지 맨 아래 '특가 알림 수신 거부'에서 번호로 처리할 수 있어요.</p>
+  <a class="btn" href="/#leaveBtn">홈페이지에서 수신 거부하기</a>
+</div>
+<small>다시 받고 싶으면 내 N CREW에서 알림을 켜거나 매장에 말씀해 주세요. 문의 플레이앤 카카오 채널.</small>
+</main>
+<script>
+const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site";
+const t=(new URLSearchParams(location.search).get("t")||"").trim();
+const $=id=>document.getElementById(id);
+if(/^[A-Za-z0-9_-]{8,40}$/.test(t)){$("withLink").hidden=false}else{$("noLink").hidden=false}
+$("go").onclick=async()=>{
+  const b=$("go"),m=$("msg");b.disabled=true;m.className="msg";m.textContent="처리하고 있어요...";
+  try{
+    const j=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"optout_link",t})}).then(r=>r.json());
+    if(j.ok){m.className="msg ok";m.textContent="광고 문자 수신을 거부했어요. 회원 혜택은 그대로예요.";b.textContent="처리 완료";return}
+    m.className="msg err";m.textContent=j.error||"링크를 확인하지 못했어요. 홈페이지에서 다시 해 주세요.";
+  }catch(e){m.className="msg err";m.textContent="연결이 잠시 불안정해요. 다시 눌러 주세요."}
+  b.disabled=false};
+</script>
+</body></html>
