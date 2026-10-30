@@ -100,7 +100,9 @@ async function detail(){
  const e=j.ev, r=j.rsvp;
  document.title=`${e.title} | 게임 모임`;
  let act="";
- if(!j.login)act=loginHtml();
+ const over=!["open","closed"].includes(e.status)||new Date(e.start_at)<=new Date();
+ if(over)act=`<p class="state">${e.status==="cancelled"?"취소된 모임이에요":["open","closed"].includes(e.status)?"이미 시작된 모임이에요":"지금은 신청을 받지 않아요"}</p>`;
+ else if(!j.login)act=loginHtml();
  else if(!j.member)act=joinHtml();
  else if(!r)act=e.status==="open"?`<div class="row"><button class="btn" data-a="join">${e.left?"참가 신청":"대기 신청"}</button></div>`:`<p class="state">지금은 신청을 받지 않아요</p>`;
  else if(r.status==="confirmed")act=`<p class="state ok">참가 확정${r.via_offer?" (대기에서 확정)":""}</p><div class="row"><button class="btn ghost" data-a="cancel">참가 취소</button></div>`;

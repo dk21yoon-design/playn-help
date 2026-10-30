@@ -1,8 +1,8 @@
 -- 게임 모임(playn-party) 현재 DB 정의 — 검수 자료 (비밀정보 없음)
--- 출처: Supabase bjrgtoyjrggxmdexnwib 에서 pg_get_functiondef / pg_indexes / pg_get_triggerdef 로 2026-10-30 10:45 KST 추출
+-- 출처: Supabase bjrgtoyjrggxmdexnwib 에서 pg_get_functiondef / pg_indexes / pg_get_triggerdef 로 2026-10-30 10:45 KST 추출, v3.4(11:05 KST) 반영
 -- 적용된 마이그레이션(순서): party_rsvp_waitlist_v1, party_v2_offer_accept_community_members, party_v2_1_queue_order_by_id,
 --   party_v3_day_before_reminder_log_only, party_v3_1_reminder_absolute_date_text, party_test_evidence_table,
---   party_v3_2_decide_at_and_stale_offer, party_v3_3_revoke_public_table_grants
+--   party_v3_2_decide_at_and_stale_offer, party_v3_3_revoke_public_table_grants, party_v3_4_lifecycle_guards
 -- 이 파일은 실행용이 아니라 읽기용이다. 원문 그대로 붙였다.
 
 -- ── 함수 실행 권한 (모든 party_* 함수): anon=false authenticated=false service_role=true
@@ -87,6 +87,7 @@ begin
   select * into ev from playn_events where id = p_event and kind = 'party' for update;
   if not found then return jsonb_build_object('ok', false, 'error', '모임을 찾지 못했어요'); end if;
   if ev.status <> 'open' then return jsonb_build_object('ok', false, 'error', '지금은 신청을 받지 않아요'); end if;
+  if ev.start_at <= now() then return jsonb_build_object('ok', false, 'error', '이미 시작된 모임이에요'); end if;   -- v3.4: 접수 마감과 별개로 시작 시각 검사
   if coalesce(ev.apply_until, ev.start_at) < now() then return jsonb_build_object('ok', false, 'error', '신청이 마감됐어요'); end if;
   select * into r from playn_party_rsvps where event_id = p_event and phone = p_phone and status in ('confirmed','waitlist','offered');
   if found then return jsonb_build_object('ok', true, 'dup', true, 'status', r.status, 'rsvp_id', r.id); end if;
@@ -112,6 +113,10 @@ begin
   if not found then return jsonb_build_object('ok', false, 'error', '모임을 찾지 못했어요'); end if;
   select * into r from playn_party_rsvps where event_id = p_event and phone = p_phone and status = 'offered' for update;
   if not found then return jsonb_build_object('ok', false, 'error', '응답할 참여 제안이 없어요'); end if;
+  -- v3.4: 수락은 유효한 모임(open/closed)이고 시작 전일 때만. 신청 상태는 바꾸지 않고 거절만 돌려줌 (자동 탈락 없음). 거절(decline)은 기존대로 허용
+  if p_accept and (ev.status not in ('open','closed') or ev.start_at <= now()) then
+    return jsonb_build_object('ok', false, 'error', case when ev.status not in ('open','closed') then '취소된 모임이라 수락할 수 없어요' else '이미 시작된 모임이라 수락할 수 없어요' end);
+  end if;
   if r.offer_expires_at <= now() then
     update playn_party_rsvps set status = 'expired', closed_at = now() where id = r.id returning * into r;
     nid := party_notice(r, ev, 'expired'); if nid is not null then ids := ids || to_jsonb(nid); end if;
@@ -186,7 +191,8 @@ begin
     select * into cm from community_members c where c.phone = n.phone;
     if n.kind = 'reminder' and (ev.id is null or ev.status = 'cancelled' or ev.sched_version is distinct from n.sched_version
         or ev.start_at <= p_now or rs.status is distinct from 'confirmed') then d := 'superseded';
-    elsif n.kind = 'offered' and (rs.status is distinct from 'offered' or rs.offer_expires_at <= p_now) then d := 'superseded';
+    elsif n.kind = 'offered' and (rs.status is distinct from 'offered' or rs.offer_expires_at <= p_now
+        or ev.id is null or ev.status not in ('open','closed') or ev.start_at <= p_now) then d := 'superseded';   -- v3.4: 모임 생명주기 검사 추가
     elsif cm.phone is null or cm.status <> 'active' or not cm.notify_sms then d := 'skipped_pref';
     elsif n.test_run is not null or n.event_id like 'party-test%' then d := 'logged';
     elsif p_mode in ('test','live') then d := 'send';
