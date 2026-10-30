@@ -10,6 +10,8 @@ create or replace function public.playn_member_join(p_phone text, p_name text, p
 returns jsonb language plpgsql security definer set search_path = public, pg_temp as $$
 declare m playn_members; v_now timestamptz := now(); v_mk boolean := coalesce(p_marketing, false);
 begin
+  -- 수신 거부 기록이 있는 번호는 선택 true 여도 동의로 기록하지 않음(트리거와 같은 기준, 동의 시각도 남기지 않음)
+  if v_mk and exists(select 1 from playn_optout where phone = p_phone) and coalesce(current_setting('playn.ad_reconsent', true), '') <> 'on' then v_mk := false; end if;
   if p_phone !~ '^01[0-9]{8,9}$' or coalesce(btrim(p_name), '') = '' then return jsonb_build_object('ok', false, 'error', '이름과 휴대폰 번호를 확인해 주세요'); end if;
   select * into m from playn_members where phone = p_phone for update;
   if not found then
