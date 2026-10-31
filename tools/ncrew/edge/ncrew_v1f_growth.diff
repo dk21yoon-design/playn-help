@@ -1,0 +1,11 @@
+--- next/playn-growth.ts	2026-10-30 21:47:54.800859188 +0900
++++ next5/playn-growth.ts	2026-10-31 13:16:11.614746459 +0900
+@@ -38,7 +38,7 @@
+   try { return (await fetch(u.toString())).ok; } catch { return false; }
+ }
+ async function optoutSet() {
+-  const { data } = await sb.from("playn_optout").select("phone");
++  const { data } = await sb.from("playn_optout").select("phone").is("revoked_at", null); // v1f: 재동의로 철회된 기록은 제외
+   return new Set((data ?? []).map((r) => digits(r.phone)));
+ }
+ async function weekCount(phone: string) {
