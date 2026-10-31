@@ -1,0 +1,29 @@
+--- next2/playn-site.ts	2026-10-30 23:06:05.037363994 +0900
++++ next4/playn-site.ts	2026-10-31 12:25:09.860324790 +0900
+@@ -198,17 +198,22 @@
+     return J(r ?? { ok: false, error: "잠시 후 다시 해 주세요" });
+   }
+   if (b.action === "optout_otp") {
+-    if (cfg.ncrew_optout_mode !== "verified") return J({ ok: false, error: "본인 확인 수신 거부는 아직 준비 중이에요" });
+     const phone = normPhone(b.phone); if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
+-    const { data: r, error } = await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "optout", p_ip_hash: await otpIpHash(req) });
++    // v1e 제한 시험: 전역 verified 가 꺼져 있어도, 시험 스위치 on + 지정 번호만 인증번호 발급 (시험 전체 발송 한도 있음)
++    const pilot = cfg.ncrew_optout_mode !== "verified" && cfg.ncrew_optout_pilot === "on" && (await sb.rpc("ncrew_optout_pilot_on", { p_phone: phone })).data === true;
++    if (cfg.ncrew_optout_mode !== "verified" && !pilot) return J({ ok: false, error: "본인 확인 수신 거부는 아직 준비 중이에요" });
++    const { data: r, error } = pilot
++      ? await sb.rpc("ncrew_optout_pilot_issue", { p_phone: phone, p_ip_hash: await otpIpHash(req) })
++      : await sb.rpc("member_otp_issue", { p_phone: phone, p_purpose: "optout", p_ip_hash: await otpIpHash(req) });
+     if (error || !r?.ok) return J({ ok: false, error: r?.error ?? "잠시 후 다시 해 주세요" });
+-    const sent = await sms(cfg, phone, `[플레이앤] 수신 거부 인증번호 ${r.code} (5분 안에 입력해 주세요)`);
++    const sent = await sms(cfg, phone, `[플레이앤] 수신 거부 인증번호 ${r.code}\n5분 안에 입력해 주세요. 요청 안 했으면 무시하세요.`);
+     return J({ ok: sent, error: sent ? undefined : "문자를 보내지 못했어요. 잠시 후 다시 시도해 주세요" });
+   }
+   if (b.action === "leave") {
+     const phone = normPhone(b.phone);
+     if (!phone) return J({ ok: false, error: "휴대폰 번호를 확인해 주세요" });
+-    if (cfg.ncrew_optout_mode === "verified") {
++    const verified = cfg.ncrew_optout_mode === "verified" || (cfg.ncrew_optout_pilot === "on" && (await sb.rpc("ncrew_optout_pilot_on", { p_phone: phone })).data === true);
++    if (verified) {
+       if (!b.code) return J({ ok: false, need_code: true, error: "본인 확인 인증번호를 받아 주세요" });
+       const { data: r } = await sb.rpc("playn_optout_verified", { p_phone: phone, p_code: String(b.code).slice(0, 12) });
+       return J(r ?? { ok: false, error: "잠시 후 다시 해 주세요" });
