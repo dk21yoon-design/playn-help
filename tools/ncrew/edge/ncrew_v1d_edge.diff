@@ -1,0 +1,12 @@
+385c385,393
+<     return p ? J({ ok: true, ...p }) : J({ ok: false, expired: true });
+---
+>     if (!p) return J({ ok: false, expired: true });
+>     const { data: ad } = await sb.rpc("playn_ad_state", { p_phone: s.phone }); // 광고 알림 상태 (v1d)
+>     return J({ ok: true, ...p, ad: ad ?? null });
+>   }
+>   // 광고 알림 끄기 (v1d): 로그인 세션으로만 본인 확인. 본문의 번호는 쓰지 않음. 광고·야간 동의만 끄고 회원 자격·예약·혜택은 그대로
+>   if (b.action === "ad_off") {
+>     const { data: r, error } = await sb.rpc("playn_self_optout", { p_token: String(b.token ?? "").slice(0, 80) });
+>     if (error || !r) return J({ ok: false, error: "처리하지 못했어요. 잠시 후 다시 해 주세요" });
+>     return J(r);

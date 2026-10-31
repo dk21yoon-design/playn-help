@@ -128,6 +128,12 @@
         <p class="sub" id="refRule" style="margin-top:6px"></p><p class="sub" id="refStat" style="margin-top:4px"></p><p class="sub" id="vipStat" style="margin-top:4px;color:var(--lamp);font-weight:700"></p>
         <span id="invite"></span><div class="acts"><button class="btn lamp" id="share">초대 링크 보내기</button><button class="btn ghost" id="logout" type="button">로그아웃</button></div></div>
     </section>
+    <section class="s" id="ad"><h2 class="disp">광고 알림</h2>
+      <p class="sub" id="adSt"></p>
+      <button class="btn ghost" id="adOff" type="button" hidden style="margin-top:12px">광고 알림 끄기</button>
+      <div id="adMsg" class="msg" role="status" aria-live="polite"></div>
+      <p class="sub" style="font-size:13.5px;margin-top:8px">공실 특가·이벤트 광고 문자만 꺼져요. N CREW 회원 자격, 쿠폰, 예약 혜택은 그대로예요.</p>
+    </section>
   </div>
 </main>
 <footer><div class="wrap"><div class="row"><span>플레이앤 Play N</span><span>문의 <a href="tel:01083395818">010-8339-5818</a></span></div></div></footer>
@@ -175,6 +181,7 @@ async function load(){const t=st.get("pn_token");if(!t)return;const p=await post
  if(p.stamp){const S=p.stamp;$("stpSec").hidden=false;$("stpDots").innerHTML=Array.from({length:S.every},(_,i)=>`<i class="${i<S.have?"on":""}">${i<S.have?"✓":i===S.every-1?"🍖":""}</i>`).join("");
   $("stpTx").innerHTML=`어느 지점이든 ${S.every}번 오면 <b class="g">테라스 바베큐 ${S.people}인분 무료</b>. 지금 ${S.have}/${S.every} · ${S.every-S.have}번 더 오면 돼요.`+(S.done?` 지금까지 무료권 ${S.done}장 받았어요.`:"")+`<br>무료권은 체크인 때 '바베큐 사용'을 고르면 퇴실 정산에서 자동으로 빠져요.`}
  initBook(p);
+ renderAd(p.ad);
  $("levels").innerHTML=p.levels.map(l=>`<div class="${l.lv===p.level.lv?"on":""}"><b>Lv.${l.lv} ${l.name}</b>${l.min?l.min+"회 방문":"가입"}<br>${l.perk}</div>`).join("");
  $("badges").innerHTML=p.badges.map(b=>`<div class="bd ${b.got?"got":""}"><div class="ic">${ICON[b.id]||"·"}</div><b>${b.name}</b>${b.desc}</div>`).join("");
  $("ref").textContent=p.ref_code;$("refRule").textContent=p.referral_reward;$("refStat").textContent=`초대한 친구 ${p.invited}명 · 첫 예약 완료 ${p.invited_ok}명 · 친구들 이용 ${p.friend_visits}회`;
@@ -182,6 +189,17 @@ async function load(){const t=st.get("pn_token");if(!t)return;const p=await post
  $("share").onclick=async()=>{const u=`https://playn.kr/?ref=${p.ref_code}#crew`;const tx=`플레이앤 N CREW 초대장이에요. 이 링크로 가입하고 첫 예약하면 우리 둘 다 혜택 받아요 🎮`;
   try{if(navigator.share)await navigator.share({title:"플레이앤 N CREW 초대",text:tx,url:u});else{await navigator.clipboard.writeText(tx+" "+u);$("share").textContent="복사했어요"}}catch(e){}};
 }
+
+/* 광고 알림 끄기: 로그인 세션으로 서버가 본인 확인 (번호를 보내지 않음) */
+function renderAd(ad){const st=$("adSt"),b=$("adOff");
+ if(!ad){st.textContent="광고 알림 상태를 불러오지 못했어요. 잠시 후 새로고침해 주세요.";b.hidden=true;return}
+ if(ad.on){st.textContent="지금 공실 특가·이벤트 광고 문자를 받고 있어요.";b.hidden=false;b.disabled=false}
+ else{st.textContent="광고 알림이 꺼져 있어요. 광고 문자를 보내지 않아요.";b.hidden=true}}
+$("adOff").onclick=async()=>{const b=$("adOff"),m=$("adMsg");b.disabled=true;m.className="msg";m.textContent="처리하는 중…";
+ const j=await post({action:"ad_off",token:st.get("pn_token")}).catch(()=>null);
+ if(j&&j.ok){renderAd({on:false,optout:true});m.className="msg ok2";m.textContent=j.already?"이미 꺼져 있어요.":"광고 알림을 껐어요. 회원 혜택은 그대로예요.";return}
+ b.disabled=false;m.className="msg err2";
+ m.textContent=!j?"연결이 불안정해요. 다시 눌러 주세요.":j.expired?"로그인이 끝났어요. 다시 로그인한 뒤 눌러 주세요.":(j.error||"처리하지 못했어요. 잠시 후 다시 해 주세요.")};
 
 /* 멤버 예약 */
 let P=null;const won=n=>Number(n).toLocaleString()+"원";
