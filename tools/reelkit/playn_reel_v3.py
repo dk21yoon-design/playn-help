@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PLAY N 릴스 빌더 v3.20261024 (자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
+"""PLAY N 릴스 빌더 v3.20261031 (마감 인코딩 master: 비트레이트 하한·-14 LUFS 2패스 빌더 흡수 / 자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
   새 장면 옵션: "mic": true 또는 "mic": "T1 팀 보이스" → 그 장면은 원본 소리(선수 마이크·인게임 보이스)를 살리고 음악을 낮춤. clip.file 필요.
                "caption": "자막" → 영상 아래쪽 노란 자막(보이스 번역·대사용).
               "preview_music": {"url": "<인스타 음악 preview URL>", "start": "auto"} → out_preview.mp4 (사장님 확인용, 실제 인스타 곡). music.start도 "auto"면 드롭 지점 자동 탐색.
@@ -45,8 +45,16 @@ spec.json 예시
       장면 "caption_pop": false 로 그 장면만 끔. 결과 JSON "caption_pop" 에 적용 장면 수. 옵션이 없으면 이전 버전과 같은 결과
   자막 어디서든 ^단어^ → 노랑 #FFE45C 강조 (q_kwcolor: 한 줄에 노랑 1단어). ^ 를 안 쓰면 이전과 같음
   버그 수정: PLAYN_TICKET 만 있을 때 클립 기록 조회에서 _hq NameError → _hq 정의를 위로 올림
+- [2026-10-31 마감 인코딩 master] 매 편 손으로 하던 "빌더 CRF → VBR 9.5M 재인코딩"(q_hd)과 "loudnorm 2패스"(q_lufs14)를 빌더가 한다.
+  spec "master": true → 영상 VBR 9.5M(minrate 8.5M·maxrate 12M), 장면 중간 파일은 CRF 14(재인코딩 열화 줄임),
+      결과 영상 비트레이트가 하한(8000kbps) 미만이면 목표를 올려 1회 더 인코딩.
+      음악 있는 out.mp4·out_preview.mp4 는 측정 → -14 LUFS ±0.5 밖이면 loudnorm 2패스(linear) 재정규화, 영상은 copy.
+      out_silent.mp4 는 mic 장면이 있을 때만 같은 방식(무음이면 건너뜀).
+  세부: {"v_kbps": 9500, "min_kbps": 8500, "max_kbps": 12000, "floor_kbps": 8000, "lufs": -14, "tol": 0.5, "tp": -1.5}
+  결과 JSON "master": {"video_kbps", "reencoded", "lufs": {"out": [전, 후], "preview": [...]}} → playn_reel_qa.notes 에 그대로.
+  옵션이 없으면 이전 버전과 같은 결과(CRF 18)
 """
-BUILDER_VERSION = 'v3.20261024'
+BUILDER_VERSION = 'v3.20261031'
 import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil, base64
 
 FPS = 30
@@ -468,7 +476,7 @@ def scene_video(i, sc):
         fc = fc.replace('[v][1:v]overlay=0:0,format=yuv420p[o]',
                         f'[2:v]format=rgba,tpad=stop_mode=clone:stop_duration={d + 1:.2f}[pp];[v][1:v]overlay=0:0[v2];[v2][pp]overlay=0:0:eof_action=repeat,format=yuv420p[o]')
     run(['ffmpeg', '-y', '-loglevel', 'error', *inp, '-i', f'{W}/o{i}.png', *pin, '-filter_complex', fc, '-map', '[o]',
-         '-t', f'{d}', '-r', str(FPS), '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-an', outp])
+         '-t', f'{d}', '-r', str(FPS), '-c:v', 'libx264', '-preset', 'medium', '-crf', '14' if MASTER else '18', '-an', outp])
     # 장면 오디오: mic(선수 보이스) 장면은 원본 소리, 나머지는 무음
     ap = f'{W}/a{i}.wav'
     if sc.get('mic') and sc.get('clip'):
@@ -569,6 +577,49 @@ def clip_commit(reg, rows, rid):
 
 
 scenes = spec['scenes']
+# ---- 마감 인코딩 (2026-10-31 v3.20261031): q_hd 비트레이트 하한 + q_lufs14 2패스 ----
+MASTER = None
+if spec.get('master'):
+    MASTER = {'v_kbps': 9500, 'min_kbps': 8500, 'max_kbps': 12000, 'floor_kbps': 8000, 'lufs': -14.0, 'tol': 0.5, 'tp': -1.5}
+    if isinstance(spec['master'], dict): MASTER.update(spec['master'])
+MASTER_LOG = {}
+
+
+def video_kbps(path):
+    pr = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=bit_rate:format=duration', '-of', 'json', path], capture_output=True, text=True).stdout
+    j = json.loads(pr)
+    br = (j.get('streams') or [{}])[0].get('bit_rate')
+    if br and br != 'N/A': return int(br) / 1000
+    return os.path.getsize(path) * 8 / 1000 / float(j['format']['duration'])
+
+
+def video_encode_args(kbps):
+    return ['-c:v', 'libx264', '-preset', 'medium', '-b:v', f'{int(kbps)}k', '-minrate', f"{int(MASTER['min_kbps'])}k",
+            '-maxrate', f"{int(max(MASTER['max_kbps'], kbps * 1.2))}k", '-bufsize', f"{int(max(MASTER['max_kbps'], kbps * 1.2) * 2)}k"]
+
+
+def measure_lufs(path, I, TP):
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', path, '-vn', '-af', f'loudnorm=I={I}:TP={TP}:LRA=11:print_format=json', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    return json.loads(r[r.rindex('{'):r.rindex('}') + 1])
+
+
+def master_audio(path, tag):
+    """측정 → 목표 ±tol 밖이면 loudnorm 2패스(linear)로 재정규화. 영상 copy"""
+    I, TP, tol = float(MASTER['lufs']), float(MASTER['tp']), float(MASTER['tol'])
+    m = measure_lufs(path, I, TP)
+    before = float(m['input_i'])
+    if before == float('-inf') or before < -60: MASTER_LOG.setdefault('lufs', {})[tag] = [None, None]; return
+    after = before
+    if abs(before - I) > tol:
+        af = (f"loudnorm=I={I}:TP={TP}:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+              f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,aresample=44100")
+        tmp = path + '.m.mp4'
+        run(['ffmpeg', '-y', '-loglevel', 'error', '-i', path, '-map', '0:v', '-map', '0:a', '-c:v', 'copy', '-af', af, '-c:a', 'aac', '-b:a', '192k', '-t', f'{total}', '-movflags', '+faststart', tmp])
+        os.replace(tmp, path)
+        after = float(measure_lufs(path, I, TP)['input_i'])
+    MASTER_LOG.setdefault('lufs', {})[tag] = [round(before, 1), round(after, 1)]
+
+
 _reg, _rows, _rid = clip_check(spec, scenes)
 asyncio.run(render_overlays(scenes))
 parts = [scene_video(i, sc) for i, sc in enumerate(scenes)]
@@ -577,7 +628,17 @@ lst = f'{W}/list.txt'
 open(lst, 'w').write(''.join(f"file '{p}'\n" for p, _ in parts))
 vid = f'{W}/video.mp4'
 _vf = ['-vf', f"crop=1080:1440:0:{int(spec.get('crop_y', 170))}"] if ASPECT == '3:4' else []
-run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, *_vf, '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', str(FPS), vid])
+if MASTER:
+    _vk = float(MASTER['v_kbps'])
+    run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, *_vf, *video_encode_args(_vk), '-pix_fmt', 'yuv420p', '-r', str(FPS), vid])
+    _got = video_kbps(vid); MASTER_LOG['reencoded'] = 0
+    if _got < float(MASTER['floor_kbps']):  # 어두운·단색 화면은 목표보다 덜 나옴 → 모자란 비율만큼 올려 1회 더
+        _vk = _vk * float(MASTER['v_kbps']) / max(_got, 1) * 1.05
+        run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, *_vf, *video_encode_args(_vk), '-pix_fmt', 'yuv420p', '-r', str(FPS), vid])
+        _got = video_kbps(vid); MASTER_LOG['reencoded'] = 1
+    MASTER_LOG['video_kbps'] = round(_got)
+else:
+    run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, *_vf, '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', str(FPS), vid])
 # 보이스 트랙 (mic 장면만 소리, 나머지 무음)
 alst = f'{W}/alist.txt'
 open(alst, 'w').write(''.join(f"file '{W}/a{i}.wav'\n" for i in range(len(parts))))
@@ -682,6 +743,10 @@ pm = spec.get('preview_music')
 if pm and pm.get('url'):
     res_extra['preview'] = base + '_preview.mp4'
     res_extra['preview_start'] = mix_music(pm, base + '_preview.mp4')
+if MASTER:
+    if (m and m.get('url')) or has_mic: master_audio(out, 'out')
+    if res_extra.get('preview'): master_audio(res_extra['preview'], 'preview')
+    if has_mic: master_audio(base + '_silent.mp4', 'silent')
 # 커버: 첫 장면이 아니라 훅이 가장 잘 보이는 장면(cover 지정 or 두 번째 장면)
 ci = spec.get('cover_scene', 1 if len(parts) > 1 else 0)
 t0 = sum(d for _, d in parts[:ci]) + min(1.0, parts[ci][1] / 2)
@@ -692,4 +757,5 @@ if _mpick:
     except Exception as e: print('음악 사용 기록 실패:', e, file=sys.stderr)
 if ZOOM_LOG['punch_s'] or ZOOM_LOG['interrupt_n']: res_extra['zoom'] = ZOOM_LOG
 if POP_LOG['scenes']: res_extra['caption_pop'] = POP_LOG['scenes']
+if MASTER: res_extra['master'] = MASTER_LOG
 print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), 'builder': BUILDER_VERSION, **res_extra}, ensure_ascii=False))
