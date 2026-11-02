@@ -234,10 +234,13 @@ function renderDone(){$("ugcBox").hidden=false;$("tabs").hidden=true;$("fin").hi
   const c={...(D.calc||{})};const paid=D.status==="paid";if(!D.deposit_ok&&c.expect!=null)c.refund=c.expect;
   if(c.exempt){$("tabs").hidden=true;$("fin").hidden=true;$("fout").hidden=true;$("h1").textContent="이용 정산";$("lead").textContent=paid?"정산이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 아래 금액만 입금해 주시면 끝이에요.";
    $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">👑 레전드 · 보증금 면제 · ${paid?"정산 완료":"입금할 금액"}</div><div class="n">${won(c.owed)}</div></div><div class="sum">${c.lines.map(l=>`<div class="l"><span>${l.amount<0?"+":"·"} ${l.name}</span><span>${won(Math.abs(l.amount))}</span></div>`).join("")}</div>`+(paid?"":`<div class="acc" style="margin-top:10px"><span>${D.account}</span></div>`);return}
-  $("lead").textContent=paid?"환급이 끝났어요. 이용해 주셔서 감사합니다!":"정산 요청이 접수됐어요. 확인 후 1~2일 안에 환급해 드리고 문자로 알려드려요.";
+  // 2026-11-02: 사용내역 체크 전(자동 정산)이거나 후기 이벤트 참여 후 캡처가 없으면 환급 절차가 시작되지 않음을 안내
+  const noOut=!paid&&!!(c.opt&&c.opt.auto),noRv=!paid&&D.checkin&&D.checkin.review!=="none"&&!D.review_ok;
+  $("lead").textContent=paid?"환급이 끝났어요. 이용해 주셔서 감사합니다!":(noOut||noRv)?"아직 보증금 환급 절차가 시작되지 않았어요. 아래 항목을 마쳐 주세요.":"정산 요청이 접수됐어요. 확인 후 1~2일 안에 환급해 드리고 문자로 알려드려요.";
   $("fdone").hidden=false;$("fdone").innerHTML=`<div class="done"><div class="hint">${paid?"환급 완료":D.deposit_ok?"환급 예정":"보증금 입금 확인 후 환급 예정"}</div><div class="n">${won(c.refund)}</div></div>`+(c.lines?`<div class="sum"><div class="l"><span>보증금</span><span>${won(c.deposit)}</span></div>${c.lines.map(l=>`<div class="l"><span>${l.amount<0?"+ ":"− "}${l.name}</span><span>${l.amount<0?"+":""}${won(Math.abs(l.amount))}</span></div>`).join("")}<div class="big"><span>환급</span><em>${won(c.refund)}</em></div></div>`:"")+
   (D.deposit_ok?`<p class="hint">✅ 보증금 입금 확인됨</p>`:`<div class="msg er">보증금 입금이 아직 확인되지 않았어요. 입금 전에는 환급할 수 없어요.<br><b>${D.account}</b> · ${won(D.rules.deposit)}<br>입금자명: 체크인 때 적은 이름</div>`)+
-  (paid?"":`<button class="btn go" id="reEdit" type="button" style="display:flex;margin-top:10px">사용 내역 수정해서 다시 보내기</button>`)+
+  ((noOut||noRv)?`<div class="msg er">${noOut?"🧾 퇴실 사용내역 체크가 아직 안 됐어요.<br>":""}${noRv?"📸 후기 이벤트에 참여하셨는데 사진 후기 캡처가 아직 없어요.<br>":""}마치셔야 보증금 환급 절차가 진행돼요. 퇴실 후에 해도 괜찮아요.</div>`:"")+
+  (paid?"":`<button class="btn go" id="reEdit" type="button" style="display:flex;margin-top:10px">${noOut?"퇴실 사용내역 체크하기":noRv?"후기 캡처 올리기":"사용 내역 수정해서 다시 보내기"}</button>`)+
   (D.member?"":`<a class="btn lamp go" href="/?from=settle#crew" style="display:flex">N CREW 가입하고 다음 예약 20% 받기</a>`);
   if($("reEdit"))$("reEdit").onclick=()=>{$("fdone").hidden=true;$("tabs").hidden=false;show("out")}}
 
