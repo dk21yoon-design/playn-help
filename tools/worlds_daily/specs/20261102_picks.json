@@ -1,0 +1,150 @@
+{
+ "date": "20261102_picks",
+ "series": "롤드컵 픽 현황",
+ "title": "P24 롤드컵 픽 현황 8강",
+ "publish_at": "2099-01-01T00:00:00Z",
+ "status": "draft",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-29_T1-MKOI/g1_nexus_cams.jpg",
+  "T1.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-29_T1-MKOI/logo_T1.png",
+  "KC.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/templates/worlds_logos/KC.png",
+  "DK.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-26_DK-MKOI/logo_DK.png",
+  "BLG.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-01_BLG-HLE/logo_BLG.png",
+  "TES.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-30_TES-BLG/logo_TES.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "pill": "롤드컵 우승팀 아직 안 찍은 사람 필독",
+   "title": "8강 대진 떴는데\n[10만원 픽]\n내일 끝나{?}",
+   "size": 100,
+   "photo": "cover.jpg",
+   "pos": "center 40%",
+   "cap": "8강 대진 확정 · T1 vs KC\n10만원 픽 마감 *11/3(화) 23:59* · 넘겨보기 →"
+  },
+  {
+   "type": "next",
+   "title": "8강 대진 [손님 픽]",
+   "size": 72,
+   "matches": [
+    {
+     "date": "손님 픽 1위 · 사장님 픽 · 8강 BO5",
+     "a": {
+      "logo": "T1.png",
+      "name": "T1"
+     },
+     "b": {
+      "logo": "KC.png",
+      "name": "KC"
+     },
+     "hot": true
+    },
+    {
+     "date": "손님 픽 2위",
+     "a": {
+      "abbr": "GEN",
+      "name": "Gen.G"
+     },
+     "b": {
+      "abbr": "LYON",
+      "name": "LYON"
+     }
+    },
+    {
+     "date": "아직 아무도 안 찍음",
+     "a": {
+      "logo": "DK.png",
+      "name": "DK"
+     },
+     "b": {
+      "logo": "BLG.png",
+      "name": "BLG"
+     }
+    },
+    {
+     "date": "아직 아무도 안 찍음 · LPL 내전",
+     "a": {
+      "logo": "TES.png",
+      "name": "TES"
+     },
+     "b": {
+      "abbr": "IG",
+      "name": "IG"
+     }
+    }
+   ]
+  },
+  {
+   "type": "list",
+   "title": "스위스 끝나고\n[픽 성적표]",
+   "size": 80,
+   "items": [
+    [
+     "살아 있음",
+     "T1 · Gen.G",
+     "찍은 손님 전부 8강까지 생존"
+    ],
+    [
+     "빈자리",
+     "DK · BLG · TES · IG · KC · LYON",
+     "8강인데 아직 아무도 안 찍음"
+    ],
+    [
+     "날아간 픽",
+     "한화생명 · G2 · MKOI 등 11팀",
+     "탈락 · 찍은 손님 없어서 피해 0"
+    ]
+   ]
+  },
+  {
+   "type": "steps",
+   "title": "사장님은 T1\n너는 [누구]{?}",
+   "size": 84,
+   "steps": [
+    [
+     "사장님",
+     "T1 그대로",
+     "KC만 넘으면 4강 · 갈아탈 생각 없음"
+    ],
+    [
+     "손님 대부분",
+     "T1",
+     "사장님이랑 같은 배"
+    ],
+    [
+     "너",
+     "남은 8팀 중 아무나",
+     "빈자리 팀 찍으면 네 픽이 그 팀 1위"
+    ]
+   ],
+   "stats": [
+    [
+     "10만원",
+     "*D-1*"
+    ],
+    [
+     "5만원",
+     "11/4~"
+    ],
+    [
+     "결승",
+     "11/15"
+    ]
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "결승까지\n[같이 볼]\n사람{?}",
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "10/12~11/14 나이트·통대관 · 체크인 때 1팀 찍기\n팀원 전원 N CREW · 11/3까지 *10만원* · 이후 5만원",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "8강 우승팀 맞힐 친구 태그 🏆 롤드컵 8강 대진 떴는데 10만원 픽 내일 끝나? 롤드컵 2026 8강 홍대 게임파티룸 플레이앤 픽 현황\n4명이 모이면 플레이앤에서 → 프로필 링크\n\n스위스가 끝나고 8강 대진이 나왔어요. T1 vs KC · 젠지 vs LYON · DK vs BLG · TES vs IG예요.\n✔ 플레이앤 손님 픽 1위 T1, 2위 Gen.G. 찍은 손님 전부 8강까지 살아 있어요\n✔ DK · BLG · TES · IG · KC · LYON은 아직 아무도 안 찍었어요. 지금 찍으면 네 픽이 그 팀 1위\n✔ 한화생명 · G2 · MKOI 등 11팀이 탈락했지만 날아간 픽은 0\n✔ 사장님 픽은 T1 그대로예요\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3(화) 23:59까지 픽하면 10만원 · 그 뒤는 5만원 · 결승 뒤 7일 안에 송금\n⏳ 10만원 구간 마감 D-1\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「T1 vs MKOI 매치 하이라이트 | 스위스 Day5 | 2026 월드 챔피언십」 장면\n경기 기록·대진: 인벤 · 위키트리 · 아이뉴스24\n일정: LoL Esports 공식 일정 기준\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "8강 여덟 팀 중 우승은 누구? 번호로 남겨줘 👇\n1 T1  2 Gen.G  3 DK  4 BLG  5 TES  6 IG  7 KC  8 LYON\n같이 볼 친구도 태그해줘"
+}
