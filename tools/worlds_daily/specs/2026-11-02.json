@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-02",
+ "series": "롤드컵 데일리",
+ "title": "W12 [롤드컵 데일리] LCK 3팀 8강, 10만원 픽 내일 밤 11:59 마감",
+ "publish_at": "2026-11-02T09:50:00Z",
+ "status": "ready",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-26_DK-MKOI/g1_penta_voice_cams.jpg",
+  "blg_result.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-01_BLG-HLE/result_g2.jpg",
+  "BLG.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-01_BLG-HLE/logo_BLG.png",
+  "HLE.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-01_BLG-HLE/logo_HLE.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": ["lounge.jpg"],
+ "slides": [
+  {"type": "cover", "pill": "롤드컵 우승팀 고민 중인 사람 필독", "title": "LCK 4팀 중\n[3팀]이 8강\n누구 찍을래{?}", "size": 100, "photo": "cover.jpg", "pos": "center 75%",
+   "cap": "젠지·DK *3승 0패* · T1 *3승 1패*\n10만원 픽 마감 *D-1* · 넘겨보기 →"},
+  {"type": "list", "title": "8강은 [아침 7시]\n4일 연속", "size": 84, "items": [
+    ["11/4(수)", "TES vs IG", "LPL끼리 붙는 첫 경기"],
+    ["11/5(목)", "젠지 vs LYON", "스위스 3전 전승 젠지"],
+    ["11/6(금)", "DK vs BLG", "이긴 팀은 T1·KC 승자와 4강"],
+    ["11/7(토)", "T1 vs KC", "3승 1패로 올라온 T1"]]},
+  {"type": "score", "title": "DK 상대는\n[한화생명] 잡은 팀", "a": {"logo": "BLG.png", "name": "BLG", "sub": "LPL · 3승 2패", "score": 2}, "b": {"logo": "HLE.png", "name": "한화생명", "sub": "LCK · 2승 3패 탈락", "score": 0},
+   "sets": [["1세트 41분", "BLG", "f"], ["2세트 32분", "BLG", "f"]], "photo": "blg_result.jpg", "pos": "center 40%", "cap": "2세트 킬 *14 : 3* · 스위스 마지막 경기"},
+  {"type": "steps", "title": "10만원 받으려면\n[내일 밤]까지", "size": 80, "steps": [
+    ["1", "10/12~11/14 나이트·통대관 이용", "홍대루프탑 · 연남루프탑 · 연트럴파크"],
+    ["2", "체크인 때 우승팀 1개 선택", "그룹당 1번 · 팀원 전원 N CREW 가입"],
+    ["3", "맞히면 결승 뒤 7일 안에 송금", "11/3(화) 23:59까지 픽 10만원 · 그 뒤 5만원"]],
+   "stats": [["10만원 마감", "*D-1*"], ["손님 픽 1위", "T1"], ["결승", "11/15"]]},
+  {"type": "cta", "title": "밤새 놀다가\n아침 7시 8강\n[같이 볼] 사람{?}", "photo": "lounge.jpg", "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑", "line": "나이트·통대관 이용하고 우승팀 맞히면 *10만원 페이백*\n11/3(화) 23:59까지 찍은 픽 기준 · 그 뒤는 5만원", "url": "playn.kr/worlds"}
+ ],
+ "caption": "롤드컵 8강에 LCK 4팀 중 3팀이 올라갔어요. 젠지·디플러스 기아·T1 중에 누구 찍을래요? 우승팀 맞히기 10만원 구간은 내일 11/3(화) 밤 11:59에 끝나요 🏆\n\n롤드컵 2026 8강 일정 (한국시간 아침 7시)\n✔ 11/4(수) TES vs IG\n✔ 11/5(목) 젠지 vs LYON\n✔ 11/6(금) 디플러스 기아 vs BLG\n✔ 11/7(토) T1 vs KC\n\nBLG는 스위스 마지막 경기에서 한화생명을 2:0으로 이기고 올라왔어요. DK·BLG 승자는 T1·KC 승자와 4강에서 만나요.\n\n지금 플레이앤 손님 픽 1위는 T1이에요.\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3(화) 23:59까지 픽하면 10만원 · 그 뒤는 5만원 · 결승 뒤 7일 안에 송금\n⏳ 10만원 구간 마감 D-1\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「MKOI vs DK 매치 하이라이트 | 스위스 Day3 | 2026 월드 챔피언십」 · 「BLG vs HLE 매치 하이라이트 | 스위스 Day8 | 2026 월드 챔피언십」 장면\n경기 기록·대진: 아이뉴스24 · 위키트리\n일정: LoL Esports 공식 일정 기준\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "8강 LCK 3팀 중에 누가 제일 멀리 갈까? 👇\n1 젠지  2 DK  3 T1\n아침 7시까지 같이 버틸 친구도 태그해줘"
+}
