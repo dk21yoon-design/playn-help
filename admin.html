@@ -270,13 +270,20 @@ async function loadSettle(){const x=await spost({action:"admin_settle_list"});if
    (c.account?`<div class="acc" style="margin-top:6px">🏦 <b>${H(c.bank||"")} ${H(c.account)}</b> <span>예금주 ${H(c.holder||c.depositor||"")}</span><button class="no" data-cpy="${H((c.bank||"")+" "+c.account)}">계좌 복사</button></div>`:c.account_purged?`<div class="meta">🏦 계좌는 송금 후 개인정보 보호로 지웠어요</div>`:"")+
    (k?`<div class="meta" style="margin-top:6px">${k.lines.map(l=>`${H(l.name)} ${W(l.amount)}`).join(" · ")}<br><b style="font-size:17px">환급 ${W(k.refund)}</b> (차감 ${W(k.total)})</div>`:`<div class="meta">퇴실 정산 전</div>`)+
    ((s.flags||[]).length?`<div class="tip" style="margin-top:6px">⚠️ ${s.flags.map(H).join("<br>⚠️ ")}</div>`:"")+
-   (s.proof_url?`<a href="${s.proof_url}" target="_blank" rel="noopener"><img src="${s.proof_url}" style="width:90px;border-radius:8px;margin-top:6px"></a>`:"")+
+   (s.proof_url?`<a href="${s.proof_url}" target="_blank" rel="noopener"><img src="${s.proof_url}" style="width:90px;border-radius:8px;margin-top:6px"></a>`+(c.review&&c.review!=="none"?`<div class="meta">📸 후기 캡처 ${s.review_ok===true?"✅ 수락함":s.review_ok===false?"❌ 반려함"+(s.review_note?" ("+H(s.review_note)+")":"")+" · 손님 재업로드 대기":"확인 대기 → 사진 눌러서 크게 보고 아래에서 수락·반려"}</div>`:""):"")+
    (s.clean?`<div class="meta" style="margin-top:6px">🧹 청소 점검: ${VL2[s.clean.verdict]||H(s.clean.verdict)}${s.clean.notes?" — "+H(s.clean.notes):""}</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${s.clean.urls.map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" style="width:72px;height:72px;object-fit:cover;border-radius:8px"></a>`).join("")}</div>`:"")+
    (s.deposit_exempt?`<div class="meta" style="color:#FFB547">👑 레전드 · 보증금 면제${k?` · 받을 돈 ${W(k.owed)}`:""}</div>`:"");
   // 보증금 입금 상태
   if(s.status!=="paid"){const dp=document.createElement("div");dp.className="act";dp.style.flexWrap="wrap";
    dp.innerHTML=s.deposit_exempt?`<span class="meta">👑 보증금 면제 (레전드)</span><span></span>`:s.deposit_ok?`<span class="meta">💰 보증금 입금 확인됨${s.deposit_at?" ("+new Date(s.deposit_at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})+")":""}</span><button class="no">입금 취소</button>`:`<span class="meta" style="color:#ff6b6b">${PF[s.id]?`📎 손님이 입금 캡처 올림 → 토스 확인 후 '입금 확인'`:`💸 보증금 미입금 (토스 알림 대기${s.deposit_reminded_at?" · 독촉문자 보냄":""})`}${PF[s.id]?`<br><a href="${PF[s.id]}" target="_blank" rel="noopener"><img src="${PF[s.id]}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-top:4px"></a>`:""}</span><button class="ok">입금 확인</button>`;
    dp.lastElementChild.onclick=async()=>{const r=await spost({action:"admin_deposit_set",id:s.id,ok:!s.deposit_ok});if(!r.ok)alert0(dp,r.error||"실패");loadSettle()};d.appendChild(dp)}
+  // 후기 이벤트 캡처 수락·반려 (v22: 사장님이 수락해야 환급)
+  if(s.proof_url&&c.review&&c.review!=="none"&&s.status!=="paid"&&s.review_ok!==true){const rv=document.createElement("div");rv.className="act";rv.style.flexWrap="wrap";
+   rv.innerHTML=`<button class="ok">후기 인증 수락</button><input type="text" placeholder="반려 사유 (예: 후기 화면이 아니에요)"><button class="no">반려하고 다시 요청</button>`;
+   const [ok,why,no]=rv.children;
+   ok.onclick=async()=>{ok.disabled=true;const r=await spost({action:"admin_review_set",id:s.id,ok:true});if(!r.ok)alert0(rv,r.error||"실패");loadSettle()};
+   no.onclick=async()=>{if(!confirm("반려하면 손님께 후기 캡처를 다시 올려달라는 문자가 가요. 보낼까요?"))return;no.disabled=true;const r=await spost({action:"admin_review_set",id:s.id,ok:false,note:why.value});if(!r.ok)alert0(rv,r.error||"실패");else if(!r.notified)alert("반려는 됐는데 문자는 못 보냈어요. 손님께 직접 연락해 주세요");loadSettle()};
+   d.appendChild(rv)}
   // 바베큐 결제 인원 확인
   if(k&&k.bbq&&k.bbq.people&&s.status!=="paid"){const bq=document.createElement("div");bq.className="act";bq.style.flexWrap="wrap";
    const sc=/^\d+$/.test(String(s.res_id||""))?`<a class="no" href="https://partner.spacecloud.kr/reservation/${s.res_id}" target="_blank" rel="noopener" style="padding:10px;border-radius:10px;text-decoration:none">스클 예약 보기</a>`:"";
