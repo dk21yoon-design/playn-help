@@ -466,7 +466,7 @@ const emptyBox=(t)=>`<div class="empty">${t}</div>`;
 
 function platformBody(B,P){const b=DATA.board,p=b.playn;let h="";
   if(B.id==="playn"){
-    if(P.id==="web"){h+=metCard("지금 접속",N(p.live5),"최근 5분")+metCard("오늘 방문자",N(p.today),`페이지뷰 ${fmt(p.today_pv)}`)+metCard("N CREW",N(p.members),`7일 +${fmt(p.members7)}`)+metCard("예약 (오늘)",N(p.res_today),`앞으로 14일 ${fmt(p.res_upcoming)}건 · 7일 새 예약 ${fmt(p.res_new7)}`);
+    if(P.id==="web"){h+=metCard("지금 접속",N(p.live5),"최근 5분")+metCard("오늘 방문자",N(p.today),`페이지뷰 ${fmt(p.today_pv)}`)+metCard("N CREW",N(p.members),`7일 +${fmt(p.members7)}`)+(p.crew?metCard("재방문 회원",N(p.crew.repeat),`방문 기록 있는 회원 ${fmt(p.crew.visited)}명 중 2번 이상`)+metCard("재방문권 사용",`${N(p.crew.rv_used)}<small> / ${fmt(p.crew.rv_issued)}장</small>`,`사용 가능 ${fmt(p.crew.rv_active)} · 만료 ${fmt(p.crew.rv_expired)}${p.crew.rv_next_exp?` · 가장 빠른 만료 ${H(String(p.crew.rv_next_exp).slice(5))}`:""}`,"90일 · 일~목 이용 · 홈페이지 예약에서만"):"")+metCard("예약 (오늘)",N(p.res_today),`앞으로 14일 ${fmt(p.res_upcoming)}건 · 7일 새 예약 ${fmt(p.res_new7)}`);
       h+=`<div class="met wide"><span class="l">방문자 14일</span>${spark(p.visitors14||[])}</div>`;
       h+=`<div class="met wide"><span class="l">유입 경로 (7일, 사람 수)</span><div class="hbars">${hbars((p.sources7||[]).map(s=>({l:({ig:"인스타",yt:"유튜브",sms:"문자",fb:"페이스북",th:"스레드"})[s.src]||s.src,v:s.n})))}</div></div>`;
       const f=b.funnel||{},pct=(a,z)=>z?Math.round(a/z*1000)/10+"%":"–";
