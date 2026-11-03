@@ -195,6 +195,7 @@ body{background:var(--bg)}
       <label><input type="checkbox" id="jMk"><span>(선택) 공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요</span></label>
       <label><input type="checkbox" id="jNight" disabled><span>(선택) 밤 9시~아침 8시 당일 특가 알림도 받을게요</span></label>
       <details><summary>개인정보 수집·이용 안내</summary>수집 항목: 이름, 휴대폰 번호, 자주 가는 지점 · 목적: N CREW 회원 확인·혜택 제공, 광고 문자에 동의한 분께만 공실 특가·이벤트 알림, 롤드컵 투표 · 보관: N CREW 탈퇴 시까지. 필수 동의를 하지 않으면 가입·투표가 어려워요. 광고 문자는 선택이에요. 수신 거부는 playn.kr 맨 아래에서 언제든 할 수 있어요.</details>
+      <div class="row" id="jCodeBox" hidden><input id="jCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="문자로 받은 인증번호 6자리" aria-label="인증번호 6자리"></div>
       <button class="bt" id="jGo" style="margin-top:12px;width:100%">N CREW 가입하고 예언하기</button>
     </div>
   </section>
@@ -380,8 +381,10 @@ $("jGo").onclick=async()=>{
   if(!name){msg("이름을 적어 주세요","err");return}
   if(!$("jAgree").checked){msg("필수 동의에 체크해 주세요","err");return}
   $("jGo").disabled=true;
-  try{const j=await post(SITE,{action:"join",name,phone,branch:$("jBranch").value,agree:true,marketing:$("jMk").checked,night_agree:$("jMk").checked&&$("jNight").checked,source:"worlds_vote"});
+  try{const j=await post(SITE,{action:"join",name,phone,branch:$("jBranch").value,agree:true,marketing:$("jMk").checked,night_agree:$("jMk").checked&&$("jNight").checked,source:"worlds_vote",code:$("jCodeBox").hidden?undefined:$("jCode").value.trim()});
+    if(j.need_code){$("jCodeBox").hidden=false;$("jCode").focus();msg(j.error||"인증번호를 넣어 주세요",j.sent?"ok":"err");return}
     if(!j.ok){msg(j.error||"가입하지 못했어요","err");return}
+    $("jCodeBox").hidden=true;$("jCode").value="";
     if(await check()&&!mine&&!pending){msg(`${name}님, N CREW 가입 완료! 우승팀 카드를 눌러 예언하세요 🔮`,"ok");if(fp&&T[fp])toast(`친구는 ${fp}! 너는?`)}
   }catch(e){msg("네트워크 오류예요. 잠시 후 다시 시도해 주세요","err")}finally{$("jGo").disabled=false}
 };

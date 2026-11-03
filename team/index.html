@@ -38,6 +38,7 @@
     <label class="ck"><input type="checkbox" id="ag"><span>N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요 (필수)<small>멤버 특가 20%(홈페이지 예약) · 방문할수록 등급 혜택.</small></span></label>
     <label class="ck"><input type="checkbox" id="mk"><span>공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요 <small>(선택) 언제든 수신 거부할 수 있어요.</small></span></label>
     <label class="ck"><input type="checkbox" id="nt" disabled><span>밤 9시~아침 8시 당일 특가 알림도 받을게요 <small>(선택)</small></span></label>
+    <div id="cdBox" hidden><label class="t" for="cd">문자로 받은 인증번호 6자리</label><input id="cd" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
     <button class="btn pink" style="width:100%;margin-top:16px" id="go">가입하고 우리 팀에 합류</button>
     <div id="m"></div>
   </form>
@@ -55,9 +56,10 @@ function show(r){if(!r.ok){$("h").textContent=r.error||"링크를 다시 확인�
 post({action:"team_info"}).then(show).catch(()=>show({ok:false}));
 $("mk").onchange=()=>{$("nt").disabled=!$("mk").checked;if(!$("mk").checked)$("nt").checked=false};
 $("f").onsubmit=async e=>{e.preventDefault();$("go").disabled=true;
-  const r=await post({action:"team_join",name:$("nm").value,phone:$("ph").value,agree:$("ag").checked,marketing:$("mk").checked,night_agree:$("mk").checked&&$("nt").checked}).catch(()=>({ok:false,error:"연결이 불안정해요"}));
+  const r=await post({action:"team_join",name:$("nm").value,phone:$("ph").value,agree:$("ag").checked,marketing:$("mk").checked,night_agree:$("mk").checked&&$("nt").checked,code:$("cdBox").hidden?undefined:$("cd").value.trim()}).catch(()=>({ok:false,error:"연결이 불안정해요"}));
   $("go").disabled=false;
+  if(r.need_code){$("cdBox").hidden=false;$("cd").focus();$("m").innerHTML=`<div class="msg ${r.sent?"ok":"er"}">${r.error||"인증번호를 넣어 주세요"}</div>`;return}
   if(!r.ok){$("m").innerHTML=`<div class="msg er">${r.error||"다시 시도해 주세요"}</div>`;return}
-  show(r);$("m").innerHTML=`<div class="msg ok">가입 완료! 우리 팀 ${r.joined}/${r.need}명이에요. 아직 안 한 친구에게 이 링크를 보내주세요.</div>`;$("nm").value="";$("ph").value=""}
+  show(r);$("m").innerHTML=`<div class="msg ok">가입 완료! 우리 팀 ${r.joined}/${r.need}명이에요. 아직 안 한 친구에게 이 링크를 보내주세요.</div>`;$("nm").value="";$("ph").value="";$("cd").value="";$("cdBox").hidden=true}
 </script>
 </body></html>

@@ -786,6 +786,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
       <p class="note" id="refNote" hidden style="background:#FFE9C2;color:#5A3A00;border-radius:12px;padding:8px 10px;margin-top:8px;font-weight:700"></p>
       <div class="field"><label for="jName">이름</label><input id="jName" autocomplete="name" maxlength="20" required></div>
       <div class="field"><label for="jPhone">휴대폰 번호</label><input id="jPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" required></div>
+      <div class="field" id="jCodeBox" hidden><label for="jCode">문자로 받은 인증번호 6자리</label><input id="jCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
       <div class="field"><label for="jBranch">자주 가는 지점</label><select id="jBranch"><option value="">상관없어요</option><option>홍대루프탑점</option><option>연남루프탑점</option><option>연트럴파크점</option></select></div>
       <label class="chk"><input type="checkbox" id="jAgree"><span><em>(필수)</em> N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요</span></label>
       <label class="chk"><input type="checkbox" id="jMk"><span>(선택) 공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요</span></label>
@@ -1042,8 +1043,9 @@ $("joinForm").onsubmit=async e=>{e.preventDefault();const m=$("jMsg");m.classNam
   if(!$("jName").value.trim()||$("jPhone").value.replace(/\D/g,"").length<10){m.className="msg err";m.textContent="이름과 휴대폰 번호를 확인해 주세요.";return}
   if(!$("jAgree").checked){m.className="msg err";m.textContent="N CREW 가입 필수 동의에 체크해 주세요.";return}
   $("jBtn").disabled=true;m.textContent="가입하는 중…";
-  try{const j=await post({action:"join",name:$("jName").value,phone:$("jPhone").value,branch:$("jBranch").value,agree:true,marketing:$("jMk").checked,night_agree:$("jMk").checked&&$("jNight").checked,source:new URLSearchParams(location.search).get("from")||"web"});
-    if(j.ok){store.set("pn_phone",$("jPhone").value);if(REF&&!j.again)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"ref_attach",phone:$("jPhone").value,ref:REF,ticket:j.ticket})}).catch(()=>{});m.className="msg ok";m.textContent=j.again?`${j.name}님, 이미 멤버예요. 정보를 업데이트했어요.`:`${j.name}님, N CREW에 오신 걸 환영해요! 이제 위 보드에서 특가를 신청할 수 있고, 내 N CREW에서 레벨과 초대 코드를 볼 수 있어요.`}
+  try{const j=await post({action:"join",name:$("jName").value,phone:$("jPhone").value,branch:$("jBranch").value,agree:true,marketing:$("jMk").checked,night_agree:$("jMk").checked&&$("jNight").checked,source:new URLSearchParams(location.search).get("from")||"web",code:$("jCodeBox").hidden?undefined:$("jCode").value.trim()});
+    if(j.need_code){$("jCodeBox").hidden=false;$("jCode").focus();m.className=j.sent?"msg ok":"msg err";m.textContent=j.error||"인증번호를 넣어 주세요";$("jBtn").disabled=false;return}
+    if(j.ok){store.set("pn_phone",$("jPhone").value);if(j.token)store.set("pn_token",j.token);$("jCodeBox").hidden=true;if(REF&&!j.again)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-community",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"ref_attach",phone:$("jPhone").value,ref:REF,ticket:j.ticket})}).catch(()=>{});m.className="msg ok";m.textContent=j.again?`${j.name}님, 이미 멤버예요. 정보를 업데이트했어요.`:`${j.name}님, N CREW에 오신 걸 환영해요! 이제 위 보드에서 특가를 신청할 수 있고, 내 N CREW에서 레벨과 초대 코드를 볼 수 있어요.`}
     else{m.className="msg err";m.textContent=j.error}}
   catch(_){m.className="msg err";m.textContent="네트워크가 불안정해요. 잠시 후 다시 시도해 주세요."}
   $("jBtn").disabled=false};

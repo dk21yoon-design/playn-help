@@ -155,14 +155,17 @@ function quickJoin(){const m=$("msg");m.className="msg";m.innerHTML=`<div class=
 <label class="ck"><input type="checkbox" id="qjAg"> <span><em>(필수)</em> N CREW 가입: 회원 확인과 혜택 제공을 위해 이름·휴대폰 번호 수집·이용에 동의해요. 보관: N CREW 탈퇴 시까지</span></label>
 <label class="ck"><input type="checkbox" id="qjMk"> <span>(선택) 공실 특가·이벤트 광고 문자를 받을게요. 체크하지 않아도 가입과 혜택은 그대로예요</span></label>
 <label class="ck"><input type="checkbox" id="qjNt" disabled> <span>(선택) 밤 9시~아침 8시 당일 특가 알림도 받을게요</span></label>
+<div id="qjCodeBox" hidden><label for="qjCode">문자로 받은 인증번호 6자리</label><input id="qjCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
 <button class="btn lamp" id="qjBtn" type="button">가입하고 인증번호 받기</button><div id="qjMsg"></div></div>`;
  $("qjName").focus();
  $("qjMk").onchange=()=>{$("qjNt").disabled=!$("qjMk").checked;if(!$("qjMk").checked)$("qjNt").checked=false};
  $("qjBtn").onclick=async()=>{const e=$("qjMsg");if(!$("qjName").value.trim()){e.textContent="이름을 적어주세요";return}if(!$("qjAg").checked){e.textContent="필수 동의에 체크해 주세요";return}
   $("qjBtn").disabled=true;e.textContent="가입하는 중…";
-  const r=await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"join",name:$("qjName").value,phone:$("ph").value,branch:(BK&&BK.branch)||"",agree:true,marketing:$("qjMk").checked,night_agree:$("qjMk").checked&&$("qjNt").checked,source:BK?"me_book":"me"})}).then(x=>x.json()).catch(()=>({}));
+  const r=await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-site",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"join",name:$("qjName").value,phone:$("ph").value,branch:(BK&&BK.branch)||"",agree:true,marketing:$("qjMk").checked,night_agree:$("qjMk").checked&&$("qjNt").checked,source:BK?"me_book":"me",code:$("qjCodeBox").hidden?undefined:$("qjCode").value.trim()})}).then(x=>x.json()).catch(()=>({}));
+  if(r.need_code){$("qjBtn").disabled=false;$("qjCodeBox").hidden=false;$("qjCode").focus();$("qjBtn").textContent="인증하고 가입하기";e.textContent=r.error||"인증번호를 넣어 주세요";return}
   if(!r.ok){$("qjBtn").disabled=false;e.textContent=r.error||"네트워크가 불안정해요. 다시 눌러주세요";return}
   try{window.pnTrack&&window.pnTrack("me_quickjoin")}catch(_){}
+  if(r.token){st.set("pn_token",r.token);st.set("pn_phone",$("ph").value);load();return}
   $("send").click()}}
 $("verify").onclick=async()=>{const j=await post({action:"otp_verify",phone:$("ph").value,code:$("code").value}).catch(()=>({}));
  if(j.ok){st.set("pn_token",j.token);st.set("pn_phone",$("ph").value);load()}else msg(j.error||"다시 시도해 주세요")};
