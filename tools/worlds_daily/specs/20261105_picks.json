@@ -1,0 +1,149 @@
+{
+ "date": "20261105_picks",
+ "series": "롤드컵 픽 현황",
+ "title": "P26 롤드컵 픽 현황 8강",
+ "publish_at": "2099-01-01T00:00:00Z",
+ "status": "draft",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-04_IG-TES/ig_victory.jpg",
+  "T1.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-29_T1-MKOI/logo_T1.png",
+  "KC.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/templates/worlds_logos/KC.png",
+  "DK.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-10-26_DK-MKOI/logo_DK.png",
+  "BLG.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-01_BLG-HLE/logo_BLG.png",
+  "IG.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-04_IG-TES/logo_IG.png",
+  "GEN.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/site/worlds/logo_gen.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "pill": "롤드컵 우승팀 아직 안 찍은 사람 필독",
+   "title": "4강 두 자리 찼는데\n손님 픽은\n[하나도] 안 죽음{?}",
+   "size": 92,
+   "photo": "cover.jpg",
+   "pos": "center 30%",
+   "cap": "IG 3:1 TES · 젠지 3:0 LYON\n지금 찍어도 *5만원* · 넘겨보기 →"
+  },
+  {
+   "type": "list",
+   "title": "남은 6팀\n[손님 픽] 순위",
+   "size": 84,
+   "items": [
+    [
+     "1위",
+     "T1",
+     "손님 대부분이 찍음 · 사장님 픽도 T1"
+    ],
+    [
+     "2위",
+     "Gen.G",
+     "LYON 3:0으로 잡고 4강 먼저 도착"
+    ],
+    [
+     "빈자리",
+     "DK · BLG · IG · KC",
+     "아직 아무도 안 찍음 · 지금 찍으면 그 팀 1번"
+    ],
+    [
+     "날아간 픽",
+     "TES · LYON 포함 13팀",
+     "찍은 손님이 없어서 피해 0"
+    ]
+   ]
+  },
+  {
+   "type": "steps",
+   "title": "사장님도 손님도 T1\n판 뒤집을 [너]{?}",
+   "size": 76,
+   "steps": [
+    [
+     "사장님",
+     "T1 그대로",
+     "토요일 아침 KC만 넘으면 4강"
+    ],
+    [
+     "손님 대부분",
+     "T1",
+     "사장님이랑 같은 배"
+    ],
+    [
+     "너",
+     "남은 팀 아무나",
+     "T1 말고 다른 팀 고르면 혼자 노리는 자리"
+    ]
+   ],
+   "stats": [
+    [
+     "지금 픽",
+     "5만원"
+    ],
+    [
+     "픽 마감",
+     "11/14"
+    ],
+    [
+     "결승",
+     "11/15"
+    ]
+   ]
+  },
+  {
+   "type": "next",
+   "title": "이번 주말\n[아침 7시] 3연전",
+   "size": 76,
+   "matches": [
+    {
+     "date": "11/6(금) 아침 7시 · 8강",
+     "a": {
+      "logo": "DK.png",
+      "name": "DK"
+     },
+     "b": {
+      "logo": "BLG.png",
+      "name": "BLG"
+     },
+     "note": "BLG는 스위스에서 한화생명을 잡은 팀"
+    },
+    {
+     "date": "11/7(토) 아침 7시 · 8강",
+     "a": {
+      "logo": "T1.png",
+      "name": "T1"
+     },
+     "b": {
+      "logo": "KC.png",
+      "name": "KC"
+     },
+     "note": "손님 픽 1위 · *사장님 픽*이 걸린 판",
+     "hot": true
+    },
+    {
+     "date": "11/8(일) 아침 7시 · 4강",
+     "a": {
+      "logo": "GEN.png",
+      "name": "Gen.G"
+     },
+     "b": {
+      "logo": "IG.png",
+      "name": "IG"
+     },
+     "note": "IG는 7년 만의 4강"
+    }
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "토요일 아침\nT1 경기\n[같이 볼] 사람{?}",
+   "size": 92,
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "10/12~11/14 나이트·통대관 · 체크인 때 1팀 찍기\n팀원 전원 N CREW · 11/3까지 10만원 · *지금은 5만원*",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "T1 vs KC 같이 볼 친구 태그 🏆 롤드컵 4강 두 자리 찼는데 손님 픽은 하나도 안 죽음? 롤드컵 2026 8강 홍대 게임파티룸 플레이앤 픽 현황\n4명이 모이면 플레이앤에서 → 프로필 링크\n\n8강 첫 두 경기가 끝났어요. IG가 TES를 3:1, 젠지가 LYON을 3:0으로 잡고 4강에 먼저 올라갔어요.\n✔ 플레이앤 손님 픽 1위 T1, 2위 Gen.G. 찍은 팀 전부 아직 살아 있어요\n✔ TES · LYON까지 13팀이 탈락했지만 날아간 픽은 0\n✔ DK · BLG · IG · KC는 아직 아무도 안 찍었어요. 지금 찍으면 그 팀 1번\n✔ 사장님 픽은 T1 그대로. 11/7(토) 아침 7시 KC전이 고비예요\n\n📅 이번 주 경기 (한국 시간)\n11/6(금) 아침 7시 DK vs BLG\n11/7(토) 아침 7시 T1 vs KC\n11/8(일) 아침 7시 4강 젠지 vs IG\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽한 팀은 10만원 · 지금 찍으면 5만원 · 결승 뒤 7일 안에 송금\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LoL Esports 공식 중계 「IG vs TES 8강 | 2026 월드 챔피언십」 장면\n경기 기록·대진: LoL Esports 공식 일정 · 인벤 · 엑스포츠뉴스 · 위키트리\n일정: LoL Esports 공식 일정 기준 (한국 시간 환산)\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "남은 여섯 팀 중 우승은 누구? 번호로 남겨줘 👇\n1 T1  2 Gen.G  3 DK  4 BLG  5 IG  6 KC\n토요일 아침 같이 볼 친구도 태그해줘"
+}
