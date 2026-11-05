@@ -97,7 +97,7 @@
         <div><label for="bDate">날짜</label><input id="bDate" type="date"></div></div>
         <div class="row2"><div><label for="bPkg">패키지</label><select id="bPkg"><option value="day">주간 11:00~17:30</option><option value="night" selected>야간 19:00~익일 09:30</option><option value="full">통대관 12:00~익일 10:00</option></select></div>
         <div><label for="bPpl">인원</label><input id="bPpl" type="number" min="1" max="16" value="5"></div></div>
-        <label for="bCp">쓸 혜택</label><select id="bCp"><option value="">할인율 자동 적용 (가장 큰 할인)</option></select>
+        <label for="bCp">쓸 혜택</label><select id="bCp"><option value="">가장 큰 할인 자동 적용 (쿠폰 포함)</option></select>
         <label class="chk2" id="bPassWrap" hidden><input type="checkbox" id="bPass"><span>플레이앤 패스 잔액으로 결제 (<span id="bPassBal"></span>)</span></label>
         <label for="bMemo">요청사항 (선택)</label><textarea id="bMemo" rows="2" maxlength="200" placeholder="예: 생일 케이크 보관, 연장권 사용하고 싶어요"></textarea>
         <div class="qt" id="bQt">날짜를 고르면 가격이 나와요.</div>
@@ -214,7 +214,7 @@ function initBook(p){P=p;setTimeout(()=>{if(!BK)return;try{sessionStorage.remove
   if(BK.branch)$("bBr").value=BK.branch;if(BK.date)$("bDate").value=BK.date;if(BK.pkg)$("bPkg").value=BK.pkg;if(BK.people)$("bPpl").value=BK.people;if(BK.memo)$("bMemo").value=BK.memo;
   q();$("book").scrollIntoView({behavior:"smooth",block:"start"})},0);const d=$("bDate");d.min=today();const mx=new Date(Date.now()+9*3600e3+90*86400e3);d.max=mx.toISOString().slice(0,10);
  const cs=p.coupons.filter(c=>c.status==="active"&&["won","full_free","day_free","night50","wk50"].includes(c.kind));
- $("bCp").innerHTML='<option value="">할인율 자동 적용 (가장 큰 할인)</option>'+cs.map(c=>`<option value="${c.id}">${esc(c.title)} (${c.expires_at}까지)</option>`).join("");
+ $("bCp").innerHTML='<option value="">가장 큰 할인 자동 적용 (쿠폰 포함)</option>'+cs.map(c=>`<option value="${c.id}">${esc(c.title)} (${c.expires_at}까지)</option>`).join("")+(cs.length?'<option value="none">쿠폰 쓰지 않기 (아껴두기)</option>':"");
  if(p.pass_balance>0){$("bPassWrap").hidden=false;$("bPassBal").textContent="잔액 "+won(p.pass_balance)}
  $("passDesc").textContent=p.pass_balance>0?`잔액 ${won(p.pass_balance)} · 예약할 때 패스로 결제할 수 있어요.`:`${won(p.pass?.pay||500000)} 충전하면 ${won(p.pass?.credit||600000)}어치 써요. 충전은 호스트에게 문자 주세요 (010-8339-5818).`;
  const m=p.military||{};if(m.status==="approved"){$("milForm").hidden=true;$("milDesc").innerHTML=`<span class="ok2">인증 완료</span> · ${m.until}까지 방문마다 음료·물 2병. 첫 예약 5만원 할인권은 내 쿠폰에 있어요.`}
@@ -226,7 +226,7 @@ let qT=null;async function q(){const t=st.get("pn_token");if(!$("bDate").value){
  const j=await post({action:"quote",token:t,date:$("bDate").value,branch:$("bBr").value,pkg:$("bPkg").value,people:$("bPpl").value,coupon_id:$("bCp").value||null}).catch(()=>({}));
  if(!j.ok){$("bQt").innerHTML=`<span style="color:#D1124F;font-weight:700">${esc(j.error||"다시 시도해 주세요")}</span>`;return}
  if(!j.free){$("bQt").innerHTML=`<b>${j.label} ${j.pkg_name}</b>은 이미 예약이 있어요. 다른 날짜나 패키지를 골라주세요.`;return}
- $("bQt").innerHTML=`<b>${j.label} ${j.pkg_name}${j.upgrade?" → 통대관 업그레이드":""}</b> (${j.time})<br>${j.price<j.regular?`<s>${won(j.regular)}</s> → `:""}<b class="big">${won(j.price)}</b><br><span style="font-size:13.5px">${esc(j.note)}${j.extra?` · 6번째 사람부터 추가 ${won(j.extra)} 포함`:""}</span>`+(j.crew_need?`<div class="tip" style="cursor:default">👥 50% 할인권은 이용 인원 <b>${j.crew_need}명 전원</b>이 <b>신청 후 30분 안에</b> N CREW 인증을 마쳐야 확정돼요 (못 하면 자동 취소). 친구들과 같이 있을 때 신청하세요.</div>`:"")+(j.better?`<div class="tip" id="useBetter">💡 ${esc(j.better.title)} 쓰면 더 싸요 → 눌러서 적용</div>`:"");
+ $("bQt").innerHTML=`<b>${j.label} ${j.pkg_name}${j.upgrade?" → 통대관 업그레이드":""}</b> (${j.time})<br>${j.price<j.regular?`<s>${won(j.regular)}</s> → `:""}<b class="big">${won(j.price)}</b><br><span style="font-size:13.5px">${esc(j.note)}${j.extra?` · 6번째 사람부터 추가 ${won(j.extra)} 포함`:""}</span>`+(j.crew_need?`<div class="tip" style="cursor:default">👥 50% 할인권은 이용 인원 <b>${j.crew_need}명 전원</b>이 <b>신청 후 30분 안에</b> N CREW 인증을 마쳐야 확정돼요 (못 하면 자동 취소). 친구들과 같이 있을 때 신청하세요.</div>`:"")+(j.auto_coupon?`<div class="tip" style="cursor:default">🎟 ${esc(j.auto_coupon.title)} 자동 적용됐어요. 아껴두려면 위에서 '쿠폰 쓰지 않기'를 고르세요.</div>`:j.better?`<div class="tip" id="useBetter">💡 ${esc(j.better.title)} 쓰면 더 싸요 → 눌러서 적용</div>`:"");
  if(j.better)$("useBetter").onclick=()=>{$("bCp").value=j.better.id;q()};
  $("bGo").disabled=false}
 ["bBr","bDate","bPkg","bCp"].forEach(i=>$(i).addEventListener("change",q));$("bPpl").addEventListener("input",()=>{clearTimeout(qT);qT=setTimeout(q,400)});
