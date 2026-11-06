@@ -38,6 +38,7 @@ async function compute(today: string, days: number) {
   const ownEnd = new Map<string, { date: string; h: number }>();
   for (const o of ownRows || []) {
     if (!o.branch || String(o.memo ?? "") === "플레이앤 자동" || /^스클/.test(String(o.name ?? "").replace(/\s/g, ""))) continue;
+    if (Number(o.ehour) >= 23 && String(o.edate || o.sdate) === String(o.sdate)) continue; // 자정까지 막은 건 밤샘 예약(실제 퇴실은 다음 날) → 패키지 기본 퇴실 사용
     let d = String(o.edate || o.sdate), h = Number(o.ehour) + 1;
     if (h >= 24) { h -= 24; d = addDays(d, 1); }
     ownEnd.set(`${o.branch}|${o.sdate}|${o.shour}`, { date: d, h });
