@@ -100,8 +100,11 @@
         <label for="bBbq">루프탑 바베큐</label><select id="bBbq"><option value="">바베큐 하세요? 골라주세요</option><option value="0">바베큐 안 해요</option></select>
         <p class="sub" style="font-size:12.5px;margin-top:4px">바베큐는 인당 1만원 별도 (장작·숯·불판 포함, 퇴실 정산 때 계산)</p>
         <label for="bCp">쓸 혜택</label><select id="bCp"><option value="">가장 큰 할인 자동 적용 (쿠폰 포함)</option></select>
+        <div id="bTimeWrap" hidden><label for="bTime">시간 쿠폰 (조기입실·늦은퇴실)</label><select id="bTime"><option value="">이번엔 안 써요</option></select></div>
+        <label for="bRv">사진 후기 이벤트</label><select id="bRv"><option value="">체크인 때 고를게요</option><option value="early">참여 · 조기입실 1시간</option><option value="drink">참여 · 음료 2병</option><option value="none">참여 안 해요</option></select>
+        <p class="sub" style="font-size:12.5px;margin-top:4px">지금 고르면 입실 시간이 바로 계산되고 체크인 때 다시 안 골라도 돼요. 퇴실 후 사진 후기를 남기는 조건이에요.</p>
         <label class="chk2" id="bPassWrap" hidden><input type="checkbox" id="bPass"><span>플레이앤 패스 잔액으로 결제 (<span id="bPassBal"></span>)</span></label>
-        <label for="bMemo">요청사항 (선택)</label><textarea id="bMemo" rows="2" maxlength="200" placeholder="예: 생일 케이크 보관, 연장권 사용하고 싶어요"></textarea>
+        <label for="bMemo">요청사항 (선택)</label><textarea id="bMemo" rows="2" maxlength="200" placeholder="예: 생일 케이크 보관"></textarea>
         <div class="qt" id="bQt">날짜를 고르면 가격이 나와요.</div>
         <button class="btn pink" id="bGo" style="width:100%;margin-top:12px" disabled>이 가격으로 예약 신청</button>
         <div class="msg" id="bMsg"></div>
@@ -217,6 +220,7 @@ function initBook(p){P=p;setTimeout(()=>{if(!BK)return;try{sessionStorage.remove
   q();$("book").scrollIntoView({behavior:"smooth",block:"start"})},0);const d=$("bDate");d.min=today();const mx=new Date(Date.now()+9*3600e3+90*86400e3);d.max=mx.toISOString().slice(0,10);
  const cs=p.coupons.filter(c=>c.status==="active"&&["won","full_free","day_free","night50","wk50"].includes(c.kind));
  $("bCp").innerHTML='<option value="">가장 큰 할인 자동 적용 (쿠폰 포함)</option>'+cs.map(c=>`<option value="${c.id}">${esc(c.title)} (${c.expires_at}까지)</option>`).join("")+(cs.length?'<option value="none">쿠폰 쓰지 않기 (아껴두기)</option>':"");
+ const ts=p.coupons.filter(c=>c.status==="active"&&/^ext[123]$/.test(c.kind));if(ts.length){$("bTimeWrap").hidden=false;$("bTime").innerHTML='<option value="">이번엔 안 써요</option>'+ts.map(c=>`<option value="${c.id}|early">${esc(c.title)} → 조기입실</option><option value="${c.id}|late">${esc(c.title)} → 늦은퇴실</option>`).join("")}
  if(p.pass_balance>0){$("bPassWrap").hidden=false;$("bPassBal").textContent="잔액 "+won(p.pass_balance)}
  $("passDesc").textContent=p.pass_balance>0?`잔액 ${won(p.pass_balance)} · 예약할 때 패스로 결제할 수 있어요.`:`${won(p.pass?.pay||500000)} 충전하면 ${won(p.pass?.credit||600000)}어치 써요. 충전은 호스트에게 문자 주세요 (010-8339-5818).`;
  const m=p.military||{};if(m.status==="approved"){$("milForm").hidden=true;$("milDesc").innerHTML=`<span class="ok2">인증 완료</span> · ${m.until}까지 방문마다 음료·물 2병. 첫 예약 5만원 할인권은 내 쿠폰에 있어요.`}
@@ -226,15 +230,17 @@ function initBook(p){P=p;setTimeout(()=>{if(!BK)return;try{sessionStorage.remove
 }
 function bbqOpts(){const n=Math.max(1,Math.min(16,+$("bPpl").value||5)),v=$("bBbq").value;$("bBbq").innerHTML='<option value="">바베큐 하세요? 골라주세요</option><option value="0">바베큐 안 해요</option>'+[...Array(n).keys()].map(i=>`<option value="${n-i}">바베큐 ${n-i}명 (${((n-i)*1).toLocaleString()}만원 별도)</option>`).join("");if(v!==""&&+v<=n)$("bBbq").value=v}
 bbqOpts();
+function tArgs(){const t=($("bTime").value||"").split("|");return{time_coupon_id:t[0]||null,time_dir:t[1]||null,review_pick:$("bRv").value||null}}
 let qT=null;async function q(){const t=st.get("pn_token");if(!$("bDate").value){return}$("bQt").textContent="계산 중…";$("bGo").disabled=true;
- const j=await post({action:"quote",token:t,date:$("bDate").value,branch:$("bBr").value,pkg:$("bPkg").value,people:$("bPpl").value,coupon_id:$("bCp").value||null}).catch(()=>({}));
+ const j=await post({action:"quote",token:t,date:$("bDate").value,branch:$("bBr").value,pkg:$("bPkg").value,people:$("bPpl").value,coupon_id:$("bCp").value||null,...tArgs()}).catch(()=>({}));
  if(!j.ok){$("bQt").innerHTML=`<span style="color:#D1124F;font-weight:700">${esc(j.error||"다시 시도해 주세요")}</span>`;return}
  if(!j.free){$("bQt").innerHTML=`<b>${j.label} ${j.pkg_name}</b>은 이미 예약이 있어요. 다른 날짜나 패키지를 골라주세요.`;return}
  $("bQt").innerHTML=`<b>${j.label} ${j.pkg_name}${j.upgrade?" → 통대관 업그레이드":""}</b> (${j.time})<br>${j.price<j.regular?`<s>${won(j.regular)}</s> → `:""}<b class="big">${won(j.price)}</b><br><span style="font-size:13.5px">${esc(j.note)}${j.extra?` · 6번째 사람부터 추가 ${won(j.extra)} 포함`:""}</span>`+(j.crew_need?`<div class="tip" style="cursor:default">👥 50% 할인권은 이용 인원 <b>${j.crew_need}명 전원</b>이 <b>신청 후 30분 안에</b> N CREW 인증을 마쳐야 확정돼요 (못 하면 자동 취소). 친구들과 같이 있을 때 신청하세요.</div>`:"")+($("bBbq").value===""?`<div class="tip" style="cursor:default">🍖 바베큐 여부를 골라주세요</div>`:+$("bBbq").value>0?`<div style="font-size:13.5px;margin-top:6px">🍖 바베큐 ${$("bBbq").value}명 · ${(+$("bBbq").value*10000).toLocaleString()}원 별도 (퇴실 정산)</div>`:"")+(j.auto_coupon?`<div class="tip" style="cursor:default">🎟 ${esc(j.auto_coupon.title)} 자동 적용됐어요. 아껴두려면 위에서 '쿠폰 쓰지 않기'를 고르세요.</div>`:j.better?`<div class="tip" id="useBetter">💡 ${esc(j.better.title)} 쓰면 더 싸요 → 눌러서 적용</div>`:"");
+ const pl=j.plan||{},tl=[pl.early,pl.late].filter(Boolean);if(tl.length)$("bQt").insertAdjacentHTML("beforeend",tl.map(x=>`<div class="${x.possible?"":"tip"}" style="font-size:13.5px;margin-top:6px;${x.possible?"font-weight:700":"cursor:default"}">⏰ ${esc(x.label)}</div>`).join(""));
  if(j.better)$("useBetter").onclick=()=>{$("bCp").value=j.better.id;q()};
- $("bGo").disabled=$("bBbq").value===""}
-["bBr","bDate","bPkg","bCp","bBbq"].forEach(i=>$(i).addEventListener("change",q));$("bPpl").addEventListener("input",()=>{bbqOpts();clearTimeout(qT);qT=setTimeout(q,400)});
-$("bGo").onclick=async()=>{$("bGo").disabled=true;const j=await post({action:"member_request",token:st.get("pn_token"),date:$("bDate").value,branch:$("bBr").value,pkg:$("bPkg").value,people:$("bPpl").value,coupon_id:$("bCp").value||null,bbq_people:$("bBbq").value,pay_pass:$("bPass").checked,memo:$("bMemo").value}).catch(()=>({}));
+ $("bGo").disabled=$("bBbq").value===""||tl.some(x=>!x.possible)}
+["bBr","bDate","bPkg","bCp","bBbq","bTime","bRv"].forEach(i=>$(i).addEventListener("change",q));$("bPpl").addEventListener("input",()=>{bbqOpts();clearTimeout(qT);qT=setTimeout(q,400)});
+$("bGo").onclick=async()=>{$("bGo").disabled=true;const j=await post({action:"member_request",token:st.get("pn_token"),date:$("bDate").value,branch:$("bBr").value,pkg:$("bPkg").value,people:$("bPpl").value,coupon_id:$("bCp").value||null,bbq_people:$("bBbq").value,pay_pass:$("bPass").checked,memo:$("bMemo").value,...tArgs()}).catch(()=>({}));
  if(j.ok&&j.crew){$("bMsg").className="msg ok";$("bMsg").innerHTML=`신청했어요 (#${j.id}). <b>50% 할인은 이용 인원 ${j.crew.need}명 전원이 30분 안에 N CREW 인증을 마쳐야 확정돼요.</b> 시간 안에 못 하면 자동 취소되고 할인권은 돌아와요. 같이 오는 친구들에게 지금 바로 아래 링크를 보내주세요 (지금 1/${j.crew.need})<br><button type="button" class="btn" id="crewShare" style="margin-top:8px">인증 링크 보내기</button> <a href="${j.crew.link}" target="_blank" rel="noopener">진행 상황 보기</a>`;
    $("crewShare").onclick=async()=>{const tx=`플레이앤 50% 예약에 같이 가려면 N CREW 인증이 필요해요 (30초)`;try{if(navigator.share)await navigator.share({title:"플레이앤 N CREW 인증",text:tx,url:j.crew.link});else{await navigator.clipboard.writeText(tx+" "+j.crew.link);$("crewShare").textContent="복사했어요"}}catch(e){}}}
  else if(j.ok){$("bMsg").className="msg ok";$("bMsg").textContent=`신청했어요 (#${j.id}). 호스트가 확인하면 확정 문자${j.price>0&&!$("bPass").checked?"와 입금 계좌":""}를 보내드려요.`;setTimeout(load,1500)}

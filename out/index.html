@@ -153,6 +153,7 @@ async function load(){
   $("accTxt").textContent=D.account;$("depAmt").textContent=won(D.rules.deposit);
   if(D.exempt){$("depHint").hidden=true;$("exemptBox").hidden=false;$("exemptBox").innerHTML="👑 N CREW 레전드 멤버라 <b>보증금 없이</b> 이용하세요. 입금자명 칸엔 이름만 적어주시면 돼요. 퇴실 후 쓰신 물품 금액만 정산해요."}
   else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent=(D.checkin&&D.checkin.review==="drink")?"N CREW 혜택: 물 2병 무료 (음료는 후기 이벤트로 받아서 1회 방문 음료 2병 한도 적용)":"N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}
+  if(D.prefill&&!D.checkin){const f=D.prefill;if(f.headcount)$("hc").value=f.headcount;if(f.depositor)$("dp").value=f.depositor;if(f.review){const r=document.querySelector(`[name=rv][value="${f.review}"]`);if(r)r.checked=true}if(f.bbq!=null){const r=document.querySelector(`[name=bq][value="${f.bbq?1:0}"]`);if(r)r.checked=true}const pr=document.querySelector(`[name=pf][value="${f.platform}"]`);if(pr)pr.checked=true;if(f.headcount)$("hc").oninput&&setTimeout(()=>$("hc").oninput(),0)}
   if(D.platform&&!D.checkin){const v={naver:"네이버",site:"홈페이지·기타",spacecloud:"스페이스클라우드"}[D.platform];const r=document.querySelector(`[name=pf][value="${v}"]`);if(r)r.checked=true}
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
   $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people,ex=Math.max(0,n-b),dp=(D.rules.items.find(x=>x.id==="disposable")||{price:0}).price;
