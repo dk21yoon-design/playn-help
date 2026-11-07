@@ -267,9 +267,9 @@ async function sessionPhone(token: unknown) {
 async function quote(cfg: Record<string, string>, phone: string, b: any): Promise<any> {
   const noCoupon = b.coupon_id === "none"; // v19: 손님이 '쿠폰 쓰지 않기'를 고른 경우만 자동 적용 안 함
   if (noCoupon) b = { ...b, coupon_id: null };
-  const pr: any = await profile(phone, cfg);
+  // v21: 회원 정보와 빈자리 확인을 동시에 (견적 대기 시간 단축)
+  const [pr, sl]: any[] = await Promise.all([b._pr ? Promise.resolve(b._pr) : profile(phone, cfg), b._sl ? Promise.resolve(b._sl) : fetch(SITE, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "slot", date: b.date, branch: b.branch, pkg: b.pkg }) }).then((x) => x.json())]);
   if (!pr) return { ok: false, error: "N CREW 멤버가 아니에요" };
-  const sl = await (await fetch(SITE, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "slot", date: b.date, branch: b.branch, pkg: b.pkg }) })).json();
   if (!sl.ok) return sl;
   if (!sl.regular) return { ok: false, error: "가격을 확인할 수 없어요. 호스트에게 문의해 주세요" };
   const people = Math.max(1, Math.min(30, Number(b.people) || 5));
@@ -332,7 +332,7 @@ async function quote(cfg: Record<string, string>, phone: string, b: any): Promis
   }
   // v19: 쿠폰을 안 골랐으면 더 유리한 할인권을 자동으로 적용 (화면 '가장 큰 할인 자동 적용'과 같게)
   if (better && !noCoupon && !b._auto) {
-    const auto = await quote(cfg, phone, { ...b, coupon_id: better.id, _auto: true });
+    const auto = await quote(cfg, phone, { ...b, coupon_id: better.id, _auto: true, _pr: pr, _sl: sl }); // v21: 다시 조회하지 않음
     if (auto.ok) return { ...auto, auto_coupon: { id: better.id, title: better.title }, plan: await timePlan(cfg, pr, b, auto.upgrade ? "full" : String(b.pkg)) };
   }
   const tp: any = b._auto ? null : await timePlan(cfg, pr, b, upgrade ? "full" : String(b.pkg)); // v21
