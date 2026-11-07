@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PLAY N 릴스 빌더 v3.20261024 (자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
+"""PLAY N 릴스 빌더 v3.20261107 (파국 순간 프리즈 freeze 빌더 흡수 / 자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
   새 장면 옵션: "mic": true 또는 "mic": "T1 팀 보이스" → 그 장면은 원본 소리(선수 마이크·인게임 보이스)를 살리고 음악을 낮춤. clip.file 필요.
                "caption": "자막" → 영상 아래쪽 노란 자막(보이스 번역·대사용).
               "preview_music": {"url": "<인스타 음악 preview URL>", "start": "auto"} → out_preview.mp4 (사장님 확인용, 실제 인스타 곡). music.start도 "auto"면 드롭 지점 자동 탐색.
@@ -45,8 +45,17 @@ spec.json 예시
       장면 "caption_pop": false 로 그 장면만 끔. 결과 JSON "caption_pop" 에 적용 장면 수. 옵션이 없으면 이전 버전과 같은 결과
   자막 어디서든 ^단어^ → 노랑 #FFE45C 강조 (q_kwcolor: 한 줄에 노랑 1단어). ^ 를 안 쓰면 이전과 같음
   버그 수정: PLAYN_TICKET 만 있을 때 클립 기록 조회에서 _hq NameError → _hq 정의를 위로 올림
+- [2026-11-07 프리즈] 지금까지 빌더 사본을 고쳐(tpad) 넣던 파국 순간 정지(q_freeze)를 빌더 옵션으로 흡수.
+  장면 "freeze": 1.2 → 장면 시작 기준 1.2초 프레임에서 0.35초 정지 후 이어서 재생 (clip 장면만, mic 장면 제외)
+  장면 "freeze": {"at": 1.2, "len": 0.35, "text": "^펑^ 끝났다", "punch": true, "flash": true}
+      len   : 정지 길이 0.1~1.0초 (기본 0.35). 장면 길이(dur)는 그대로 → 원본은 dur-len초만 씀(음악·자막 타이밍 안 바뀜)
+      text  : 정지 동안 영상 박스 가운데 큰 자막 한 줄(react 스타일 외곽선, ^단어^ 노랑·{단어} 핑크)
+      punch : true 면 정지 시작에 펀치 줌(장면 "punch"에 at 추가, q_punch 같이 기록)
+      flash : true 면 정지 첫 2프레임 흰 섬광(영상 박스 안만)
+  조건: at ≥ 0.1, at+len ≤ dur-0.3. 어기면 빌드 중단. 한 편에 1곳 권장(2곳 이상이면 경고만).
+  옵션이 없으면 이전 버전과 같은 결과. 결과 JSON "freeze": [{"scene", "at_s"(전체 기준 초), "len"}] → qa quality_items 에 q_freeze
 """
-BUILDER_VERSION = 'v3.20261024'
+BUILDER_VERSION = 'v3.20261107'
 import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil, base64
 
 FPS = 30
@@ -365,6 +374,32 @@ document.querySelectorAll('.center .c').forEach(c=>fitW(c,940));
     return ''.join(h).replace('__TS__', str(float(spec.get('text_scale', 1))))
 
 
+# ---- 프리즈 (2026-11-07 v3.20261107): 파국 순간 정지 q_freeze ----
+FREEZE_LOG = []
+
+
+def _freeze_cfg(sc):
+    f = sc.get('freeze')
+    if f is None or f is False: return None
+    cfg = {'at': None, 'len': 0.35, 'text': '', 'punch': False, 'flash': False}
+    if isinstance(f, dict): cfg.update(f)
+    else: cfg['at'] = f
+    if not sc.get('clip') or sc.get('mic'):
+        print('⚠️ freeze 는 clip 장면(mic 아님)에서만 — 이 장면은 건너뜀', file=sys.stderr); return None
+    d = float(sc.get('dur', 3.0)); a = float(cfg['at']); ln = float(cfg['len'])
+    if not (0.1 <= ln <= 1.0): raise SystemExit(f'❌ freeze.len {ln}: 0.1~1.0초')
+    if a < 0.1 or a + ln > d - 0.3 + 1e-6: raise SystemExit(f'❌ freeze.at {a}+len {ln}: 0.1초 이후, 장면 끝 0.3초 전(dur {d})에 끝나야 함')
+    cfg['at'], cfg['len'] = a, ln
+    return cfg
+
+
+def freeze_html(text):
+    return (HEAD.replace('<body>', '<body class="stroke">') +
+            '<div style="position:absolute;left:60px;right:60px;top:860px;height:300px;display:flex;align-items:center;justify-content:center;text-align:center">'
+            f'<span id="fz" style="font-size:104px;font-weight:900;letter-spacing:-2.5px;line-height:1.1;color:#fff;-webkit-text-stroke:14px #08080E;paint-order:stroke fill;display:inline-block;white-space:nowrap">{mark(text)}</span></div>'
+            "<script>const e=document.getElementById('fz');let f=104;while(e.scrollWidth>940&&f>48){f-=4;e.style.fontSize=f+'px'}</script></body></html>")
+
+
 async def render_overlays(scenes):
     from playwright.async_api import async_playwright
     async with async_playwright() as p:
@@ -376,6 +411,13 @@ async def render_overlays(scenes):
             await pg.evaluate('document.fonts.ready')
             await pg.wait_for_timeout(150)
             await pg.screenshot(path=f'{W}/o{i}.png', omit_background=True)
+            fz = _freeze_cfg(sc)
+            if fz and fz.get('text'):
+                open(f'{W}/fz{i}.html', 'w', encoding='utf-8').write(freeze_html(fz['text']))
+                await pg.goto('file://' + f'{W}/fz{i}.html', wait_until='networkidle')
+                await pg.evaluate('document.fonts.ready')
+                await pg.wait_for_timeout(150)
+                await pg.screenshot(path=f'{W}/fz{i}.png', omit_background=True)
             pc = _pop_cfg(sc)
             if not pc: continue
             # 팝 자막을 뺀 판(o{i}.png 덮어쓰기) + 팝 자막만 n프레임(p{i}_01..n.png, 크기·투명도 애니메이션)
@@ -401,8 +443,12 @@ ZOOM_LOG = {'punch_s': [], 'interrupt_n': 0}
 
 def _punch_list(sc):
     p = sc.get('punch')
-    if p is None or p is False: return []
-    return [float(x) for x in (p if isinstance(p, (list, tuple)) else [p])]
+    out = [] if p is None or p is False else [float(x) for x in (p if isinstance(p, (list, tuple)) else [p])]
+    fz = sc.get('freeze')
+    if isinstance(fz, dict) and fz.get('punch') and sc.get('clip') and not sc.get('mic') and fz.get('at') is not None:
+        a = float(fz['at'])
+        if all(abs(a - x) > 0.05 for x in out): out.append(a)  # 프리즈 시작에 펀치(이미 있으면 그대로)
+    return sorted(out)
 
 
 def zoom_filter(i, sc, d):
@@ -445,7 +491,10 @@ def scene_video(i, sc):
         c = sc['clip']
         src = source(c)
         inp = ['-ss', str(c.get('start', 0)), '-t', f'{d + 0.2}', '-i', src]
-        pre = f'[0:v]fps={FPS},{fg_crop}setpts=PTS-STARTPTS,split[a][b]'
+        fz = _freeze_cfg(sc)
+        # 프리즈: at초 프레임을 len초만큼 복제해 끼움(loop) → 뒤는 이어서 재생, 장면 길이 d 유지
+        fz_f = f'loop=loop={int(round(fz["len"] * FPS))}:size=1:start={int(round(fz["at"] * FPS))},setpts=N/({FPS}*TB),' if fz else ''
+        pre = f'[0:v]fps={FPS},{fg_crop}setpts=PTS-STARTPTS,{fz_f}split[a][b]'
     else:
         img = fetch(sc['image'], f'{W}/img{i}')
         n = int(d * FPS) + 6
@@ -458,15 +507,26 @@ def scene_video(i, sc):
         else:
             pre = (f'[0:v]scale=2160:-2,zoompan=z=\'min(1+0.0009*on,1.25)\':x=\'iw/2-(iw/zoom/2)\':y=\'ih/2-(ih/zoom/2)\':d={n}:s=1080x1350:fps={FPS},'
                    f'setsar=1,split[a][b]')
+    fz = _freeze_cfg(sc) if sc.get('clip') else None
+    fz_a = round(int(round(fz['at'] * FPS)) / FPS, 4) if fz else 0
+    fz_flash = (f",drawbox=x=0:y=0:w=iw:h=ih:color=white@0.55:t=fill:enable='between(t,{fz_a:.4f},{fz_a + 2 / FPS - 0.001:.4f})'" if fz and fz.get('flash') else '')
     fc = (pre + ';'
           '[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=28:2,eq=brightness=-0.32:saturation=0.8[bg];'
-          f'[b]scale=1080:720:force_original_aspect_ratio=increase,crop=1080:720{zoom_filter(i, sc, d)}[fg];'
+          f'[b]scale=1080:720:force_original_aspect_ratio=increase,crop=1080:720{zoom_filter(i, sc, d)}{fz_flash}[fg];'
           '[bg][fg]overlay=0:620[v];[v][1:v]overlay=0:0,format=yuv420p[o]')
     pin = []
     if os.path.exists(f'{W}/p{i}_01.png'):  # 자막 팝: 장면 시작부터 팝 프레임 → 마지막 프레임 유지
         pin = ['-framerate', str(FPS), '-start_number', '1', '-i', f'{W}/p{i}_%02d.png']
         fc = fc.replace('[v][1:v]overlay=0:0,format=yuv420p[o]',
                         f'[2:v]format=rgba,tpad=stop_mode=clone:stop_duration={d + 1:.2f}[pp];[v][1:v]overlay=0:0[v2];[v2][pp]overlay=0:0:eof_action=repeat,format=yuv420p[o]')
+    if fz:
+        if os.path.exists(f'{W}/fz{i}.png'):  # 프리즈 동안만 큰 자막
+            k = 1 + 1 + (1 if pin else 0)
+            pin += ['-i', f'{W}/fz{i}.png']
+            assert fc.endswith(',format=yuv420p[o]')
+            fc = fc[:-len(',format=yuv420p[o]')] + f"[vz];[vz][{k}:v]overlay=0:0:enable='between(t,{fz_a:.4f},{fz_a + fz['len']:.4f})',format=yuv420p[o]"
+        t0 = sum(float(x.get('dur', 3.0)) for x in scenes[:i])
+        FREEZE_LOG.append({'scene': i, 'at_s': round(t0 + fz_a, 2), 'len': fz['len']})
     run(['ffmpeg', '-y', '-loglevel', 'error', *inp, '-i', f'{W}/o{i}.png', *pin, '-filter_complex', fc, '-map', '[o]',
          '-t', f'{d}', '-r', str(FPS), '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-an', outp])
     # 장면 오디오: mic(선수 보이스) 장면은 원본 소리, 나머지는 무음
@@ -692,4 +752,7 @@ if _mpick:
     except Exception as e: print('음악 사용 기록 실패:', e, file=sys.stderr)
 if ZOOM_LOG['punch_s'] or ZOOM_LOG['interrupt_n']: res_extra['zoom'] = ZOOM_LOG
 if POP_LOG['scenes']: res_extra['caption_pop'] = POP_LOG['scenes']
+if FREEZE_LOG:
+    res_extra['freeze'] = FREEZE_LOG
+    if len(FREEZE_LOG) > 1: print(f'⚠️ 프리즈 {len(FREEZE_LOG)}곳: q_freeze 는 한 편에 1곳 권장', file=sys.stderr)
 print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), 'builder': BUILDER_VERSION, **res_extra}, ensure_ascii=False))
