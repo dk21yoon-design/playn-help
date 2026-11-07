@@ -277,6 +277,45 @@ td .why{display:block;color:var(--dim);font-size:12px}
 .td.done label{color:var(--dim);text-decoration:line-through}
 
 /* 스킬 레이더 */
+
+/* 레퍼런스 랩 (데이터센터) */
+.rl-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.rl-stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px}
+.rl-stat b{display:block;font-family:var(--f-disp);font-weight:400;font-size:26px;color:var(--ink)}
+.rl-stat span{font-size:13px;color:var(--mute)}
+.rl-bars{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;display:grid;gap:8px;margin-bottom:14px}
+.rl-bars h4{font-size:14px;color:var(--mute);font-weight:700}
+.rl-bar{display:grid;grid-template-columns:120px 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.rl-bar .tr{height:8px;border-radius:999px;background:rgba(166,162,214,.12);overflow:hidden}.rl-bar .tr i{display:block;height:100%;background:var(--lamp);border-radius:999px}
+.rl-bar em{font-style:normal;color:var(--dim);text-align:right}
+.rl-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.rl-chip{font:inherit;font-size:14px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--mute);cursor:pointer;min-height:40px}
+.rl-chip[aria-pressed=true]{background:var(--lamp);color:#1a1300;border-color:var(--lamp)}
+.rl-tools select{font:inherit;font-size:14px;background:var(--panel);color:var(--ink);border:1px solid var(--line2);border-radius:999px;padding:8px 12px;min-height:40px}
+.rl-add{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.rl-add input{flex:1;min-width:220px;font:inherit;font-size:14px;background:var(--panel);color:var(--ink);border:1px solid var(--line2);border-radius:999px;padding:10px 16px;min-height:44px}
+.rl-add .go{font-size:14px;font-weight:800;color:#1a1300;background:var(--lamp);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;min-height:44px}
+.rl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.rl-card{position:relative;border-radius:var(--r-sm);overflow:hidden;background:var(--panel);border:1px solid var(--line);cursor:pointer;text-align:left;padding:0;color:inherit;font:inherit}
+.rl-card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.rl-card .cv{aspect-ratio:4/5;width:100%;object-fit:cover;display:block;background:var(--deep)}
+.rl-card .bd{position:absolute;top:8px;left:8px;display:flex;gap:5px}
+.rl-card .bd span{font-size:12px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(14,12,44,.82);color:var(--ink)}
+.rl-card .cap{padding:10px 11px 12px}
+.rl-card .cap b{font-size:14px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rl-card .cap small{display:block;margin-top:4px;font-size:12px;color:var(--dim)}
+.rl-card.pend{display:flex;flex-direction:column;justify-content:center;min-height:200px;padding:14px;border-style:dashed}
+.rl-dlg{border:0;padding:0;background:var(--night);color:var(--ink);width:min(1100px,96vw);max-height:92vh;border-radius:var(--r);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.rl-dlg::backdrop{background:rgba(8,6,28,.8)}
+.rl-dlg .top{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.rl-dlg .top h3{font-size:18px;flex:1;min-width:0}
+.rl-dlg .x{min-width:44px;min-height:44px;border:1px solid var(--line2);border-radius:999px;background:none;color:var(--ink);font-size:18px;cursor:pointer}
+.rl-strip{display:flex;gap:8px;overflow-x:auto;padding:14px 16px;scroll-snap-type:x mandatory}
+.rl-strip img{height:min(62vh,560px);width:auto;border-radius:8px;scroll-snap-align:start;flex:none;background:var(--deep)}
+.rl-body{padding:4px 16px 18px;display:grid;gap:10px;font-size:15px;line-height:1.55}
+.rl-body .ap{background:rgba(255,181,71,.09);border-left:3px solid var(--lamp);padding:10px 12px;border-radius:6px}
+.rl-body .meta{font-size:13px;color:var(--dim)}
+.rl-body a{color:var(--lamp)}
 .skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
 .sk{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .sk.pick{border-color:rgba(255,181,71,.55);background:linear-gradient(180deg,rgba(255,181,71,.09),var(--panel))}
@@ -411,7 +450,7 @@ function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.log
 /* ── 렌더 ── */
 function renderCats(){const c=$("#cats");c.innerHTML="";
   const all=issuesOf("all");
-  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"maker",name:"릴스 생성기",mono:"▶",monoBg:"#3A1F00"},{id:"music",name:"릴스 음악",mono:"♪",monoBg:"#3A0F2A"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"}];
+  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"maker",name:"릴스 생성기",mono:"▶",monoBg:"#3A1F00"},{id:"music",name:"릴스 음악",mono:"♪",monoBg:"#3A0F2A"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"},{id:"refs",name:"레퍼런스 랩",mono:"◎",monoBg:"#123A2C"}];
   items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;
     const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
     const crit=o.filter(i=>i.severity==="crit").length, warn=o.filter(i=>i.severity==="warn").length;
@@ -716,6 +755,59 @@ function syncKpis(){const k=$("#main .kpis");if(!k)return;const t=document.creat
 document.addEventListener("focusout",()=>setTimeout(flush,150));
 ["pause","ended"].forEach(ev=>document.addEventListener(ev,()=>setTimeout(flush,150),true));
 
+
+/* ── 레퍼런스 랩 (데이터센터): 매일 밤 수집 담당이 채우고, 숫자도 다시 재서 쌓음 ── */
+const REFS_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/hq-refs";
+let REFS=null, REFS_AT=0, RF={cat:"전체",fmt:"전체",sort:"new"};
+const refsPost=b=>fetch(REFS_API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크 연결이 끊겼어요"}));
+async function loadRefs(force){if(!force&&REFS&&Date.now()-REFS_AT<120e3)return;const j=await refsPost({action:"list"});if(j.ok){REFS=j.refs;REFS_AT=Date.now();if(VIEW==="refs")render(true)}}
+function refsSection(){const s=el("section");s.id="refs";
+  s.innerHTML=`<div class="sh"><span class="eye">REFERENCE LAB</span><h2>레퍼런스 랩</h2><span class="meta">우리 데이터센터 · 매일 밤 9시 23분 수집 · 숫자는 일주일마다 다시 재요</span></div>`;
+  if(!REFS){s.insertAdjacentHTML("beforeend",`<div class="empty">불러오는 중…</div>`);loadRefs(true);return s}
+  loadRefs(false);
+  const done=REFS.filter(r=>r.status!=="pending"),pend=REFS.filter(r=>r.status==="pending");
+  const wk=done.filter(r=>Date.now()-new Date(r.added_at)<7*864e5).length;
+  const withL=done.filter(r=>r.likes!=null);const avg=withL.length?Math.round(withL.reduce((a,r)=>a+r.likes,0)/withL.length):null;
+  const cats=[...new Set(done.map(r=>r.category).filter(Boolean))];
+  const byCat=cats.map(c=>{const a=withL.filter(r=>r.category===c);return{c,n:done.filter(r=>r.category===c).length,avg:a.length?Math.round(a.reduce((x,r)=>x+r.likes,0)/a.length):0}}).sort((a,b)=>b.avg-a.avg);
+  const top=[...withL].sort((a,b)=>b.likes-a.likes)[0];
+  const stats=el("div","rl-stats");
+  stats.innerHTML=`<div class="rl-stat"><b>${fmt(done.length)}</b><span>모은 레퍼런스</span></div><div class="rl-stat"><b>+${fmt(wk)}</b><span>이번 주 추가</span></div><div class="rl-stat"><b>${fmt(avg)}</b><span>평균 좋아요 (인스타)</span></div><div class="rl-stat"><b>${fmt(cats.length)}</b><span>카테고리</span></div>${top?`<div class="rl-stat"><b>${fmt(top.likes)}</b><span>최고: ${H(top.title)}</span></div>`:""}`;
+  s.appendChild(stats);
+  if(byCat.length){const mx=Math.max(...byCat.map(x=>x.avg),1);const bars=el("div","rl-bars");
+    bars.innerHTML=`<h4>카테고리별 평균 좋아요 · 무엇이 먹히는지</h4>`+byCat.map(x=>`<div class="rl-bar"><span>${H(x.c)}</span><div class="tr"><i style="width:${Math.max(3,Math.round(x.avg/mx*100))}%"></i></div><em>${fmt(x.avg)} · ${x.n}개</em></div>`).join("");s.appendChild(bars)}
+  const add=el("form","rl-add");add.innerHTML=`<input type="url" required placeholder="인스타·사이트 링크 붙여넣기 → 오늘 밤 수집 때 이미지·숫자까지 채워요" aria-label="레퍼런스 링크"><button class="go" type="submit">넣기</button>`;
+  add.onsubmit=async e=>{e.preventDefault();const i=add.querySelector("input"),bt=add.querySelector("button");bt.disabled=true;const j=await refsPost({action:"add",url:i.value.trim()});bt.disabled=false;toast(j.ok?(j.msg||"넣었어요"):(j.error||"실패"));if(j.ok&&!j.dup){i.value="";loadRefs(true)}};
+  s.appendChild(add);
+  const tools=el("div","rl-tools");
+  tools.innerHTML=["전체",...cats].map(c=>`<button type="button" class="rl-chip" aria-pressed="${RF.cat===c}" data-c="${H(c)}">${H(c)}</button>`).join("")+
+   `<select aria-label="형식"><option>전체</option>${["카드뉴스","릴스","사이트"].map(f=>`<option ${RF.fmt===f?"selected":""}>${f}</option>`).join("")}</select>`+
+   `<select aria-label="정렬"><option value="new" ${RF.sort==="new"?"selected":""}>최신순</option><option value="likes" ${RF.sort==="likes"?"selected":""}>좋아요순</option></select>`;
+  tools.querySelectorAll(".rl-chip").forEach(b=>b.onclick=()=>{RF.cat=b.dataset.c;render(true)});
+  const [fs,ss]=tools.querySelectorAll("select");fs.onchange=()=>{RF.fmt=fs.value;render(true)};ss.onchange=()=>{RF.sort=ss.value;render(true)};
+  s.appendChild(tools);
+  let list=done.filter(r=>(RF.cat==="전체"||r.category===RF.cat)&&(RF.fmt==="전체"||r.format===RF.fmt));
+  list=RF.sort==="likes"?list.sort((a,b)=>(b.likes??-1)-(a.likes??-1)):list;
+  const g=el("div","rl-grid");
+  if(RF.cat==="전체")pend.forEach(r=>{const c=el("div","rl-card pend");c.innerHTML=`<b style="font-size:14px">수집 대기</b><small style="font-size:12px;color:var(--dim);word-break:break-all">${H(r.url)}</small>`;g.appendChild(c)});
+  if(!list.length&&!pend.length)g.innerHTML=`<div class="empty">아직 이 조건에 맞는 레퍼런스가 없어요.</div>`;
+  list.forEach(r=>{const b=el("button","rl-card");b.type="button";const im=(r.images||[])[0];
+    b.innerHTML=`${im?`<img class="cv" src="${H(im)}" alt="${H(r.title)} 표지" loading="lazy" width="340" height="425">`:`<div class="cv"></div>`}
+     <div class="bd">${r.likes!=null?`<span>♥ ${fmt(r.likes)}</span>`:""}${(r.images||[]).length>1?`<span>${r.images.length}장</span>`:""}</div>
+     <div class="cap"><b>${H(r.title)}</b><small>${H(r.category||"")} · ${H(r.format||"")}</small></div>`;
+    b.onclick=()=>openRef(r);g.appendChild(b)});
+  s.appendChild(g);return s}
+function openRef(r){let d=$("#rlDlg");if(!d){d=el("dialog","rl-dlg");d.id="rlDlg";document.body.appendChild(d);d.addEventListener("click",e=>{if(e.target===d)d.close()})}
+  const ms=(r.metrics||[]).map(m=>`${H(m.at)} ♥ ${fmt(m.likes)}${m.comments!=null?` · 댓글 ${fmt(m.comments)}`:""}`).join(" → ");
+  d.innerHTML=`<div class="top"><h3>${H(r.title)}</h3><button class="x" type="button" aria-label="닫기">✕</button></div>
+   <div class="rl-strip">${(r.images||[]).map((u,i)=>`<img src="${H(u)}" alt="${H(r.title)} ${i+1}번째 장">`).join("")}</div>
+   <div class="rl-body">${r.summary?`<p>${H(r.summary)}</p>`:""}${r.apply?`<p class="ap"><b>우리 작업에 이렇게:</b> ${H(r.apply)}</p>`:""}
+    ${(r.links||[]).length?`<p>${r.links.map(l=>`<a href="${H(l.url)}" target="_blank" rel="noopener">${H(l.name)} ↗</a>`).join(" · ")}</p>`:""}
+    <p class="meta">${H(r.source||"")}${r.likes!=null?` · 좋아요 ${fmt(r.likes)}`:""}${r.comments!=null?` · 댓글 ${fmt(r.comments)}`:""} · ${new Date(r.added_at).toLocaleDateString("ko-KR")} 수집</p>
+    ${ms?`<p class="meta">숫자 기록: ${ms}</p>`:""}
+    ${r.url?`<p><a href="${H(r.url)}" target="_blank" rel="noopener">원본 열기 ↗</a></p>`:""}</div>`;
+  d.querySelector(".x").onclick=()=>d.close();d.showModal()}
+
 function render(force){if(!DATA)return;if(!force&&!canRender()){DEFER=true;return}DEFER=false;const sn=snapUI();renderCats();const m=$("#main");m.innerHTML="";
   const B=BRANDS.find(b=>b.id===VIEW);
   if(VIEW==="all"){
@@ -730,6 +822,7 @@ function render(force){if(!DATA)return;if(!force&&!canRender()){DEFER=true;retur
   else if(VIEW==="skills"){m.appendChild(skillsSection())}
   else if(VIEW==="music"){m.appendChild(musicSection())}
   else if(VIEW==="maker"){m.appendChild(makerSection())}
+  else if(VIEW==="refs"){m.appendChild(refsSection())}
   countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
   COUNTED=true;restoreUI(sn);
 }
@@ -743,7 +836,7 @@ async function load(){const j=await post({action:"board"});
     $("#liveDot").classList.add("off");$("#liveTxt").textContent="갱신 실패 · 다시 시도 중";return}
   st.set("pn_admin",KEY);$("#gate").hidden=true;$("#app").hidden=false;DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
-function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
+function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
   if(["issues","publish","activity"].includes(h))return;render(true);window.scrollTo({top:0,behavior:"smooth"})}
 window.addEventListener("hashchange",route);
 $("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});
