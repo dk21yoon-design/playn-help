@@ -58,17 +58,32 @@ async function earlyWindow(r: any, hours: number, buf: number) {
   const newMs = baseMs - hours * 3600e3;
   const { data: ev } = await sb.from("playand_ical_events").select("start_at,end_at,summary").eq("branch", r.branch)
     .lt("start_at", kSp(origMs)).gt("end_at", kSp(newMs - buf)).limit(10);
-  const hit = (ev ?? [])[0];
+  const lo = (await ledgerOuts(r.branch, r.use_date, String(r.id))).find((m) => m > newMs - buf && m <= origMs); // v4: 장부 퇴실+청소 버퍼
+  const hit = (ev ?? [])[0] ?? (lo ? { end_at: kIso(lo) } : undefined);
   const ex = e0 && e0.coupon_id ? [e0] : [];
   const tooLate = kstNow() > newMs - 60 * 60e3;
   const reason = ex?.length ? "이미 조기입실이 잡혀 있어요" : tooLate ? "조기입실은 바뀐 입실 1시간 전까지만 신청할 수 있어요" : hit ? `앞 예약(${fmt(String(hit.end_at).replace(" ", "T"))} 퇴실)이 있어요` : null;
   return { possible: !reason, reason, orig: kIso(origMs), to: kIso(newMs), prev: e0 };
 }
-// v3: 그날 새 입실 시각 전에 끝나는 앞 예약(실제 청소가 필요한 퇴실)
+// v4: 그날 퇴실하는 앞 예약을 예약 장부(+확정 연장)로 계산. 캘린더는 야간 예약이 자정에 끝나는 것처럼 보여 실제 퇴실(09:30)을 못 봄
+const OUT_M: Record<string, [number, number]> = { day: [0, 17.5 * 60], night: [1, 9.5 * 60], full: [1, 10 * 60] };
+const addD = (d: string, n: number) => new Date(new Date(d + "T00:00:00Z").getTime() + n * 86400e3).toISOString().slice(0, 10);
+async function ledgerOuts(branch: string, date: string, exceptId: string) {
+  const { data: rs } = await sb.from("playand_reservations").select("id,pkg,use_date").eq("branch", branch).eq("status", "confirmed").in("use_date", [date, addD(date, -1)]);
+  const outs: number[] = [];
+  for (const x of rs ?? []) {
+    if (String(x.id) === exceptId) continue;
+    const o = OUT_M[x.pkg]; if (!o || addD(x.use_date, o[0]) !== date) continue;
+    let ms = new Date(date + "T00:00:00Z").getTime() + o[1] * 60e3;
+    const { data: ex } = await sb.from("playn_extensions").select("new_end").eq("res_id", String(x.id)).eq("status", "confirmed");
+    for (const e of ex ?? []) ms = Math.max(ms, kMs(String(e.new_end)));
+    outs.push(ms);
+  }
+  return outs.sort((a, b) => b - a);
+}
 async function prevOut(r: any, newIso: string) {
-  const { data } = await sb.from("playand_ical_events").select("start_at,end_at").eq("branch", r.branch)
-    .gte("end_at", r.use_date + " 00:00").lte("end_at", newIso.replace("T", " ")).lt("start_at", r.use_date + " " + String(r.start_h ?? 0).padStart(2, "0") + ":00").order("end_at", { ascending: false }).limit(1);
-  return data?.[0] ? String(data[0].end_at).replace(" ", "T").slice(0, 16) : null;
+  const lim = kMs(newIso), outs = (await ledgerOuts(r.branch, r.use_date, String(r.id))).filter((m) => m <= lim);
+  return outs.length ? kIso(outs[0]) : null;
 }
 async function myRes(phone: string) {
   const { data } = await sb.from("playand_reservations").select("id,branch,pkg,use_date,start_h,status,guest_name").in("phone", [phone, fmtTel(phone)]).eq("status", "confirmed").gte("use_date", new Date(kstNow() - 86400e3).toISOString().slice(0, 10)).order("use_date").limit(10);

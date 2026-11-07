@@ -100,6 +100,20 @@ async function reviewEarly(cfg: Record<string, string>, s: any) {
   const newMs = (e0 ? kMs(String(e0.new_start)) : origMs) - 3600e3;
   const sp = (ms: number) => kIso(ms).replace("T", " ");
   const { data: ev } = await sb.from("playand_ical_events").select("end_at").eq("branch", r.branch).lt("start_at", sp(origMs)).gt("end_at", sp(newMs - buf)).limit(1);
+  // v25: 캘린더는 야간 예약이 자정에 끝나 보여서 장부 기준 실제 퇴실(09:30·10:00, 확정 연장 포함)도 확인
+  const OUT_M: Record<string, [number, number]> = { day: [0, 17.5 * 60], night: [1, 9.5 * 60], full: [1, 10 * 60] };
+  const prevD = new Date(new Date(r.use_date + "T00:00:00Z").getTime() - 86400e3).toISOString().slice(0, 10);
+  const { data: lr } = await sb.from("playand_reservations").select("id,pkg,use_date").eq("branch", r.branch).eq("status", "confirmed").in("use_date", [r.use_date, prevD]).neq("id", String(r.id));
+  const outs: number[] = [];
+  for (const x of lr ?? []) {
+    const o = OUT_M[x.pkg]; if (!o || (o[0] ? prevD : r.use_date) !== x.use_date) continue;
+    let ms = new Date(r.use_date + "T00:00:00Z").getTime() + o[1] * 60e3;
+    const { data: xe } = await sb.from("playn_extensions").select("new_end").eq("res_id", String(x.id)).eq("status", "confirmed");
+    for (const e of xe ?? []) ms = Math.max(ms, kMs(String(e.new_end)));
+    outs.push(ms);
+  }
+  const lo = outs.filter((m) => m > newMs - buf && m <= origMs).sort((a, b) => b - a)[0];
+  if (lo) return { ok: false, reason: `앞 예약 ${fmtK(kIso(lo))} 퇴실 + 청소 시간과 겹쳐요`, to: e0 ? String(e0.new_start).slice(0, 16) : kIso(origMs), orig: kIso(origMs) };
   if (ev?.[0]) return { ok: false, reason: `앞 예약 ${fmtK(String(ev[0].end_at).replace(" ", "T"))} 퇴실 + 청소 시간과 겹쳐요`, to: e0 ? String(e0.new_start).slice(0, 16) : kIso(origMs), orig: kIso(origMs) };
   const tag = "후기 이벤트 조기입실 1시간";
   if (e0) await sb.from("playn_early_in").update({ hours: Number(e0.hours) + 1, new_start: kIso(newMs), note: `${e0.note ?? ""} + ${tag}`.trim() }).eq("id", e0.id);
@@ -107,8 +121,8 @@ async function reviewEarly(cfg: Record<string, string>, s: any) {
   const H = { "content-type": "application/json", "x-playand-key": cfg.intake_key };
   await fetch(Deno.env.get("SUPABASE_URL") + "/functions/v1/playand-sync", { method: "POST", headers: H, body: JSON.stringify({ skip_ical: true }), signal: AbortSignal.timeout(45000) }).catch(() => {});
   await fetch(Deno.env.get("SUPABASE_URL") + "/functions/v1/playand-intake", { method: "POST", headers: H, body: JSON.stringify({ source: "block_todo" }), signal: AbortSignal.timeout(20000) }).catch(() => {});
-  const { data: po } = await sb.from("playand_ical_events").select("end_at").eq("branch", r.branch).gte("end_at", r.use_date + " 00:00").lte("end_at", sp(newMs)).lt("start_at", sp(origMs)).order("end_at", { ascending: false }).limit(1);
-  return { ok: true, to: kIso(newMs), orig: kIso(origMs), hours: (e0 ? Number(e0.hours) : 0) + 1, prev_out: po?.[0] ? String(po[0].end_at).replace(" ", "T").slice(0, 16) : null };
+  const po = outs.filter((m) => m <= newMs).sort((a, b) => b - a)[0];
+  return { ok: true, to: kIso(newMs), orig: kIso(origMs), hours: (e0 ? Number(e0.hours) : 0) + 1, prev_out: po ? kIso(po) : null };
 }
 async function fxProgress(g: any) {
   const { data } = await sb.from("playn_fx_members").select("phone").eq("code", g.code);
