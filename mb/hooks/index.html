@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>릴스 첫 문장 공식 6 · AI 문방구</title>
+<meta name="description" content="AI 문방구 REF INDEX No.04. 릴스 첫 문장 공식 6가지와 클로드에 넣으면 첫 문장 3안이 나오는 프롬프트, 빈칸 템플릿을 모았어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main>
+<p class="brand"><i></i>AI 문방구 · REF INDEX No.04</p>
+<h1>같은 영상,<br><em>첫 문장만 바꿨어요</em></h1>
+<p class="lead">댓글로 신청해주셔서 고마워요. 릴스 첫 문장을 유형별 공식과 빈칸 템플릿으로 정리했어요. 마지막에 클로드에 넣으면 첫 문장 3안이 바로 나오는 프롬프트가 있어요.</p>
+<button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button>
+<h2><b>FORMULA</b>유형별 공식과 빈칸 템플릿</h2>
+<div class="card"><h3>숫자·리스트형</h3><p>공식: 숫자 + 직접 해본 결과 · 예시: 3만원으로 문구점 5곳 털었어요</p><div class="copy" data-c>[금액·개수]으로 [대상] [숫자]곳 [해본 일]<button type="button">복사</button></div></div><div class="card"><h3>반전형</h3><p>공식: 다들 믿는 것 + 아니었어요 · 예시: 인형뽑기는 운이 아니었어요</p><div class="copy" data-c>[다들 당연하게 여기는 것]은 [통념]이 아니었어요<button type="button">복사</button></div></div><div class="card"><h3>문제제기형</h3><p>공식: 상대가 품은 의문 + 물음표 · 예시: 웨이팅 1시간, 진짜 기다릴 만할까?</p><div class="copy" data-c>[보는 사람이 망설이는 것], 진짜 [할 만할까]?<button type="button">복사</button></div></div><div class="card"><h3>공감형</h3><p>공식: 말 못 한 속마음 + ~인 사람? · 예시: 약속 취소되면 은근 좋은 사람?</p><div class="copy" data-c>[상황]이면 은근 [속마음]인 사람?<button type="button">복사</button></div></div><div class="card"><h3>전후 비교형</h3><p>공식: 작은 변화 하나 + 달라진 결과 · 예시: 간판 하나 바꿨더니 달라진 것</p><div class="copy" data-c>[작은 변화] 하나 바꿨더니 달라진 것<button type="button">복사</button></div></div><div class="card"><h3>긴급성·행동유도형</h3><p>공식: 마감 날짜 + 지금 할 행동 · 예시: 일요일까지만, 저장해두세요</p><div class="copy" data-c>[날짜]까지만, [저장·댓글]해두세요<button type="button">복사</button></div></div>
+<h2><b>PROMPT</b>클로드에 그대로 넣기</h2>
+<div class="card"><h3>첫 문장 3안 뽑기</h3><div class="copy" data-c>내 릴스 주제는 [주제]이고 보는 사람은 [대상]이야. 숫자·리스트형, 반전형, 문제제기형, 공감형, 전후 비교형, 긴급성형 중에서 어울리는 유형 3개를 골라 첫 문장을 하나씩 써줘. 15자 안으로, 사실이 아닌 숫자는 쓰지 마.<button type="button">복사</button></div></div>
+<div class="card"><h3>아쉬운·무난한·잘되는 비교</h3><div class="copy" data-c>이 첫 문장을 아쉬운 버전, 무난한 버전, 잘되는 버전 3단계로 다시 써줘: [지금 쓴 첫 문장]<button type="button">복사</button></div></div>
+<h2><b>TIP</b>첫 문장 점검</h2>
+<ol class="steps"><li><strong>15자 안</strong><p class="lead" style="font-size:15px">한 화면에 한 줄로 읽혀야 해요</p></li><li><strong>숫자는 사실만</strong><p class="lead" style="font-size:15px">직접 해본 숫자가 아니면 빼세요. 들키면 신뢰가 깨져요</p></li><li><strong>3개 써서 고르기</strong><p class="lead" style="font-size:15px">유형이 다른 3안을 만들어 소리 내 읽어보고 하나만</p></li></ol>
+<footer>재해석: 「아쉬운 훅 vs 무난한 훅 vs 잘되는 훅」 · 「릴스 후킹 문구 6가지 카테고리」 · 정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a><br>다음 편도 받아보려면 팔로우해두세요.</footer>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['릴스 첫 문장 공식 6 · AI 문방구 (@ai.munbanggu)','REF INDEX No.04',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='첫문장공식6_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
