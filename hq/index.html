@@ -399,6 +399,46 @@ footer{color:var(--dim);font-size:12.5px;padding-bottom:40px}
 .ops-frame{background:var(--night);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .ops-frame iframe{display:block;width:100%;border:0;min-height:70vh;background:var(--night)}
 .ops-tabs{display:flex;gap:6px;flex-wrap:wrap}
+
+/* 월 매출 (2026-11-08) */
+.rv-hero{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.rv-hero div{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 16px}
+.rv-hero div.big{grid-column:span 2;background:radial-gradient(120% 140% at 100% 0%,#3a1a5e 0%,var(--panel) 60%);border-color:var(--line2)}
+@media (max-width:520px){.rv-hero div.big{grid-column:1/-1}}
+.rv-hero small{display:block;font-size:13px;color:var(--mute)}
+.rv-hero b{display:block;font-family:"Clash Display","Black Han Sans",sans-serif;font-weight:700;font-size:28px;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.rv-hero .big b{font-size:clamp(34px,5.2vw,50px);white-space:nowrap}
+.rv-hero em{font-style:normal;font-size:13px;font-weight:700}.up{color:var(--ok)}.dn{color:#FF8A8D}
+.rv-chart{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px 10px}
+.rv-chart svg{display:block;width:100%;height:auto;overflow:visible}
+@media (max-width:700px){.rv-chart{overflow-x:auto}.rv-chart svg{min-width:640px}.rv-hero{grid-template-columns:1fr 1fr}.rv-hero b{font-size:22px}}
+.rv-chart .lg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin:0 4px 8px}.rv-chart .lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.rv-chart .bar{cursor:pointer}.rv-chart .bar:hover rect{opacity:.85}
+.rv-br{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.rv-br>div{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);border-radius:var(--r-sm);padding:14px 16px;display:grid;gap:6px}
+.rv-br h4{font-size:15px;font-weight:800}.rv-br .v{font-family:"Clash Display",sans-serif;font-weight:700;font-size:26px;font-variant-numeric:tabular-nums}
+.rv-br .s{font-size:13px;color:var(--mute);line-height:1.5}
+.rv-tbl{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:auto}
+.rv-tbl table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;min-width:560px}
+.rv-tbl th{font-size:12.5px;color:var(--mute);font-weight:700;text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rv-tbl th:first-child,.rv-tbl td:first-child{text-align:left}
+.rv-tbl td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.rv-tbl td small{display:block;color:var(--dim);font-size:11.5px}
+.rv-tbl tr.cur td{background:rgba(255,181,71,.06)}.rv-tbl tr.sel td{background:var(--panel2)}
+.rv-tbl tbody tr{cursor:pointer}.rv-tbl tbody tr:hover td{background:rgba(255,255,255,.03)}
+.rv-tbl tfoot td{font-weight:800;border-bottom:0}
+.rv-det{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:14px}
+.rv-det h3{font-family:var(--f-disp);font-weight:400;font-size:20px}
+.rv-mix{display:grid;gap:8px}
+.rv-mix .r{display:grid;grid-template-columns:92px minmax(0,1fr) 110px;gap:10px;align-items:center;font-size:13.5px}
+.rv-mix .tr{height:10px;border-radius:5px;background:var(--night);overflow:hidden;display:flex}.rv-mix .tr i{display:block;height:100%}
+.rv-mix .r b{text-align:right;font-variant-numeric:tabular-nums}
+.rv-list{display:grid;gap:4px;max-height:420px;overflow:auto}
+.rv-list div{display:grid;grid-template-columns:62px 56px 70px minmax(0,1fr) auto;gap:8px;font-size:13px;padding:7px 8px;border-radius:8px;background:var(--night);border-left:3px solid var(--c);align-items:center}
+.rv-list div span:nth-child(4){overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mute)}
+.rv-list div b{font-variant-numeric:tabular-nums}
+.rv-list .e{color:var(--dim);font-weight:500}
+@media (max-width:520px){.rv-list div{grid-template-columns:48px 44px minmax(0,1fr) auto}.rv-list div span:nth-child(3){display:none}}
 /* 청소비 정산 (2026-11-08) — 영수증·가격판 레퍼런스: 숫자는 크게, 줄은 점선, 지점색은 막대로만 */
 .cp-top{display:grid;gap:14px}
 @media (min-width:960px){.cp-top{grid-template-columns:minmax(0,1fr) 400px;align-items:start}}
@@ -555,9 +595,9 @@ function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.log
 /* ── 렌더 ── */
 function renderCats(){const c=$("#cats");c.innerHTML="";
   const all=issuesOf("all");
-  const TI={cpay:"M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3",cal:"M7 3v3M17 3v3M4 8h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zM8 12h3v3H8z",clean:"M4 20h16M7 20l2-9h6l2 9M10 11V4h4v7",settle:"M4 7h16v10H4zM4 11h16M8 15h3",req:"M5 4h14v16H5zM8 8h8M8 12h8M8 16h5",cmgr:"M16 11a3 3 0 100-6 3 3 0 000 6zM8 12a3 3 0 100-6 3 3 0 000 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5",admin:"M4 6h16M4 12h16M4 18h16",auto:"M12 8a4 4 0 100 8 4 4 0 000-8zm8.9 5.3l1.6 1.2-2 3.5-1.9-.7a8 8 0 01-2.2 1.3L16 20.5h-4l-.4-1.9a8 8 0 01-2.2-1.3l-1.9.7-2-3.5 1.6-1.2a8 8 0 010-2.6L5.5 9.5l2-3.5 1.9.7a8 8 0 012.2-1.3L12 3.5h4l.4 1.9a8 8 0 012.2 1.3l1.9-.7 2 3.5-1.6 1.2a8 8 0 010 2.6z",maker:"M8 5v14l11-7z",music:"M9 18V6l11-2v12M9 18a3 3 0 11-3-3 3 3 0 013 3zm11-2a3 3 0 11-3-3 3 3 0 013 3z",skills:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",refs:"M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 100 4 2 2 0 000-4z"};
+  const TI={rev:"M4 20V10M10 20V4M16 20v-7M22 20H2",cpay:"M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3",cal:"M7 3v3M17 3v3M4 8h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zM8 12h3v3H8z",clean:"M4 20h16M7 20l2-9h6l2 9M10 11V4h4v7",settle:"M4 7h16v10H4zM4 11h16M8 15h3",req:"M5 4h14v16H5zM8 8h8M8 12h8M8 16h5",cmgr:"M16 11a3 3 0 100-6 3 3 0 000 6zM8 12a3 3 0 100-6 3 3 0 000 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5",admin:"M4 6h16M4 12h16M4 18h16",auto:"M12 8a4 4 0 100 8 4 4 0 000-8zm8.9 5.3l1.6 1.2-2 3.5-1.9-.7a8 8 0 01-2.2 1.3L16 20.5h-4l-.4-1.9a8 8 0 01-2.2-1.3l-1.9.7-2-3.5 1.6-1.2a8 8 0 010-2.6L5.5 9.5l2-3.5 1.9.7a8 8 0 012.2-1.3L12 3.5h4l.4 1.9a8 8 0 012.2 1.3l1.9-.7 2 3.5-1.6 1.2a8 8 0 010 2.6z",maker:"M8 5v14l11-7z",music:"M9 18V6l11-2v12M9 18a3 3 0 11-3-3 3 3 0 013 3zm11-2a3 3 0 11-3-3 3 3 0 013 3z",skills:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",refs:"M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 100 4 2 2 0 000-4z"};
   const tool=(id,name,bg)=>({id,name,svg:TI[id],monoBg:bg});
-  const groups=[["채널",[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS]],["도구",[tool("auto","자동화","#241F63"),tool("maker","릴스 생성기","#3A1F00"),tool("music","릴스 음악","#3A0F2A"),tool("skills","스킬 레이더","#3A2A00"),tool("refs","레퍼런스 랩","#123A2C")]],["운영",[tool("cal","예약·정산 캘린더","#4A1830"),tool("clean","청소 캘린더","#123A2C"),tool("cpay","청소비 정산","#3A2A00"),tool("settle","보증금 정산","#3A2A00"),tool("req","예약 신청","#241F63"),tool("cmgr","청소 매니저","#173247"),tool("admin","관리 더보기","#2B2770")]]];
+  const groups=[["채널",[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS]],["도구",[tool("auto","자동화","#241F63"),tool("maker","릴스 생성기","#3A1F00"),tool("music","릴스 음악","#3A0F2A"),tool("skills","스킬 레이더","#3A2A00"),tool("refs","레퍼런스 랩","#123A2C")]],["운영",[tool("rev","월 매출","#4A1830"),tool("cal","예약·정산 캘린더","#4A1830"),tool("clean","청소 캘린더","#123A2C"),tool("cpay","청소비 정산","#3A2A00"),tool("settle","보증금 정산","#3A2A00"),tool("req","예약 신청","#241F63"),tool("cmgr","청소 매니저","#173247"),tool("admin","관리 더보기","#2B2770")]]];
   groups.forEach(([gl,items],gi)=>{if(gi)c.appendChild(el("span","sep"));const g=el("div","grp");g.setAttribute("role","group");g.setAttribute("aria-label",gl);g.appendChild(el("span","gl",gl));c.appendChild(g);
   items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;if(VIEW===B.id)a.setAttribute("aria-current","page");
     const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
@@ -878,7 +918,7 @@ document.addEventListener("focusout",()=>setTimeout(flush,150));
 
 /* ── 운영: 예약·정산 캘린더 / 청소 캘린더 / 정산·신청·청소 매니저·관리 화면 붙이기 (2026-11-08) ── */
 const FN="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/";
-const OPS_LIVE=["cal","clean","cpay"];
+const OPS_LIVE=["cal","clean","cpay"];let REV=null,REVY=null,REVM=null,REVBUSY=false;
 const OPS_FRAMES={settle:{t:"보증금 정산",eye:"SETTLE",src:"/admin.html?embed=1&tab=settle",d:"체크인·퇴실 체크가 끝난 예약의 보증금 환급. 금액 조정·송금 완료 처리"},
  req:{t:"예약 신청",eye:"REQUEST",src:"/admin.html?embed=1&tab=req",d:"홈페이지 예약 신청 확정·입금 확인·연장 요청"},
  cmgr:{t:"청소 매니저",eye:"CLEANING",src:"/clean/?embed=1",d:"청소 매니저 화면 그대로. 메모·완료 보고·매니저 문자 등록"},
@@ -1041,6 +1081,68 @@ function cpaySection(){const s=el("section");s.id="cpay";const t=kToday();
   L.appendChild(ad);s.appendChild(L);
   s.appendChild(el("p","ops-note","같은 손님이 이어서 묵은 연박은 마지막 퇴실 1번만 셉니다. 숫자는 예약 원장(스페이스클라우드·네이버·홈페이지) 기준이에요."));
   return s}
+
+/* ── 월 매출 (2026-11-08): 스클 예약은 실제 결제액, 네이버·플레이스·현금 등 외부예약은 요금표(요일 등급) 기준 추정 ── */
+const PKGN={day:"주간",night:"야간",full:"통대관",couple:"커플·2인",ext:"연장",time:"시간제"},SRCN={sc:"스페이스클라우드",naver:"네이버",place:"플레이스",cash:"현금·직접",home:"홈페이지",airbnb:"에어비앤비"};
+const SRCC={sc:"#8FA3FF",naver:"#3DDC97",place:"#26B37A",cash:"#FFB547",home:"#FF2E6E",airbnb:"#FF8A8D"},PKGC={day:"#FFB547",night:"#8FA3FF",full:"#FF2E6E",couple:"#C08BFF",ext:"#3DDC97",time:"#3DF2FF"};
+async function loadRev(y){if(REVBUSY)return;REVBUSY=true;const j=await fetch(FN+"playn-admin",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"revenue",year:y,key:KEY})}).then(r=>r.json()).catch(()=>({ok:false,error:"연결이 끊겼어요"}));REVBUSY=false;REV=j.ok?j:{err:j.error||"못 불러왔어요"};if(VIEW==="rev")render(true)}
+const man=n=>{n=Math.round(n/10000);return n>=10000?(n/10000).toFixed(n%10000?1:0)+"억":fmt(n)+"만"};
+function revSection(){const s=el("section");s.id="rev";const t=kToday();if(!REVY)REVY=+t.slice(0,4);
+  s.innerHTML=`<div class="sh"><span class="eye">REVENUE</span><h2>월 매출</h2><span class="meta">${REV&&REV.synced_at?"스클 장부 "+kst(REV.synced_at)+" 기준 · ":""}지점·패키지별</span></div>`;
+  const bar=el("div","ops-bar");bar.innerHTML=`<button type="button" data-y="-1" aria-label="이전 해">◀</button><span class="mon">${REVY}년</span><button type="button" data-y="1" aria-label="다음 해">▶</button><span class="sp"></span>`+[["","전체",""],...Object.entries(BRS2).map(([k,v])=>[k,v,BRC[k]])].map(([k,v,c])=>`<button type="button" class="ops-chip" data-br="${k}" aria-pressed="${CAL.br===k}">${c?`<i style="background:${c}"></i>`:""}${v}</button>`).join("");
+  bar.querySelectorAll("[data-y]").forEach(b=>b.onclick=()=>{REVY+= +b.dataset.y;REVM=null;REV=null;render(true)});
+  bar.querySelectorAll("[data-br]").forEach(b=>b.onclick=()=>{CAL.br=b.dataset.br;render(true)});s.appendChild(bar);
+  if(!REV||(REV.year&&REV.year!==REVY)){s.appendChild(el("div","loadmsg","<b>매출 장부 불러오는 중…</b>"));loadRev(REVY);return s}
+  if(REV.err){s.appendChild(el("div","loadmsg",`<b>${H(REV.err)}</b><button class="btn-ghost" type="button" onclick="REV=null;render(true)">다시 시도</button>`));return s}
+  const BRL=Object.keys(BRS2).filter(b=>!CAL.br||b===CAL.br);
+  const all=REV.rows.filter(r=>BRL.includes(r.branch)),cur=all.filter(r=>r.use_date.slice(0,4)==String(REVY)),prev=all.filter(r=>r.use_date.slice(0,4)==String(REVY-1));
+  const sum=a=>a.reduce((x,r)=>x+r.amount,0),mo=(a,m)=>a.filter(r=>+r.use_date.slice(5,7)===m);
+  const isNow=REVY===+t.slice(0,4),nowM=+t.slice(5,7);
+  const done=isNow?cur.filter(r=>r.use_date<=t):cur,prevSame=isNow?prev.filter(r=>r.use_date.slice(5)<=t.slice(5)):prev;
+  const yoy=sum(prevSame)?Math.round((sum(done)/sum(prevSame)-1)*100):null;
+  const fut=isNow?cur.filter(r=>r.use_date>t):[];
+  const mths=[...Array(12)].map((_,i)=>i+1),closed=isNow?mths.filter(m=>m<nowM):mths;const avg=closed.length?sum(cur.filter(r=>closed.includes(+r.use_date.slice(5,7))))/closed.length:0;
+  const thisM=isNow?sum(mo(cur,nowM)):0,lastYM=isNow?sum(mo(prev,nowM)):0;
+  const hero=el("div","rv-hero");
+  hero.innerHTML=`<div class="big"><small>${REVY}년 ${isNow?"오늘까지":"전체"} 매출</small><b>${fmt(sum(done))}<span style="font-size:.4em;font-family:Pretendard"> 원</span></b>${yoy!=null?`<em class="${yoy>=0?"up":"dn"}">작년 같은 기간보다 ${yoy>=0?"+":""}${yoy}%</em>`:""}</div>
+   <div><small>월평균 (${closed.length}개월)</small><b>${man(avg)}</b></div>
+   ${isNow?`<div><small>${nowM}월 (예약 포함)</small><b>${man(thisM)}</b>${lastYM?`<em class="${thisM>=lastYM?"up":"dn"}">작년 ${nowM}월 ${man(lastYM)}</em>`:""}</div><div><small>앞으로 잡힌 예약</small><b>${man(sum(fut))}</b><em style="color:var(--mute)">${fut.length}건</em></div>`:""}
+   <div><small>예약 ${cur.filter(r=>!["ext","time"].includes(r.pkg)).length}건 · 평균 객단가</small><b>${man(sum(cur.filter(r=>!["ext","time"].includes(r.pkg)))/Math.max(1,cur.filter(r=>!["ext","time"].includes(r.pkg)).length))}</b></div>`;
+  s.appendChild(hero);
+  // 월별 막대 (지점 쌓기) + 작년 표시
+  const W=760,Hh=230,pl=8,pb=26,bw=(W-pl*2)/12;const mx=Math.max(1,...mths.map(m=>Math.max(sum(mo(cur,m)),sum(mo(prev,m)))));
+  let svg=`<svg viewBox="0 0 ${W} ${Hh+pb+16}" role="img" aria-label="${REVY}년 월별 매출 막대그래프">`;
+  [0.25,0.5,0.75,1].forEach(f=>{const y=16+Hh-Hh*f;svg+=`<line x1="${pl}" x2="${W-pl}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.07)"/><text x="${W-pl}" y="${y-4}" fill="#8b86b8" font-size="11" text-anchor="end">${man(mx*f)}</text>`});
+  mths.forEach((m,i)=>{const x=pl+i*bw+bw*0.18,w=bw*0.64;let y=16+Hh;const pv=sum(mo(prev,m));
+    svg+=`<g class="bar" data-m="${m}"><rect x="${pl+i*bw}" y="16" width="${bw}" height="${Hh}" fill="transparent"/>`;
+    if(pv)svg+=`<rect x="${x-3}" y="${16+Hh-Hh*pv/mx}" width="${w+6}" height="${Hh*pv/mx}" rx="5" fill="none" stroke="rgba(255,255,255,.28)" stroke-dasharray="3 3"/>`;
+    BRL.forEach(b=>{const v=sum(mo(cur,m).filter(r=>r.branch===b));if(!v)return;const h=Hh*v/mx;y-=h;svg+=`<rect x="${x}" y="${y}" width="${w}" height="${Math.max(0,h-1.5)}" rx="4" fill="${BRC[b]}" opacity="${isNow&&m>nowM?.45:1}"><title>${m}월 ${BRS2[b]} ${fmt(v)}원</title></rect>`});
+    const tv=sum(mo(cur,m));if(tv)svg+=`<text x="${x+w/2}" y="${y-6}" fill="#F1EFFF" font-size="11.5" font-weight="700" text-anchor="middle">${man(tv)}</text>`;
+    svg+=`<text x="${x+w/2}" y="${16+Hh+18}" fill="${REVM===m?"#FFB547":"#a9a5cf"}" font-size="12" font-weight="${REVM===m?800:500}" text-anchor="middle">${m}월</text></g>`});
+  svg+="</svg>";
+  const ch=el("div","rv-chart");ch.innerHTML=`<div class="lg">${BRL.map(b=>`<span><i style="background:${BRC[b]}"></i>${BRS2[b]}</span>`).join("")}<span><i style="border:1px dashed rgba(255,255,255,.5)"></i>${REVY-1}년</span>${isNow?`<span><i style="background:#888;opacity:.45"></i>이달 이후 = 잡힌 예약</span>`:""}</div>`+svg;
+  ch.querySelectorAll(".bar").forEach(g=>g.onclick=()=>{REVM=+g.dataset.m;render(true);setTimeout(()=>document.querySelector(".rv-det")?.scrollIntoView({behavior:"smooth",block:"start"}),60)});
+  s.appendChild(ch);
+  // 지점 카드
+  const bc=el("div","rv-br");Object.keys(BRS2).filter(b=>BRL.includes(b)).forEach(b=>{const a=cur.filter(r=>r.branch===b),bk=a.filter(r=>!["ext","time"].includes(r.pkg));const pkc={};bk.forEach(r=>pkc[r.pkg]=(pkc[r.pkg]||0)+1);const top=Object.entries(pkc).sort((x,y)=>y[1]-x[1])[0];
+    const pa=prev.filter(r=>r.branch===b&&(!isNow||r.use_date.slice(5)<=t.slice(5))),da=isNow?a.filter(r=>r.use_date<=t):a;const g=sum(pa)?Math.round((sum(da)/sum(pa)-1)*100):null;
+    const d=el("div");d.style.setProperty("--c",BRC[b]);d.innerHTML=`<h4>${b}</h4><span class="v">${fmt(sum(a))}원</span><span class="s">${bk.length}건 · 객단가 ${man(sum(bk)/Math.max(1,bk.length))} · 비중 ${Math.round(sum(a)/Math.max(1,sum(cur))*100)}%${top?`<br>많이 팔린 패키지 ${PKGN[top[0]]} ${top[1]}건`:""}${g!=null?`<br><span class="${g>=0?"up":"dn"}">작년 같은 기간 ${g>=0?"+":""}${g}%</span>`:""}</span>`;bc.appendChild(d)});
+  s.appendChild(bc);
+  // 월별 표
+  const tb=el("div","rv-tbl");let h=`<table><thead><tr><th>월</th>${BRL.map(b=>`<th>${BRS2[b]}</th>`).join("")}<th>합계</th><th>작년</th></tr></thead><tbody>`;
+  mths.forEach(m=>{const a=mo(cur,m);if(!a.length&&!mo(prev,m).length)return;h+=`<tr data-m="${m}" class="${isNow&&m===nowM?"cur":""} ${REVM===m?"sel":""}"><td><b>${m}월</b></td>${BRL.map(b=>{const x=a.filter(r=>r.branch===b);return `<td>${x.length?fmt(sum(x)):"–"}<small>${x.filter(r=>!["ext","time"].includes(r.pkg)).length}건</small></td>`}).join("")}<td><b>${fmt(sum(a))}</b></td><td style="color:var(--mute)">${mo(prev,m).length?fmt(sum(mo(prev,m))):"–"}</td></tr>`});
+  h+=`</tbody><tfoot><tr><td>합계</td>${BRL.map(b=>`<td>${fmt(sum(cur.filter(r=>r.branch===b)))}</td>`).join("")}<td>${fmt(sum(cur))}</td><td style="color:var(--mute)">${fmt(sum(prev))}</td></tr></tfoot></table>`;
+  tb.innerHTML=h;tb.querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{REVM=+tr.dataset.m;render(true);setTimeout(()=>document.querySelector(".rv-det")?.scrollIntoView({behavior:"smooth",block:"start"}),60)});s.appendChild(tb);
+  // 선택한 달 상세
+  const M=REVM||(isNow?nowM:12),a=mo(cur,M);
+  const det=el("div","rv-det");const mix=(key,names,cols)=>{const g={};a.forEach(r=>g[r[key]]=(g[r[key]]||0)+r.amount);const tot=sum(a)||1;return Object.entries(g).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<div class="r"><span>${names[k]||k}</span><span class="tr"><i style="width:${Math.max(2,v/tot*100)}%;background:${cols[k]||"#888"}"></i></span><b>${fmt(v)}</b></div>`).join("")};
+  det.innerHTML=`<h3>${REVY}년 ${M}월 · ${fmt(sum(a))}원 · ${a.length}건</h3>
+   <div class="rv-mix"><b style="font-size:13px;color:var(--mute)">패키지별</b>${mix("pkg",PKGN,PKGC)||'<span class="ops-note">기록 없음</span>'}</div>
+   <div class="rv-mix"><b style="font-size:13px;color:var(--mute)">예약 경로별</b>${mix("src",SRCN,SRCC)}</div>
+   <div class="rv-list">${a.slice().sort((x,y)=>x.use_date.localeCompare(y.use_date)).map(r=>`<div style="--c:${BRC[r.branch]}"><span>${+r.use_date.slice(5,7)}/${+r.use_date.slice(8)}</span><span>${BRS2[r.branch]}</span><span>${PKGN[r.pkg]||r.pkg}</span><span>${H(SRCN[r.src]||r.src)}${r.name&&r.src!=="sc"?" · "+H(r.name):""}</span><b>${fmt(r.amount)}${r.est?' <span class="e">추정</span>':""}</b></div>`).join("")}</div>`;
+  s.appendChild(det);
+  s.appendChild(el("p","ops-note","스페이스클라우드 예약은 손님 결제 금액(수수료 빼기 전)이고, 네이버·플레이스·현금 같은 외부예약은 스클 캘린더 일정을 지금 요금표(요일 등급)로 계산한 추정치예요. 추가 인원·할인은 빠져 있어요. 취소·환불 건은 뺐어요."));
+  return s}
 function frameSection(v){const f=OPS_FRAMES[v],s=el("section");s.id=v;
   s.innerHTML=`<div class="sh"><span class="eye">${f.eye}</span><h2>${H(f.t)}</h2><span class="meta">${H(f.d)} · <a href="${H(f.src.replace(/[?&]embed=1/,"").replace("?&","?"))}" target="_blank" rel="noopener">새 창으로 열기 ↗</a></span></div>`;
   const w=el("div","ops-frame");const i=document.createElement("iframe");i.dataset.v=v;i.title=f.t;i.src=f.src;i.loading="eager";w.appendChild(i);s.appendChild(w);return s}
@@ -1117,6 +1219,7 @@ function render(force){if(!DATA)return;
   else if(VIEW==="cal"){m.appendChild(calSection())}
   else if(VIEW==="clean"){m.appendChild(cleanSection())}
   else if(VIEW==="cpay"){m.appendChild(cpaySection())}
+  else if(VIEW==="rev"){m.appendChild(revSection())}
   else if(OPS_FRAMES[VIEW]){m.appendChild(frameSection(VIEW))}
   countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
   COUNTED=true;restoreUI(sn);
@@ -1137,7 +1240,7 @@ async function load(){clearTimeout(RETRY);const j=await post({action:"board"});
     RETRY=setTimeout(load,wait*1000);return}
   FAILS=0;st.set("pn_admin",KEY);showApp();DATA=j;try{localStorage.setItem("pn_hq_cache",JSON.stringify(j))}catch(e){try{localStorage.removeItem("pn_hq_cache")}catch(x){}}lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick();loadMB();if(OPS_LIVE.includes(VIEW))loadOps()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
-function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs",...OPS_LIVE,...Object.keys(OPS_FRAMES),...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
+function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs","rev",...OPS_LIVE,...Object.keys(OPS_FRAMES),...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
   if(["issues","publish","activity"].includes(h))return;if(OPS_LIVE.includes(VIEW))loadOps();render(true);window.scrollTo({top:0,behavior:"smooth"})}
 window.addEventListener("hashchange",route);
 $("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});
