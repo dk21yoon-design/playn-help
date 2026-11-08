@@ -14,9 +14,9 @@ def sh(*a):
     return subprocess.run(a, capture_output=True, text=True).stdout
 
 def load(path, sr=22050, offset=0.0, duration=None):
-    import librosa
-    y, _ = librosa.load(path, sr=sr, offset=offset, duration=duration)
-    return y
+    # ffmpeg로 읽는다 (mp4도 바로 읽힘, librosa는 mp4를 못 여는 환경이 있음)
+    cmd = ['ffmpeg', '-v', 'error', '-ss', str(offset), '-i', path] + (['-t', str(duration)] if duration else []) + ['-ac', '1', '-ar', str(sr), '-f', 'f32le', '-']
+    return np.frombuffer(subprocess.run(cmd, capture_output=True).stdout, np.float32).copy()
 
 def db_curve(y, sr=22050, hop_s=0.05):
     import librosa
