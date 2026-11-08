@@ -1131,11 +1131,11 @@ const MB_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/munbanggu-hq
 function loadMB(){fetch(MB_API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:KEY})}).then(r=>r.json()).then(j=>{if(j.ok){MB=j;if(DATA)render()}}).catch(()=>{})}
 function showApp(){$("#gate").hidden=true;$("#app").hidden=false}
 async function load(){clearTimeout(RETRY);const j=await post({action:"board"});
-  if(!j.ok){if(/관리 키/.test(j.error||"")){$("#app").hidden=true;$("#gate").hidden=false;if(KEY){$("#gateErr").hidden=false;$("#gateErr").textContent=j.error}return}
+  if(!j.ok){if(/관리 키/.test(j.error||"")){try{localStorage.removeItem("pn_hq_cache")}catch(e){}$("#app").hidden=true;$("#gate").hidden=false;if(KEY){$("#gateErr").hidden=false;$("#gateErr").textContent=j.error}return}
     FAILS++;const wait=Math.min(30,3*2**(FAILS-1));$("#liveDot").classList.add("off");$("#liveTxt").textContent=`갱신 실패 · ${wait}초 뒤 다시`;
     if(!DATA){showApp();$("#main").innerHTML=`<div class="loadmsg"><b>관제실 숫자를 아직 못 불러왔어요</b>${H(j.error||"서버 응답이 늦어요")}. ${wait}초 뒤에 자동으로 다시 시도해요.<br><button class="btn-ghost" type="button" onclick="load()">지금 다시 시도</button></div>`}
     RETRY=setTimeout(load,wait*1000);return}
-  FAILS=0;st.set("pn_admin",KEY);showApp();DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick();loadMB();if(OPS_LIVE.includes(VIEW))loadOps()}
+  FAILS=0;st.set("pn_admin",KEY);showApp();DATA=j;try{localStorage.setItem("pn_hq_cache",JSON.stringify(j))}catch(e){try{localStorage.removeItem("pn_hq_cache")}catch(x){}}lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick();loadMB();if(OPS_LIVE.includes(VIEW))loadOps()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
 function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs",...OPS_LIVE,...Object.keys(OPS_FRAMES),...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
   if(["issues","publish","activity"].includes(h))return;if(OPS_LIVE.includes(VIEW))loadOps();render(true);window.scrollTo({top:0,behavior:"smooth"})}
@@ -1145,7 +1145,9 @@ $("#refresh").onclick=()=>{$("#liveTxt").textContent="갱신 중";load()};
 setInterval(()=>{if(!document.hidden)load()},45000);setInterval(tick,1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-lastOk>30000)load()});
 VIEW=(location.hash.replace("#","")||"all");
-if(KEY){showApp();$("#liveTxt").textContent="불러오는 중";load()}else{$("#gate").hidden=false}
+// 2026-11-08: 마지막으로 받은 화면을 이 기기에 남겨 두고 열자마자 먼저 보여줌 → 새 숫자는 뒤에서 받아 바꿔 끼움
+if(KEY){showApp();let c=null;try{c=JSON.parse(localStorage.getItem("pn_hq_cache")||"null")}catch(e){}
+  if(c&&c.ok){DATA=c;render(true);$("#liveTxt").textContent="저장된 화면 · 새로 받는 중"}else $("#liveTxt").textContent="불러오는 중";load()}else{$("#gate").hidden=false}
 </script>
 </body>
 </html>
