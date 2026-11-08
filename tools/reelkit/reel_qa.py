@@ -41,7 +41,25 @@ def main():
     shots = np.diff([0] + cuts + [dur])
     info.append(f'컷 {len(cuts)}개 {[round(c, 1) for c in cuts]}, 컷 길이 중앙값 {np.median(shots):.1f}초')
     if spec.get('continuous_audio') and len(cuts) > max(4, dur / 12):
-        fails.append(f'명장면형인데 컷이 {len(cuts)}개: 플레이는 끊지 말고 한 번에 (상위 릴스 컷 0~1개)')
+        # 2026-11-08 사장님: 컷 수를 줄이려고 화면을 멈추면 안 됨 → 컷이 많아도 주의만. 정지 화면은 아래 0)에서 실패
+        warns.append(f'명장면형인데 컷이 {len(cuts)}개: 원본 중계 카메라 전환이면 그대로 두고, 정지·확대로 숨기지 말 것')
+
+    # 0) 일시정지 금지 (2026-11-08 사장님 「일시정지되는 부분 있으면 다시 만들어」): 영상(클립) 장면에서 0.5초 이상 멈춘 화면 = 실패
+    t0, clip_rng = 0.0, []
+    for s_ in sc:
+        d_ = float(s_.get('dur', 0))
+        if s_.get('clip'): clip_rng.append((t0, t0 + d_))
+        if s_.get('freeze') or (s_.get('clip') or {}).get('still'):
+            fails.append(f'{t0:.1f}초 장면에 freeze/정지 옵션: 정지 화면 쓰지 말고 원본이 이어지는 구간으로 바꾸기')
+        t0 += d_
+    fz = subprocess.run(['ffmpeg', '-hide_banner', '-i', out, '-vf', 'crop=1080:720:0:620,freezedetect=n=0.003:d=0.5', '-an', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    import re as _re
+    st = [float(x) for x in _re.findall(r'freeze_start: ([0-9.]+)', fz)]
+    en = [float(x) for x in _re.findall(r'freeze_end: ([0-9.]+)', fz)] + [dur]
+    for a_, b_ in zip(st, en):
+        if any(a_ < r[1] - 0.05 and b_ > r[0] + 0.05 for r in clip_rng):
+            fails.append(f'{a_:.1f}~{b_:.1f}초 화면이 멈춰 있음({b_ - a_:.1f}초): 일시정지처럼 보임 → 다시 만들기')
+    info.append(f'정지 화면 검사: {len(st)}구간')
 
     # 2) 해설 연속성: 이어진 mic 장면들은 원본 오디오와 같아야 함 (장면마다 음량이 튀거나 끊기면 실패)
     t0 = 0.0; runs = []
@@ -54,6 +72,9 @@ def main():
                 runs.append({'file': c.get('audio_file') or c['file'], 'src': c.get('start', 0), 'src_end': c.get('start', 0) + s['dur'], 't': t0, 'dur': s['dur']})
         t0 += s['dur']
     silent = out.replace('.mp4', '_silent.mp4')
+    import os as _os
+    if not _os.path.exists(silent):
+        warns.append('_silent.mp4 없음: 해설 연속성 검사 건너뜀'); runs = []
     for r in runs:
         if r['dur'] < 3: continue
         a = db_curve(load(silent, offset=r['t'], duration=r['dur'])); b = db_curve(load(r['file'], offset=r['src'], duration=r['dur']))
