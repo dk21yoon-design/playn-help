@@ -86,6 +86,7 @@ textarea{width:100%;box-sizing:border-box;min-height:96px;border-radius:12px;bor
 .reg .on{background:#0F3325;color:#CFF5E3;border-radius:12px;padding:12px;font-size:17px;font-weight:700;margin-top:8px}
 .upd{color:var(--dim);font-size:14px;margin-top:20px;text-align:center}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+html.embed main.w>h1{display:none}
 </style>
 </head>
 <body>
@@ -104,7 +105,8 @@ textarea{width:100%;box-sizing:border-box;min-height:96px;border-radius:12px;bor
 (function(){
 const API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-clean",AUTO="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-auto";
 const $=id=>document.getElementById(id);
-const qs=new URLSearchParams(location.search);const K=qs.get("k")||"";
+const qs=new URLSearchParams(location.search);const EMB=!!qs.get("embed");let K=qs.get("k")||"";if(!K&&EMB){try{K=localStorage.getItem("pn_admin")||""}catch(e){}} // HQ 안에서는 관리 키를 같이 씀
+if(EMB){document.documentElement.classList.add("embed");const send=()=>{try{parent.postMessage({pnFrameH:document.documentElement.scrollHeight},location.origin)}catch(e){}};new ResizeObserver(send).observe(document.body)}
 const BRS=[["","전체"],["홍대루프탑점","홍대"],["연남루프탑점","연남"],["연트럴파크점","연트럴"]];
 const ALLBR=["홍대루프탑점","연남루프탑점","연트럴파크점"];
 const COL={"홍대루프탑점":"#FF2E6E","연남루프탑점":"#3DDC97","연트럴파크점":"#8FA3FF"};

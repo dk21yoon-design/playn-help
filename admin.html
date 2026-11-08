@@ -55,7 +55,9 @@ section[data-tab]{display:none}section[data-tab].on{display:block}
 table.tb{width:100%;border-collapse:collapse;font-size:13.5px}.tb th{text-align:left;color:var(--mute);font-weight:600;padding:6px 4px;border-bottom:1px solid var(--line)}.tb td{padding:7px 4px;border-bottom:1px solid #2A2668;vertical-align:top}.tb td.n{text-align:right;white-space:nowrap}
 .hbar{height:6px;background:#2B2770;border-radius:3px;margin-top:4px}.hbar i{display:block;height:100%;background:var(--brand);border-radius:3px}
 .wrap2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){.wrap2{grid-template-columns:1fr}}
+html.embed body{max-width:none;padding:12px 14px 24px}html.embed body>h1,html.embed #sum{display:none}html.embed.one #tabs{display:none}
 </style>
+<script>(function(){const q=new URLSearchParams(location.search);if(q.get("embed")){document.documentElement.classList.add("embed");if(q.get("tab"))document.documentElement.classList.add("one")}})()</script>
 </head>
 <body>
 <h1>N CREW 관리</h1>
@@ -432,6 +434,11 @@ async function tabCounts(){try{const x=await spost({action:"admin_settle_list"})
  try{const m=await mpostA({action:"admin_mil_list"});if(m.ok)$("tcCrew").textContent=m.items.filter(i=>i.status==="pending").length||""}catch(e){}}
 const mpostA=b=>fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-military",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json());
 const _load2=load;load=async function(){await _load2();if(!$("main").hidden){let t="board";try{t=localStorage.getItem("pn_admin_tab")||"board"}catch(e){}showTab(t);tabCounts()}};
+/* HQ 안에 붙일 때 (2026-11-08): ?embed=1&tab=settle → 그 탭만, 높이를 HQ로 알림 */
+(function(){const q=new URLSearchParams(location.search);if(!q.get("embed"))return;const T=q.get("tab");
+ if(T){const _l3=load;load=async function(){await _l3();if(!$("main").hidden)showTab(T)}}
+ const send=()=>{try{parent.postMessage({pnFrameH:document.documentElement.scrollHeight},location.origin)}catch(e){}};
+ new ResizeObserver(send).observe(document.body);addEventListener("load",send)})();
 if(KEY)load();
 </script>
 </body>

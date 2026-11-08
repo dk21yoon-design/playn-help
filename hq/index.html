@@ -9,6 +9,7 @@
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <script src="icons.js"></script>
 <style>
@@ -349,6 +350,95 @@ td .why{display:block;color:var(--dim);font-size:12px}
 footer{color:var(--dim);font-size:12.5px;padding-bottom:40px}
 @media (max-width:560px){.logo span{display:none}.live span{max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.iss{grid-template-columns:4px 1fr}.iss .acts{grid-column:2;flex-direction:row;align-items:center;justify-self:start}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── 운영: 예약·청소 캘린더, 정산·관리 화면 붙이기 (2026-11-08) ── */
+.ops-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ops-bar .mon{font-family:var(--f-disp);font-size:22px;min-width:132px;text-align:center}
+.ops-bar button,.ops-chip{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);color:var(--mute);font-size:14px;font-weight:600;background:transparent;cursor:pointer}
+.ops-bar button:hover,.ops-chip:hover{color:var(--ink);border-color:var(--ink)}
+.ops-chip[aria-pressed="true"]{background:var(--panel2);color:var(--ink);border-color:var(--line2)}
+.ops-chip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.ops-bar .sp{flex:1}
+.ops-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.ops-kpi div{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px}
+.ops-kpi small{display:block;font-size:13px;color:var(--mute)}.ops-kpi b{font-family:var(--f-disp);font-weight:400;font-size:26px}
+.ops-kpi .w b{color:var(--warn)}.ops-kpi .c b{color:var(--crit)}.ops-kpi .g b{color:var(--ok)}
+.ops-wrap{display:grid;gap:14px}
+@media (min-width:1100px){.ops-wrap{grid-template-columns:minmax(0,1fr) 380px;align-items:start}.ops-side{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow:auto}}
+.cal{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.cal-h,.cal-g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.cal-h span{padding:8px 0;text-align:center;font-size:13px;font-weight:700;color:var(--mute);border-bottom:1px solid var(--line)}
+.cal-h span:first-child{color:#FF8FA8}.cal-h span:last-child{color:var(--info)}
+.cal-d{min-height:108px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px;display:flex;flex-direction:column;gap:4px;text-align:left;background:transparent;color:inherit;cursor:pointer;font:inherit;min-width:0}
+.cal-d:nth-child(7n){border-right:0}
+.cal-d:hover{background:rgba(255,255,255,.03)}
+.cal-d.out{opacity:.35}.cal-d.past .n{color:var(--dim)}
+.cal-d.sel{background:var(--panel2);box-shadow:inset 0 0 0 2px var(--lamp)}
+.cal-d .n{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+.cal-d.today .n b{background:var(--lamp);color:#1a1300;border-radius:999px;padding:1px 7px}
+.cal-d .more{font-size:12px;color:var(--mute);padding-left:2px}
+.ev{display:grid;font-size:12px;line-height:1.3;padding:3px 6px 4px 6px;border-radius:6px;background:rgba(255,255,255,.05);border-left:3px solid var(--c);white-space:nowrap;overflow:hidden;min-width:0}
+.ev span{overflow:hidden;text-overflow:ellipsis;font-weight:600}.ev em{font-style:normal;font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.ev.ok em{color:var(--ok)}.ev.warn em{color:var(--warn)}.ev.crit em{color:var(--crit)}.ev.info em{color:var(--info)}.ev.dim em{color:var(--dim)}
+.ev.done{opacity:.6}
+@media (max-width:700px){.cal-d{min-height:64px;padding:4px}.ev{padding:2px 3px;font-size:0;gap:0;border-left-width:4px;height:7px}.ev em,.ev span{display:none}.cal-d .more{font-size:11px}}
+.ops-side{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.ops-side h3{font-family:var(--f-disp);font-weight:400;font-size:20px}
+.ops-side .empty{color:var(--mute);font-size:14px}
+.rv2{border:1px solid var(--line);border-left:4px solid var(--c);border-radius:var(--r-sm);padding:12px;display:grid;gap:8px;background:var(--night)}
+.rv2 .t{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.rv2 .t b{font-size:16px}.rv2 .t small{color:var(--mute);font-size:13px}
+.rv2 .kv2{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px}
+.rv2 .kv2 div{background:var(--panel);border-radius:8px;padding:6px 8px;font-size:12.5px;color:var(--mute)}.rv2 .kv2 div b{display:block;color:var(--ink);font-size:14px;margin-top:1px}
+.tag{display:inline-flex;align-items:center;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--panel2);color:var(--ink)}
+.tag.ok{background:rgba(61,220,151,.14);color:var(--ok)}.tag.warn{background:rgba(255,181,71,.14);color:var(--warn)}.tag.crit{background:rgba(255,90,95,.14);color:#FF8A8D}.tag.info{background:rgba(143,163,255,.14);color:var(--info)}
+.rv2 .flags{font-size:13px;line-height:1.5;color:var(--warn);display:grid;gap:4px}
+.rv2 .act{display:flex;gap:8px;flex-wrap:wrap}.rv2 .act a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;background:var(--lamp);color:#1a1300;font-weight:700;font-size:14px;text-decoration:none}
+.rv2 .act a.g{background:transparent;color:var(--ink);border:1px solid var(--line2)}
+.rv2 .ph{display:flex;gap:6px;flex-wrap:wrap}.rv2 .ph img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:var(--panel2)}
+.ops-note{font-size:13px;color:var(--dim)}
+.ops-frame{background:var(--night);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ops-frame iframe{display:block;width:100%;border:0;min-height:70vh;background:var(--night)}
+.ops-tabs{display:flex;gap:6px;flex-wrap:wrap}
+/* 청소비 정산 (2026-11-08) — 영수증·가격판 레퍼런스: 숫자는 크게, 줄은 점선, 지점색은 막대로만 */
+.cp-top{display:grid;gap:14px}
+@media (min-width:960px){.cp-top{grid-template-columns:minmax(0,1fr) 400px;align-items:start}}
+.cp-hero{position:relative;overflow:hidden;border-radius:var(--r);padding:22px 22px 20px;background:radial-gradient(120% 140% at 100% 0%,#3a1a5e 0%,var(--panel) 55%);border:1px solid var(--line2)}
+.cp-hero .lb{font-family:"Clash Display",Pretendard,sans-serif;font-weight:600;letter-spacing:.14em;font-size:12px;color:var(--lamp)}
+.cp-hero .amt{font-family:"Clash Display","Black Han Sans",sans-serif;font-weight:700;font-size:clamp(44px,9vw,76px);line-height:1;margin:10px 0 6px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.cp-hero .amt small{font-family:Pretendard,sans-serif;font-size:22px;font-weight:700;margin-left:4px;color:var(--mute)}
+.cp-hero .sub2{color:var(--mute);font-size:14px}
+.cp-hero .due{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 14px;border-radius:999px;background:var(--lamp);color:#1a1300;font-weight:800;font-size:14px}
+.cp-hero .due.late{background:var(--crit);color:#fff}
+.cp-br{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.cp-br div{background:rgba(0,0,0,.22);border-radius:var(--r-sm);padding:12px;border-top:3px solid var(--c)}
+.cp-br small{display:block;color:var(--mute);font-size:12.5px}.cp-br b{display:block;font-family:"Clash Display",sans-serif;font-weight:700;font-size:24px;margin-top:2px;font-variant-numeric:tabular-nums}.cp-br em{font-style:normal;font-size:12.5px;color:var(--mute)}
+@media (max-width:520px){.cp-br{grid-template-columns:1fr}.cp-br div{display:flex;align-items:baseline;gap:10px}.cp-br b{margin:0 0 0 auto}}
+.rcpt{background:#F6F1E7;color:#1B1830;border-radius:var(--r);padding:22px 20px 18px;font-variant-numeric:tabular-nums;box-shadow:0 18px 40px rgba(0,0,0,.35);position:relative}
+.rcpt:after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:10px;background:radial-gradient(circle at 6px -2px,transparent 7px,#F6F1E7 7.5px) 0 0/12px 10px repeat-x}
+.rcpt h3{font-family:"Clash Display",var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.04em;text-align:center}
+.rcpt .per{text-align:center;font-size:13px;color:#5b5670;margin-top:2px}
+.rcpt hr{border:0;border-top:2px dashed #C9C1B1;margin:14px 0}
+.rcpt .ln{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:15px;align-items:baseline}
+.rcpt .ln span{color:#5b5670;font-size:13px;grid-column:1}.rcpt .ln b{grid-column:2;grid-row:1/span 2;font-size:17px}
+.rcpt .tot{display:flex;justify-content:space-between;align-items:baseline;font-weight:800}.rcpt .tot b{font-family:"Clash Display",sans-serif;font-size:30px}
+.rcpt .act{display:flex;gap:8px;margin-top:16px}.rcpt .act button{flex:1;min-height:44px;border-radius:999px;border:0;background:#1B1830;color:#F6F1E7;font-weight:800;font-size:14px;cursor:pointer}
+.rcpt .act button.g{background:transparent;color:#1B1830;box-shadow:inset 0 0 0 2px #1B1830}
+.cp-list{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.cp-list .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
+.cp-list .hd b{font-size:16px}.cp-list .hd small{color:var(--mute);font-size:13px}
+.cp-row{display:grid;grid-template-columns:44px 92px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);border-left:4px solid var(--c)}
+.cp-row:last-child{border-bottom:0}.cp-row.off{opacity:.45}.cp-row.off .pr{text-decoration:line-through}
+.cp-row input{width:22px;height:22px;accent-color:var(--lamp);cursor:pointer;justify-self:center}
+.cp-row .d{font-weight:700;font-size:14px}.cp-row .d small{display:block;font-weight:500;color:var(--mute);font-size:12px}
+.cp-row .w{font-size:14px;min-width:0}.cp-row .w small{display:block;color:var(--mute);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cp-row .pr{font-weight:800;font-variant-numeric:tabular-nums;font-size:15px}
+.cp-row.man{background:rgba(255,181,71,.06)}
+@media (max-width:520px){.cp-row{grid-template-columns:36px 70px minmax(0,1fr) auto;gap:8px;padding:10px 12px}}
+.cp-add{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line);align-items:center}
+.cp-add select,.cp-add input{min-height:44px;border-radius:10px;border:1px solid var(--line2);background:var(--night);color:var(--ink);padding:0 10px;font:inherit;font-size:14px}
+.cp-add input[type=text]{flex:1;min-width:140px}
+.cp-add button{min-height:44px;padding:0 16px;border-radius:999px;border:0;background:var(--lamp);color:#1a1300;font-weight:800;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -465,9 +555,9 @@ function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.log
 /* ── 렌더 ── */
 function renderCats(){const c=$("#cats");c.innerHTML="";
   const all=issuesOf("all");
-  const TI={auto:"M12 8a4 4 0 100 8 4 4 0 000-8zm8.9 5.3l1.6 1.2-2 3.5-1.9-.7a8 8 0 01-2.2 1.3L16 20.5h-4l-.4-1.9a8 8 0 01-2.2-1.3l-1.9.7-2-3.5 1.6-1.2a8 8 0 010-2.6L5.5 9.5l2-3.5 1.9.7a8 8 0 012.2-1.3L12 3.5h4l.4 1.9a8 8 0 012.2 1.3l1.9-.7 2 3.5-1.6 1.2a8 8 0 010 2.6z",maker:"M8 5v14l11-7z",music:"M9 18V6l11-2v12M9 18a3 3 0 11-3-3 3 3 0 013 3zm11-2a3 3 0 11-3-3 3 3 0 013 3z",skills:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",refs:"M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 100 4 2 2 0 000-4z"};
+  const TI={cpay:"M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3",cal:"M7 3v3M17 3v3M4 8h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zM8 12h3v3H8z",clean:"M4 20h16M7 20l2-9h6l2 9M10 11V4h4v7",settle:"M4 7h16v10H4zM4 11h16M8 15h3",req:"M5 4h14v16H5zM8 8h8M8 12h8M8 16h5",cmgr:"M16 11a3 3 0 100-6 3 3 0 000 6zM8 12a3 3 0 100-6 3 3 0 000 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5",admin:"M4 6h16M4 12h16M4 18h16",auto:"M12 8a4 4 0 100 8 4 4 0 000-8zm8.9 5.3l1.6 1.2-2 3.5-1.9-.7a8 8 0 01-2.2 1.3L16 20.5h-4l-.4-1.9a8 8 0 01-2.2-1.3l-1.9.7-2-3.5 1.6-1.2a8 8 0 010-2.6L5.5 9.5l2-3.5 1.9.7a8 8 0 012.2-1.3L12 3.5h4l.4 1.9a8 8 0 012.2 1.3l1.9-.7 2 3.5-1.6 1.2a8 8 0 010 2.6z",maker:"M8 5v14l11-7z",music:"M9 18V6l11-2v12M9 18a3 3 0 11-3-3 3 3 0 013 3zm11-2a3 3 0 11-3-3 3 3 0 013 3z",skills:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",refs:"M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 100 4 2 2 0 000-4z"};
   const tool=(id,name,bg)=>({id,name,svg:TI[id],monoBg:bg});
-  const groups=[["채널",[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS]],["도구",[tool("auto","자동화","#241F63"),tool("maker","릴스 생성기","#3A1F00"),tool("music","릴스 음악","#3A0F2A"),tool("skills","스킬 레이더","#3A2A00"),tool("refs","레퍼런스 랩","#123A2C")]]];
+  const groups=[["채널",[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS]],["도구",[tool("auto","자동화","#241F63"),tool("maker","릴스 생성기","#3A1F00"),tool("music","릴스 음악","#3A0F2A"),tool("skills","스킬 레이더","#3A2A00"),tool("refs","레퍼런스 랩","#123A2C")]],["운영",[tool("cal","예약·정산 캘린더","#4A1830"),tool("clean","청소 캘린더","#123A2C"),tool("cpay","청소비 정산","#3A2A00"),tool("settle","보증금 정산","#3A2A00"),tool("req","예약 신청","#241F63"),tool("cmgr","청소 매니저","#173247"),tool("admin","관리 더보기","#2B2770")]]];
   groups.forEach(([gl,items],gi)=>{if(gi)c.appendChild(el("span","sep"));const g=el("div","grp");g.setAttribute("role","group");g.setAttribute("aria-label",gl);g.appendChild(el("span","gl",gl));c.appendChild(g);
   items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;if(VIEW===B.id)a.setAttribute("aria-current","page");
     const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
@@ -785,6 +875,176 @@ document.addEventListener("focusout",()=>setTimeout(flush,150));
 ["pause","ended"].forEach(ev=>document.addEventListener(ev,()=>setTimeout(flush,150),true));
 
 
+
+/* ── 운영: 예약·정산 캘린더 / 청소 캘린더 / 정산·신청·청소 매니저·관리 화면 붙이기 (2026-11-08) ── */
+const FN="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/";
+const OPS_LIVE=["cal","clean","cpay"];
+const OPS_FRAMES={settle:{t:"보증금 정산",eye:"SETTLE",src:"/admin.html?embed=1&tab=settle",d:"체크인·퇴실 체크가 끝난 예약의 보증금 환급. 금액 조정·송금 완료 처리"},
+ req:{t:"예약 신청",eye:"REQUEST",src:"/admin.html?embed=1&tab=req",d:"홈페이지 예약 신청 확정·입금 확인·연장 요청"},
+ cmgr:{t:"청소 매니저",eye:"CLEANING",src:"/clean/?embed=1",d:"청소 매니저 화면 그대로. 메모·완료 보고·매니저 문자 등록"},
+ admin:{t:"관리 더보기",eye:"ADMIN",src:"/admin.html?embed=1",d:"예약 현황·방문 분석·멤버·이벤트·콘텐츠"}};
+const BRC={"홍대루프탑점":"#FF2E6E","연남루프탑점":"#3DDC97","연트럴파크점":"#8FA3FF"},BRS2={"홍대루프탑점":"홍대","연남루프탑점":"연남","연트럴파크점":"연트럴"};
+const PKG2={day:["주간",11,"17:30"],night:["야간",19,"다음날 09:30"],full:["통대관",12,"다음날 10:00"]};
+let OPS={board:null,clean:null,at:0,err:""},OPSBUSY=false,CAL={m:null,sel:null,br:""};
+const kToday=()=>new Date(Date.now()+9*36e5).toISOString().slice(0,10);
+const ymd=(y,m,d)=>new Date(Date.UTC(y,m,d)).toISOString().slice(0,10);
+async function loadOps(force){if(OPSBUSY||(!force&&OPS.at&&Date.now()-OPS.at<90e3))return;OPSBUSY=true;
+  const pj=(fn,b)=>fetch(FN+fn,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}).then(r=>r.json()).catch(()=>({ok:false,error:"연결이 끊겼어요"}));
+  const [b,c]=await Promise.all([pj("playn-admin",{action:"board",back:62,fwd:60,key:KEY}),pj("playn-clean",{action:"board",days:31,k:KEY})]);
+  OPSBUSY=false;OPS={board:b.ok?b.items:OPS.board,clean:c.ok?c:OPS.clean,at:Date.now(),err:!b.ok?(b.error||"예약을 못 불러왔어요"):!c.ok?(c.error||"청소 일정을 못 불러왔어요"):""};
+  if(OPS_LIVE.includes(VIEW))render(true)}
+setInterval(()=>{if(!document.hidden&&OPS_LIVE.includes(VIEW))loadOps()},120e3);
+function settleState(r){const s=r.settle;if(r.calendar_only)return["dim","장부 밖"];const t=kToday();
+  if(s&&s.status==="paid")return["ok","정산 끝"];if(s&&s.status==="void")return["dim","취소"];
+  if(s&&(s.status==="hold"||(s.flags||[]).some(f=>/보류|⛔/.test(f))))return["crit","환급 보류"];
+  if(s&&s.checkout_at)return["warn","환급 대기"];
+  if(s&&s.checkin_at&&r.date<=t)return["info","이용 중"];
+  if(r.date>t)return["dim","체크인 전"];if(r.date===t)return["info","오늘 입실"];
+  return["warn","퇴실 체크 없음"]}
+function startTxt(r){const e=(r.early||[])[0];const p=PKG2[r.pkg]||["",r.start_h,""];const st=e?String(e.new_start).slice(11,16):String(r.start_h).padStart(2,"0")+":00";
+  const x=(r.ext||[]).find(z=>z.status==="confirmed");return `${st}${e?" (조기)":""} ~ ${x?String(x.new_end).slice(5,16).replace("-","/").replace("T"," ")+" (연장)":p[2]}`}
+function calHead(view){const t=kToday();if(!CAL.m)CAL.m=t.slice(0,7);if(!CAL.sel)CAL.sel=t;
+  const [y,m]=CAL.m.split("-").map(Number);
+  const bar=el("div","ops-bar");
+  bar.innerHTML=`<button type="button" data-nav="-1" aria-label="이전 달">◀</button><span class="mon">${y}년 ${m}월</span><button type="button" data-nav="1" aria-label="다음 달">▶</button><button type="button" data-nav="0">오늘</button><span class="sp"></span>`+
+   [["","전체",""],...Object.entries(BRS2).map(([k,v])=>[k,v,BRC[k]])].map(([k,v,c])=>`<button type="button" class="ops-chip" data-br="${k}" aria-pressed="${CAL.br===k}">${c?`<i style="background:${c}"></i>`:""}${v}</button>`).join("")+`<button type="button" data-re="1">새로고침</button>`;
+  bar.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{const n=+b.dataset.nav;if(!n){CAL.m=t.slice(0,7);CAL.sel=t}else{const d=new Date(Date.UTC(y,m-1+n,1));CAL.m=d.toISOString().slice(0,7)}render(true)});
+  bar.querySelectorAll("[data-br]").forEach(b=>b.onclick=()=>{CAL.br=b.dataset.br;render(true)});
+  bar.querySelector("[data-re]").onclick=()=>{toast("새로 불러오는 중");loadOps(true)};
+  return bar}
+function calGrid(evOf){const t=kToday();const [y,m]=CAL.m.split("-").map(Number);const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const cells=Math.ceil((first+days)/7)*7;const cal=el("div","cal");
+  cal.innerHTML=`<div class="cal-h">${"일월화수목금토".split("").map(w=>`<span>${w}</span>`).join("")}</div>`;const g=el("div","cal-g");
+  for(let i=0;i<cells;i++){const d=ymd(y,m-1,i-first+1);const evs=evOf(d);const btn=el("button","cal-d"+(d.slice(0,7)!==CAL.m?" out":"")+(d<t?" past":"")+(d===t?" today":"")+(d===CAL.sel?" sel":""));btn.type="button";
+    btn.setAttribute("aria-label",`${+d.slice(5,7)}월 ${+d.slice(8)}일 ${evs.length}건`);
+    btn.innerHTML=`<span class="n"><b>${+d.slice(8)}</b></span>`+evs.slice(0,3).map(e=>`<span class="ev ${e.cls}" style="--c:${e.c}"><span>${H(e.txt)}</span><em>${H(e.tag||"")}</em></span>`).join("")+(evs.length>3?`<span class="more">+${evs.length-3}건 더</span>`:"");
+    btn.onclick=()=>{CAL.sel=d;render(true);if(innerWidth<1100)setTimeout(()=>document.querySelector(".ops-side")?.scrollIntoView({behavior:"smooth",block:"start"}),60)};g.appendChild(btn)}
+  cal.appendChild(g);return cal}
+const dayLabel=d=>{const x=new Date(d+"T00:00:00Z");const diff=Math.round((x-new Date(kToday()+"T00:00:00Z"))/864e5);return `${x.getUTCMonth()+1}월 ${x.getUTCDate()}일 (${"일월화수목금토"[x.getUTCDay()]})${diff===0?" · 오늘":diff===1?" · 내일":diff===-1?" · 어제":""}`};
+function opsWait(s,label){s.appendChild(el("div","loadmsg",OPS.err?`<b>${H(OPS.err)}</b><button class="btn-ghost" type="button" onclick="loadOps(true)">다시 시도</button>`:`<b>${label} 불러오는 중…</b>`));if(!OPS.at)loadOps();return s}
+function calSection(){const s=el("section");s.id="cal";
+  s.innerHTML=`<div class="sh"><span class="eye">BOOKINGS</span><h2>예약·정산 캘린더</h2><span class="meta">${OPS.at?ago(OPS.at)+" 갱신":""} · 지난 62일 ~ 앞으로 60일</span></div>`;
+  s.appendChild(calHead("cal"));if(!OPS.board)return opsWait(s,"예약");
+  const all=OPS.board.filter(r=>!CAL.br||r.branch===CAL.br),t=kToday(),mo=all.filter(r=>r.date.slice(0,7)===CAL.m);
+  const rec=all.filter(r=>r.date>=addD(t,-14)),st2=rec.map(settleState),cnt=n=>st2.filter(x=>x[1]===n).length,waitRef=cnt("환급 대기"),hold=cnt("환급 보류"),noOut=cnt("퇴실 체크 없음");
+  const k=el("div","ops-kpi");k.innerHTML=`<div><small>${+CAL.m.slice(5)}월 예약</small><b>${mo.length}</b></div><div><small>오늘 예약</small><b>${all.filter(r=>r.date===t).length}</b></div>
+    <div class="${waitRef?"w":""}"><small>보증금 환급 대기</small><b>${waitRef}</b></div><div class="${hold?"c":""}"><small>환급 보류</small><b>${hold}</b></div><div class="${noOut?"w":""}"><small>퇴실 체크 없음 (2주)</small><b>${noOut}</b></div>`;s.appendChild(k);
+  const wrap=el("div","ops-wrap");
+  wrap.appendChild(calGrid(d=>all.filter(r=>r.date===d).map(r=>{const [c2,tg]=settleState(r);return{c:BRC[r.branch]||"#888",cls:c2,txt:`${BRS2[r.branch]||""} ${(PKG2[r.pkg]||["예약"])[0]} ${(r.early||[]).length?+String(r.early[0].new_start).slice(11,13):r.start_h}시`,tag:tg}})));
+  const side=el("div","ops-side");const list=all.filter(r=>r.date===CAL.sel);
+  side.innerHTML=`<h3>${dayLabel(CAL.sel)}</h3>`+(list.length?"":`<p class="empty">이날 예약이 없어요</p>`);
+  list.forEach(r=>{const s2=r.settle||{},q=r.request||{},m=r.member||{};const [c2,tg]=settleState(r);const d=el("div","rv2");d.style.setProperty("--c",BRC[r.branch]||"#888");
+    const ph=String(r.phone||"").replace(/\D/g,"");
+    d.innerHTML=`<div class="t"><b>${H(BRS2[r.branch]||r.branch)} · ${H((PKG2[r.pkg]||[r.pkg])[0])}</b><small>${H(startTxt(r))}</small><span class="tag ${c2}">${H(tg)}</span></div>
+     <div class="t"><b>${H(r.guest||"이름 없음")}</b><small>${ph?"010-****-"+ph.slice(-4):""} · ${H(r.source||"")}${r.title?" · "+H(r.title):""}</small></div>
+     <div class="kv2"><div>인원<b>${s2.headcount||q.people?H(s2.headcount||q.people)+"명":"체크인 때 입력"}</b></div><div>바베큐<b>${s2.bbq==null?"–":String(s2.bbq)==="true"?"함":"안 함"}</b></div>
+      <div>보증금<b>${s2.deposit_exempt?"면제":s2.deposit_ok?"입금 ✓":"확인 전"}</b></div><div>환급<b>${s2.refund!=null?fmt(s2.refund)+"원":"–"}</b></div>
+      ${q.price?`<div>예약금<b>${fmt(q.price)}원</b></div>`:""}${Number(s2.owed)>0?`<div>추가 정산<b>${fmt(s2.owed)}원</b></div>`:""}</div>
+     ${(r.early||[]).length?`<div class="ops-note">조기입실 ${H(r.early.map(e=>String(e.new_start).slice(11,16)+" ("+e.hours+"시간 · "+(e.note||"")+")").join(", "))}</div>`:""}
+     ${(r.ext||[]).length?`<div class="ops-note">연장 ${H(r.ext.map(x=>String(x.new_end).slice(11,16)+" "+x.status).join(", "))}</div>`:""}
+     ${m.mil_until||m.vip||q.discount?`<div class="ops-note">${m.mil_until?"군인 인증 · ":""}${m.vip?"VIP · ":""}${q.discount?H(q.discount):""}</div>`:""}
+     ${(s2.flags||[]).length?`<div class="flags">${s2.flags.map(f=>`<span>${H(f)}</span>`).join("")}</div>`:""}
+     ${s2.note?`<div class="ops-note">메모: ${H(s2.note)}</div>`:""}
+     <div class="act">${r.settle&&s2.status!=="paid"&&s2.checkout_at?`<a href="#settle">정산 처리</a>`:""}${String(r.id).startsWith("site:")?`<a class="g" href="#req">예약 신청 보기</a>`:""}<a class="g" href="#clean" data-d="${H(r.pkg==="day"?r.date:ymd(+r.date.slice(0,4),+r.date.slice(5,7)-1,+r.date.slice(8)+1))}">퇴실 청소 보기</a></div>`;
+    const cl=d.querySelector("a[data-d]");cl.onclick=()=>{CAL.sel=cl.dataset.d;CAL.m=cl.dataset.d.slice(0,7)};side.appendChild(d)});
+  side.appendChild(el("p","ops-note","색 막대 = 지점 · 오른쪽 글자 = 정산 상태 (체크인 전 → 이용 중 → 환급 대기 → 정산 끝)"));
+  wrap.appendChild(side);s.appendChild(wrap);return s}
+function cleanSection(){const s=el("section");s.id="clean";
+  s.innerHTML=`<div class="sh"><span class="eye">CLEANING</span><h2>청소 캘린더</h2><span class="meta">${OPS.at?ago(OPS.at)+" 갱신":""} · 오늘부터 31일 · 매니저 화면과 같은 일정</span></div>`;
+  s.appendChild(calHead("clean"));if(!OPS.clean)return opsWait(s,"청소 일정");
+  const C=OPS.clean,its=[...(C.items||[]),...(C.manual||[]).map(x=>({...x,manual:true}))].filter(i=>!CAL.br||i.branch===CAL.br);const t=kToday();
+  const wk=its.filter(i=>i.date>=t&&i.date<=ymd(+t.slice(0,4),+t.slice(5,7)-1,+t.slice(8)+6));
+  const tight=its.filter(i=>i.gap_min!=null&&i.gap_min<120&&i.date>=t).length;
+  const k=el("div","ops-kpi");k.innerHTML=`<div><small>오늘 청소</small><b>${its.filter(i=>i.date===t).length}</b></div><div><small>7일 안 청소</small><b>${wk.length}</b></div>
+   <div class="g"><small>완료 보고</small><b>${its.filter(i=>i.report).length}</b></div><div class="${tight?"w":""}"><small>청소 시간 2시간 미만</small><b>${tight}</b></div>`;s.appendChild(k);
+  const tagOf=i=>i.report?["ok","완료"]:i.note?.done?["ok","완료"]:i.gap_min!=null&&i.gap_min<120?["warn",(i.gap_min<0?"겹침":Math.round(i.gap_min/6)/10+"h")]:i.date<t?["dim","지남"]:["info",""];
+  const hmOf=o=>o?o.slice(0,2)+":"+o.slice(2):"";
+  const wrap=el("div","ops-wrap");
+  wrap.appendChild(calGrid(d=>its.filter(i=>i.date===d).sort((a,b)=>String(a.out||"").localeCompare(String(b.out||""))).map(i=>{const [c2,tg]=tagOf(i);return{c:BRC[i.branch]||"#888",cls:c2+(i.report?" done":""),txt:`${BRS2[i.branch]||""} ${i.manual?"메모":hmOf(i.out)+" 퇴실"}`,tag:tg}})));
+  const side=el("div","ops-side");const list=its.filter(i=>i.date===CAL.sel).sort((a,b)=>String(a.out||"").localeCompare(String(b.out||"")));
+  side.innerHTML=`<h3>${dayLabel(CAL.sel)}</h3>`+(list.length?"":`<p class="empty">${CAL.sel<t?"지난 날짜예요":CAL.sel>ymd(+t.slice(0,4),+t.slice(5,7)-1,+t.slice(8)+31)?"31일 뒤 일정은 아직 계산하지 않아요":"이날 청소가 없어요"}</p>`);
+  list.forEach(i=>{const [c2,tg]=tagOf(i);const d=el("div","rv2");d.style.setProperty("--c",BRC[i.branch]||"#888");const rp=i.report;
+    const photos=rp?.photos?Object.values(rp.photos).flat().slice(0,6):[];
+    d.innerHTML=`<div class="t"><b>${H(BRS2[i.branch]||i.branch)} · ${H(i.manual?"직접 넣은 일정":i.out_txt||"")}</b>${tg?`<span class="tag ${c2}">${H(tg==="완료"?"청소 완료":tg)}</span>`:""}</div>
+     <div class="t"><small>${H(i.manual?i.title:`${i.pkg||""} 손님 퇴실 → ${i.in_txt||""}`)}</small></div>
+     ${i.gap_min!=null?`<div class="kv2"><div>청소 가능 시간<b>${i.gap_min<0?"겹침 "+(-i.gap_min)+"분":Math.floor(i.gap_min/60)+"시간 "+(i.gap_min%60)+"분"}</b></div>${i.ext?`<div>연장<b>${i.ext}시간</b></div>`:""}</div>`:""}
+     ${i.stay||i.stay_prev?`<div class="ops-note">연박 손님 (중간 청소)</div>`:""}${i.own_time?`<div class="ops-note">사장님이 넣은 시간 기준</div>`:""}
+     ${i.notion_title?`<div class="ops-note">예전 일정 제목: ${H(i.notion_title)}</div>`:""}
+     ${i.note?.memo?`<div class="ops-note">메모: ${H(i.note.memo)}${i.note.by_name?" ("+H(i.note.by_name)+")":""}</div>`:""}
+     ${rp?`<div class="ops-note">완료 보고 ${H(rp.by||"")} · ${rp.at?kst(rp.at):""}${rp.shortages&&Object.keys(rp.shortages).length?" · 부족: "+H(Object.keys(rp.shortages).join(", ")):""}${rp.ai?.verdict?" · AI "+H(rp.ai.verdict):""}${rp.memo?" · "+H(rp.memo):""}</div>`:""}
+     ${photos.length?`<div class="ph">${photos.map(u=>`<a href="${H(u)}" target="_blank" rel="noopener"><img src="${H(u)}" alt="청소 사진" loading="lazy" width="72" height="72"></a>`).join("")}</div>`:""}
+     <div class="act">${i.res_id?`<a class="g" href="#cal" data-d="${H(i.use_date||i.date)}">예약 보기</a>`:""}<a class="g" href="#cmgr">매니저 화면에서 메모·보고</a></div>`;
+    const cl=d.querySelector("a[data-d]");if(cl)cl.onclick=()=>{CAL.sel=cl.dataset.d;CAL.m=cl.dataset.d.slice(0,7)};side.appendChild(d)});
+  side.appendChild(el("p","ops-note","색 막대 = 지점 · 오른쪽 = 다음 입실까지 남은 청소 시간 (2시간 미만이면 노란색)"));
+  wrap.appendChild(side);s.appendChild(wrap);return s}
+
+/* ── 청소비 정산 (2026-11-08): 홍대·연남 건당 2만원, 연트럴 건당 1.5만원, 매달 10일에 지난달 몫 지급 ── */
+const CP_RATE={"홍대루프탑점":20000,"연남루프탑점":20000,"연트럴파크점":15000};
+let CPM=null;
+const addD=(d,n)=>{const x=new Date(d+"T00:00:00Z");x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)};
+function cpJobs(){ // 예약 원장 → 퇴실(청소) 목록. 같은 손님이 이어서 묵으면 마지막 퇴실 때 한 번만
+  const rows=(OPS.board||[]).filter(r=>CP_RATE[r.branch]&&r.status!=="cancelled");
+  const pk=r=>r.pkg||(r.start_h>=17?"night":r.start_h>=12?"full":"day");
+  const outOf=r=>{const x=(r.ext||[]).find(z=>z.status==="confirmed");if(x)return String(x.new_end).slice(0,10);return pk(r)==="day"?r.date:addD(r.date,1)};
+  const seen=new Set(),jobs=[];
+  for(const r of rows){const out=outOf(r),p=pk(r);const k=`${r.branch}|${out}|${p}`;if(seen.has(k))continue;seen.add(k);
+    const ph=String(r.phone||"").replace(/\D/g,"");
+    const nxt=ph&&rows.find(z=>z!==r&&z.branch===r.branch&&z.date===out&&String(z.phone||"").replace(/\D/g,"")===ph);
+    jobs.push({id:`${r.branch}|${out}|${p}`,branch:r.branch,date:out,pkg:p,use:r.date,stay:!!nxt,src:r.calendar_only?"캘린더":r.source||"",guest:r.member?.name||""})}
+  return jobs.sort((a,b)=>(a.date+a.branch).localeCompare(b.date+b.branch))}
+const cpKey=m=>"pn_cpay_"+m;
+const cpGet=m=>{try{return JSON.parse(localStorage.getItem(cpKey(m))||"{}")}catch(e){return{}}};
+const cpSet=(m,v)=>{try{localStorage.setItem(cpKey(m),JSON.stringify(v))}catch(e){}};
+function cpaySection(){const s=el("section");s.id="cpay";const t=kToday();
+  if(!CPM){const d=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-2,1));CPM=d.toISOString().slice(0,7)}
+  const [y,m]=CPM.split("-").map(Number);const pay=ymd(y,m,10);const dd=Math.round((new Date(pay+"T00:00:00Z")-new Date(t+"T00:00:00Z"))/864e5);
+  s.innerHTML=`<div class="sh"><span class="eye">CLEANING PAY</span><h2>청소비 정산</h2><span class="meta">퇴실 1건 = 청소 1건 · 홍대·연남 20,000원 · 연트럴 15,000원 · 다음 달 10일 지급</span></div>`;
+  const bar=el("div","ops-bar");bar.innerHTML=`<button type="button" data-mv="-1" aria-label="이전 달">◀</button><span class="mon">${y}년 ${m}월분</span><button type="button" data-mv="1" aria-label="다음 달">▶</button><span class="sp"></span><button type="button" data-re="1">새로고침</button>`;
+  bar.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{const d=new Date(Date.UTC(y,m-1+ +b.dataset.mv,1));CPM=d.toISOString().slice(0,7);render(true)});
+  bar.querySelector("[data-re]").onclick=()=>{toast("새로 불러오는 중");loadOps(true)};s.appendChild(bar);
+  if(!OPS.board)return opsWait(s,"예약 원장");
+  const oldest=OPS.board.reduce((a,r)=>r.date<a?r.date:a,"9999");
+  const A=cpGet(CPM),off=new Set(A.off||[]),man=A.man||[];
+  const jobs=cpJobs().filter(j=>j.date.slice(0,7)===CPM&&!j.stay);
+  const all=[...jobs.map(j=>({...j,on:!off.has(j.id)})),...man.map((x,i)=>({...x,id:"man"+i,man:true,on:true}))];
+  const on=all.filter(j=>j.on);const sum=b=>on.filter(j=>j.branch===b);const total=on.reduce((a,j)=>a+CP_RATE[j.branch],0);
+  const top=el("div","cp-top");
+  const hero=el("div","cp-hero");
+  hero.innerHTML=`<div class="lb">TOTAL · ${m}월 청소</div><div class="amt">${fmt(total)}<small>원</small></div><div class="sub2">청소 ${on.length}건${all.length-on.length?` · 뺀 ${all.length-on.length}건`:""}${man.length?` · 직접 넣은 ${man.length}건`:""}</div>
+   <span class="due ${dd<0?"late":""}">${dd>0?`${+pay.slice(5,7)}월 10일 지급 · D-${dd}`:dd===0?"오늘 지급하는 날":`${+pay.slice(5,7)}월 10일 지급일 지남`}</span>
+   <div class="cp-br">${Object.keys(CP_RATE).map(b=>`<div style="--c:${BRC[b]}"><small>${BRS2[b]} · ${fmt(CP_RATE[b]/1000)}천원</small><em>${sum(b).length}건</em><b>${fmt(sum(b).length*CP_RATE[b])}</b></div>`).join("")}</div>`;
+  top.appendChild(hero);
+  const rc=el("div","rcpt");
+  rc.innerHTML=`<h3>CLEANING PAY</h3><div class="per">${y}.${String(m).padStart(2,"0")}.01 – ${ymd(y,m,0).slice(5).replace("-",".")} 퇴실분 · ${pay.replace(/-/g,".")} 지급</div><hr>`+
+   Object.keys(CP_RATE).map(b=>`<div class="ln"><div>${b}</div><span>${sum(b).length}건 × ${fmt(CP_RATE[b])}원</span><b>${fmt(sum(b).length*CP_RATE[b])}원</b></div>`).join('<div style="height:10px"></div>')+
+   `<hr><div class="tot"><span>합계</span><b>${fmt(total)}원</b></div><div class="act"><button type="button" data-cp="copy">정산 내역 복사</button><button type="button" class="g" data-cp="reset">처음대로</button></div>`;
+  const txt=()=>[`[플레이앤 청소비 ${m}월분]`,`${pay.slice(5,7)}월 10일 지급`,...Object.keys(CP_RATE).map(b=>`${BRS2[b]} ${sum(b).length}건 × ${fmt(CP_RATE[b])} = ${fmt(sum(b).length*CP_RATE[b])}원`),`합계 ${fmt(total)}원`,"",
+     ...on.map(j=>`${+j.date.slice(5,7)}/${+j.date.slice(8)} ${BRS2[j.branch]}${j.man?" (추가) "+(j.note||""):""}`)].join("\n");
+  rc.querySelector('[data-cp="copy"]').onclick=async()=>{try{await navigator.clipboard.writeText(txt());toast("복사했어요. 문자나 카톡에 붙여 넣으면 돼요")}catch(e){toast("복사가 막혀 있어요")}};
+  rc.querySelector('[data-cp="reset"]').onclick=()=>{cpSet(CPM,{});render(true);toast("뺀 건·추가한 건을 모두 지웠어요")};
+  top.appendChild(rc);s.appendChild(top);
+  const L=el("div","cp-list");
+  L.innerHTML=`<div class="hd"><b>청소 내역 ${all.length}건</b><small>청소 안 한 건은 체크를 풀고, 빠진 건은 아래에서 추가하세요. 바꾼 내용은 이 기기에 남아요</small></div>`;
+  if(CPM+"-01"<oldest)L.insertAdjacentHTML("beforeend",`<div class="cp-add" style="border-top:0;color:var(--warn);font-size:13px">${+oldest.slice(5,7)}월 ${+oldest.slice(8)}일 이전 예약은 불러오지 않아요. 이 달은 일부만 보여요</div>`);
+  if(!all.length)L.insertAdjacentHTML("beforeend",`<div class="cp-add" style="border-top:0;color:var(--mute)">이 달 퇴실 기록이 없어요</div>`);
+  const W="일월화수목금토";
+  all.forEach(j=>{const r=el("label","cp-row"+(j.on?"":" off")+(j.man?" man":""));r.style.setProperty("--c",BRC[j.branch]);
+    const dw=W[new Date(j.date+"T00:00:00Z").getUTCDay()];
+    r.innerHTML=`<input type="checkbox" ${j.on?"checked":""} aria-label="${+j.date.slice(5,7)}월 ${+j.date.slice(8)}일 ${BRS2[j.branch]} 청소 포함">
+     <span class="d">${+j.date.slice(5,7)}/${+j.date.slice(8)} (${dw})<small>${BRS2[j.branch]}</small></span>
+     <span class="w">${j.man?"직접 추가":(PKG2[j.pkg]||[""])[0]+" 손님 퇴실"}<small>${j.man?H(j.note||""):`${+j.use.slice(5,7)}/${+j.use.slice(8)} 이용 · ${H(j.src)}${j.guest?" · "+H(j.guest):""}`}</small></span>
+     <span class="pr">${fmt(CP_RATE[j.branch])}</span>`;
+    r.querySelector("input").onchange=e=>{const a=cpGet(CPM);if(j.man){if(!e.target.checked){a.man=(a.man||[]).filter((x,i)=>"man"+i!==j.id)}}else{const o=new Set(a.off||[]);e.target.checked?o.delete(j.id):o.add(j.id);a.off=[...o]}cpSet(CPM,a);render(true)};
+    L.appendChild(r)});
+  const ad=el("form","cp-add");ad.innerHTML=`<input type="date" required min="${CPM}-01" max="${ymd(y,m,0)}" value="${CPM}-01" aria-label="청소한 날"><select aria-label="지점">${Object.keys(CP_RATE).map(b=>`<option value="${b}">${BRS2[b]}</option>`).join("")}</select><input type="text" placeholder="메모 (예: 중간 청소, 단골 대청소)" aria-label="메모"><button type="submit">청소 1건 추가</button>`;
+  ad.onsubmit=e=>{e.preventDefault();const [d,b,n]=[...ad.querySelectorAll("input,select")].map(x=>x.value);const a=cpGet(CPM);a.man=[...(a.man||[]),{branch:b,date:d,use:d,note:n.trim()}];cpSet(CPM,a);render(true);toast("1건 추가했어요")};
+  L.appendChild(ad);s.appendChild(L);
+  s.appendChild(el("p","ops-note","같은 손님이 이어서 묵은 연박은 마지막 퇴실 1번만 셉니다. 숫자는 예약 원장(스페이스클라우드·네이버·홈페이지) 기준이에요."));
+  return s}
+function frameSection(v){const f=OPS_FRAMES[v],s=el("section");s.id=v;
+  s.innerHTML=`<div class="sh"><span class="eye">${f.eye}</span><h2>${H(f.t)}</h2><span class="meta">${H(f.d)} · <a href="${H(f.src.replace(/[?&]embed=1/,"").replace("?&","?"))}" target="_blank" rel="noopener">새 창으로 열기 ↗</a></span></div>`;
+  const w=el("div","ops-frame");const i=document.createElement("iframe");i.dataset.v=v;i.title=f.t;i.src=f.src;i.loading="eager";w.appendChild(i);s.appendChild(w);return s}
+window.addEventListener("message",e=>{if(e.origin!==location.origin||!e.data||!e.data.pnFrameH)return;document.querySelectorAll(".ops-frame iframe").forEach(f=>{if(f.contentWindow===e.source)f.style.height=Math.max(500,e.data.pnFrameH+20)+"px"})});
 /* ── 레퍼런스 랩 (데이터센터): 매일 밤 수집 담당이 채우고, 숫자도 다시 재서 쌓음 ── */
 const REFS_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/hq-refs";
 let REFS=null, REFS_AT=0, RF={cat:"전체",fmt:"전체",sort:"new"};
@@ -837,7 +1097,9 @@ function openRef(r){let d=$("#rlDlg");if(!d){d=el("dialog","rl-dlg");d.id="rlDlg
     ${r.url?`<p><a href="${H(r.url)}" target="_blank" rel="noopener">원본 열기 ↗</a></p>`:""}</div>`;
   d.querySelector(".x").onclick=()=>d.close();d.showModal()}
 
-function render(force){if(!DATA)return;if(!force&&!canRender()){DEFER=true;return}DEFER=false;const sn=snapUI();renderCats();const m=$("#main");m.innerHTML="";
+function render(force){if(!DATA)return;
+  if(OPS_FRAMES[VIEW]&&$("#main").querySelector(`iframe[data-v="${VIEW}"]`)){renderCats();return} // 붙인 관리 화면은 새로고침 때 다시 불러오지 않음
+  if(!force&&!canRender()){DEFER=true;return}DEFER=false;const sn=snapUI();renderCats();const m=$("#main");m.innerHTML="";
   const B=BRANDS.find(b=>b.id===VIEW);
   if(VIEW==="all"){
     const s1=el("section");s1.innerHTML=statusBanner("all")+kpiStrip();m.appendChild(s1);
@@ -852,6 +1114,10 @@ function render(force){if(!DATA)return;if(!force&&!canRender()){DEFER=true;retur
   else if(VIEW==="music"){m.appendChild(musicSection())}
   else if(VIEW==="maker"){m.appendChild(makerSection())}
   else if(VIEW==="refs"){m.appendChild(refsSection())}
+  else if(VIEW==="cal"){m.appendChild(calSection())}
+  else if(VIEW==="clean"){m.appendChild(cleanSection())}
+  else if(VIEW==="cpay"){m.appendChild(cpaySection())}
+  else if(OPS_FRAMES[VIEW]){m.appendChild(frameSection(VIEW))}
   countUp(m);requestAnimationFrame(()=>m.querySelectorAll(".track i[data-w]").forEach(i=>i.style.width=i.dataset.w+"%"));
   COUNTED=true;restoreUI(sn);
 }
@@ -869,10 +1135,10 @@ async function load(){clearTimeout(RETRY);const j=await post({action:"board"});
     FAILS++;const wait=Math.min(30,3*2**(FAILS-1));$("#liveDot").classList.add("off");$("#liveTxt").textContent=`갱신 실패 · ${wait}초 뒤 다시`;
     if(!DATA){showApp();$("#main").innerHTML=`<div class="loadmsg"><b>관제실 숫자를 아직 못 불러왔어요</b>${H(j.error||"서버 응답이 늦어요")}. ${wait}초 뒤에 자동으로 다시 시도해요.<br><button class="btn-ghost" type="button" onclick="load()">지금 다시 시도</button></div>`}
     RETRY=setTimeout(load,wait*1000);return}
-  FAILS=0;st.set("pn_admin",KEY);showApp();DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick();loadMB()}
+  FAILS=0;st.set("pn_admin",KEY);showApp();DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick();loadMB();if(OPS_LIVE.includes(VIEW))loadOps()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
-function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
-  if(["issues","publish","activity"].includes(h))return;render(true);window.scrollTo({top:0,behavior:"smooth"})}
+function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs",...OPS_LIVE,...Object.keys(OPS_FRAMES),...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
+  if(["issues","publish","activity"].includes(h))return;if(OPS_LIVE.includes(VIEW))loadOps();render(true);window.scrollTo({top:0,behavior:"smooth"})}
 window.addEventListener("hashchange",route);
 $("#gateForm").addEventListener("submit",e=>{e.preventDefault();KEY=$("#keyIn").value.trim();load()});
 $("#refresh").onclick=()=>{$("#liveTxt").textContent="갱신 중";load()};
