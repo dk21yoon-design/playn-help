@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>모션 기법 이름 6 · AI 문방구</title>
+<meta name="description" content="AI 문방구 REF INDEX No.03. 편집 지시가 쉬워지는 모션 기법 6개의 이름과 클로드·편집자에게 그대로 보내는 문장, 바로 쓰는 CSS 값을 모았어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main>
+<p class="brand"><i></i>AI 문방구 · REF INDEX No.03</p>
+<h1>‘좀 더 역동적으로’ 말고<br><em>이름으로 시키세요</em></h1>
+<p class="lead">댓글로 신청해주셔서 고마워요. 모션은 기법 이름을 알면 클로드든 편집자든 한 번에 알아들어요. 기법마다 그대로 보내는 문장과 코드 값을 적어뒀어요.</p>
+<button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button>
+<h2><b>PROMPT</b>그대로 보내는 문장</h2>
+<div class="card"><h3>Stretch Text</h3><p>늘어나고 찌그러지는 글자. 제목에 힘을 줄 때</p><div class="copy" data-c>제목 단어마다 가로로 늘었다 줄게, 단어별로 0.1초씩 늦게<button type="button">복사</button></div></div><div class="card"><h3>Posterize Time</h3><p>일부러 뚝뚝 끊기는 움직임. 손으로 그린 듯한 맛</p><div class="copy" data-c>자막 등장 모션을 초당 8프레임으로 끊어줘<button type="button">복사</button></div></div><div class="card"><h3>Stagger</h3><p>한 줄씩 시간차로 등장. 목록·자막</p><div class="copy" data-c>목록은 줄마다 0.12초씩 늦게 왼쪽에서 들어오게<button type="button">복사</button></div></div><div class="card"><h3>Bounce</h3><p>떨어져서 통통 튀기. 리액션·숫자 강조</p><div class="copy" data-c>통통 자막은 위에서 떨어져 두 번 튀고 멈추게<button type="button">복사</button></div></div><div class="card"><h3>Mask Reveal</h3><p>가려졌다가 드러나기. 제목·가격 공개</p><div class="copy" data-c>가격 자막은 왼쪽에서 오른쪽으로 닦아내듯 드러나게<button type="button">복사</button></div></div><div class="card"><h3>Ease Out</h3><p>빠르게 와서 살짝 멈추기. 모든 움직임의 기본값</p><div class="copy" data-c>모든 등장 모션은 끝에서 천천히 멈추게(ease out)<button type="button">복사</button></div></div>
+<h2><b>CODE</b>바로 붙여 쓰는 값</h2>
+<div class="card"><h3>Stretch Text</h3><div class="copy" data-c>transform: scaleX(1.45) scaleY(.83);<button type="button">복사</button></div></div><div class="card"><h3>Posterize Time</h3><div class="copy" data-c>animation-timing-function: steps(8);<button type="button">복사</button></div></div><div class="card"><h3>Stagger</h3><div class="copy" data-c>animation-delay: calc(var(--i) * .12s);<button type="button">복사</button></div></div><div class="card"><h3>Bounce</h3><div class="copy" data-c>anime.js: easing: 'easeOutBounce'<button type="button">복사</button></div></div><div class="card"><h3>Mask Reveal</h3><div class="copy" data-c>clip-path: inset(0 100% 0 0) → inset(0);<button type="button">복사</button></div></div><div class="card"><h3>Ease Out</h3><div class="copy" data-c>transition-timing-function: cubic-bezier(.16, 1, .3, 1);<button type="button">복사</button></div></div>
+<h2><b>TIP</b>모션 지시 순서</h2>
+<ol class="steps"><li><strong>기법 이름</strong><p class="lead" style="font-size:15px">Stagger, Bounce처럼 이름부터</p></li><li><strong>대상</strong><p class="lead" style="font-size:15px">제목인지, 자막 한 줄인지, 목록인지</p></li><li><strong>숫자</strong><p class="lead" style="font-size:15px">0.12초 간격, 초당 8프레임처럼 숫자로</p></li></ol>
+<div class="card"><h3>움직임 줄이기 설정</h3><p>웹에 넣을 땐 기기에서 움직임 줄이기를 켠 사람에겐 멈춘 화면으로 보여주세요. CSS의 prefers-reduced-motion으로 끌 수 있어요.</p></div>
+<footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · 2026.11.09<br>다음 편도 받아보려면 팔로우해두세요.</footer>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['모션 기법 이름 6 · AI 문방구 (@ai.munbanggu)','REF INDEX No.03',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='모션기법6_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
