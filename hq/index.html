@@ -51,13 +51,25 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* 카테고리 탭 */
 .cats{position:sticky;top:calc(58px + env(safe-area-inset-top,0px));z-index:19;background:rgba(14,12,44,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.cats .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:10px}
+.cats .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:10px;align-items:center}
+.cats .grp{display:flex;gap:6px;align-items:center;flex:none}
+.cats .gl{flex:none;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--dim);padding:0 4px 0 8px}
+.cats .gl:first-child{padding-left:0}
+.cats .sep{flex:none;width:1px;height:22px;background:var(--line2);margin:0 6px}
+.cat .mono svg{display:block}
+@media (min-width:1100px){.cats .wrap{flex-wrap:wrap;overflow:visible;row-gap:8px}.cats .grp{flex-wrap:wrap}.cats .sep{display:none}}
+@media (max-width:1099px){.cats .wrap{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);padding-right:40px}.cats .wrap.end{-webkit-mask-image:none;mask-image:none}}
+.cat:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.cat{min-height:40px}
+.loadmsg{margin:48px auto;max-width:520px;text-align:center;color:var(--mute);font-size:15px;line-height:1.6}
+.loadmsg b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+.loadmsg button{margin-top:14px}
 .cats .wrap::-webkit-scrollbar{display:none}
 .cat{text-decoration:none;display:flex;align-items:center;gap:7px;flex:none;padding:7px 13px 7px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mute);font-size:14px;font-weight:600;transition:.25s var(--ease)}
 .cat img,.cat .mono{width:22px;height:22px;border-radius:6px;flex:none}
 .cat:hover{color:var(--ink);border-color:var(--line2)}
 .cat.on{background:var(--ink);color:var(--deep);border-color:var(--ink)}
-.cat .n{min-width:18px;height:18px;border-radius:9px;background:var(--crit);color:#fff;font-size:11px;display:grid;place-items:center;padding:0 5px}
+.cat .n{min-width:18px;height:18px;border-radius:9px;background:var(--crit);color:#1A0508;font-weight:800;font-size:11px;display:grid;place-items:center;padding:0 5px}
 .cat .n.w{background:var(--warn);color:#2A1A00}
 
 main{display:flex;flex-direction:column;gap:44px;padding-block:28px 80px}
@@ -75,7 +87,7 @@ section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--eas
 .status .big{font-family:var(--f-disp);font-size:clamp(24px,4.4vw,36px);line-height:1.15;text-wrap:balance}
 .status .sub{color:var(--mute);font-size:14px}
 .status .ico{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;flex:none;background:var(--ok);color:#06281A}
-.status.warn .ico{background:var(--warn);color:#2A1A00}.status.crit .ico{background:var(--crit);color:#fff}
+.status.warn .ico{background:var(--warn);color:#2A1A00}.status.crit .ico{background:var(--crit);color:#1A0508}
 .status .txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
 .status .go{border:1px solid var(--line2);border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
 
@@ -140,7 +152,7 @@ section{display:flex;flex-direction:column;gap:16px;animation:rise .6s var(--eas
 .iss .bar{align-self:stretch;border-radius:0 3px 3px 0}
 .iss.crit .bar{background:var(--crit)}.iss.warn .bar{background:var(--warn)}.iss.info .bar{background:var(--info)}.iss.done .bar{background:var(--ok)}
 .iss .b{display:flex;flex-direction:column;gap:4px;min-width:0}
-.iss h4{font-size:15px;font-weight:700;line-height:1.4}
+.iss .h4{font-size:15px;font-weight:700;line-height:1.4}
 .iss .m{font-size:12.5px;color:var(--dim);display:flex;gap:10px;flex-wrap:wrap}
 .iss .d{font-size:13.5px;color:var(--mute)}
 .iss .fix{font-size:13.5px;color:var(--ok)}
@@ -284,7 +296,7 @@ td .why{display:block;color:var(--dim);font-size:12px}
 .rl-stat b{display:block;font-family:var(--f-disp);font-weight:400;font-size:26px;color:var(--ink)}
 .rl-stat span{font-size:13px;color:var(--mute)}
 .rl-bars{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;display:grid;gap:8px;margin-bottom:14px}
-.rl-bars h4{font-size:14px;color:var(--mute);font-weight:700}
+.rl-bars .h4{font-size:14px;color:var(--mute);font-weight:700}
 .rl-bar{display:grid;grid-template-columns:120px 1fr 70px;gap:10px;align-items:center;font-size:13px}
 .rl-bar .tr{height:8px;border-radius:999px;background:rgba(166,162,214,.12);overflow:hidden}.rl-bar .tr i{display:block;height:100%;background:var(--lamp);border-radius:999px}
 .rl-bar em{font-style:normal;color:var(--dim);text-align:right}
@@ -320,7 +332,7 @@ td .why{display:block;color:var(--dim);font-size:12px}
 .sk{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .sk.pick{border-color:rgba(255,181,71,.55);background:linear-gradient(180deg,rgba(255,181,71,.09),var(--panel))}
 .sk .h{display:flex;gap:8px;align-items:center}
-.sk h4{font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.sk .h4{font-size:15px;font-weight:800;overflow-wrap:anywhere}
 .sk .st{margin-left:auto;font-size:12.5px;color:var(--lamp);font-weight:700;white-space:nowrap}
 .sk p{font-size:13px;color:var(--mute);line-height:1.55}
 .sk p b{color:var(--ink)}
@@ -389,11 +401,13 @@ const BRANDS=[
          {id:"threads-salim",name:"@salim.bogam",icon:"threads",url:"https://www.threads.net/@salim.bogam"},{id:"threads-life",name:"@life.drawer_kr",icon:"threads",url:"https://www.threads.net/@life.drawer_kr"},{id:"threads-ch3",name:"@todays.method",icon:"threads",url:"https://www.threads.net/@todays.method"}]},
  {id:"saenghwal",name:"생활공략집",tag:"워드프레스 · 유튜브 쇼츠 · 인스타 · 페북",logo:"img/saenghwal.webp",
   plats:[{id:"wordpress",name:"워드프레스",icon:"wordpress",url:"https://gongryakzip.com/"},{id:"youtube",name:"유튜브",icon:"youtube"},{id:"shorts",name:"쇼츠 대기열",icon:"shorts"},{id:"pick",name:"제품 페이지",icon:"web",url:"https://playn.kr/pick/"},{id:"instagram",name:"인스타",icon:"instagram",url:"https://www.instagram.com/saenghwal.gongryak/"},{id:"facebook",name:"페이스북",icon:"facebook"}]},
- {id:"hanta",name:"한타BGM",tag:"게임 플레이리스트 · 유튜브 · 인스타",mono:"한타",monoBg:"linear-gradient(135deg,#6B2BD9,#FF2E6E)",
+ {id:"hanta",name:"한타BGM",tag:"게임 플레이리스트 · 유튜브 · 인스타",mono:"한타",monoBg:"#6B2BD9",
   plats:[{id:"youtube",name:"유튜브",icon:"youtube"},{id:"instagram",name:"인스타 @hantabgm",icon:"instagram",url:"https://www.instagram.com/hantabgm/"},{id:"facebook",name:"페이스북",icon:"facebook"}]},
  {id:"yeokjeon",name:"역전실록",tag:"역전 실화 다큐 쇼츠 · 유튜브 · 인스타 · 틱톡",logo:"img/yeokjeon.webp",
   plats:[{id:"youtube",name:"유튜브",icon:"youtube"},{id:"instagram",name:"인스타",icon:"instagram"},{id:"tiktok",name:"틱톡",icon:"tiktok"},{id:"clip",name:"네이버 클립",icon:"naver"}]},
- {id:"lab",name:"실험 채널",tag:"지롱이 · 범인은 · 힉스필드 광고 실험",mono:"LAB",monoBg:"linear-gradient(135deg,#1F5FD1,#3DDC97)",
+ {id:"munbanggu",name:"AI 문방구",tag:"스킬·레퍼런스 카드뉴스 · 인스타 · 댓글 자동 DM",mono:"AI",monoBg:"#E0185E",
+  plats:[{id:"instagram",name:"인스타 @ai.munbanggu",icon:"instagram",url:"https://www.instagram.com/ai.munbanggu/"},{id:"dm",name:"댓글 자동 DM",icon:"instagram"},{id:"page",name:"프롬프트 페이지",icon:"web",url:"https://playn.kr/mb/impeccable/"}]},
+ {id:"lab",name:"실험 채널",tag:"지롱이 · 범인은 · 힉스필드 광고 실험",mono:"LAB",monoBg:"#1F5FD1",
   plats:[{id:"jirong",name:"지롱이 인스타",icon:"instagram",url:"https://www.instagram.com/jirongejirong/"},{id:"jirong-yt",name:"안보면 후회하지롱",icon:"youtube"},{id:"beomin",name:"범인은",icon:"web"},{id:"higgs",name:"힉스필드 실험",icon:"web"}]},
 ];
 const SYS={id:"system",name:"자동화·시스템"};
@@ -443,6 +457,7 @@ const metrics=(b,ch)=>(DATA?.board?.metrics||[]).filter(m=>m.brand===b&&(!ch||m.
 const mv=(b,ch,k)=>{const m=metrics(b,ch).find(x=>x.metric===k);return m||null};
 const issuesOf=b=>(DATA?.board?.issues||[]).filter(i=>i.status==="open"&&(b==="all"||i.brand===b));
 function brandState(b){const o=issuesOf(b);if(o.some(i=>i.severity==="crit"))return["crit","확인 필요"];if(o.some(i=>i.severity==="warn"))return["warn","주의"];
+  if(b==="munbanggu"&&MB){if(MB.errors?.length||MB.dm?.failed)return["warn","주의"];return["ok","정상"]}
   const hasData=b==="playn"||metrics(b).length||(b==="yeokjeon"&&DATA?.board?.yeokjeon?.queue);return hasData?["ok","정상"]:["idle","연결 대기"]}
 
 function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.logo}" alt="">`:`<span class="${cls} mono" style="background:${B.monoBg};font-size:${B.mono.length>2?14:B.mono.length>1?16:24}px">${H(B.mono)}</span>`}
@@ -450,12 +465,17 @@ function logoHTML(B,cls="blogo"){return B.logo?`<img class="${cls}" src="${B.log
 /* ── 렌더 ── */
 function renderCats(){const c=$("#cats");c.innerHTML="";
   const all=issuesOf("all");
-  const items=[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS,{id:"auto",name:"자동화",mono:"⚙",monoBg:"#241F63"},{id:"maker",name:"릴스 생성기",mono:"▶",monoBg:"#3A1F00"},{id:"music",name:"릴스 음악",mono:"♪",monoBg:"#3A0F2A"},{id:"skills",name:"스킬 레이더",mono:"★",monoBg:"#3A2A00"},{id:"refs",name:"레퍼런스 랩",mono:"◎",monoBg:"#123A2C"}];
-  items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;
+  const TI={auto:"M12 8a4 4 0 100 8 4 4 0 000-8zm8.9 5.3l1.6 1.2-2 3.5-1.9-.7a8 8 0 01-2.2 1.3L16 20.5h-4l-.4-1.9a8 8 0 01-2.2-1.3l-1.9.7-2-3.5 1.6-1.2a8 8 0 010-2.6L5.5 9.5l2-3.5 1.9.7a8 8 0 012.2-1.3L12 3.5h4l.4 1.9a8 8 0 012.2 1.3l1.9-.7 2 3.5-1.6 1.2a8 8 0 010 2.6z",maker:"M8 5v14l11-7z",music:"M9 18V6l11-2v12M9 18a3 3 0 11-3-3 3 3 0 013 3zm11-2a3 3 0 11-3-3 3 3 0 013 3z",skills:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",refs:"M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 100 4 2 2 0 000-4z"};
+  const tool=(id,name,bg)=>({id,name,svg:TI[id],monoBg:bg});
+  const groups=[["채널",[{id:"all",name:"전체",logo:"img/playn.webp"},...BRANDS]],["도구",[tool("auto","자동화","#241F63"),tool("maker","릴스 생성기","#3A1F00"),tool("music","릴스 음악","#3A0F2A"),tool("skills","스킬 레이더","#3A2A00"),tool("refs","레퍼런스 랩","#123A2C")]]];
+  groups.forEach(([gl,items],gi)=>{if(gi)c.appendChild(el("span","sep"));const g=el("div","grp");g.setAttribute("role","group");g.setAttribute("aria-label",gl);g.appendChild(el("span","gl",gl));c.appendChild(g);
+  items.forEach(B=>{const a=el("a","cat"+(VIEW===B.id?" on":""));a.href="#"+B.id;if(VIEW===B.id)a.setAttribute("aria-current","page");
     const o=B.id==="all"?all:B.id==="auto"?issuesOf("system"):issuesOf(B.id);
     const crit=o.filter(i=>i.severity==="crit").length, warn=o.filter(i=>i.severity==="warn").length;
-    a.innerHTML=(B.logo?`<img src="${B.logo}" alt="">`:`<span class="mono" style="background:${B.monoBg};font-size:${(B.mono||"").length>2?9:12}px">${H(B.mono)}</span>`)+H(B.name)+(crit?`<span class="n">${crit}</span>`:warn?`<span class="n w">${warn}</span>`:"");
-    c.appendChild(a)})}
+    a.innerHTML=(B.logo?`<img src="${B.logo}" alt="">`:B.svg?`<span class="mono" style="background:${B.monoBg};display:grid;place-items:center"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="${B.svg}" fill="none" stroke="#F3F1FF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></span>`:`<span class="mono" style="background:${B.monoBg};font-size:${(B.mono||"").length>2?11:12}px;letter-spacing:-.04em">${H(B.mono)}</span>`)+H(B.name)+(crit?`<span class="n">${crit}</span>`:warn?`<span class="n w">${warn}</span>`:"");
+    g.appendChild(a)})});
+  const on=c.querySelector(".cat.on");if(on&&c.scrollWidth>c.clientWidth){const x=on.offsetLeft-c.clientWidth/2+on.offsetWidth/2;c.scrollLeft=Math.max(0,x)}
+  const fade=()=>c.classList.toggle("end",c.scrollLeft+c.clientWidth>=c.scrollWidth-8);fade();c.onscroll=fade}
 
 function countUp(root){root.querySelectorAll("[data-n]").forEach(e=>{const to=Number(e.dataset.n);if(isNaN(to))return;
   if(COUNTED||matchMedia("(prefers-reduced-motion:reduce)").matches||e.dataset.done){e.textContent=fmt(to);return}
@@ -495,6 +515,7 @@ function brandKpis(id){const b=DATA.board,p=b.playn;
     return[{l:"블로그 누적 방문",v:N(tot||null)},{l:"오늘 예약 발행",v:N(mv("naver","blog","published_today")?.value)},{l:"쓰레드 최근 조회",v:N(th||null)}]}
   if(id==="saenghwal"){const f=b.funnel||{};return[{l:"유튜브 구독",v:N(mv("saenghwal","youtube","subscribers")?.value)},{l:"제품 페이지 방문 7일",v:N(f.pick_view7??null)},{l:"제품 클릭 7일",v:N(f.pick_out7??null)}]}
   if(id==="yeokjeon"){const q=b.yeokjeon?.queue||{};return[{l:"인스타 게시",v:N(q.published||0)},{l:"인스타 대기",v:N(q.ready||0)},{l:"유튜브 업로드",v:N(mv("yeokjeon","youtube","uploads_total")?.value)}]}
+  if(id==="munbanggu"){const m=MB;if(!m)return[{l:"팔로워",v:"불러오는 중"},{l:"게시",v:"–"},{l:"자동 DM",v:"–"}];return[{l:"인스타 팔로워",v:N(m.acct?.followers??null)},{l:"게시 · 대기",v:`${fmt(m.queue.published)}<small> · ${fmt(m.queue.ready+m.queue.draft)}</small>`},{l:"자동 DM 보냄",v:N(m.dm.sent)}]}
   const W=(b,ch,k)=>{const x=mv(b,ch,k);return x?N(x.value):"연결 대기"};
   if(id==="hanta")return[{l:"유튜브 구독",v:W("hanta","youtube","subscribers")},{l:"최근 10개 조회",v:W("hanta","youtube","views_recent10")},{l:"인스타 팔로워",v:W("hanta","instagram","followers")}];
   return[{l:"지롱이 팔로워",v:W("lab","jirong","followers")},{l:"지롱이 유튜브",v:W("lab","jirong-yt","subscribers")},{l:"범인은·힉스필드",v:"정보 필요"}]}
@@ -528,6 +549,14 @@ function platformBody(B,P){const b=DATA.board,p=b.playn;let h="";
     h+=(f.pick_top||[]).length?`<div class="met wide"><span class="l">많이 누른 제품 (7일)</span><div class="hbars">${hbars(f.pick_top.map(x=>({l:"#"+x.no+(PICKS[x.no]?" "+PICKS[x.no]:""),v:x.n})))}</div></div>`:emptyBox("아직 제품 클릭 기록이 없어요. 쇼츠를 보고 프로필 링크로 들어와 '보러가기'를 누르면 여기에 쌓여요.");
   } else if(B.id==="yeokjeon"&&P.id==="instagram"){const y=b.yeokjeon||{};
     h+=genericMetrics("yeokjeon","instagram")+metCard("게시",N(y.queue?.published||0))+metCard("대기",N(y.queue?.ready||0))+(y.recent||[]).map(r=>`<div class="met wide"><span class="l">#${r.id} · ${r.publish_at?kst(r.publish_at):""}</span><span class="t">${r.status==="published"?`<a href="${H(r.permalink)}" target="_blank" rel="noopener">게시물 보기</a>`:r.status==="ready"?"발행 대기":H(r.status+" "+(r.error||""))}</span></div>`).join("");
+  } else if(B.id==="munbanggu"){const m=MB;
+    if(!m)h+=emptyBox("AI 문방구 숫자를 불러오는 중이에요");
+    else if(P.id==="instagram"){h+=metCard("팔로워",N(m.acct?.followers??null),m.acct?.error?"인스타 연결 확인 필요":"@"+H(m.acct?.username||"ai.munbanggu"))+metCard("인스타 게시물",N(m.acct?.media??null),"계정 전체")+metCard("자동 발행",N(m.queue.published),`대기 ${fmt(m.queue.ready)} · 초안 ${fmt(m.queue.draft)}`)
+      +(m.recent||[]).map(r=>`<div class="met wide"><span class="l">#${r.id} · ${r.kind==="reels"?"릴스":"카드뉴스"} · ${H(r.title)}${r.at?" · "+kst(r.at):""}</span><span class="t">${r.status==="published"&&r.permalink?`<a href="${H(r.permalink)}" target="_blank" rel="noopener">게시물 보기 ↗</a>`:r.status==="ready"?"발행 대기":r.status==="draft"?"초안":H(r.status)}${r.dm?" · 댓글 DM 켜짐":""}</span></div>`).join("")}
+    else if(P.id==="dm"){h+=metCard("보낸 DM",N(m.dm.sent),`최근 7일 ${fmt(m.dm.week)}건`,m.dm.last?ago(m.dm.last)+" 마지막 발송":"아직 발송 없음")+metCard("감시 중인 글",N(m.dm.watching),"발행 7일 안 · 2분마다 댓글 확인")+metCard("실패",N(m.dm.failed),m.dm.failed?"인스타 오류 · 로그 확인":"없음")
+      +emptyBox("댓글에 키워드(기본 <b>문방구</b>)가 있으면 작성자에게 다운로드 링크를 DM으로 한 번 보내요. 인스타 정책상 댓글 하나에 한 번, 댓글 단 지 7일 안에만 보낼 수 있어요.")}
+    else h+=emptyBox("댓글로 신청한 사람이 받는 프롬프트 모음 페이지예요. 편마다 새 페이지가 생기면 여기에 쌓여요.");
+    if(m?.errors?.length)h+=`<div class="met wide" style="border-color:rgba(255,181,71,.4)"><span class="l">최근 2일 작업 오류</span>${m.errors.map(e=>`<span class="t">• ${H(e.detail)} · ${ago(e.created_at)}</span>`).join("")}</div>`;
   } else {const ch=P.id;h+=genericMetrics(B.id,ch);
     if(!h)h=emptyBox(`<b>${H(P.name)}</b> 숫자는 아직 연결 전이에요. 연결되면 자동으로 채워집니다. 방법은 <a href="#auto" style="color:var(--lamp)">자동화 → 연결 센터</a>에 있어요.`)}
   const issues=issuesOf(B.id).filter(i=>!i.channel||P.name.includes(i.channel)||i.channel.includes(P.name.split(" ")[0]));
@@ -558,7 +587,7 @@ function hbars(rows){if(!rows.length)return'<span style="color:var(--dim)">데�
 
 function issueRow(i){const done=i.status==="resolved";const r=el("div","iss "+(done?"done":i.severity));
   const br=[...BRANDS,SYS].find(b=>b.id===i.brand)?.name||i.brand;
-  r.innerHTML=`<i class="bar"></i><div class="b"><h4>${H(i.title)}</h4>
+  r.innerHTML=`<i class="bar"></i><div class="b"><h3 class="h4">${H(i.title)}</h3>
    <div class="m"><span>${H(br)}${i.channel?" · "+H(i.channel):""}</span><span>${done?"해결 "+kst(i.resolved_at):"발생 "+kst(i.opened_at)}</span><span>${H({cron:"서버 감지",queue:"발행 큐",detect:"자동 감지",log:"발행 로그",pc:"PC 로그",claude:"Claude 점검",push:"보고"}[i.source]||i.source||"")}</span></div>
    ${i.detail?`<div class="d">${H(i.detail)}</div>`:""}${done?`<div class="fix">✓ ${H(i.fix_note||"해결")} · 지금 정상</div>`:fixLine(i)}</div>
    ${done?"":`<div class="acts">${i.fix_state&&!["done","human"].includes(i.fix_state)?"":`<button class="go" type="button">${i.fix_state?"다시 시도":"바로 해결"}</button>`}<button class="act" type="button">해결로 표시</button></div>`}`;
@@ -637,7 +666,7 @@ function skillsSection(){const s=el("section");s.id="skills";const sk=DATA.skill
   const g=el("div","skills");
   if(!sk.length)g.innerHTML=emptyBox("매일 아침 GitHub에서 추천 많이 받은 스킬을 모아 여기에 정리해요. 첫 수집이 끝나면 채워집니다.");
   sk.forEach(k=>{const c=el("article","sk"+(k.pick?" pick":""));const dlt=k.stars_prev!=null&&k.stars!=null?k.stars-k.stars_prev:null;
-    c.innerHTML=`<div class="h">${ico("github",16,"#F3F1FF")}<h4>${k.pick?"★ ":""}${H(k.name)}</h4><span class="st">★ ${fmt(k.stars)}${dlt?` (+${fmt(dlt)})`:""}${k.rank?` · ${k.rank}위`:""}</span></div>
+    c.innerHTML=`<div class="h">${ico("github",16,"#F3F1FF")}<h3 class="h4">${k.pick?"★ ":""}${H(k.name)}</h3><span class="st">★ ${fmt(k.stars)}${dlt?` (+${fmt(dlt)})`:""}${k.rank?` · ${k.rank}위`:""}</span></div>
      ${k.what?`<p><b>무엇:</b> ${H(k.what)}</p>`:""}${k.how?`<p><b>잘 쓰는 법:</b> ${H(k.how)}</p>`:""}${k.where_use?`<p><b>어디에:</b> ${H(k.where_use)}</p>`:""}
      ${k.reviews?`<p><b>후기:</b> ${H(k.reviews)}</p>`:""}${k.good_for?`<p><b>꿀인 사람:</b> ${H(k.good_for)}</p>`:""}
      ${k.pick&&k.pick_reason?`<p class="why"><b>내 작업에 쓰면:</b> ${H(k.pick_reason)}</p>`:""}
@@ -775,7 +804,7 @@ function refsSection(){const s=el("section");s.id="refs";
   stats.innerHTML=`<div class="rl-stat"><b>${fmt(done.length)}</b><span>모은 레퍼런스</span></div><div class="rl-stat"><b>+${fmt(wk)}</b><span>이번 주 추가</span></div><div class="rl-stat"><b>${fmt(avg)}</b><span>평균 좋아요 (인스타)</span></div><div class="rl-stat"><b>${fmt(cats.length)}</b><span>카테고리</span></div>${top?`<div class="rl-stat"><b>${fmt(top.likes)}</b><span>최고: ${H(top.title)}</span></div>`:""}`;
   s.appendChild(stats);
   if(byCat.length){const mx=Math.max(...byCat.map(x=>x.avg),1);const bars=el("div","rl-bars");
-    bars.innerHTML=`<h4>카테고리별 평균 좋아요 · 무엇이 먹히는지</h4>`+byCat.map(x=>`<div class="rl-bar"><span>${H(x.c)}</span><div class="tr"><i style="width:${Math.max(3,Math.round(x.avg/mx*100))}%"></i></div><em>${fmt(x.avg)} · ${x.n}개</em></div>`).join("");s.appendChild(bars)}
+    bars.innerHTML=`<h3 class="h4">카테고리별 평균 좋아요 · 무엇이 먹히는지</h3>`+byCat.map(x=>`<div class="rl-bar"><span>${H(x.c)}</span><div class="tr"><i style="width:${Math.max(3,Math.round(x.avg/mx*100))}%"></i></div><em>${fmt(x.avg)} · ${x.n}개</em></div>`).join("");s.appendChild(bars)}
   const add=el("form","rl-add");add.innerHTML=`<input type="url" required placeholder="인스타·사이트 링크 붙여넣기 → 오늘 밤 수집 때 이미지·숫자까지 채워요" aria-label="레퍼런스 링크"><button class="go" type="submit">넣기</button>`;
   add.onsubmit=async e=>{e.preventDefault();const i=add.querySelector("input"),bt=add.querySelector("button");bt.disabled=true;const j=await refsPost({action:"add",url:i.value.trim()});bt.disabled=false;toast(j.ok?(j.msg||"넣었어요"):(j.error||"실패"));if(j.ok&&!j.dup){i.value="";loadRefs(true)}};
   s.appendChild(add);
@@ -831,10 +860,16 @@ function render(force){if(!DATA)return;if(!force&&!canRender()){DEFER=true;retur
 const post=b=>{const t=b.action!=="board"?{}:null;if(t)BUSY.add(t);
   return fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...b,key:KEY})}).then(r=>r.json()).catch(()=>({ok:false,error:"네트워크 연결이 끊겼어요"}))
     .finally(()=>{if(t){BUSY.delete(t);setTimeout(flush,0)}})};
-async function load(){const j=await post({action:"board"});
+let MB=null,FAILS=0,RETRY=null;
+const MB_API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/munbanggu-hq";
+function loadMB(){fetch(MB_API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:KEY})}).then(r=>r.json()).then(j=>{if(j.ok){MB=j;if(DATA)render()}}).catch(()=>{})}
+function showApp(){$("#gate").hidden=true;$("#app").hidden=false}
+async function load(){clearTimeout(RETRY);const j=await post({action:"board"});
   if(!j.ok){if(/관리 키/.test(j.error||"")){$("#app").hidden=true;$("#gate").hidden=false;if(KEY){$("#gateErr").hidden=false;$("#gateErr").textContent=j.error}return}
-    $("#liveDot").classList.add("off");$("#liveTxt").textContent="갱신 실패 · 다시 시도 중";return}
-  st.set("pn_admin",KEY);$("#gate").hidden=true;$("#app").hidden=false;DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick()}
+    FAILS++;const wait=Math.min(30,3*2**(FAILS-1));$("#liveDot").classList.add("off");$("#liveTxt").textContent=`갱신 실패 · ${wait}초 뒤 다시`;
+    if(!DATA){showApp();$("#main").innerHTML=`<div class="loadmsg"><b>관제실 숫자를 아직 못 불러왔어요</b>${H(j.error||"서버 응답이 늦어요")}. ${wait}초 뒤에 자동으로 다시 시도해요.<br><button class="btn-ghost" type="button" onclick="load()">지금 다시 시도</button></div>`}
+    RETRY=setTimeout(load,wait*1000);return}
+  FAILS=0;st.set("pn_admin",KEY);showApp();DATA=j;lastOk=Date.now();$("#liveDot").classList.remove("off");render();tick();loadMB()}
 function tick(){if(!lastOk)return;const s=Math.round((Date.now()-lastOk)/1000);$("#liveTxt").textContent=s<5?"실시간 · 방금 갱신":`실시간 · ${s}초 전 갱신`}
 function route(){const h=location.hash.replace("#","");VIEW=["all","auto","skills","music","maker","refs",...BRANDS.map(b=>b.id)].includes(h)?h:(h==="issues"||h==="publish"||h==="activity"?VIEW:"all");
   if(["issues","publish","activity"].includes(h))return;render(true);window.scrollTo({top:0,behavior:"smooth"})}
@@ -844,7 +879,7 @@ $("#refresh").onclick=()=>{$("#liveTxt").textContent="갱신 중";load()};
 setInterval(()=>{if(!document.hidden)load()},45000);setInterval(tick,1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-lastOk>30000)load()});
 VIEW=(location.hash.replace("#","")||"all");
-if(KEY)load();else{$("#gate").hidden=false}
+if(KEY){showApp();$("#liveTxt").textContent="불러오는 중";load()}else{$("#gate").hidden=false}
 </script>
 </body>
 </html>
