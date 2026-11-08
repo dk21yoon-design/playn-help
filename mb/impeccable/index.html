@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Impeccable 프롬프트 모음 · AI 문방구</title>
+<meta name="description" content="AI 문방구 SKILL INDEX No.01. 디자인 점검 스킬 Impeccable 설치부터 바로 붙여 쓰는 프롬프트, 명령어 6개, 점검 명령까지 한 장에 모았어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main>
+<p class="brand"><i></i>AI 문방구 · SKILL INDEX No.01</p>
+<h1>AI가 만든 티를 거르는<br><em>Impeccable</em> 프롬프트 모음</h1>
+<p class="lead">댓글로 신청해주셔서 고마워요. 설치부터 바로 붙여 쓰는 문장까지 이 페이지에 다 있어요. 버튼을 누르면 복사되고, 아래 버튼으로 한 파일에 받아갈 수도 있어요.</p>
+<button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button>
+
+<h2><b>STEP</b>설치 3단계</h2>
+<ol class="steps">
+<li><strong>프로젝트 폴더에서 설치</strong><div class="copy" data-c>npx impeccable install<button type="button">복사</button></div></li>
+<li><strong>클로드 코드 다시 열기</strong><p class="lead" style="font-size:15px">설치 중에 자동 점검(hook)을 켤지 물어보면 켜두세요. 수정할 때마다 알아서 점검해줘요.</p></li>
+<li><strong>처음 한 번 초기 설정</strong><div class="copy" data-c>/impeccable init<button type="button">복사</button></div><p class="lead" style="font-size:15px;margin-top:8px">내 서비스가 누구를 위한 건지 몇 가지 묻고 PRODUCT.md로 정리해요. 이후 명령은 전부 이 파일을 읽고 움직여요.</p></li>
+</ol>
+
+<h2><b>PROMPT</b>상황별로 붙여 쓰기</h2>
+<div class="card"><h3>지금 페이지가 어디서 본 것 같을 때</h3><p>점수 매긴 리뷰와 먼저 고칠 순서를 받아요.</p><div class="copy" data-c>/impeccable critique 첫 화면(히어로 섹션)<button type="button">복사</button></div></div>
+<div class="card"><h3>올리기 전에 마지막 점검</h3><p>접근성·성능·반응형을 급한 순서(P0~P3)로 정리해줘요.</p><div class="copy" data-c>/impeccable audit 이 페이지 전체<button type="button">복사</button></div></div>
+<div class="card"><h3>너무 밋밋할 때</h3><div class="copy" data-c>/impeccable bolder 가격표 카드<button type="button">복사</button></div></div>
+<div class="card"><h3>너무 시끄럽고 정신없을 때</h3><div class="copy" data-c>/impeccable quieter 메인 페이지<button type="button">복사</button></div></div>
+<div class="card"><h3>폰트·글자 크기가 엉망일 때</h3><div class="copy" data-c>/impeccable typeset 본문과 제목<button type="button">복사</button></div></div>
+<div class="card"><h3>마무리 손질</h3><div class="copy" data-c>/impeccable polish 예약 섹션<button type="button">복사</button></div></div>
+<div class="card"><h3>처음부터 새로 만들 때</h3><p>요청에 업종·대상·분위기를 같이 적으면 결과가 좋아져요.</p><div class="copy" data-c>/impeccable 연남동 동네 빵집 랜딩 페이지 만들어줘. 아침에 굽고 오후 3시면 품절되는 가게라는 느낌이 첫 화면에 보이게. 다 만들면 npx impeccable detect로 점검해서 걸린 건 고쳐줘.<button type="button">복사</button></div></div>
+
+<h2><b>TIP</b>잘 쓰는 법</h2>
+<div class="card"><h3>대상은 좁게</h3><p>"홈페이지 전체"보다 "가격표 카드", "첫 화면"처럼 한 부분을 집어줄수록 결과가 좋아요.</p></div>
+<div class="card"><h3>코드 없이 점검만</h3><p>터미널에서 주소만 넣어도 돼요. 크롬 확장 프로그램으로 아무 사이트나 열어 점검할 수도 있어요.</p><div class="copy" data-c>npx impeccable detect https://내사이트주소<button type="button">복사</button></div></div>
+<div class="card"><h3>브랜드 폰트가 걸릴 때</h3><p>일부러 쓰는 폰트라면 예외로 등록하면 돼요.</p><div class="copy" data-c>npx impeccable ignores add-value overused-font Inter --reason "Brand font"<button type="button">복사</button></div></div>
+
+<h2><b>CMD</b>자주 쓸 명령 6개</h2>
+<div class="grid">
+<div class="card cmd"><small>REVIEW</small><code>critique</code><p>점수 매긴 UX 리뷰</p></div>
+<div class="card cmd"><small>REVIEW</small><code>audit</code><p>접근성·성능·반응형 점검</p></div>
+<div class="card cmd"><small>FINISH</small><code>polish</code><p>올리기 전 마지막 다듬기</p></div>
+<div class="card cmd"><small>STEER</small><code>bolder</code><p>밋밋한 화면을 과감하게</p></div>
+<div class="card cmd"><small>STEER</small><code>quieter</code><p>시끄러운 화면을 차분하게</p></div>
+<div class="card cmd"><small>STEER</small><code>typeset</code><p>폰트·크기·위계 정리</p></div>
+</div>
+
+<footer>출처: <a href="https://github.com/pbakaus/impeccable" rel="noopener">github.com/pbakaus/impeccable</a> (MIT) · 정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a><br>다음 스킬도 받아보려면 팔로우해두세요.</footer>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['Impeccable 프롬프트 모음 · AI 문방구 (@ai.munbanggu)','출처 github.com/pbakaus/impeccable',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impeccable_prompts_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
