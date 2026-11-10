@@ -1,0 +1,122 @@
+{
+ "date": "2026-11-10",
+ "series": "롤드컵 데일리",
+ "title": "W14 [롤드컵 데일리] 젠지 6:0 BLG 6:1, 결승 11/15(일) 새벽 4시 어디서 볼래",
+ "publish_at": "2026-11-10T09:50:00Z",
+ "status": "ready",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-09_blg-t1/blg_victory.jpg",
+  "GEN.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-08_gen-ig/logo_GEN.png",
+  "BLG.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-09_blg-t1/logo_BLG.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "pill": "결승 볼 곳 아직 못 정한 사람 필독",
+   "title": "젠지 [6:0]\nBLG 6:1\n누가 이겨{?}",
+   "photo": "cover.jpg",
+   "pos": "center 40%",
+   "cap": "8강·4강 세트 스코어 · 결승 *11/15(일) 새벽 4시*\n넘겨보기 →"
+  },
+  {
+   "type": "list",
+   "title": "결승까지\n[이렇게] 왔다",
+   "items": [
+    [
+     "8강",
+     "젠지 3:0 LYON",
+     "3세트 노데스 에이스로 마무리"
+    ],
+    [
+     "4강",
+     "젠지 3:0 IG",
+     "3세트 캐니언 대지 용 스틸 → 역전"
+    ],
+    [
+     "8강",
+     "BLG 3:0 DK",
+     "세 세트 다 가져감"
+    ],
+    [
+     "4강",
+     "BLG 3:1 T1",
+     "T1 4연패 도전을 끝낸 팀"
+    ]
+   ],
+   "size": 72
+  },
+  {
+   "type": "next",
+   "title": "토요일 밤 새면\n[새벽 4시] 결승",
+   "matches": [
+    {
+     "date": "11/15(일) 새벽 4시 · 결승",
+     "a": {
+      "logo": "GEN.png",
+      "name": "Gen.G"
+     },
+     "b": {
+      "logo": "BLG.png",
+      "name": "BLG"
+     },
+     "note": "젠지는 토너먼트 *무패* · BLG는 T1 잡고 올라옴",
+     "hot": true
+    }
+   ],
+   "chips": [
+    "🌙 토요일 나이트로 밤새기",
+    "✅ 픽은 11/14(토) 밤 11:59까지",
+    "💸 지금 찍으면 5만원"
+   ]
+  },
+  {
+   "type": "steps",
+   "title": "결승 단관\n[3단계]면 끝",
+   "steps": [
+    [
+     "예약",
+     "11/14(토) 나이트·통대관",
+     "playn.kr에서 홍대루프탑 · 연남루프탑 · 연트럴파크"
+    ],
+    [
+     "픽",
+     "체크인 때 우승팀 1개",
+     "젠지 or BLG · 그룹당 1번"
+    ],
+    [
+     "가입",
+     "팀원 전원 N CREW (무료)",
+     "맞히면 결승 뒤 7일 안에 송금"
+    ]
+   ],
+   "stats": [
+    [
+     "픽 마감",
+     "11/14"
+    ],
+    [
+     "결승",
+     "11/15"
+    ],
+    [
+     "페이백",
+     "*5만원*"
+    ]
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "새벽 4시 결승\n[다섯 명] 모이면\n어디서 봐{?}",
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "10/12~11/14 나이트·통대관 · 체크인 때 1팀 찍기\n팀원 전원 N CREW · *지금 찍으면 5만원*",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "롤드컵 결승 젠지 vs BLG 어디서 볼래? 젠지는 8강·4강 6:0, BLG는 6:1로 올라왔어요. 결승은 11/15(일) 새벽 4시예요 🏆\n\n✔ 젠지: 8강 LYON 3:0 · 4강 IG 3:0\n✔ BLG: 8강 DK 3:0 · 4강 T1 3:1\n✔ 결승 11/15(일) 새벽 4시 (한국시간)\n✔ 우승팀 픽은 11/14(토) 밤 11:59까지 · 지금 찍으면 5만원\n\n토요일 나이트로 들어와서 밤새 놀다가 결승 같이 봐요.\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽한 팀은 10만원 · 지금은 5만원 · 결승 뒤 7일 안에 송금\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LCK 공식 유튜브 「BLG vs T1 매치 하이라이트 | 4강 | 2026 월드 챔피언십」 장면\n경기 기록·대진: GGRecon · Game Over News · EsportNow\n일정: LoL Esports 공식 일정 기준 (한국시간 환산)\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "결승 우승은 누구? 번호로 남겨줘 👇\n1 젠지  2 BLG\n토요일 밤 같이 밤샐 친구도 태그해줘"
+}
