@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>클로드 필수 스킬 5 설치·프롬프트 · AI 문방구</title>
+<meta name="description" content="AI 문방구가 실제로 쓰는 클로드 스킬 5개. im-not-ai, frontend-design, Impeccable, Claude in Chrome, skill-creator 설치 명령과 바로 붙여 쓰는 프롬프트를 모았어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main>
+<p class="brand"><i></i>AI 문방구 · SKILL 5</p>
+<h1>클로드에 먼저 깔아야 할<br><em>스킬 5개</em></h1>
+<p class="lead">댓글로 신청해주셔서 고마워요. 저희가 실제로 쓰는 스킬만 골랐어요. 설치 명령은 클로드 코드에 그대로 붙여 넣으면 되고, 아래 버튼으로 한 파일에 받아갈 수도 있어요.</p>
+<button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button>
+<h2><b>01</b>im-not-ai</h2><div class="card"><h3>한국어 글에서 AI 티 지우기</h3><p>번역투, 뻔한 AI 표현, 쉼표 많은 문장을 찾아 사람이 쓴 문장으로 고쳐요. 캡션·블로그·대본 마지막 손질에 써요.</p></div><div class="card"><h3>설치</h3><div class="copy" data-c>/plugin marketplace add epoko77-ai/im-not-ai<button type="button">복사</button></div><div class="copy" data-c>/plugin install humanize-korean@im-not-ai<button type="button">복사</button></div></div><div class="card"><h3>캡션 다듬기</h3><div class="copy" data-c>/humanize-korean 아래 인스타 캡션에서 AI 티 나는 부분만 고쳐줘. 숫자와 가게 이름은 그대로 둬.<button type="button">복사</button></div></div><div class="card"><h3>말로 시켜도 돼요</h3><div class="copy" data-c>이 글 AI스러움 없애줘<button type="button">복사</button></div></div><p class="lead" style="font-size:13px;margin-top:-4px">출처 github.com/epoko77-ai/im-not-ai</p><h2><b>02</b>frontend-design</h2><div class="card"><h3>AI 티 안 나는 화면 디자인</h3><p>앤트로픽 공식 스킬이에요. 다 비슷하게 나오던 랜딩 페이지에 업종에 맞는 폰트·색·배치를 먼저 정하고 만들어요.</p></div><div class="card"><h3>설치</h3><div class="copy" data-c>/plugin marketplace add anthropics/claude-plugins-official<button type="button">복사</button></div><div class="copy" data-c>/plugin install frontend-design@claude-plugins-official<button type="button">복사</button></div></div><div class="card"><h3>새로 만들 때</h3><div class="copy" data-c>연남동 동네 빵집 랜딩 페이지 만들어줘. 아침에 굽고 오후 3시면 품절되는 가게라는 느낌이 첫 화면에 보이게. 흔한 보라색 그라데이션은 쓰지 마.<button type="button">복사</button></div></div><div class="card"><h3>있는 화면 바꿀 때</h3><div class="copy" data-c>지금 첫 화면이 템플릿 같아. 업종에 맞게 폰트와 색부터 다시 정하고 고쳐줘.<button type="button">복사</button></div></div><p class="lead" style="font-size:13px;margin-top:-4px">출처 anthropics/claude-plugins-official</p><h2><b>03</b>Impeccable</h2><div class="card"><h3>만든 화면 점검하고 순서대로 고치기</h3><p>대비·글자 크기·반응형·AI 티를 점검해서 급한 순서로 정리해줘요. 저희 사이트는 17개 걸리던 게 5개로 줄었어요.</p></div><div class="card"><h3>설치</h3><div class="copy" data-c>npx impeccable install<button type="button">복사</button></div><div class="copy" data-c>/impeccable init<button type="button">복사</button></div></div><div class="card"><h3>올리기 전 점검</h3><div class="copy" data-c>/impeccable audit 이 페이지 전체<button type="button">복사</button></div></div><div class="card"><h3>코드 없이 주소만</h3><div class="copy" data-c>npx impeccable detect https://내사이트주소<button type="button">복사</button></div></div><p class="lead" style="font-size:13px;margin-top:-4px">출처 github.com/pbakaus/impeccable</p><h2><b>04</b>Claude in Chrome</h2><div class="card"><h3>브라우저 대신 조작</h3><p>내 크롬을 열어 검색·클릭·자료 수집을 대신해요. 로그인된 사이트도 그대로 써요. 사진 모아줘 한마디에 144장을 모아왔어요.</p></div><div class="card"><h3>설치</h3><div class="copy" data-c>크롬 웹스토어에서 &#x27;Claude&#x27; 확장 설치 후 로그인<button type="button">복사</button></div><div class="copy" data-c>claude --chrome<button type="button">복사</button></div></div><div class="card"><h3>자료 모으기</h3><div class="copy" data-c>언스플래시에서 &#x27;빈티지 성냥갑&#x27; 세로 사진 8장 찾아서 링크랑 같이 표로 정리해줘.<button type="button">복사</button></div></div><div class="card"><h3>반복 입력</h3><div class="copy" data-c>contacts.csv 한 줄씩 읽어서 고객관리 사이트에 연락처로 입력해줘.<button type="button">복사</button></div></div><p class="lead" style="font-size:13px;margin-top:-4px">출처 code.claude.com/docs/en/chrome</p><h2><b>05</b>skill-creator</h2><div class="card"><h3>스킬 만드는 스킬</h3><p>매일 하는 작업을 한 번 설명하면 SKILL.md로 만들어줘요. 다음부터는 한마디로 같은 방식으로 일해요.</p></div><div class="card"><h3>설치</h3><div class="copy" data-c>/plugin marketplace add anthropics/claude-plugins-official<button type="button">복사</button></div><div class="copy" data-c>/plugin install skill-creator@claude-plugins-official<button type="button">복사</button></div></div><div class="card"><h3>반복 작업을 스킬로</h3><div class="copy" data-c>방금 한 카드뉴스 작업 과정을 스킬로 만들어줘. 다음엔 &#x27;카드뉴스 만들어줘&#x27; 한마디로 같은 순서로 하게.<button type="button">복사</button></div></div><div class="card"><h3>있는 스킬 손보기</h3><div class="copy" data-c>이 스킬이 너무 자주 켜져. 설명을 고쳐서 카드뉴스 얘기할 때만 쓰이게 해줘.<button type="button">복사</button></div></div><p class="lead" style="font-size:13px;margin-top:-4px">출처 anthropics/claude-plugins-official</p><h2><b>TIP</b>잘 쓰는 법</h2><div class="card"><h3>많이 까는 것보다 하나씩</h3><p>지금 시간을 제일 많이 쓰는 작업부터 하나 깔아서 써보세요. 설치 후에는 클로드 코드를 새로 열어야 스킬이 잡혀요.</p></div>
+<footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a><br>다음 스킬도 받아보려면 팔로우해두세요.</footer>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['클로드 필수 스킬 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='claude_skills5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
