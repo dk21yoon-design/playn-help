@@ -60,3 +60,8 @@ body{background:#000;font-family:Pretendard,sans-serif;color:#F5F3FF;word-break:
 .cap em{font-style:normal;color:var(--lamp)}
 .mc p em{font-style:normal;color:#fff;font-weight:800}
 .stats b em{font-style:normal;color:var(--green)}
+
+/* 2026-11-12 레퍼런스 랩 반영 (옵션, 기본 꺼짐) */
+.t.narrow{font-family:Pretendard,sans-serif;font-weight:900;letter-spacing:-.045em;line-height:1.08;transform:scaleX(.86);transform-origin:left top;width:116.3%}
+.t.narrow .hl{padding:.02em .14em 0;line-height:1.02}
+.mast{display:flex;justify-content:space-between;font-family:Pretendard,sans-serif;font-weight:900;font-size:28px;letter-spacing:.04em;color:var(--red);padding-bottom:14px;border-bottom:3px solid var(--red);margin-bottom:30px}

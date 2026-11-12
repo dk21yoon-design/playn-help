@@ -1,0 +1,131 @@
+{
+ "date": "20261112_picks",
+ "series": "롤드컵 픽 현황",
+ "title": "P29 롤드컵 픽 현황 결승 D-3",
+ "publish_at": "2099-01-01T00:00:00Z",
+ "status": "draft",
+ "assets": {
+  "cover.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-06_BLG-DK/g3_blg_cams.jpg",
+  "GEN.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-08_gen-ig/logo_GEN.png",
+  "BLG.png": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/worlds_frames/2026-11-09_blg-t1/logo_BLG.png",
+  "lounge.jpg": "https://bjrgtoyjrggxmdexnwib.supabase.co/storage/v1/object/public/playn-media/promo/store/lounge.jpg"
+ },
+ "store_photos": [
+  "lounge.jpg"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "masthead": [
+    "PICK REPORT",
+    "FINAL · D-3"
+   ],
+   "pill": "결승 우승팀 아직 못 정한 사람 필독",
+   "title": "결승 픽\n아직 [동점]\n누가 앞설래{?}",
+   "size": 100,
+   "photo": "cover.jpg",
+   "pos": "center 70%",
+   "photo_top": 800,
+   "cap": "T1 픽은 다 날아갔고 남은 건 젠지·BLG\n지금 찍으면 *5만원* · 넘겨보기 →"
+  },
+  {
+   "type": "list",
+   "title": "살아남은 픽\n[2팀]만 남았다",
+   "size": 80,
+   "items": [
+    [
+     "생존",
+     "Gen.G",
+     "토너먼트 6:0 · 젠지 찍은 손님 아직 생존"
+    ],
+    [
+     "생존",
+     "BLG",
+     "지난 회차 뒤로 첫 픽이 들어옴 · 젠지와 동점"
+    ],
+    [
+     "날아간 픽",
+     "T1",
+     "손님 픽 대부분 · 사장님 픽도 여기"
+    ],
+    [
+     "날아간 픽",
+     "나머지 16팀",
+     "결승 못 간 팀은 전부 탈락"
+    ]
+   ]
+  },
+  {
+   "type": "steps",
+   "title": "동점 깨는 건\n[네 픽]",
+   "size": 84,
+   "steps": [
+    [
+     "예약",
+     "11/14(토) 나이트·통대관",
+     "홍대루프탑 · 연남루프탑 · 연트럴파크"
+    ],
+    [
+     "픽",
+     "체크인 때 젠지 or BLG",
+     "그룹당 1번 · 11/14 밤 11:59 마감"
+    ],
+    [
+     "송금",
+     "맞히면 결승 뒤 7일 안",
+     "팀원 전원 N CREW 가입이면"
+    ]
+   ],
+   "stats": [
+    [
+     "지금 픽",
+     "*5만원*"
+    ],
+    [
+     "픽 마감",
+     "11/14"
+    ],
+    [
+     "결승",
+     "11/15"
+    ]
+   ]
+  },
+  {
+   "type": "next",
+   "title": "결승은\n[일요일 새벽 4시]",
+   "size": 80,
+   "matches": [
+    {
+     "date": "11/15(일) 새벽 4시 · 결승",
+     "a": {
+      "logo": "GEN.png",
+      "name": "Gen.G"
+     },
+     "b": {
+      "logo": "BLG.png",
+      "name": "BLG"
+     },
+     "hot": true,
+     "note": "뉴욕 바클레이스 센터 · 5판 3선승"
+    }
+   ],
+   "chips": [
+    "🌙 토요일 나이트로 밤새기",
+    "✅ 픽은 11/14 밤까지",
+    "💸 맞히면 5만원"
+   ]
+  },
+  {
+   "type": "cta",
+   "title": "동점 깨러\n[토요일 밤]\n올 사람{?}",
+   "size": 94,
+   "photo": "lounge.jpg",
+   "cap": "게이밍 PC 5대 · 큰 화면 · 루프탑",
+   "line": "10/12~11/14 나이트·통대관 · 체크인 때 1팀 찍기\n팀원 전원 N CREW · *지금 찍으면 5만원*",
+   "url": "playn.kr/worlds"
+  }
+ ],
+ "caption": "결승 픽 동점 깰 친구 태그 🏆 롤드컵 2026 결승 젠지 vs BLG, 플레이앤 손님 픽 현황 D-3\n4명이 모이면 플레이앤에서 → 프로필 링크\n\n✔ T1 픽은 4강에서 전부 날아갔어요 (사장님 픽 포함)\n✔ 남은 픽은 젠지와 BLG, 지금은 동점이에요\n✔ 지난 회차 뒤로 BLG에 첫 픽이 들어왔어요\n✔ 픽은 11/14(토) 밤 11:59까지 · 지금 찍으면 5만원\n\n📅 결승 (한국 시간)\n11/15(일) 새벽 4시 젠지 vs BLG · 뉴욕 바클레이스 센터\n토요일 나이트로 밤새고 같이 봐요\n\n✅ 참여 방법\n1. 10/12~11/14 나이트·통대관 이용 (홍대루프탑 · 연남루프탑 · 연트럴파크)\n2. 체크인 때 우승팀 1개 선택 (그룹당 1번)\n3. 팀원 전원 N CREW 가입 (무료)\n💸 11/3까지 픽한 팀은 10만원 · 지금 찍으면 5만원 · 결승 뒤 7일 안에 송금\n\n👉 playn.kr/worlds (프로필 링크)\n\n—\n출처\n영상·이미지: LoL Esports 공식 중계 「BLG vs DK 8강 | 2026 월드 챔피언십」 장면\n경기 기록·대진: LoL Esports 공식 일정 · Strafe · Stevivor\n일정: LoL Esports 공식 일정 기준 (한국 시간 환산)\n매장 사진: 플레이앤\n이 이벤트는 플레이앤이 자체 진행합니다. 이 콘텐츠는 Riot Games의 공식 콘텐츠가 아니며 Riot Games와 관련이 없습니다.\n\n#롤드컵 #롤드컵2026 #롤드컵단관 #게임파티룸 #홍대파티룸",
+ "first_comment": "동점 깨기 투표 👇\n1 젠지  2 BLG\n같이 찍을 친구도 태그해줘"
+}

@@ -40,10 +40,17 @@ def photo(src, top_px, bottom_px, cap=None, pos="center", capsize=40):
     c = f'<div class="cap" style="font-size:{capsize}px">{esc(cap)}</div>' if cap else ""
     return f'<div class="photo" style="top:{top_px}px;bottom:{bottom_px}px;background-image:url({src});background-position:{pos}">{c}</div>'
 
+def masthead(s):  # 2026-11-12 레퍼런스 랩(dzip 「TREND FONT 01」) 잡지형 머리줄: 라벨 · 번호 + 가는 빨간 선
+    m = s.get("masthead")
+    if not m: return ""
+    return f'<div class="mast"><span>{esc(m[0])}</span><span>{esc(m[1]) if len(m) > 1 else ""}</span></div>'
+
 def render_cover(s, i, n, series):
-    return (top(series) + '<div style="position:absolute;left:84px;right:84px;top:168px">'
+    # title_font: "narrow" = 좁힌 프리텐다드(레퍼런스 랩 @lilsucone, 가로 좁게·세로 길쭉하게). 기본은 잘난체
+    tf = " narrow" if s.get("title_font") == "narrow" else ""
+    return (top(series) + '<div style="position:absolute;left:84px;right:84px;top:168px">' + masthead(s)
             + (f'<span class="pill">{esc(s["pill"])}</span>' if s.get("pill") else "")
-            + f'<h1 class="t" style="font-size:{s.get("size",104)}px;margin-top:36px">{esc(s["title"])}</h1></div>'
+            + f'<h1 class="t{tf}" style="font-size:{s.get("size",104)}px;margin-top:36px">{esc(s["title"])}</h1></div>'
             + photo(s["photo"], s.get("photo_top", 735), 132, s.get("cap"), s.get("pos", "center"))
             + foot(i, n))
 
