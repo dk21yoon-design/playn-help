@@ -65,6 +65,7 @@
     <label class="t">바베큐 사용</label>
     <div class="ch"><label><input type="radio" name="bq" value="1">사용해요</label><label><input type="radio" name="bq" value="0" checked>안 써요</label></div>
     <p class="hint" id="bbqCpHint" hidden></p>
+    <p class="hint" id="bbqNvHint" hidden>🍖 네이버 예약은 바베큐를 따로 결제할 수 없어요. 바베큐 먹은 인원 × 1만원이 퇴실 정산 때 <b>보증금에서 차감</b>돼요.</p>
     <label class="t">예약하신 곳</label>
     <div class="ch"><label><input type="radio" name="pf" value="스페이스클라우드" checked>스페이스클라우드</label><label><input type="radio" name="pf" value="네이버">네이버</label><label><input type="radio" name="pf" value="홈페이지·기타">홈페이지·기타</label></div>
     <label class="t">플레이앤은 어떻게 알게 되셨어요? <small style="font-weight:600;color:#5B5790">(필수 · 하나만 골라주세요)</small></label>
@@ -101,7 +102,8 @@
     <div id="bbqBox" hidden>
       <label class="t">바베큐 (1인 1만원)</label>
       <div class="it"><div><b>바베큐 먹은 인원</b><small>실제 이용 인원 전체</small></div><div class="st" data-id="__bbq"><button type="button">−</button><span>0</span><button type="button">+</button></div></div>
-      <div class="ch"><label><input type="radio" name="bp" value="platform">스페이스클라우드에서 결제함</label><label><input type="radio" name="bp" value="deposit" checked>결제 안 함 (보증금 차감)</label></div>
+      <div class="ch" id="bpBox"><label><input type="radio" name="bp" value="platform">스페이스클라우드에서 결제함</label><label><input type="radio" name="bp" value="deposit" checked>결제 안 함 (보증금 차감)</label></div>
+      <p class="hint" id="bbqNvOut" hidden>네이버 예약은 바베큐를 따로 결제할 수 없어서 먹은 인원 × 1만원이 보증금에서 차감돼요.</p>
       <div class="it" id="bbqPaidRow" hidden><div><b>스클에서 결제한 인원</b><small>예약 내역의 바베큐 인원 · 호스트가 확인해요</small></div><div class="st" data-id="__bbqpaid"><button type="button">−</button><span>0</span><button type="button">+</button></div></div>
       <p class="hint" id="bbqWarn" hidden></p>
     </div>
@@ -155,6 +157,7 @@ async function load(){
   if(D.exempt){$("depHint").hidden=true;$("exemptBox").hidden=false;$("exemptBox").innerHTML="👑 N CREW 레전드 멤버라 <b>보증금 없이</b> 이용하세요. 입금자명 칸엔 이름만 적어주시면 돼요. 퇴실 후 쓰신 물품 금액만 정산해요."}
   else if(D.crew&&D.crew.lv>=2){$("exemptBox").hidden=false;$("exemptBox").textContent=(D.checkin&&D.checkin.review==="drink")?"N CREW 혜택: 물 2병 무료 (음료는 후기 이벤트로 받아서 1회 방문 음료 2병 한도 적용)":"N CREW 혜택: 음료 2병 + 물 2병은 정산에서 자동으로 빠져요."}
   if(D.prefill&&!D.checkin){const f=D.prefill;if(f.headcount)$("hc").value=f.headcount;if(f.depositor)$("dp").value=f.depositor;if(f.review){const r=document.querySelector(`[name=rv][value="${f.review}"]`);if(r)r.checked=true}if(f.bbq!=null){const r=document.querySelector(`[name=bq][value="${f.bbq?1:0}"]`);if(r)r.checked=true}const pr=document.querySelector(`[name=pf][value="${f.platform}"]`);if(pr)pr.checked=true;if(f.headcount)$("hc").oninput&&setTimeout(()=>$("hc").oninput(),0)}
+  const nvH=()=>{const b=document.querySelector("[name=bq]:checked"),p=document.querySelector("[name=pf]:checked");$("bbqNvHint").hidden=!(b&&b.value==="1"&&p&&p.value==="네이버")};document.querySelectorAll("[name=bq],[name=pf]").forEach(x=>x.addEventListener("change",nvH));setTimeout(nvH,0);
   if(D.platform&&!D.checkin){const v={naver:"네이버",site:"홈페이지·기타",spacecloud:"스페이스클라우드"}[D.platform];const r=document.querySelector(`[name=pf][value="${v}"]`);if(r)r.checked=true}
   $("accCp").onclick=async()=>{try{await navigator.clipboard.writeText(D.account.replace(/\s*\(.*\)/,""));$("accCp").textContent="복사됨"}catch(e){}};
   $("hc").oninput=()=>{const n=+$("hc").value,b=D.rules.base_people,ex=Math.max(0,n-b),dp=(D.rules.items.find(x=>x.id==="disposable")||{price:0}).price;
@@ -198,7 +201,7 @@ function renderOut(){
   const dsync=()=>document.querySelectorAll("#dispTg button").forEach(b=>b.classList.toggle("on",(b.dataset.v==="1")===!!Q.disposable));dsync();
   document.querySelectorAll("#dispTg button").forEach(b=>b.onclick=()=>{Q.disposable=b.dataset.v==="1"?hc:0;dsync();calc()});
   const ex=D.checkin.headcount-D.rules.base_people;$("extraBox").hidden=ex<=0;$("exN").textContent=ex;
-  $("bbqBox").hidden=!D.checkin.bbq;$("rvBox").hidden=D.checkin.review==="none";$("drinkNote").hidden=D.checkin.review!=="drink";
+  $("bbqBox").hidden=!D.checkin.bbq;if(D.platform==="naver"){document.querySelector("[name=bp][value=deposit]").checked=true;$("bpBox").hidden=true;$("bbqNvOut").hidden=false}$("rvBox").hidden=D.checkin.review==="none";$("drinkNote").hidden=D.checkin.review!=="drink";
   document.querySelectorAll("#fout .st").forEach(s=>{const id=s.dataset.id,[m,v,p]=s.children;
     m.onclick=()=>{Q[id]=Math.max(0,(Q[id]||0)-1);v.textContent=Q[id];calc()};p.onclick=()=>{Q[id]=Math.min(99,(Q[id]||0)+1);v.textContent=Q[id];calc()}});
   document.querySelectorAll("[name=ex],[name=bp]").forEach(r=>r.onchange=calc);calc()}
