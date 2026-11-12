@@ -179,7 +179,7 @@ async function load(){
   if(!D.member){$("crBox").hidden=false;$("crJ").onchange=()=>{$("crMl").hidden=!$("crJ").checked;if(!$("crJ").checked){$("crM").checked=false;$("crN").checked=false;$("crNl").hidden=true}};$("crM").onchange=()=>{$("crNl").hidden=!$("crM").checked;if(!$("crM").checked)$("crN").checked=false}}
   if(D.status==="paid"||D.status==="submitted"||D.status==="hold"){return renderDone()}
   if(D.checkin){const c=D.checkin;$("hc").value=c.headcount;$("dp").value=c.depositor;$("bk").value=c.bank;$("ac").placeholder=c.account+" (다시 입력하면 바뀌어요)";$("ac").required=false;document.querySelectorAll("[name=fv]").forEach(x=>x.required=false);
-    document.querySelector(`[name=rv][value=${c.review}]`).checked=true;document.querySelector(`[name=bq][value="${c.bbq?1:0}"]`).checked=true;$("hc").oninput()}
+    document.querySelector(`[name=rv][value=${c.review}]`).checked=true;document.querySelector(`[name=bq][value="${c.bbq?1:0}"]`).checked=true;{const pr=c.platform&&document.querySelector(`[name=pf][value="${c.platform}"]`);if(pr)pr.checked=true}$("hc").oninput()}
   $("tabs").hidden=false;show(D.checkin&&mode!=="in"?"out":(D.checkin?mode:"in"));
 }
 function teamBox(){if(!D.group)return;const c=D.crew||{joined:0,need:0},url=`https://playn.kr/team/?g=${D.group}`;$("wTeam").hidden=false;
