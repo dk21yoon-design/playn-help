@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>클로드 코드 명령어 7 · AI 문방구</title>
+<meta name="description" content="클로드 코드에서 자주 쓰는 명령어 7개를 언제 쓰는지와 함께 정리했어요. /init, /plan, /compact, /clear, /rewind, /btw, /context.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · CMD 7</p><h1>클로드 코드<br><em>명령어 7개</em> 한 장 정리</h1><p class="lead">댓글로 신청해주셔서 고마워요. 클로드 코드 입력창에 그대로 치면 돼요. 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>/init</h2><div class="card"><h3>프로젝트 설명서(CLAUDE.md) 만들기</h3><p>폴더를 읽고 실행 방법과 규칙을 정리한 CLAUDE.md를 만들어요. 다음 대화부터 클로드가 이 파일을 먼저 읽어서 매번 설명할 필요가 없어요. 새 프로젝트를 열면 처음 한 번 하세요.</p><div class="copy" data-c>/init<button type="button">복사</button></div></div><h2><b>02</b>/plan</h2><div class="card"><h3>고치기 전에 계획부터</h3><p>바로 코드를 고치지 않고 할 일 목록을 먼저 보여줘요. 확인하고 승인하면 그때 진행해요. 큰 수정 전에 쓰면 엉뚱한 방향으로 가는 걸 막아요.</p><div class="copy" data-c>/plan 예약 페이지 날짜 선택 오류 고쳐줘<button type="button">복사</button></div></div><h2><b>03</b>/compact</h2><div class="card"><h3>긴 대화 요약해서 공간 확보</h3><p>대화가 길어져 답이 흐려질 때 지금까지 내용을 요약하고 공간을 비워요. 흐름은 그대로 이어가요. 뒤에 남길 내용을 적어도 돼요.</p><div class="copy" data-c>/compact<button type="button">복사</button></div><div class="copy" data-c>/compact 결정한 디자인 규칙과 남은 할 일 위주로 요약<button type="button">복사</button></div></div><h2><b>04</b>/clear</h2><div class="card"><h3>주제 바뀌면 새 대화</h3><p>앞 대화를 지우고 빈 상태로 시작해요. 이전 대화는 /resume 으로 다시 불러올 수 있어요. 주제가 바뀌면 이어서 쓰는 것보다 새로 여는 게 결과가 좋아요.</p><div class="copy" data-c>/clear<button type="button">복사</button></div><div class="copy" data-c>/resume<button type="button">복사</button></div></div><h2><b>05</b>/rewind</h2><div class="card"><h3>잘못 고쳤으면 되돌리기</h3><p>대화와 코드를 이전 시점으로 되돌려요. /undo, /checkpoint 로도 열려요. 이상하게 고쳐졌을 때 손으로 되돌리지 마세요.</p><div class="copy" data-c>/rewind<button type="button">복사</button></div></div><h2><b>06</b>/btw</h2><div class="card"><h3>흐름 안 끊고 곁다리 질문</h3><p>작업 중에 잠깐 궁금한 걸 물어봐요. 이 질문과 답은 대화 기록에 남지 않아요.</p><div class="copy" data-c>/btw 아까 쓴 폰트 이름 뭐였지?<button type="button">복사</button></div></div><h2><b>07</b>/context</h2><div class="card"><h3>대화창 얼마나 찼는지 보기</h3><p>지금 맥락을 무엇이 얼마나 쓰는지 칸으로 보여줘요. 많이 찼으면 /compact 나 /clear 를 하면 돼요.</p><div class="copy" data-c>/context<button type="button">복사</button></div></div><h2><b>TIP</b>잘 쓰는 법</h2><div class="card"><p>명령어는 메시지 맨 앞에 써야 작동해요. 입력창에 / 만 치면 쓸 수 있는 명령 목록이 떠요.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['클로드 코드 명령어 7 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='claude_code_cmd7_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>

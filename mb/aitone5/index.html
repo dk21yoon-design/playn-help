@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AI 티 지우는 문장 5 · AI 문방구</title>
+<meta name="description" content="AI가 쓴 글이 티 나는 이유 5가지와 고치는 법. 번역투, 뻔한 수식어, 쉼표 긴 문장, 세 개 짝 맞추기, 결론적으로 마무리를 전후 예시와 프롬프트로 정리했어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 문장 5</p><h1>AI 티 나는 문장<br><em>5가지 고치는 법</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 캡션이나 블로그를 다 쓴 뒤 아래 순서대로 한 번씩 훑어보세요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>번역투</h2><div class="card"><h3>~을 통해 · ~에 있어서 · ~하는 것</h3><p>영어를 옮긴 듯한 말투예요. 주어와 동사만 남기고 바로 말하면 돼요.<br>전: 이번 행사를 통해 새로운 경험을 드리는 것에 있어서 최선을 다하겠습니다.<br>후: 이번 행사에서 처음 오신 분께 음료 한 잔 드려요.</p><div class="copy" data-c>아래 글에서 &quot;~을 통해&quot;, &quot;~에 있어서&quot;, &quot;~하는 것&quot; 같은 번역투를 찾아 바로 말하는 문장으로 고쳐줘. 숫자와 가게 이름은 그대로 둬.<button type="button">복사</button></div></div><h2><b>02</b>뻔한 수식어</h2><div class="card"><h3>다양한 · 혁신적인 · 최적의 · 특별한</h3><p>어디에나 붙는 말이라 아무 정보가 없어요. 숫자나 구체적인 사실로 바꿔요.<br>전: 다양한 메뉴와 최적의 공간에서 특별한 시간을 보내세요.<br>후: 메뉴는 열네 가지예요. 창가 자리는 네 테이블이에요.</p><div class="copy" data-c>아래 글에서 다양한, 혁신적인, 최적의, 특별한 같은 수식어를 지우고 그 자리에 들어갈 구체적인 숫자나 사실을 나한테 물어봐줘.<button type="button">복사</button></div></div><h2><b>03</b>쉼표로 길게 이은 문장</h2><div class="card"><h3>~하며, ~하고, ~이며,</h3><p>연결어미 뒤 쉼표로 문장을 길게 이으면 AI 티가 나요. 두 문장으로 끊어요.<br>전: 원두를 매일 새로 볶으며, 손님 취향에 맞춰 추천해 드리고, 디저트도 함께 준비하고 있습니다.<br>후: 원두는 매일 아침 볶아요. 취향을 말해주시면 골라드려요.</p><div class="copy" data-c>아래 글에서 &quot;~하며,&quot;, &quot;~하고,&quot; 처럼 쉼표로 이어진 문장을 짧은 문장 두세 개로 끊어줘.<button type="button">복사</button></div></div><h2><b>04</b>세 개씩 짝 맞추기</h2><div class="card"><h3>빠르고, 쉽고, 편하게</h3><p>셋을 맞춘 리듬은 AI가 특히 좋아해요. 제일 중요한 하나만 남기고 구체적으로 써요.<br>전: 빠르고, 쉽고, 편하게 예약하세요.<br>후: 예약은 버튼 한 번이면 끝나요.</p><div class="copy" data-c>아래 글에서 세 개를 나란히 늘어놓은 표현을 찾아서 제일 중요한 하나만 남기고 구체적으로 바꿔줘.<button type="button">복사</button></div></div><h2><b>05</b>결론적으로 마무리</h2><div class="card"><h3>결론적으로 · 요약하자면 · 큰 변화를 만듭니다</h3><p>마지막에 교훈으로 정리하는 문장은 지워요. 실제 결과 한 줄로 끝내요.<br>전: 결론적으로, 작은 습관이 큰 변화를 만듭니다.<br>후: 저는 이 방법으로 아침 준비 시간이 10분 줄었어요.</p><div class="copy" data-c>아래 글의 마지막 요약 문장을 지우고 내가 실제로 겪은 결과 한 줄로 끝내줘. 결과가 없으면 나한테 물어봐줘.<button type="button">복사</button></div></div><h2><b>TIP</b>잘 쓰는 법</h2><div class="card"><p>한 번에 다 고치려 하지 말고 1번부터 차례로 한 번씩 훑어보세요. 클로드 코드를 쓰면 im-not-ai 스킬로 한 번에 점검할 수도 있어요(자료실의 스킬 5 참고).</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['AI 티 지우는 문장 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ai_tone5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
