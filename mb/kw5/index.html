@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>이미지 AI 키워드 5 · AI 문방구</title>
+<meta name="description" content="같은 커피잔 사진에 단어 하나만 붙여 바꾼 이미지 AI 키워드 5개. golden hour, 85mm, flat lay, Portra 400, neon night 프롬프트 원문과 섞어 쓰는 법.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ba img{width:100%;border-radius:10px;display:block}.ba small{display:block;font-size:12px;color:var(--mute);margin-top:4px}</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 키워드 5</p><h1>단어 하나로 달라지는<br><em>이미지 AI 키워드 5</em></h1>
+<p class="lead">댓글로 신청해주셔서 고마워요. 영상에 나온 사진은 전부 힉스필드(GPT Image 2.6)로 같은 커피잔 사진에 키워드만 붙여 다시 만든 결과예요. 피사체 문장 뒤에 키워드 문장을 붙이면 돼요.</p>
+<button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button>
+<h2><b>BASE</b>기준 사진 (전)</h2><div class="card"><img src="p0.jpg" alt="키워드 없이 만든 기준 커피잔 사진" style="width:100%;border-radius:10px"><div class="copy" data-c>a white ceramic coffee cup with latte on a plain wooden cafe table, simple straight-on smartphone photo, flat indoor lighting<button type="button">복사</button></div></div><h2><b>01</b>golden hour backlight</h2><div class="card"><h3>해 질 녘 역광</h3><p>빛이 뒤에서 들어와 컵 테두리와 김이 빛나요. 음식·음료 사진에 제일 무난하게 먹혀요.</p><div class="ba"><div><img src="p0.jpg" alt="키워드 전"><small>전</small></div><div><img src="p1.jpg" alt="golden hour backlight 적용 후"><small>후</small></div></div><div class="copy" data-c>golden hour backlight, warm low sun from behind, glowing rim light, long soft shadows<button type="button">복사</button></div></div><h2><b>02</b>85mm, shallow depth of field</h2><div class="card"><h3>배경 흐림</h3><p>배경이 녹아내리고 주인공만 또렷해져요. 제품 하나를 강조할 때 써요.</p><div class="ba"><div><img src="p0.jpg" alt="키워드 전"><small>전</small></div><div><img src="p2.jpg" alt="85mm, shallow depth of field 적용 후"><small>후</small></div></div><div class="copy" data-c>shot on 85mm lens, shallow depth of field f/1.8, creamy bokeh background<button type="button">복사</button></div></div><h2><b>03</b>top-down flat lay</h2><div class="card"><h3>위에서 내려다보기</h3><p>소품까지 정리된 잡지 컷이 돼요. 메뉴판·인스타 피드용으로 좋아요.</p><div class="ba"><div><img src="p0.jpg" alt="키워드 전"><small>전</small></div><div><img src="p3.jpg" alt="top-down flat lay 적용 후"><small>후</small></div></div><div class="copy" data-c>top-down flat lay, shot from directly above, neatly arranged props, editorial magazine styling<button type="button">복사</button></div></div><h2><b>04</b>shot on Kodak Portra 400</h2><div class="card"><h3>필름 색감</h3><p>필름 입자와 바랜 색이 생겨요. 감성 카페·브이로그 썸네일에 잘 맞아요.</p><div class="ba"><div><img src="p0.jpg" alt="키워드 전"><small>전</small></div><div><img src="p4.jpg" alt="shot on Kodak Portra 400 적용 후"><small>후</small></div></div><div class="copy" data-c>shot on Kodak Portra 400 35mm film, visible film grain, warm faded tones, soft light leak<button type="button">복사</button></div></div><h2><b>05</b>cinematic neon night</h2><div class="card"><h3>영화 같은 밤</h3><p>분홍·청록 네온과 비 반사로 분위기가 확 바뀌어요. 바·야간 매장 홍보에 써요.</p><div class="ba"><div><img src="p0.jpg" alt="키워드 전"><small>전</small></div><div><img src="p5.jpg" alt="cinematic neon night 적용 후"><small>후</small></div></div><div class="copy" data-c>cinematic neon night, pink and teal neon light, rain reflections, moody film still<button type="button">복사</button></div></div><h2><b>MIX</b>섞어 쓰는 법</h2><div class="card"><h3>빛 하나 + 카메라 하나</h3><p>빛(golden hour, neon)과 카메라(85mm, flat lay, film)는 서로 다른 부분을 바꿔서 같이 써도 안 부딪혀요. 빛끼리, 카메라끼리 둘을 섞으면 하나가 묻혀요.</p><div class="copy" data-c>[피사체], golden hour backlight, shot on 85mm lens, shallow depth of field<button type="button">복사</button></div><div class="copy" data-c>[피사체], top-down flat lay, shot on Kodak Portra 400 film, visible grain<button type="button">복사</button></div></div>
+<div class="card"><h3>내 사진에 입히기</h3><p>힉스필드·챗GPT에 내 사진을 올리고 "같은 구도 그대로, 아래 느낌만 바꿔줘" 뒤에 키워드를 붙이면 영상처럼 전후가 나와요.</p><div class="copy" data-c>같은 피사체와 구도는 그대로 두고 이 느낌만 바꿔줘: golden hour backlight, warm low sun from behind<button type="button">복사</button></div></div>
+<footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['이미지 AI 키워드 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='image_keywords5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
