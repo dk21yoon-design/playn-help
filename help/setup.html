@@ -2,8 +2,8 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>body{font:16px -apple-system,Pretendard,sans-serif;background:#0B0B10;color:#F2F2F7;padding:24px;max-width:480px;margin:auto}input,button{width:100%;padding:13px;font-size:16px;border-radius:12px;box-sizing:border-box}input{background:#12121A;color:#fff;border:1px solid #2A2A36;margin-top:10px}button{margin-top:12px;background:#FF2E6E;color:#fff;border:0;font-weight:800}#m{margin-top:16px;color:#3DF2FF}</style><script src="/assets/pv.js" defer></script>
 </head>
-<body><h2>Play N AI 상담사 · 키 등록</h2><p style="color:#9A9AAA">사장님 전용 화면이에요. 받은 링크로만 한 번 쓸 수 있어요.</p>
-<input id="k" type="password" placeholder="sk-ant-..." autocomplete="off"><button id="b">저장</button><div id="m"></div>
+<body><h2>Play N AI 상담사 · 키 등록</h2><p style="color:#9A9AAA">사장님 전용 화면이에요. 받은 링크로만 한 번 쓸 수 있어요.<br>무료로 쓰려면 Google AI Studio(aistudio.google.com) → Get API key 에서 받은 AIza 로 시작하는 키를 넣으세요. 키가 없어도 상담봇은 FAQ 모드로 답해요.</p>
+<input id="k" type="password" placeholder="AIza... (Gemini 무료) 또는 sk-ant-..." autocomplete="off"><button id="b">저장</button><div id="m"></div>
 <script>
 const t=new URLSearchParams(location.hash.slice(1)).get('t');
 document.getElementById('b').onclick=async()=>{const k=document.getElementById('k').value.trim();const m=document.getElementById('m');
