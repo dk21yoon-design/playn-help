@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>낙서 변신 5 · AI 문방구</title>
+<meta name="description" content="공책에 대충 그린 낙서 한 장을 점토 피규어, 수채화 그림책, 비닐 스티커, 네온사인, 자수 패치로 바꾸는 이미지 AI 프롬프트 원문과 내 그림 넣는 법.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ba img{width:100%;border-radius:10px;display:block}.ba small{display:block;font-size:12px;color:var(--mute);margin-top:4px}</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 낙서 변신 5</p><h1>대충 그린 낙서<br>→ <em>5가지 변신</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 영상 속 사진은 전부 힉스필드(GPT Image 2.6)에 공책 낙서 사진 한 장을 넣고 문장만 바꿔 만든 결과예요. 아이 그림이나 가게 캐릭터 낙서로 해보세요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>BASE</b>원본 낙서 (전)</h2><div class="card"><img src="p0.jpg" alt="원본 고양이 낙서" style="width:100%;border-radius:10px"></div><h2><b>01</b>clay figure</h2><div class="card"><h3>말랑한 3D 장난감</h3><p>점토로 빚은 피규어처럼 바뀌어요. 아이 그림으로 하면 반응이 제일 좋아요.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p1.jpg" alt="clay figure 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact doodle into a cute handmade clay figure toy with the same shape and pose, soft matte plasticine texture, pastel colors, soft studio light<button type="button">복사</button></div></div><h2><b>02</b>watercolor picture book</h2><div class="card"><h3>동화책 한 장면</h3><p>번지는 수채 물감과 배경이 같이 그려져요.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p2.jpg" alt="watercolor picture book 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact doodle into a watercolor children&#x27;s picture book illustration with the same shape and pose, soft bleeding washes, cozy background, paper texture<button type="button">복사</button></div></div><h2><b>03</b>vinyl sticker</h2><div class="card"><h3>바로 쓰는 굿즈</h3><p>흰 테두리 다이컷 스티커가 돼요. 그대로 인쇄소에 맡겨도 돼요.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p3.jpg" alt="vinyl sticker 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact doodle into a glossy die-cut vinyl sticker with the same shape and pose, bold clean outlines, flat bright colors, thick white border, no logos<button type="button">복사</button></div></div><h2><b>04</b>neon sign</h2><div class="card"><h3>벽에 걸린 간판</h3><p>가게 간판 시안으로 미리 보기 좋아요.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p4.jpg" alt="neon sign 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact doodle into a glowing neon sign with the same outline, mounted on a dark brick wall at night, realistic neon tubes and glow<button type="button">복사</button></div></div><h2><b>05</b>embroidered patch</h2><div class="card"><h3>한 땀씩 자수 패치</h3><p>실 질감이 살아 있는 와펜이 돼요.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p5.jpg" alt="embroidered patch 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact doodle into an embroidered patch with the same shape and pose, visible thread stitches, satin stitch fill, merrowed border, on denim<button type="button">복사</button></div></div><h2><b>HOW</b>내 그림으로 하는 법</h2><div class="card"><p>그림을 위에서 반듯하게 찍어 올리고 아래 문장의 [ ]만 바꾸면 돼요. "this exact doodle"과 "same shape and pose"를 넣어야 내 그림 모양이 그대로 남아요.</p><div class="copy" data-c>Turn this exact doodle into [원하는 스타일] with the same shape and pose<button type="button">복사</button></div></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['낙서 변신 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='doodle5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
