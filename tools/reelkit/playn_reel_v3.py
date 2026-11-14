@@ -54,8 +54,11 @@ spec.json 예시
       flash : true 면 정지 첫 2프레임 흰 섬광(영상 박스 안만)
   조건: at ≥ 0.1, at+len ≤ dur-0.3. 어기면 빌드 중단. 한 편에 1곳 권장(2곳 이상이면 경고만).
   옵션이 없으면 이전 버전과 같은 결과. 결과 JSON "freeze": [{"scene", "at_s"(전체 기준 초), "len"}] → qa quality_items 에 q_freeze
+- [2026-11-15 멈춤 0건 검수] 빌드 마지막에 영상 박스(1080x720, y=620)만 freezedetect(n=0.003, d=0.5)로 검사한다(reel_qa.py와 같은 기준).
+  일부러 넣은 "freeze" 구간(±0.15초)은 빼고 센다. 결과 JSON "freeze_check": {"n": 의도치 않은 멈춤 수, "spans": [[시작, 끝], ...]}
+  기본은 경고만(결과물 그대로). spec "freeze_check": "strict" → 1건이라도 있으면 빌드 중단(exit). "off" → 검사 안 함. q_freeze0 기록용
 """
-BUILDER_VERSION = 'v3.20261107'
+BUILDER_VERSION = 'v3.20261115'
 import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil, base64
 
 FPS = 30
@@ -755,4 +758,22 @@ if POP_LOG['scenes']: res_extra['caption_pop'] = POP_LOG['scenes']
 if FREEZE_LOG:
     res_extra['freeze'] = FREEZE_LOG
     if len(FREEZE_LOG) > 1: print(f'⚠️ 프리즈 {len(FREEZE_LOG)}곳: q_freeze 는 한 편에 1곳 권장', file=sys.stderr)
+# 2026-11-15 멈춤 0건 검수(freeze0): 영상 박스만 보고 의도치 않은 정지 구간을 센다
+def freeze_check(path, intended):
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-i', path, '-vf', 'crop=1080:720:0:620,freezedetect=n=0.003:d=0.5', '-an', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    st = [float(x) for x in re.findall(r'freeze_start: ([0-9.]+)', r)]
+    en = [float(x) for x in re.findall(r'freeze_end: ([0-9.]+)', r)]
+    spans = []
+    for i, a in enumerate(st):
+        b = en[i] if i < len(en) else total
+        if any(a >= f['at_s'] - 0.15 and b <= f['at_s'] + f['len'] + 0.15 for f in intended): continue
+        spans.append([round(a, 2), round(b, 2)])
+    return spans
+_fc = spec.get('freeze_check', 'warn')
+if _fc != 'off':
+    _spans = freeze_check(out, FREEZE_LOG or [])
+    res_extra['freeze_check'] = {'n': len(_spans), 'spans': _spans}
+    if _spans:
+        print(f'⚠️ 의도치 않은 멈춤 {len(_spans)}구간: {_spans} → 원본이 이어지는 구간으로 바꾸기', file=sys.stderr)
+        if _fc == 'strict': raise SystemExit(f'❌ 멈춤 검수 실패 {len(_spans)}구간: {_spans}')
 print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), 'builder': BUILDER_VERSION, **res_extra}, ensure_ascii=False))
