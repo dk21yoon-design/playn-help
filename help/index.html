@@ -66,10 +66,10 @@ add('assistant','안녕하세요! 플레이앤 '+BR[b].n+' AI 상담사예요 �
 log.appendChild(el('div','note','AI가 안내사항을 바탕으로 답해요. 보증금·환불·연장은 호스트가 확정해요.'))}
 async function send(text){text=(text||'').trim();if(!text||busy)return;busy=true;sendBtn.disabled=true;q.value='';q.style.height='';
 add('user',text);
-if(window.pnVacancy&&window.pnVacancy.re.test(text)&&!/(환불|취소|연장)/.test(text)){try{const v=await window.pnVacancy.run(text);add('assistant',v.text);msgs.push({role:'user',content:text},{role:'assistant',content:v.text});const d=el('div','chips');v.brs.forEach(br=>{const x=el('a','chip',br.replace('점','')+' 표에서 신청 →');x.href='/?branch='+encodeURIComponent(br)+'#deals';x.style.textDecoration='none';d.appendChild(x)});log.appendChild(d);scroll()}catch(e){add('assistant','빈자리 표를 불러오지 못했어요. playn.kr 첫 화면에서 확인해 주세요.')}busy=false;sendBtn.disabled=false;return}msgs.push({role:'user',content:text});const t=el('div','typing','답변 작성 중…');log.appendChild(t);scroll();
-try{const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({b,sid,messages:msgs})});const j=await r.json();t.remove();
+if(window.pnVacancy&&window.pnVacancy.re.test(text)&&!/(환불|취소|연장)/.test(text)){try{const v=await window.pnVacancy.run(text);add('assistant',v.text);msgs.push({role:'user',content:text},{role:'assistant',content:v.text});const d=el('div','chips');v.brs.forEach(br=>{const x=el('a','chip',br.replace('점','')+' 표에서 신청 →');x.href='/?branch='+encodeURIComponent(br)+'#deals';x.style.textDecoration='none';d.appendChild(x)});log.appendChild(d);scroll()}catch(e){add('assistant','빈자리 표를 불러오지 못했어요. playn.kr 첫 화면에서 확인해 주세요.')}busy=false;sendBtn.disabled=false;return}msgs.push({role:'user',content:text});const t=el('div','typing','답변 작성 중…');log.appendChild(t);scroll();const slow=setTimeout(()=>{t.textContent='조금만 기다려 주세요. 답변을 정리하고 있어요…'},6000);
+try{const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({b,sid,messages:msgs}),signal:AbortSignal.timeout?AbortSignal.timeout(25000):undefined});const j=await r.json();clearTimeout(slow);t.remove();
 const ans=j.answer||'잠시 연결이 원활하지 않아요. 호스트에게 연락 주세요.';add('assistant',ans);msgs.push({role:'assistant',content:ans});if(j.escalate)escCard(j.host||'010-8339-5818')}
-catch(e){t.remove();add('assistant','네트워크가 불안정해요. 잠시 후 다시 시도하시거나 호스트에게 연락 주세요.');escCard('010-8339-5818')}
+catch(e){clearTimeout(slow);t.remove();msgs.pop();add('assistant','답변이 늦어지고 있어요. 잠시 후 다시 물어봐 주시거나 아래 버튼으로 호스트에게 바로 연락 주세요.');escCard('010-8339-5818')}
 busy=false;sendBtn.disabled=false}
 f.onsubmit=e=>{e.preventDefault();send(q.value)};
 q.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();send(q.value)}});

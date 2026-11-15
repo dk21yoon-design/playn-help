@@ -1,4 +1,4 @@
-// playn-chat v15 (2026-11-14): 무료 운영
+// playn-chat v15.2 (2026-11-15): 무효 키 건너뛰기·AI 12초 넘으면 FAQ로 / v15 (2026-11-14): 무료 운영
 // 순서: Anthropic(키 있고 작동할 때) → Gemini 무료 등급(gemini_api_key 있을 때) → 키 없는 FAQ 엔진(항상 작동)
 // playand_config.chat_mode = 'faq' 이면 AI 호출 없이 FAQ 엔진만 쓴다.
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -129,18 +129,20 @@ async function live() {
 }
 
 // ───────── 1) Anthropic ─────────
+let claudeDeadUntil = 0; // 키가 무효면 30분 동안 건너뜀 (응답 지연 방지)
 async function askClaude(branch: string | null, msgs: { role: string; content: string }[], extra: string, model: string) {
   const key = await cfg("anthropic_api_key");
-  if (!key) return null;
+  if (!key || Date.now() < claudeDeadUntil) return null;
   const k = await kb();
   const r = await fetch("https://api.anthropic.com/v1/messages", {
+    signal: AbortSignal.timeout(15000),
     method: "POST",
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
     body: JSON.stringify({ model, max_tokens: 1400, system: [{ type: "text", text: system(branch, k), cache_control: { type: "ephemeral" } }, { type: "text", text: (await live()).text }, ...(extra ? [{ type: "text", text: extra }] : [])], messages: msgs }),
   }).catch(() => null);
   if (!r) return null;
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) return { fail: j?.error?.message ?? String(r.status) };
+  if (!r.ok) { if (r.status === 401 || r.status === 403 || r.status === 400) claudeDeadUntil = Date.now() + 30 * 60_000; return { fail: j?.error?.message ?? String(r.status) }; }
   return { text: (j.content ?? []).map((c: any) => c.text ?? "").join("").trim(), usage: { engine: "claude", ...j.usage } };
 }
 
@@ -163,7 +165,7 @@ async function askGemini(branch: string | null, msgs: { role: string; content: s
     contents: msgs.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
     generationConfig: { maxOutputTokens: 1200, temperature: 0.3 },
   };
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/${model}:generateContent`, { method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": key }, body: JSON.stringify(body) }).catch(() => null);
+  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/${model}:generateContent`, { method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": key }, body: JSON.stringify(body), signal: AbortSignal.timeout(12000) }).catch(() => null);
   if (!r) return null;
   const j = await r.json().catch(() => ({}));
   if (!r.ok) return { fail: j?.error?.message ?? String(r.status) };
