@@ -1,4 +1,4 @@
-// playn-chat v15.2 (2026-11-15): 무효 키 건너뛰기·AI 12초 넘으면 FAQ로 / v15 (2026-11-14): 무료 운영
+// playn-chat v15.4 (2026-11-15): 비밀번호 값 유출 차단(지식 줄 제거 + 답변 최종 검사) / v15.2 (2026-11-15): 무효 키 건너뛰기·AI 12초 넘으면 FAQ로 / v15 (2026-11-14): 무료 운영
 // 순서: Anthropic(키 있고 작동할 때) → Gemini 무료 등급(gemini_api_key 있을 때) → 키 없는 FAQ 엔진(항상 작동)
 // playand_config.chat_mode = 'faq' 이면 AI 호출 없이 FAQ 엔진만 쓴다.
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -9,14 +9,28 @@ const HOST = "010-8339-5818";
 const MODEL = "claude-haiku-4-5-20251001";
 const CORS = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type", "access-control-allow-methods": "GET,POST,OPTIONS" };
 const J = (o: unknown, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...CORS, "content-type": "application/json; charset=utf-8" } });
-const scrub = (t: string) => t.split("\n").filter((l) => !/(입실|출입문).{0,6}비밀번호/.test(l)).join("\n");
+// 비밀번호 값이 들어 있는 줄은 AI에 넘기지 않음 (입실·출입문·화장실·컴퓨터·와이파이)
+const scrub = (t: string) => t.split("\n").filter((l) => !/(입실|출입문).{0,6}비밀번호\s*[|:]/.test(l) && !/(와이파이|컴퓨터\s*비밀번호)\s*[|:(]/.test(l)).join("\n");
+// 최종 안전망: 실제 비밀번호 값(door_codes)이 답에 섞이면 위치 안내로 바꿈
+let codeCache: { at: number; toks: string[] } | null = null;
+async function secretTokens() {
+  if (codeCache && Date.now() - codeCache.at < 10 * 60_000) return codeCache.toks;
+  const raw = (await cfg("door_codes")) ?? "";
+  const toks = new Set<string>();
+  for (const m of raw.matchAll(/[A-Za-z0-9_@#!*.-]{4,}/g)) { const t = m[0].replace(/^[._-]+|[._-]+$/g, ""); if (/\d/.test(t) && t.length >= 4 && !/^\d+(\.\d+)?G$/i.test(t)) toks.add(t); }
+  codeCache = { at: Date.now(), toks: [...toks] };
+  return codeCache.toks;
+}
+const SAFE_PW = "비밀번호(입실·컴퓨터·와이파이·화장실)는 체크인 화면(예약 확정 문자의 playn.kr/in 링크) 맨 위 비밀번호 카드에 있어요 🔐 문자로도 보내드려요. 못 찾으시면 호스트에게 \"체크인 링크 다시 보내주세요\"라고 문자 주세요 (010-8339-5818).";
 
 let kbCache: { at: number; data: Record<string, string> } | null = null;
 async function kb() {
   if (kbCache && Date.now() - kbCache.at < 5 * 60_000) return kbCache.data;
   const { data } = await sb.from("playn_kb").select("id,content");
+  const toks = await secretTokens().catch(() => [] as string[]);
+  const hide = (t: string) => toks.reduce((acc, k) => acc.split(k).join("(체크인 화면 비밀번호 카드에서 확인)"), t ?? "");
   const m: Record<string, string> = {};
-  for (const r of data ?? []) m[r.id] = r.content;
+  for (const r of data ?? []) m[r.id] = hide(r.content);
   kbCache = { at: Date.now(), data: m };
   return m;
 }
@@ -424,6 +438,8 @@ Deno.serve(async (req) => {
       const h = Number(em[1]);
       if (h > 0 && h <= 12 && (xinfo.maxH === null || h <= xinfo.maxH)) { await extRequest(branch, xinfo, h, String(body.sid ?? "")); escalate = false; }
     }
+    const toks = await secretTokens().catch(() => [] as string[]);
+    if (toks.some((t) => text.includes(t))) { text = SAFE_PW; usage = { ...(usage ?? {}), redacted: true }; }
     const answer = text.replaceAll("[[ESCALATE]]", "").replace(/\[\[EXT:[^\]]*\]\]/g, "").replace(/\*\*/g, "").replace(/^#+\s*/gm, "").replace(/^(\s*)[-*]\s+/gm, "$1· ").trim();
     if (!dry) await sb.from("playn_chat_log").insert({ branch: branch ?? "공통", session: String(body.sid ?? "").slice(0, 40), ip, question: msgs[msgs.length - 1].content, answer, escalate, tokens: usage });
     return J({ answer, escalate, host: HOST });
