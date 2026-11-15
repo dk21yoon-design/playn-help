@@ -388,24 +388,27 @@ Deno.serve(async (req) => {
         }
       }
     }
+    const T0 = Date.now(); const tm: Record<string, number> = {};
     const mode = (await cfg("chat_mode")) || "auto";
     const fails: string[] = [];
     let res: any = null;
     if (mode !== "faq") {
       const model = dry && ["claude-sonnet-5", "claude-haiku-4-5-20251001"].includes(body?.model) ? body.model : ((await cfg("chat_model")) || MODEL);
-      const c = await askClaude(branch, msgs, extra, model).catch(() => null);
+      let t = Date.now(); await live().catch(() => null); tm.live = Date.now() - t; t = Date.now();
+      const c = await askClaude(branch, msgs, extra, model).catch(() => null); tm.claude = Date.now() - t;
       if (c?.text) res = c; else if (c?.fail) fails.push("claude: " + c.fail);
       if (!res) {
-        const g = await askGemini(branch, msgs, extra).catch(() => null);
+        const t2 = Date.now(); const g = await askGemini(branch, msgs, extra).catch(() => null); tm.gemini = Date.now() - t2;
         if (g?.text) res = g; else if (g?.fail) fails.push("gemini: " + g.fail);
       }
     }
     let text: string, usage: any, escalate: boolean;
+    tm.total = Date.now() - T0;
     if (res) {
-      text = res.text; usage = res.usage; escalate = text.includes("[[ESCALATE]]");
+      text = res.text; usage = { ...res.usage, tm }; escalate = text.includes("[[ESCALATE]]");
     } else {
       const f = await faq(branch, msgs, xinfo);
-      text = f.text; escalate = f.esc; usage = { engine: "faq", fails };
+      text = f.text; escalate = f.esc; usage = { engine: "faq", fails, tm };
     }
     const em = text.match(/\[\[EXT:(\d+(?:\.5)?)\]\]/);
     if (em && xinfo && branch && !dry) {
