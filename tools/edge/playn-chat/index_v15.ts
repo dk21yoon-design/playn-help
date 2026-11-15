@@ -17,7 +17,7 @@ async function secretTokens() {
   if (codeCache && Date.now() - codeCache.at < 10 * 60_000) return codeCache.toks;
   const raw = (await cfg("door_codes")) ?? "";
   const toks = new Set<string>();
-  for (const m of raw.matchAll(/[A-Za-z0-9_@#!*.-]{4,}/g)) { const t = m[0].replace(/^[._-]+|[._-]+$/g, ""); if (/\d/.test(t) && t.length >= 4 && !/^\d+(\.\d+)?G$/i.test(t)) toks.add(t); }
+  for (const m of raw.matchAll(/[A-Za-z0-9_@#!*.-]{4,}/g)) { const t = m[0].replace(/^[._-]+|[._-]+$/g, ""); if (/\d/.test(t) && t.length >= 4 && !/^\d+(\.\d+)?G$/i.test(t)) { toks.add(t); for (const seg of t.split("_")) if (seg.length >= 6 && /\d/.test(seg) && /[A-Za-z]/.test(seg)) toks.add(seg); } }
   codeCache = { at: Date.now(), toks: [...toks] };
   return codeCache.toks;
 }
