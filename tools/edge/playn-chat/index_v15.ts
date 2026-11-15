@@ -98,7 +98,14 @@ ${k["troubleshoot:common"] ?? ""}`;
 
 // ───────── 실시간 빈자리 (v14 그대로 + FAQ용 원본 보관) ─────────
 let liveCache: { at: number; text: string; days: any[] } | null = null;
+const NEED_LIVE = /(빈자리|빈방|예약|가격|얼마|요금|원이|날짜|오늘|내일|모레|이번\s*주|다음\s*주|주말|평일|[월화수목금토일]요일|야간|주간|통대관|\d+\s*명|\d+\s*월|\d+\s*일|특가|할인)/;
+let wantLive = true;
+function dateOnly() {
+  const now = new Date(Date.now() + 9 * 3600e3), W = "일월화수목금토";
+  return { at: 0, days: [] as any[], text: `[실시간 정보]\n오늘: ${now.getUTCMonth() + 1}/${now.getUTCDate()} (${W[now.getUTCDay()]}요일) ${String(now.getUTCHours()).padStart(2, "0")}:${String(now.getUTCMinutes()).padStart(2, "0")} 한국 시간. 빈자리·요금 질문이 아니라서 빈자리 표는 생략했어.` };
+}
 async function live() {
+  if (!wantLive) return dateOnly();
   if (liveCache && Date.now() - liveCache.at < 120_000) return liveCache;
   const now = new Date(Date.now() + 9 * 3600e3);
   const W = "일월화수목금토";
@@ -132,7 +139,7 @@ async function live() {
 let claudeDeadUntil = 0; // 키가 무효면 30분 동안 건너뜀 (응답 지연 방지)
 async function askClaude(branch: string | null, msgs: { role: string; content: string }[], extra: string, model: string) {
   const key = await cfg("anthropic_api_key");
-  if (!key || Date.now() < claudeDeadUntil) return null;
+  if (!key || Date.now() < claudeDeadUntil || (await cfg("chat_skip_claude"))) return null;
   const k = await kb();
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     signal: AbortSignal.timeout(15000),
@@ -142,7 +149,7 @@ async function askClaude(branch: string | null, msgs: { role: string; content: s
   }).catch(() => null);
   if (!r) return null;
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) { if (r.status === 401 || r.status === 403 || r.status === 400) claudeDeadUntil = Date.now() + 30 * 60_000; return { fail: j?.error?.message ?? String(r.status) }; }
+  if (!r.ok) { if (r.status === 401 || r.status === 403) { claudeDeadUntil = Date.now() + 30 * 60_000; await sb.from("playand_config").upsert({ key: "chat_skip_claude", value: "invalid key " + new Date().toISOString().slice(0, 10) }); } return { fail: j?.error?.message ?? String(r.status) }; }
   return { text: (j.content ?? []).map((c: any) => c.text ?? "").join("").trim(), usage: { engine: "claude", ...j.usage } };
 }
 
@@ -329,7 +336,7 @@ async function faq(branch: string | null, msgs: { role: string; content: string 
   const parts: string[] = [];
   let esc = false;
   for (const h of hits) {
-    if (h.it.id === "vacancy") { parts.push(vacancyText((await live()).days, branch)); continue; }
+    if (h.it.id === "vacancy") { wantLive = true; parts.push(vacancyText((await live()).days, branch)); continue; }
     if (h.it.id === "extend" && xinfo) {
       parts.push(`지금 이용 중인 예약은 ${xinfo.curEnd}에 끝나요.\n${xinfo.next ? `다음 예약이 ${xinfo.next}에 있어서 ` : ""}${xinfo.maxH === null ? "연장 여유가 있어요." : xinfo.maxH > 0 ? `최대 ${xinfo.maxH}시간까지 연장할 수 있어요.` : "연장은 어려워요. 퇴실 시간을 지켜주세요."}\n연장하려면 호스트에게 원하는 시간을 문자 주세요 (${HOST}).`);
       esc = true; continue;
@@ -353,6 +360,7 @@ Deno.serve(async (req) => {
         const t = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "x-api-key": v, "anthropic-version": "2023-06-01", "content-type": "application/json" }, body: JSON.stringify({ model: MODEL, max_tokens: 5, messages: [{ role: "user", content: "hi" }] }) });
         if (!t.ok) return J({ ok: false, error: "키 확인 실패 (" + t.status + "). 키나 결제 등록을 확인해 주세요" });
         await sb.from("playand_config").upsert({ key: "anthropic_api_key", value: v });
+        await sb.from("playand_config").delete().eq("key", "chat_skip_claude");
       } else if (v.startsWith("AIza")) {
         const t = await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=5", { headers: { "x-goog-api-key": v } });
         if (!t.ok) return J({ ok: false, error: "Gemini 키 확인 실패 (" + t.status + ")" });
@@ -394,6 +402,7 @@ Deno.serve(async (req) => {
     let res: any = null;
     if (mode !== "faq") {
       const model = dry && ["claude-sonnet-5", "claude-haiku-4-5-20251001"].includes(body?.model) ? body.model : ((await cfg("chat_model")) || MODEL);
+      wantLive = msgs.slice(-3).some((m) => m.role === "user" && NEED_LIVE.test(m.content));
       let t = Date.now(); await live().catch(() => null); tm.live = Date.now() - t; t = Date.now();
       const c = await askClaude(branch, msgs, extra, model).catch(() => null); tm.claude = Date.now() - t;
       if (c?.text) res = c; else if (c?.fail) fails.push("claude: " + c.fail);
