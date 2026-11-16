@@ -1,0 +1,22 @@
+<!-- 훅 썸네일 공통 템플릿 (2026-11-16) — work_standard 5번. {{BG}} 진한 단색, {{TAG}} 노란 라벨(혜택·숫자), {{HOOK}} 2줄(한 단어 <em>), {{AFTER}} 결과 이미지, {{BEFORE}} 전 이미지(없으면 .bf·.ar 지움), {{BADGE}} 약속 한 줄, {{FOOT}} 채널·CTA. 1080x1920으로 스크린샷. -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"><style>
+*{margin:0;padding:0;box-sizing:border-box}body{width:1080px;height:1920px;overflow:hidden;background:{{BG}};font-family:Pretendard;color:#fff;position:relative}
+.top{position:absolute;left:0;right:0;top:250px;text-align:center}
+.tag{display:inline-block;background:#FFE14D;color:#111;font-weight:900;font-size:44px;padding:12px 30px;border-radius:14px;transform:rotate(-3deg)}
+h1{margin-top:34px;font-size:150px;font-weight:900;line-height:1.08;letter-spacing:-.05em;text-shadow:0 8px 0 #0004}
+h1 em{font-style:normal;color:#FFE14D}
+.ph{position:absolute;left:70px;right:70px;top:790px;height:700px;border-radius:36px;overflow:hidden;border:10px solid #fff;box-shadow:0 30px 60px #0006}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph b{position:absolute;right:22px;top:22px;background:#FFE14D;color:#111;font:900 46px Pretendard;padding:8px 26px;border-radius:999px}
+.bf{position:absolute;left:30px;top:1330px;width:330px;height:250px;border-radius:24px;overflow:hidden;border:8px solid #fff;transform:rotate(-6deg);box-shadow:0 20px 40px #0007}
+.bf img{width:100%;height:100%;object-fit:cover}.bf i{position:absolute;left:12px;top:12px;background:#111;color:#fff;font:900 34px Pretendard;font-style:normal;padding:4px 18px;border-radius:999px}
+.ar{position:absolute;left:340px;top:1440px;font:900 110px Pretendard;color:#FFE14D;text-shadow:0 6px 0 #0005}
+.badge{position:absolute;left:0;right:0;top:1620px;text-align:center}
+.badge span{display:inline-block;background:#111;color:#fff;font-weight:900;font-size:62px;padding:20px 40px;border-radius:20px}
+.h{position:absolute;left:0;right:0;top:1770px;text-align:center;font:700 34px Pretendard;opacity:.85}
+</style></head><body>
+<div class="top"><span class="tag">{{TAG}}</span><h1>{{HOOK}}</h1></div>
+<div class="ph"><img src="{{AFTER}}"><b>후</b></div>
+<div class="bf"><img src="{{BEFORE}}"><i>전</i></div><div class="ar">→</div>
+<div class="badge"><span>{{BADGE}}</span></div><div class="h">{{FOOT}}</div>
+</body></html>
