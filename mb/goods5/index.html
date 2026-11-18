@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>귤 굿즈 5 · AI 문방구</title>
+<meta name="description" content="귤 사진 한 장으로 봉제 인형, 아크릴 키링, 에나멜 핀, 피규어, 표정 스티커까지 캐릭터 굿즈 5가지를 만드는 이미지 AI 프롬프트 원문과 내 사진 넣는 법.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ba img{width:100%;border-radius:10px;display:block}.ba small{display:block;font-size:12px;color:var(--mute);margin-top:4px}</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 귤 굿즈 5</p><h1>귤 사진 한 장<br>→ <em>캐릭터 굿즈 5</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 영상 속 굿즈는 전부 힉스필드(GPT Image 2.6)에 귤 사진 한 장을 넣고 굿즈 종류만 바꿔 만든 결과예요. 굿즈 제작 맡기기 전에 시안 뽑는 용도로 좋아요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>BASE</b>원본 귤 사진 (전)</h2><div class="card"><img src="p0.jpg" alt="원본 귤 사진 (전)" style="width:100%;border-radius:10px"></div><h2><b>01</b>plush toy</h2><div class="card"><h3>말랑한 봉제 인형</h3><p>보송한 천에 자수로 놓은 얼굴, 펠트 잎사귀.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p1.jpg" alt="plush toy 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact tangerine with its green leaf into a soft plush toy: a round orange minky plush tangerine with a cute small embroidered smiling face and a felt green leaf on top, visible fabric texture and seams, sitting on the same white wooden table in the same soft daylight, same framing and size. Original character, no text, no logos, no tags.<button type="button">복사</button></div></div><h2><b>02</b>acrylic keychain</h2><div class="card"><h3>투명 키링</h3><p>투명 아크릴 판에 그림을 넣고 금색 고리를 달아요.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p2.jpg" alt="acrylic keychain 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact tangerine with its green leaf into a clear acrylic keychain: a cute flat cartoon illustration of the tangerine with a small smiling face printed inside a transparent rounded acrylic plate with a white outline, a gold metal ring and short chain, lying on the same white wooden table, same soft daylight, same framing. Original character, no text, no logos.<button type="button">복사</button></div></div><h2><b>03</b>enamel pin</h2><div class="card"><h3>금테 배지</h3><p>유광 에나멜에 금속 테두리, 뒷면 고정 핀까지.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p3.jpg" alt="enamel pin 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact tangerine with its green leaf into a small hard enamel pin badge: glossy orange enamel tangerine with a green enamel leaf and a tiny smiling face, thin shiny gold metal outlines, lying on the same white wooden table with its gold pin back clutch next to it, macro product shot, same soft daylight. Original character, no text, no logos.<button type="button">복사</button></div></div><h2><b>04</b>vinyl figure</h2><div class="card"><h3>책상 위 피규어</h3><p>짧은 팔다리가 달린 유광 플라스틱 장난감.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p4.jpg" alt="vinyl figure 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact tangerine with its green leaf into a glossy vinyl designer toy figure: a standing tangerine character with a round orange body, a green leaf on its head, tiny arms and little feet, simple happy face, smooth matte-and-gloss plastic finish, standing on the same white wooden table, same soft daylight, same framing. Original character, no text, no logos, no packaging.<button type="button">복사</button></div></div><h2><b>05</b>sticker sheet</h2><div class="card"><h3>표정 스티커</h3><p>표정이 다른 스티커 9개가 한 장에.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p5.jpg" alt="sticker sheet 후"><small>후</small></div></div><div class="copy" data-c>Turn this exact tangerine with its green leaf into a die-cut sticker sheet lying flat on the same white wooden table: one sheet with nine kiss-cut cartoon tangerine stickers, each with a different facial expression (happy, sleepy, angry, crying, surprised, wink, love, cool, laughing), thick white sticker borders, slight glossy sheen, same soft daylight. Original character, absolutely no text or letters, no logos.<button type="button">복사</button></div></div><h2><b>HOW</b>내 사진으로 하는 법</h2><div class="card"><p>물건이나 내가 그린 그림을 한 장 올리고 [ ]만 바꾸세요. 실존 캐릭터나 브랜드 로고는 쓰지 말고 내 그림, 내 반려동물, 과일처럼 내 것으로 해야 굿즈로 팔 때도 안전해요.</p><div class="copy" data-c>Turn this exact [피사체] into a [굿즈 종류: plush toy / acrylic keychain / enamel pin / vinyl figure / sticker sheet], same soft daylight, same framing. Original character, no text, no logos.<button type="button">복사</button></div></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['귤 굿즈 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='goods5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>

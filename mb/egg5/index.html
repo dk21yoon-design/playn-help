@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>아침상 5 · AI 문방구</title>
+<meta name="description" content="계란 프라이 사진 한 장으로 한식, 영국식, 멕시코식, 일본식, 튀르키예식 아침상을 차리는 이미지 AI 프롬프트 원문과 내 음식 사진 넣는 법.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ba img{width:100%;border-radius:10px;display:block}.ba small{display:block;font-size:12px;color:var(--mute);margin-top:4px}</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 아침상 5</p><h1>계란 프라이 하나<br>→ <em>나라별 아침상 5</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 영상 속 아침상은 전부 힉스필드(GPT Image 2.6)에 계란 프라이 사진 한 장을 넣고 나라 이름만 바꿔 만든 결과예요. 메뉴 사진이나 블로그 표지 만들 때 써보세요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>BASE</b>원본 계란 프라이 사진 (전)</h2><div class="card"><img src="p0.jpg" alt="원본 계란 프라이 사진 (전)" style="width:100%;border-radius:10px"></div><h2><b>01</b>Korean</h2><div class="card"><h3>밥과 김치</h3><p>흰쌀밥, 김치, 김, 된장국, 반찬 몇 가지.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p1.jpg" alt="Korean 후"><small>후</small></div></div><div class="copy" data-c>Keep the exact same sunny-side-up fried egg on the same round white plate, same camera angle, same wooden table. Build a Korean home breakfast around it: a bowl of white rice, a small dish of kimchi, a stack of roasted seaweed sheets, a small bowl of soybean paste soup, a few side dishes (banchan) in small bowls, metal chopsticks and spoon. Natural daylight, appetizing food photo. No text, no logos.<button type="button">복사</button></div></div><h2><b>02</b>full English</h2><div class="card"><h3>베이컨과 콩</h3><p>베이컨, 소시지, 콩 요리, 구운 토마토, 토스트, 홍차.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p2.jpg" alt="full English 후"><small>후</small></div></div><div class="copy" data-c>Keep the exact same sunny-side-up fried egg on the same round white plate, same camera angle, same wooden table. Turn it into a full English breakfast on that plate: crispy bacon rashers, sausages, baked beans in tomato sauce, grilled tomato half, sauteed mushrooms, buttered toast, with a mug of tea beside it. Natural daylight, appetizing food photo. No text, no logos, no brand labels.<button type="button">복사</button></div></div><h2><b>03</b>Mexican</h2><div class="card"><h3>토르티야와 살사</h3><p>우에보스 란체로스. 토르티야 위 계란에 살사와 아보카도.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p3.jpg" alt="Mexican 후"><small>후</small></div></div><div class="copy" data-c>Keep the same sunny-side-up fried egg, same camera angle, same wooden table. Make it Mexican huevos rancheros: the fried egg now sits on a warm corn tortilla on the same round white plate, topped with chunky red ranchero salsa, refried beans, sliced avocado, crumbled white cheese, chopped cilantro, a lime wedge, a small bowl of green salsa beside. Natural daylight, appetizing food photo. No text, no logos.<button type="button">복사</button></div></div><h2><b>04</b>Japanese</h2><div class="card"><h3>미소국과 생선구이</h3><p>나무 쟁반에 미소국, 연어구이, 밥, 절임, 녹차.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p4.jpg" alt="Japanese 후"><small>후</small></div></div><div class="copy" data-c>Keep the exact same sunny-side-up fried egg on the same round white plate, same camera angle, same wooden table. Build a traditional Japanese breakfast set around it on a dark wooden tray: a small lacquer bowl of miso soup with tofu and scallion, a grilled salted salmon fillet on a rectangular plate, a bowl of white rice, small pickles, wooden chopsticks on a rest, a cup of green tea. Natural daylight, appetizing food photo. No text, no logos.<button type="button">복사</button></div></div><h2><b>05</b>Turkish</h2><div class="card"><h3>빵과 올리브와 치즈</h3><p>작은 접시 가득 올리브, 치즈, 채소, 꿀, 시미트 빵, 홍차.</p><div class="ba"><div><img src="p0.jpg" alt="전"><small>전</small></div><div><img src="p5.jpg" alt="Turkish 후"><small>후</small></div></div><div class="copy" data-c>Keep the exact same sunny-side-up fried egg on the same round white plate, same camera angle, same wooden table. Build a Turkish breakfast spread around it: many small dishes of black and green olives, white feta cheese slices, sliced tomatoes and cucumbers, honey with kaymak cream, jam, a basket of sesame simit bread rings, tulip-shaped glasses of black tea. The table full and abundant. Natural daylight, appetizing food photo. No text, no logos.<button type="button">복사</button></div></div><h2><b>HOW</b>내 사진으로 하는 법</h2><div class="card"><p>음식 하나가 접시째 잘 보이게 찍은 사진을 올리고 [ ]만 바꾸세요. "Keep the exact same"을 넣어야 내 음식이 가운데 그대로 남아요. 나라 이름 대신 "캠핑 아침", "호텔 조식"을 넣어도 돼요.</p><div class="copy" data-c>Keep the exact same [음식] on the same plate, same camera angle, same table. Build a [나라/분위기] breakfast around it: [곁들일 음식]. Natural daylight, appetizing food photo. No text, no logos.<button type="button">복사</button></div></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['아침상 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='egg5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
