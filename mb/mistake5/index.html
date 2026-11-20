@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>클로드 망하는 습관 5 · AI 문방구</title>
+<meta name="description" content="앤트로픽 클로드 코드 공식 문서에 나온 실패 패턴 5가지와 고치는 법을 전후 프롬프트로 정리했어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 습관 5</p><h1>클로드 결과가<br>이상해지는 <em>습관 5개</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 앤트로픽 클로드 코드 공식 문서(Best practices)의 실패 패턴을 바탕으로 정리했어요. 고친 프롬프트는 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>한 대화에 이것저것</h2><div class="card"><h3>주제가 바뀌면 /clear</h3><p>하나 시키다가 딴 얘기 하고 다시 돌아오면 대화창이 상관없는 내용으로 차요. 대화가 찰수록 앞 지시를 잊거나 실수가 늘어요.</p><div class="copy" data-c>/clear<button type="button">복사</button></div><div class="copy" data-c>로그인 오류만 볼게. 세션 만료 후 로그인이 안 돼. src/auth 확인해줘<button type="button">복사</button></div></div><h2><b>02</b>계속 다시 고쳐달라고 하기</h2><div class="card"><h3>두 번 틀리면 새 대화에서 조건 붙여 다시</h3><p>같은 걸 세 번째 고치고 있다면 대화에 실패한 시도가 쌓인 상태예요. 새 대화에서 배운 걸 담아 한 번에 시키는 게 거의 항상 나아요.</p><div class="copy" data-c>/clear<button type="button">복사</button></div><div class="copy" data-c>모바일 360px에서 예약 버튼이 화면 밖으로 나가. 한 줄로 보이게 고치고 스크린샷으로 확인해줘<button type="button">복사</button></div></div><h2><b>03</b>CLAUDE.md에 다 적어두기</h2><div class="card"><h3>지워도 실수 안 할 줄은 빼기</h3><p>설명서가 길면 중요한 규칙이 묻혀서 무시돼요. 줄마다 “이걸 지우면 클로드가 실수할까?” 물어보고 아니면 지우세요. 클로드가 코드만 봐도 아는 것, 자주 바뀌는 정보, “깔끔하게 짜줘” 같은 당연한 말은 빼요.</p><div class="copy" data-c>CLAUDE.md 읽고 코드만 봐도 알 수 있는 줄은 지워줘. 남길 줄만 보여줘<button type="button">복사</button></div></div><h2><b>04</b>확인 방법 없이 믿기</h2><div class="card"><h3>테스트·스크린샷을 같이 주기</h3><p>그럴듯해 보여도 예외 상황을 놓칠 수 있어요. 클로드가 직접 돌려볼 수 있는 확인 방법을 주면 통과할 때까지 스스로 고쳐요.</p><div class="copy" data-c>이메일 검사 함수 만들어줘. a@b.com은 통과, a@.com과 invalid는 실패. 만들고 테스트 돌려서 통과할 때까지 고쳐줘<button type="button">복사</button></div></div><h2><b>05</b>범위 없이 알아봐달라고 하기</h2><div class="card"><h3>범위를 좁히거나 서브에이전트에 맡기기</h3><p>“전부 알아봐줘”는 파일 수백 개를 읽다가 대화창을 다 써버려요. 폴더를 정해주거나 서브에이전트로 따로 조사시키면 본 대화가 깨끗하게 남아요.</p><div class="copy" data-c>서브에이전트로 src/auth 폴더만 보고 로그인 흐름 요약해줘<button type="button">복사</button></div></div><h2><b>TIP</b>알아두면 좋은 것</h2><div class="card"><p>출처: code.claude.com 클로드 코드 Best practices · Avoid common failure patterns</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['클로드 망하는 습관 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='claude_mistake5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>

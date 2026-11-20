@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>클로드 코드 단축키 7 · AI 문방구</title>
+<meta name="description" content="클로드 코드에서 손이 먼저 가는 단축키 7개를 쓰는 상황과 함께 정리했어요. Esc, Esc 두 번, Shift+Tab, !, @, Ctrl+V, Ctrl+B.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · KEY 7</p><h1>클로드 코드<br><em>단축키 7개</em> 한 장 정리</h1><p class="lead">댓글로 신청해주셔서 고마워요. 클로드 코드 공식 문서 기준으로 정리했어요. 예시 문장은 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>Esc</h2><div class="card"><h3>엉뚱하게 가면 바로 멈추기</h3><p>클로드가 답을 쓰거나 작업하는 중간에 멈춰요. 지금까지 한 작업은 그대로 남아서 바로 방향만 다시 알려주면 돼요.</p><div class="copy" data-c>헤더는 그대로 두고 버튼 색만 바꿔줘<button type="button">복사</button></div></div><h2><b>02</b>Esc 두 번</h2><div class="card"><h3>이전 시점으로 되감기</h3><p>입력창이 비어 있을 때 Esc를 두 번 누르면 되감기 메뉴가 열려요. 대화와 코드를 고른 시점으로 돌려요. /rewind 와 같아요. 입력창에 글자가 있으면 두 번 눌렀을 때 그 글을 지워요.</p><div class="copy" data-c>/rewind<button type="button">복사</button></div></div><h2><b>03</b>Shift+Tab</h2><div class="card"><h3>누를 때마다 모드 바꾸기</h3><p>권한 모드를 돌아가며 바꿔요. 계획 모드(plan mode)에서는 파일을 고치지 않고 읽고 계획만 세워요. 큰 수정 전에 계획 모드로 먼저 보세요. 윈도우에서 안 먹으면 Alt+M.</p><div class="copy" data-c>예약 페이지 고칠 계획만 먼저 세워줘<button type="button">복사</button></div></div><h2><b>04</b>! (느낌표)</h2><div class="card"><h3>터미널 명령 바로 실행</h3><p>맨 앞에 !를 붙이면 클로드를 거치지 않고 명령이 바로 돌아가요. 결과는 대화에 남아서 클로드가 이어서 설명해줘요. 빈 입력창에서 Esc나 Backspace로 빠져나와요.</p><div class="copy" data-c>! npm test<button type="button">복사</button></div><div class="copy" data-c>! git status<button type="button">복사</button></div></div><h2><b>05</b>@ (골뱅이)</h2><div class="card"><h3>파일 콕 집어주기</h3><p>@ 뒤에 경로를 치면 자동 완성이 떠요. 파일 위치를 설명할 필요 없이 그 파일부터 읽어요.</p><div class="copy" data-c>@src/cart.js 할인 계산이 이상해. 원인 찾아줘<button type="button">복사</button></div></div><h2><b>06</b>Ctrl+V</h2><div class="card"><h3>캡처 이미지 붙여넣기</h3><p>화면 캡처를 그대로 붙여넣어요. 입력창에 [Image #1] 표시가 생겨요. 윈도우·WSL에서는 Alt+V도 돼요. 맥 iTerm2는 Cmd+V.</p><div class="copy" data-c>[Image #1] 이 화면처럼 버튼 위치랑 색 맞춰줘<button type="button">복사</button></div></div><h2><b>07</b>Ctrl+B</h2><div class="card"><h3>오래 걸리는 작업 뒤로 보내기</h3><p>빌드나 테스트처럼 오래 걸리는 명령을 백그라운드로 보내요. 그동안 다른 일을 시킬 수 있어요. tmux를 쓰면 두 번 눌러요.</p><div class="copy" data-c>빌드 도는 동안 README 정리해줘<button type="button">복사</button></div></div><h2><b>TIP</b>알아두면 좋은 것</h2><div class="card"><p>빈 입력창에서 ? 를 치면 내 환경에서 쓸 수 있는 단축키 목록이 떠요. 터미널마다 조금씩 달라요.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['클로드 코드 단축키 7 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='claude_code_shortcut7_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
