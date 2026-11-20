@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>코드로 영상 만드는 도구 3 · AI 문방구</title>
+<meta name="description" content="편집 프로그램 없이 클로드로 영상 만드는 도구 3개(Remotion·HyperFrames·OpenMontage)의 설치 명령과 처음 시킬 문장을 정리했어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FFB800;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · VIDEO 3</p><h1>편집 프로그램 없이<br><em>영상 만드는 도구 3</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 클로드 코드 같은 코딩 에이전트에 붙여 쓰는 영상 도구 3개예요. 설치 명령과 처음 시킬 문장은 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>Remotion</h2><div class="card"><h3>리액트 코드로 만드는 영상</h3><p>그래프, 숫자 카운트, 데이터처럼 정확하게 움직여야 하는 영상에 좋아요. 공식 문서에 클로드 코드용 스킬 설치 방법이 같이 나와요. 회사 규모에 따라 유료 라이선스가 필요할 수 있으니 remotion.dev 라이선스 안내를 먼저 보세요.</p><div class="copy" data-c>npx create-video@latest<button type="button">복사</button></div><div class="copy" data-c>Remotion 스킬로 매출 그래프가 0에서 1200까지 올라가는 15초 세로 영상 만들어줘<button type="button">복사</button></div></div><h2><b>02</b>HyperFrames</h2><div class="card"><h3>HTML이 그대로 영상으로</h3><p>웹페이지 만들듯 HTML·CSS로 짜면 MP4로 렌더링돼요. 자막과 그래픽이 많은 쇼츠에 잘 맞아요. 헤이젠이 만든 오픈소스(Apache 2.0)예요. Node.js 22 이상이 필요해요.</p><div class="copy" data-c>npx skills add heygen-com/hyperframes<button type="button">복사</button></div><div class="copy" data-c>하이퍼프레임즈로 30초 세로 쇼츠 만들어줘. 자막은 화면 아래, 장면 5개<button type="button">복사</button></div></div><h2><b>03</b>OpenMontage</h2><div class="card"><h3>대본부터 편집까지 한 줄로</h3><p>대본, 소스 찾기, 편집, 렌더까지 이어서 돌리는 제작 라인이에요. 무료 스톡 영상을 모아 잘라 붙이는 방식도 지원해요. AGPLv3 라이선스라 결과물 말고 코드를 고쳐 배포할 땐 조건을 확인하세요. FFmpeg가 필요해요.</p><div class="copy" data-c>git clone https://github.com/calesthio/OpenMontage.git
+cd OpenMontage
+make setup<button type="button">복사</button></div><div class="copy" data-c>비 오는 도시를 주제로 60초 영상 만들어줘. 실제 영상 소스만, 내레이션 없이 음악만<button type="button">복사</button></div></div><h2><b>04</b>틀 재사용</h2><div class="card"><h3>한 번 만든 틀은 주제만 바꿔서</h3><p>세 도구 모두 결과가 코드로 남아요. 마음에 든 영상의 틀을 두고 문장만 바꾸면 다음 편이 금방 나와요.</p><div class="copy" data-c>지난번 영상 틀(색·자막 위치·길이)은 그대로 두고 주제만 바꿔서 하나 더 만들어줘<button type="button">복사</button></div></div><h2><b>SRC</b>출처</h2><div class="card"><p><a href="https://www.remotion.dev/docs" rel="noopener">remotion.dev/docs</a> · <a href="https://github.com/heygen-com/hyperframes" rel="noopener">github.com/heygen-com/hyperframes</a> · <a href="https://github.com/calesthio/OpenMontage" rel="noopener">github.com/calesthio/OpenMontage</a> (2026-11-21 확인)</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['코드로 영상 만드는 도구 3 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='video_tools3_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>

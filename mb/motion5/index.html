@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>클로드 모션 이름 5 · AI 문방구</title>
+<meta name="description" content="클로드에게 움직이게 해줘 대신 쓰는 모션 이름 5개(Fade Up·Stagger·Scale Up·Marquee·Typing)와 바로 붙여넣는 문장을 정리했어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#B6FF3B;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · MOTION 5</p><h1>'움직이게 해줘' 말고<br><em>이 이름 5개</em>로</h1><p class="lead">댓글로 신청해주셔서 고마워요. 클로드한테 모션을 시킬 때 이름을 넣으면 한 번에 원하는 움직임이 나와요. 문장은 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>Fade Up</h2><div class="card"><h3>아래에서 살짝 올라오며 등장</h3><p>제목이나 카드가 처음 뜰 때 써요. 투명도 0에서 1로, 위치는 20~30px 아래에서 제자리로 오게 하면 자연스러워요.</p><div class="copy" data-c>제목이 fade up으로 나오게 해줘. 투명도 0→1, 아래 24px에서 올라오게, 0.6초 ease-out<button type="button">복사</button></div></div><h2><b>02</b>Stagger</h2><div class="card"><h3>카드가 시간 차를 두고 하나씩</h3><p>목록이나 카드가 한꺼번에 뜨면 밋밋할 때 써요. 0.05~0.1초 간격이 무난해요.</p><div class="copy" data-c>카드 목록을 stagger로 하나씩 나오게 해줘. 간격 0.08초, 각 카드는 fade up<button type="button">복사</button></div></div><h2><b>03</b>Scale Up</h2><div class="card"><h3>작게 시작해서 커지며 등장</h3><p>버튼, 큰 숫자, 배지처럼 눈이 먼저 가야 하는 곳에 써요. 끝에서 살짝 튕기게 하면 더 눈에 띄어요.</p><div class="copy" data-c>가운데 큰 숫자를 scale up으로 강조해줘. 0.6배에서 1배로, 끝에서 살짝 튕기게(ease-out-back)<button type="button">복사</button></div></div><h2><b>04</b>Marquee</h2><div class="card"><h3>글자 줄이 옆으로 계속 흐르기</h3><p>상단 공지 띠, 브랜드 이름 띠, 행사 문구에 써요. 문구를 두 번 이어 붙여야 끊김 없이 돌아요.</p><div class="copy" data-c>상단 띠 문구를 marquee로 왼쪽으로 계속 흐르게 해줘. 끊김 없이 무한 반복, 한 바퀴 12초<button type="button">복사</button></div></div><h2><b>05</b>Typing</h2><div class="card"><h3>한 글자씩 쳐지듯 나오기</h3><p>질문, 검색창, 채팅 장면에 어울려요. 커서를 깜빡이게 두면 실제로 치는 느낌이 나요.</p><div class="copy" data-c>검색창 문구를 typing 효과로 한 글자씩 나오게 해줘. 글자당 0.06초, 끝에 커서 깜빡임<button type="button">복사</button></div></div><h2><b>TIP</b>같이 쓰면 좋아요</h2><div class="card"><h3>움직임 줄이기 설정 존중하기</h3><p>휴대폰에서 동작 줄이기를 켠 사람한테는 모션을 끄는 게 좋아요. 한 줄만 붙이면 돼요.</p><div class="copy" data-c>prefers-reduced-motion 켠 사용자한테는 위 모션을 모두 끄고 바로 보이게 해줘<button type="button">복사</button></div></div><div class="card"><h3>모션 이름을 더 알고 싶다면</h3><p>Animista에서 이름별로 바로 재생해 보고 길이·이징을 바꿔볼 수 있어요. 자료실의 <a href="../motion/">모션 효과 정리</a>도 같이 보세요.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['클로드 모션 이름 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='claude_motion5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
