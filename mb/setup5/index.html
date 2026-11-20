@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>클로드 첫 세팅 5 · AI 문방구</title>
+<meta name="description" content="클로드를 깔고 처음 하면 좋은 세팅 5가지를 메뉴 위치와 함께 정리했어요. 지시사항, 메모리, 챗GPT 기억 가져오기, 지난 대화 검색, 프로젝트.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · SET 5</p><h1>클로드 깔았으면<br><em>이 세팅 5개</em>부터</h1><p class="lead">댓글로 신청해주셔서 고마워요. 클로드 공식 도움말(support.claude.com) 기준으로 정리했어요. 메뉴 이름은 앱 언어와 버전에 따라 조금 다를 수 있어요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>지시사항</h2><div class="card"><h3>말투·자주 쓰는 말 한 번만 적기</h3><p>설정 › Your Claude › Instructions(내 지시사항)에 적어두면 모든 대화에 적용돼요. 답 길이, 말투, 우리 가게 이름처럼 매번 설명하던 걸 넣으세요.</p><div class="copy" data-c>답은 짧게 한국어로. 표보다 목록으로 정리. 우리 가게는 홍대 게임파티룸이야.<button type="button">복사</button></div></div><h2><b>02</b>메모리</h2><div class="card"><h3>대화 내용 알아서 기억</h3><p>설정 › Your Claude › "Generate memory from chats"가 켜져 있는지 확인하세요. 무료·Pro·Max는 기본으로 켜져 있어요. 팀·엔터프라이즈는 관리자가 막아뒀으면 안 보일 수 있어요.</p></div><h2><b>03</b>기억 이사</h2><div class="card"><h3>챗GPT 기억 그대로 가져오기</h3><p>① 챗GPT에 아래 문장을 넣고 나온 내용을 전부 복사해요. ② 클로드 설정 › Your Claude › Start import에 붙여넣고 Add to memory. 모든 플랜에서 돼요(웹·데스크톱). 아직 실험 기능이라 일부는 빠질 수 있어요.</p><div class="copy" data-c>내가 너한테 저장해둔 기억과 내 정보를 전부 한 코드 블록 안에 목록으로 적어줘. 날짜가 있으면 같이 적어줘. 빼먹지 말고 그대로 적어줘.<button type="button">복사</button></div></div><h2><b>04</b>지난 대화 검색</h2><div class="card"><h3>저번에 한 얘기 다시 꺼내기</h3><p>설정 › Your Claude › "Search and reference chats"를 켜면 지난 대화를 찾아서 이어 써요. Pro 이상 유료 플랜에서 돼요.</p><div class="copy" data-c>저번에 짠 이벤트 문구 다시 보여줘<button type="button">복사</button></div></div><h2><b>05</b>프로젝트</h2><div class="card"><h3>일마다 방 따로 만들기</h3><p>프로젝트를 만들고 지침과 파일(메뉴판, 가격표 등)을 넣어두면 그 프로젝트 안 대화에는 알아서 적용돼요. 무료 플랜은 5개까지.</p><div class="copy" data-c>지침: 반말 금지. 이모지는 한 개까지. 가격은 첨부한 가격표 기준으로만 말해.<button type="button">복사</button></div></div><h2><b>TIP</b>순서</h2><div class="card"><p>지시사항 → 메모리 확인 → 기억 가져오기 순서로 하면 첫 대화부터 나를 알고 시작해요. 출처: support.claude.com (Personalization features · Memory · Import memory)</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['클로드 첫 세팅 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='claude_setup5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
