@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PLAY N 릴스 빌더 v3.20261107 (파국 순간 프리즈 freeze 빌더 흡수 / 자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
+"""PLAY N 릴스 빌더 v3.20261122 (최종 멈춤 0 검사 freeze_check 자동 / 파국 순간 프리즈 freeze 빌더 흡수 / 자막 팝 caption_pop·핵심 단어 노랑 ^단어^ 빌더 흡수 / 줌 액센트 punch·interrupt 빌더 흡수 / 2026-10-05 레이아웃 정돈: 가독성 판·배지 재디자인·겹침 자동 축소·선수 보이스 장면)
   새 장면 옵션: "mic": true 또는 "mic": "T1 팀 보이스" → 그 장면은 원본 소리(선수 마이크·인게임 보이스)를 살리고 음악을 낮춤. clip.file 필요.
                "caption": "자막" → 영상 아래쪽 노란 자막(보이스 번역·대사용).
               "preview_music": {"url": "<인스타 음악 preview URL>", "start": "auto"} → out_preview.mp4 (사장님 확인용, 실제 인스타 곡). music.start도 "auto"면 드롭 지점 자동 탐색.
@@ -54,8 +54,11 @@ spec.json 예시
       flash : true 면 정지 첫 2프레임 흰 섬광(영상 박스 안만)
   조건: at ≥ 0.1, at+len ≤ dur-0.3. 어기면 빌드 중단. 한 편에 1곳 권장(2곳 이상이면 경고만).
   옵션이 없으면 이전 버전과 같은 결과. 결과 JSON "freeze": [{"scene", "at_s"(전체 기준 초), "len"}] → qa quality_items 에 q_freeze
+- [2026-11-22 멈춤 0 검사] 빌드 마지막에 최종 mp4를 ffmpeg freezedetect(scale=480, n=0.003, d=0.5)로 자동 검사(work_standard freeze0).
+  영상은 그대로, 결과 JSON "freeze_check": {"count", "starts", "durations"} + "video_kbps"(최종 비트레이트). count>0 이면 경고 출력 → 그 구간 재빌드.
+  spec "freeze_check": false → 검사 끔 / "freeze_strict": true → 멈춤 1건 이상이면 JSON 출력 뒤 종료 코드 3(자동 파이프라인 중단용)
 """
-BUILDER_VERSION = 'v3.20261107'
+BUILDER_VERSION = 'v3.20261122'
 import sys, json, re, os, html as H, subprocess, asyncio, urllib.request, shutil, base64
 
 FPS = 30
@@ -755,4 +758,28 @@ if POP_LOG['scenes']: res_extra['caption_pop'] = POP_LOG['scenes']
 if FREEZE_LOG:
     res_extra['freeze'] = FREEZE_LOG
     if len(FREEZE_LOG) > 1: print(f'⚠️ 프리즈 {len(FREEZE_LOG)}곳: q_freeze 는 한 편에 1곳 권장', file=sys.stderr)
+# [2026-11-22 멈춤 0 검사 freeze0] 최종 mp4에 work_standard 기준 freezedetect(n=0.003, d=0.5)를 자동으로 돌려 결과 JSON에 넣는다.
+#   영상은 바꾸지 않는다(검사만). spec "freeze_check": false 로 끔. "freeze_strict": true 면 멈춤이 1건이라도 있을 때 JSON 출력 뒤 종료 코드 3.
+#   q_freeze 연출 정지(0.35초)는 d=0.5 아래라 걸리지 않는다. 같이 최종 영상 비트레이트(video_kbps)도 잰다(QA 측정 누락 방지).
+def freeze_scan(path, n=0.003, d=0.5):
+    p = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', path, '-vf', f'scale=480:-1,freezedetect=n={n}:d={d}', '-map', '0:v:0', '-f', 'null', '-'], capture_output=True, text=True)
+    st = [round(float(x), 2) for x in re.findall(r'freeze_start: ([\d.]+)', p.stderr)]
+    du = [round(float(x), 2) for x in re.findall(r'freeze_duration: ([\d.]+)', p.stderr)]
+    return {'n': n, 'd': d, 'count': len(st), 'starts': st, 'durations': du}
+def video_kbps(path):
+    try:
+        r = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=bit_rate', '-of', 'csv=p=0', path], capture_output=True, text=True).stdout.strip()
+        return round(int(r) / 1000) if r.isdigit() else None
+    except Exception: return None
+_fz_fail = False
+if spec.get('freeze_check', True):
+    fc = freeze_scan(out)
+    res_extra['freeze_check'] = fc
+    if fc['count']:
+        print(f"⚠️ 멈춤 {fc['count']}건 (freeze_start {fc['starts']}) — work_standard 멈춤 0 기준 미달, 그 구간을 다시 만든다", file=sys.stderr)
+        _fz_fail = bool(spec.get('freeze_strict'))
+    else: print('멈춤 검사 freeze0: 0건', file=sys.stderr)
+_kb = video_kbps(out)
+if _kb: res_extra['video_kbps'] = _kb
 print(json.dumps({'out': out, 'silent': base + '_silent.mp4', 'cover': base + '_cover.jpg', 'duration': round(total, 2), 'builder': BUILDER_VERSION, **res_extra}, ensure_ascii=False))
+if _fz_fail: sys.exit(3)
