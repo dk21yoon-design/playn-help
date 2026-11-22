@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>영상 마지막 한 줄 5 · AI 문방구</title>
+<meta name="description" content="영상 마지막 한 줄만 바꿔도 댓글과 저장이 늘어요. 좋아요 부탁 대신 쓰는 끝 문장 5개 전후 예시와 클로드한테 바로 넣는 프롬프트를 정리했어요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ba img{width:100%;border-radius:10px;display:block}.ba small{display:block;font-size:12px;color:var(--mute);margin-top:4px}</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 끝 문장 5</p><h1>마지막 한 줄만<br><em>바꿔도 댓글 달려요</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 영상에 나온 전후 문장과 클로드한테 바로 붙여넣는 프롬프트를 정리했어요. 문장은 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>BEFORE → AFTER</b>끝 문장 5개</h2><div class="card"><h3>01 받을 걸 먼저 말하기</h3><p>시청자가 얻는 게 먼저 보여야 손이 움직여요. 단어는 짧고 쉬운 걸로 하나만.</p><div class="ba"><div><p style="color:var(--mute)">✕ 좋아요 부탁드려요</p></div><div><p>✓ 댓글에 ‘[단어]’ 남기면 [정리본] 보내드려요.</p></div></div><div class="copy" data-c>댓글에 ‘[단어]’ 남기면 [정리본] 보내드려요.<button type="button">복사</button></div></div><div class="card"><h3>02 저장할 때를 알려주기</h3><p>언제 다시 볼지 떠올리게 하면 저장 버튼을 눌러요.</p><div class="ba"><div><p style="color:var(--mute)">✕ 도움 됐으면 저장해주세요</p></div><div><p>✓ 다음에 [상황] 할 때 꺼내 보세요.</p></div></div><div class="copy" data-c>다음에 [상황] 할 때 꺼내 보세요.<button type="button">복사</button></div></div><div class="card"><h3>03 둘 중 하나 고르게 하기</h3><p>열린 질문은 답하기 귀찮아요. 고르기만 하면 되는 질문이 댓글이 잘 달려요.</p><div class="ba"><div><p style="color:var(--mute)">✕ 궁금한 거 물어보세요</p></div><div><p>✓ [A]랑 [B] 중에 하나만 골라주세요.</p></div></div><div class="copy" data-c>[A]랑 [B] 중에 하나만 골라주세요.<button type="button">복사</button></div></div><div class="card"><h3>04 다음 편 예고하기</h3><p>다음에 뭐가 나오는지 알면 팔로우할 이유가 생겨요.</p><div class="ba"><div><p style="color:var(--mute)">✕ 팔로우 해주세요</p></div><div><p>✓ 내일은 [다음 주제] 편이에요.</p></div></div><div class="copy" data-c>내일은 [다음 주제] 편이에요.<button type="button">복사</button></div></div><div class="card"><h3>05 태그할 사람 콕 집기</h3><p>“친구”보다 “이런 친구”라고 콕 집으면 떠오르는 사람이 생겨요.</p><div class="ba"><div><p style="color:var(--mute)">✕ 친구한테 공유해주세요</p></div><div><p>✓ 이거 맨날 [실수] 하는 친구 태그해주세요.</p></div></div><div class="copy" data-c>이거 맨날 [실수] 하는 친구 태그해주세요.<button type="button">복사</button></div></div><h2><b>PROMPT</b>클로드한테 끝 문장 받기</h2><div class="card"><div class="copy" data-c>아래 영상 대본의 마지막 한 줄을 5가지로 다시 써줘. 1) 댓글 키워드를 남기면 받을 것 2) 저장해둘 상황 3) 둘 중 하나 고르는 질문 4) 다음 편 예고 5) 태그할 친구를 콕 집기. 각 문장은 25자 안으로, “부탁드려요” “해주세요”로 끝내지 마.
+
+[대본 붙여넣기]<button type="button">복사</button></div></div><div class="card"><p>참고: 레퍼런스 랩 훅·카피 모음(업종별 후킹 문구 유형 태그, 광고 카피 아카이브 Swiped의 약속 구조). 2026.11.23 정리.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['영상 마지막 한 줄 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cta5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
