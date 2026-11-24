@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>폰트 프롬프트 5 · AI 문방구</title>
+<meta name="description" content="클로드·챗GPT한테 폰트를 맡길 때 예쁜 폰트로 말고 이렇게 말하면 돼요. 폰트 이름·2종 규칙·숫자 크기·자간 행간·가로 좁히기 5가지 전후 문장과 바로 쓰는 프롬프트.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#F2C46D;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · FONT 5</p><h1>‘예쁜 폰트로’ 말고<br><em>이렇게 말하세요</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. AI한테 폰트를 맡길 때 쓰는 문장 5개예요. 오른쪽 버튼을 누르면 바로 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>폰트 이름부터</h2><div class="card"><p>“예쁜 폰트”는 AI마다 다르게 알아들어요. 이름을 적고 상업용 무료인지 같이 적으면 끝나요. 한글 무료 폰트는 눈누(noonnu.cc)에서 사용 범위를 먼저 보세요.</p><div class="copy" data-c>제목·본문 모두 Pretendard로 바꿔줘. 상업용 무료(OFL) 폰트야.<button type="button">복사</button></div></div><h2><b>02</b>폰트는 두 개만</h2><div class="card"><p>폰트가 세 개를 넘으면 화면이 어수선해져요. 제목 하나, 본문 하나로 정하고 굵기로만 차이를 주세요.</p><div class="copy" data-c>제목은 Pretendard Black, 본문은 Pretendard Regular. 이 두 개만 써줘.<button type="button">복사</button></div></div><h2><b>03</b>크기는 숫자로</h2><div class="card"><p>“크게”는 기준이 없어요. 화면 크기와 px를 같이 적으면 다시 고칠 일이 줄어요.</p><div class="copy" data-c>1080×1920 화면에서 제목 120px, 본문 40px로 맞춰줘.<button type="button">복사</button></div></div><h2><b>04</b>자간·행간 숫자</h2><div class="card"><p>글자가 답답해 보이면 자간을 살짝 좁히고 행간은 넓혀요. 제목 -2%, 본문 1.3에서 시작해보세요.</p><div class="copy" data-c>제목 자간 -2%(letter-spacing: -0.02em), 본문 행간 1.3으로 바꿔줘.<button type="button">복사</button></div></div><h2><b>05</b>썸네일은 가로로 좁히기</h2><div class="card"><p>썸네일 글씨는 굵은 고딕을 가로로 살짝 좁히면 한 줄에 더 크게 들어가요. 90%에서 시작해서 85%까지만 줄이세요.</p><div class="copy" data-c>제목을 Pretendard Black으로 바꾸고 가로만 90%로 좁혀줘(transform: scaleX(0.9)).<button type="button">복사</button></div></div><h2><b>06</b>한 번에 넣는 문장</h2><div class="card"><p>다섯 개를 한꺼번에 시킬 때 쓰는 문장이에요.</p><div class="copy" data-c>폰트는 Pretendard(OFL) 하나만 써줘. 제목 Black 120px 자간 -2%에 가로 90%, 본문 Regular 40px 행간 1.3. 화면은 1080×1920.<button type="button">복사</button></div></div><h2><b>SRC</b>출처</h2><div class="card"><p><a href="https://github.com/orioncactus/pretendard" rel="noopener">github.com/orioncactus/pretendard</a>(OFL 1.1) · <a href="https://noonnu.cc" rel="noopener">noonnu.cc</a> · <a href="https://developer.mozilla.org/ko/docs/Web/CSS/letter-spacing" rel="noopener">MDN letter-spacing</a> (2026-11-25 확인)</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['폰트 프롬프트 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='font_prompt5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>무료 영상 도구 5 · AI 문방구</title>
+<meta name="description" content="자막·무음 컷·자막 입히기·목소리 분리·배경 지우기를 클로드 코드한테 맡길 때 쓰는 무료 도구 5개(whisper·auto-editor·ffmpeg·demucs·rembg)의 설치 명령과 시키는 문장.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FFB800;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · TOOL 5</p><h1>손으로 하던 영상 작업<br><em>맡기는 도구 5</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 클로드 코드 같은 코딩 에이전트에 “이걸로 해줘”라고 하면 설치부터 실행까지 해주는 무료 도구예요. 설치 명령과 시키는 문장은 버튼을 누르면 복사돼요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>whisper · 자막 파일 자동</h2><div class="card"><p>영상이나 음성을 넣으면 받아쓰기해서 srt 자막 파일을 만들어요. 오픈AI가 공개한 오픈소스(MIT)예요. FFmpeg가 필요해요.</p><div class="copy" data-c>pip install -U openai-whisper<button type="button">복사</button></div><div class="copy" data-c>whisper로 영상.mp4 한국어 자막 srt 만들어줘.
+whisper 영상.mp4 --language Korean --output_format srt<button type="button">복사</button></div></div><h2><b>02</b>auto-editor · 무음 구간 컷</h2><div class="card"><p>소리 크기를 보고 말 없는 구간을 알아서 잘라내요. 토크 영상 1차 컷에 좋아요.</p><div class="copy" data-c>pip install auto-editor<button type="button">복사</button></div><div class="copy" data-c>auto-editor로 영상.mp4에서 말 없는 구간 잘라줘.
+auto-editor 영상.mp4<button type="button">복사</button></div></div><h2><b>03</b>ffmpeg · 자막 입히기</h2><div class="card"><p>만든 srt 자막을 영상 위에 바로 구워요. 다른 도구들도 대부분 이걸 같이 써요. 윈도우는 winget, 맥은 brew로 깔아요.</p><div class="copy" data-c>winget install Gyan.FFmpeg<button type="button">복사</button></div><div class="copy" data-c>ffmpeg로 자막.srt를 영상에 입혀줘.
+ffmpeg -i 영상.mp4 -vf subtitles=자막.srt 완성.mp4<button type="button">복사</button></div></div><h2><b>04</b>demucs · 목소리·배경음 분리</h2><div class="card"><p>녹음에 음악이나 소음이 섞였을 때 목소리만 따로 뽑아요. 처음 돌릴 때 모델을 내려받아서 조금 걸려요.</p><div class="copy" data-c>python -m pip install -U demucs<button type="button">복사</button></div><div class="copy" data-c>demucs로 녹음.mp3에서 목소리만 뽑아줘.
+demucs --two-stems=vocals 녹음.mp3<button type="button">복사</button></div></div><h2><b>05</b>rembg · 사진 배경 지우기</h2><div class="card"><p>썸네일에 쓸 인물·제품 사진 배경을 한 줄로 지워요. 결과는 배경이 투명한 png예요.</p><div class="copy" data-c>pip install &quot;rembg[cpu,cli]&quot;<button type="button">복사</button></div><div class="copy" data-c>rembg로 사진.png 배경 지워줘.
+rembg i 사진.png 누끼.png<button type="button">복사</button></div></div><h2><b>06</b>한 번에 맡기는 문장</h2><div class="card"><p>다섯 개를 이어서 시킬 때 쓰는 문장이에요.</p><div class="copy" data-c>영상.mp4로 쇼츠 만들 준비해줘. auto-editor로 무음 잘라내고, whisper로 한국어 자막 srt 만들고, ffmpeg로 자막 입혀서 완성.mp4로 저장해줘. 없는 도구는 먼저 설치해줘.<button type="button">복사</button></div></div><h2><b>SRC</b>출처</h2><div class="card"><p><a href="https://github.com/openai/whisper" rel="noopener">openai/whisper</a> · <a href="https://github.com/WyattBlue/auto-editor" rel="noopener">WyattBlue/auto-editor</a> · <a href="https://ffmpeg.org/ffmpeg-filters.html#subtitles" rel="noopener">ffmpeg subtitles</a> · <a href="https://github.com/facebookresearch/demucs" rel="noopener">demucs</a> · <a href="https://github.com/danielgatis/rembg" rel="noopener">danielgatis/rembg</a> (2026-11-25 확인)</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['무료 영상 도구 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='video_tools5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
