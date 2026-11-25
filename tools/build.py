@@ -168,22 +168,23 @@ def ld_business(b):
         "sameAs": ["https://www.instagram.com/playn_no.1/", "https://pf.kakao.com/_xoxhsuxj", b["sc_url"], b["ss_url"]], "image": f"{SITE}/assets/og.png",
     }
 
-# 2026-11-26 지점 사진: 홈에서 지점이 확인된 실제 사진만 쓴다 (파일, 가로, 세로, alt). 다른 지점 사진을 섞지 않는다
-PHOTOS = {
-    "hongdae": [("hd.webp", 861, 900, "홍대루프탑점 PC 좌석"), ("games.webp", 900, 900, "홍대루프탑점 보드게임 선반")],
-    "yeonnam": [("yn.webp", 900, 551, "연남루프탑점 게이밍 데스크"), ("rooftop.webp", 900, 675, "연남루프탑점 루프탑, 잔디와 캠핑 의자"),
-                ("karaoke.webp", 900, 654, "연남루프탑점 빔프로젝터 노래방과 아케이드 스틱"), ("ynroof.webp", 900, 675, "연남루프탑점 루프탑 낮 전경, 인조 잔디와 캠핑 의자")],
-    "yeontral": [("yt.webp", 675, 900, "연트럴파크점 네온 게이밍 룸"), ("gearwall.webp", 675, 900, "연트럴파크점 기어 월, 마우스와 키보드가 벽 가득 진열된 모습"),
-                 ("lounge.webp", 675, 900, "연트럴파크점 눕는 좌식 의자와 게이밍 데스크")],
-}
+# 2026-11-26 지점 사진: 스페이스클라우드 지점별 공간 사진을 assets/spots/<지점>/ 에 정리했고, 목록·순서·alt는 manifest.json 한 곳에서 관리한다.
+# 지점 사이에 사진을 섞지 않는다. 사진을 바꿀 때는 파일과 manifest.json만 고친다.
+def load_photos():
+    try:
+        with open(os.path.join(ROOT, "assets", "spots", "manifest.json"), encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+PHOTOS = load_photos()
 
 def branch_shots(b):
     ph = PHOTOS.get(b["slug"], [])
     if not ph: return ""
     imgs = ""
-    for i, (f, w, h, a) in enumerate(ph):
+    for i, p in enumerate(ph):
         lazy = "" if i == 0 else ' loading="lazy"'
-        imgs += f'<img src="/assets/home/{f}" alt="{E(a)}" width="{w}" height="{h}"{lazy} decoding="async">'
+        imgs += f'<img src="/assets/spots/{b["slug"]}/{p["file"]}" alt="{E(p["alt"])}" width="{p["w"]}" height="{p["h"]}"{lazy} decoding="async">'
     name = E(b["name"])
     return f'<div class="shots" role="group" aria-label="{name} 공간 사진">{imgs}</div>'
 
