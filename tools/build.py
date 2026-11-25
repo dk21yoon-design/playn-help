@@ -124,6 +124,9 @@ BR_CSS = """
 .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .facts span{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:14px}
 .facts .star{color:var(--lamp);font-weight:800}
+.shots{display:flex;gap:10px;margin-top:18px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px}
+.shots::-webkit-scrollbar{display:none}
+.shots img{flex:none;height:clamp(180px,46vw,360px);width:auto;border-radius:var(--r-md);border:1px solid var(--line);scroll-snap-align:start;background:var(--panel)}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .cta .btn{flex:1 1 180px}
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
@@ -165,6 +168,25 @@ def ld_business(b):
         "sameAs": ["https://www.instagram.com/playn_no.1/", "https://pf.kakao.com/_xoxhsuxj", b["sc_url"], b["ss_url"]], "image": f"{SITE}/assets/og.png",
     }
 
+# 2026-11-26 지점 사진: 홈에서 지점이 확인된 실제 사진만 쓴다 (파일, 가로, 세로, alt). 다른 지점 사진을 섞지 않는다
+PHOTOS = {
+    "hongdae": [("hd.webp", 861, 900, "홍대루프탑점 PC 좌석"), ("games.webp", 900, 900, "홍대루프탑점 보드게임 선반")],
+    "yeonnam": [("yn.webp", 900, 551, "연남루프탑점 게이밍 데스크"), ("rooftop.webp", 900, 675, "연남루프탑점 루프탑, 잔디와 캠핑 의자"),
+                ("karaoke.webp", 900, 654, "연남루프탑점 빔프로젝터 노래방과 아케이드 스틱"), ("ynroof.webp", 900, 675, "연남루프탑점 루프탑 낮 전경, 인조 잔디와 캠핑 의자")],
+    "yeontral": [("yt.webp", 675, 900, "연트럴파크점 네온 게이밍 룸"), ("gearwall.webp", 675, 900, "연트럴파크점 기어 월, 마우스와 키보드가 벽 가득 진열된 모습"),
+                 ("lounge.webp", 675, 900, "연트럴파크점 눕는 좌식 의자와 게이밍 데스크")],
+}
+
+def branch_shots(b):
+    ph = PHOTOS.get(b["slug"], [])
+    if not ph: return ""
+    imgs = ""
+    for i, (f, w, h, a) in enumerate(ph):
+        lazy = "" if i == 0 else ' loading="lazy"'
+        imgs += f'<img src="/assets/home/{f}" alt="{E(a)}" width="{w}" height="{h}"{lazy} decoding="async">'
+    name = E(b["name"])
+    return f'<div class="shots" role="group" aria-label="{name} 공간 사진">{imgs}</div>'
+
 def branch_page(b, prices):
     p = prices.get(b["name"], {})
     rows = ""
@@ -193,6 +215,7 @@ def branch_page(b, prices):
     <h1 class="disp">{b['name']}</h1>
     <p class="tag">{E(b['tagline'])}</p>
     <div class="facts"><span class="star">★ {b['rating']:.2f} · 후기 {b['reviews_n']}개</span><span>{b['cap']}</span><span>{b['floor']}</span><span>{b['area']}</span><span>24시간 운영</span></div>
+    {branch_shots(b)}
     <div class="cta">
       <a class="btn pink" href="/me/?b={b['code']}#book">홈페이지로 예약 · N CREW 할인</a>
       <a class="btn lamp" href="{b['ss_url']}" target="_blank" rel="noopener">네이버로 예약</a>
@@ -329,7 +352,7 @@ FOR_PAGES = [
        picks=["5명이면 연트럴파크점(5인 최적), 6명 이상이면 홍대·연남루프탑점", "복귀 전날 밤이면 야간 패키지(19:00~다음 날 09:30) + 늦은퇴실 2시간"],
        note="5만원 할인은 1인 1회 · 할인은 playn.kr 홈페이지 예약에서만, 한 예약에 가장 큰 할인 1개 · 2시간권은 1인 1회, 이용 인원 전원 N CREW 가입 시 사용 · 조기입실·늦은퇴실이 어려우면 바베큐 무료 패키지로 변경 · 인증 정보가 사실과 다르면 할인 금액을 청구하고 혜택이 취소될 수 있어요."),
   dict(slug="worlds", title="롤드컵, 새벽에 혼자 보지 말고", kicker="롤드컵 2026 단체 관람",
-       desc="롤드컵 2026 새벽 경기를 친구들과 큰 화면으로. 홍대·연남 게임파티룸 플레이앤 야간 패키지.",
+       desc="롤드컵 2026 새벽 경기를 친구들과 큰 화면으로. 홍대·연남 게임파티룸 플레이앤 야간 패키지로 저녁엔 내전 한 판, 새벽엔 다 같이 응원하고 아침 9시 30분에 퇴실해요.",
        lead="올해 롤드컵은 미국에서 열려서 한국은 새벽~아침 경기가 많아요. 야간 패키지면 저녁에 들어와서 내전 한 판, 새벽엔 다 같이 응원, 아침에 퇴실.",
        perks=[("큰 화면으로 같이 응원","홍대루프탑점 75인치 TV, 연남루프탑점 대형 빔프로젝터"),
               ("경기 전엔 우리끼리 내전","PC 5대로 5인 내전이나 자유랭크 연승전"),
@@ -337,7 +360,7 @@ FOR_PAGES = [
        picks=["주요 일정: 10/16 개막 · 10/24~11/1 스위스 스테이지 · 11/4~7 8강 · 11/8~9 4강 · 11/15 결승 (한국 시간 기준, 대회 공식 일정 확인)", "추천: 야간 패키지 19:00~다음 날 09:30"],
        note="경기 일정은 대회 사정에 따라 바뀔 수 있어요. 자세한 정리는 매거진 '롤드컵 2026 관람 가이드'에 있어요. 리그 오브 레전드와 롤드컵은 Riot Games의 상표이며, 플레이앤은 Riot Games와 관련이 없어요."),
   dict(slug="birthday", title="생일은 게임하고 고기 굽고 노래까지", kicker="생일·기념일 파티",
-       desc="홍대 생일파티 장소 찾는다면 플레이앤. 게이밍 PC, 노래방, 보드게임, 루프탑 바베큐까지 최대 16명.",
+       desc="홍대 생일파티 장소 찾는다면 플레이앤. 게이밍 PC, 노래방, 보드게임, 루프탑 바베큐까지 최대 16명이 단독으로 써요. 배달 음식과 주류도 가져올 수 있어요.",
        lead="파티룸은 많은데 할 게 없어서 금방 지루해지죠. 플레이앤은 PC 게임, 콘솔, 노래방, 보드게임, 루프탑 바베큐를 돌아가며 하다 보면 시간이 모자라요.",
        perks=[("최대 16명","홍대·연남루프탑점 단독층 루프탑"),
               ("할 게 끝이 없는 공간","PC 5대 · PS·스위치 · 노래방(시간 제한 없음) · 보드게임"),
@@ -345,7 +368,7 @@ FOR_PAGES = [
        picks=["하루 종일 놀려면 통대관(12:00~다음 날 10:00)", "6번째 사람부터 1명당 2만원 · 보증금 20만원 별도"],
        note="파티 소품 사용 기준은 예약 후 호스트에게 확인해 주세요."),
   dict(slug="club", title="동아리·과·회사 내전은 여기서", kicker="단체 내전·팀빌딩",
-       desc="롤·발로란트 동아리 내전, 과 MT, 회사 팀빌딩까지. 프로 장비 PC 5대와 루프탑이 있는 홍대 게임파티룸 플레이앤.",
+       desc="롤·발로란트 동아리 내전, 과 MT, 회사 팀빌딩까지. 프로 장비 PC 5대와 루프탑이 있는 홍대 게임파티룸 플레이앤. 내전 뒤에는 루프탑 바베큐로 뒤풀이까지 한 번에 해요.",
        lead="5대5 내전은 PC방보다 한 공간에서 하는 게 열 배 재밌어요. 지는 팀이 고기 굽기, 이긴 팀은 루프탑에서 쉬기.",
        perks=[("팀 교대 내전","PC 5대로 한 팀씩 교대 · 나머지는 TV·노래방·보드게임"),
               ("리그 기록까지","5인 자유랭크 연승 기록은 플레이앤 리그 순위에 올라가요"),

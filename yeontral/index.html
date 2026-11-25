@@ -35,6 +35,9 @@
 .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .facts span{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:14px}
 .facts .star{color:var(--lamp);font-weight:800}
+.shots{display:flex;gap:10px;margin-top:18px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px}
+.shots::-webkit-scrollbar{display:none}
+.shots img{flex:none;height:clamp(180px,46vw,360px);width:auto;border-radius:var(--r-md);border:1px solid var(--line);scroll-snap-align:start;background:var(--panel)}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .cta .btn{flex:1 1 180px}
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
@@ -70,6 +73,7 @@
     <h1 class="disp">연트럴파크점</h1>
     <p class="tag">연트럴파크 옆, 5인 최적화 5층 게이밍 룸</p>
     <div class="facts"><span class="star">★ 4.85 · 후기 13개</span><span>최대 7명 (5명 최적)</span><span>5층 · 엘리베이터 없음</span><span>23㎡</span><span>24시간 운영</span></div>
+    <div class="shots" role="group" aria-label="연트럴파크점 공간 사진"><img src="/assets/home/yt.webp" alt="연트럴파크점 네온 게이밍 룸" width="675" height="900" decoding="async"><img src="/assets/home/gearwall.webp" alt="연트럴파크점 기어 월, 마우스와 키보드가 벽 가득 진열된 모습" width="675" height="900" loading="lazy" decoding="async"><img src="/assets/home/lounge.webp" alt="연트럴파크점 눕는 좌식 의자와 게이밍 데스크" width="675" height="900" loading="lazy" decoding="async"></div>
     <div class="cta">
       <a class="btn pink" href="/me/?b=yeontral#book">홈페이지로 예약 · N CREW 할인</a>
       <a class="btn lamp" href="https://smartstore.naver.com/playn_/products/12071850850" target="_blank" rel="noopener">네이버로 예약</a>

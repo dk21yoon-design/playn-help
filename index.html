@@ -233,7 +233,7 @@ details.terms div{padding:6px 0 0}
 .lvl:before{content:"";position:absolute;left:12%;right:12%;top:27px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--line2),var(--lamp),#FF2E6E)}
 .lvl li{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
 .lvl .n{position:relative;z-index:1;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:15px;background:var(--deep);border:2px solid var(--lamp);color:var(--lamp)}
-.lvl li.lgd .n{background:linear-gradient(135deg,#FF2E6E,#FFB547);border:0;color:#fff;box-shadow:0 0 22px rgba(255,46,110,.55)}
+.lvl li.lgd .n{background:linear-gradient(135deg,#FF2E6E,#FFB547);border:0;color:#1B1640;box-shadow:0 0 22px rgba(255,46,110,.55)}
 .lvl em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--mute);margin-top:6px;letter-spacing:.04em}
 .lvl b{font-size:16.5px;line-height:1.3}
 .lvl small{font-size:13px;color:var(--mute);line-height:1.45}
@@ -267,7 +267,7 @@ details.terms div{padding:6px 0 0}
 
 /* 카테고리 바 (2026-10-12): 긴 페이지를 위에서 바로 이동 */
 .top nav a.evn{color:var(--ink);position:relative}.top nav a.evn i{font-style:normal;font-size:10px;font-weight:800;background:#FF2E6E;color:#fff;border-radius:6px;padding:1px 5px;margin-left:4px;vertical-align:2px}
-.catbar a.ev{color:#fff;background:linear-gradient(90deg,#FF2E6E,#A53BFF)}.catbar a.ev i{font-style:normal;background:#fff;color:#FF2E6E;border-radius:99px;font-size:11px;padding:0 6px;margin-left:4px}
+.catbar a.ev{color:#fff;background:linear-gradient(90deg,#E0185E,#9B33F2)}.catbar a.ev i{font-style:normal;background:#fff;color:#FF2E6E;border-radius:99px;font-size:11px;padding:0 6px;margin-left:4px}
 .catbar{position:sticky;top:64px;z-index:35;background:rgba(14,12,44,.86);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);border-bottom:1px solid var(--line)}
 .catbar .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:9px;padding-bottom:9px}
 .catbar .wrap::-webkit-scrollbar{display:none}
@@ -655,10 +655,10 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 <!-- 게임 모임 메뉴: 준비만 해 둠(hidden). 첫 실제 모임 등록·신청 흐름 검증 뒤 data-party-menu 두 곳의 hidden 을 지워 공개 -->
 <header class="top"><div class="wrap">
   <a class="logo" href="#"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a>
-  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/" class="evn">롤드컵 이벤트</a><a href="party/" data-party-menu hidden>게임 모임</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
+  <nav aria-label="주요 메뉴"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="party/" data-party-menu hidden>게임 모임</a><a href="league/">리그</a><a href="gear/">기어</a><a href="plan/">파티 플래너</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="#crew" class="join">N CREW 가입</a></nav>
   <button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer"><span></span></button>
 </div></header>
-<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="worlds/">🏆 롤드컵 우승 예언 이벤트</a><a href="party/" data-party-menu hidden>게임 모임</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
+<div class="drawer" id="drawer"><a href="#deals">공실특가</a><a href="#branches">지점·요금</a><a href="party/" data-party-menu hidden>게임 모임</a><a href="league/">리그</a><a href="gear/">기어 라이브러리</a><a href="plan/">파티 플래너</a><a href="#magazine">게임 매거진</a><a href="#faq">FAQ</a><a href="me/">내 N CREW</a><a href="help/">AI 상담사</a><a href="#crew" class="join">N CREW 가입하기</a></div>
 
 <main>
 <section class="hero"><div class="wrap">
@@ -677,10 +677,6 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
       <div class="rating"><b>★ <span class="cu" data-to="4.9" data-d="1">4.9</span></b><span>후기 <span class="cu" data-to="285">285</span>개</span></div>
     </div>
   </div>
-  <div class="evrot rv" id="evrot">
-   <a class="event on" href="worlds/" data-track="home_ev_worlds"><b>🏆 롤드컵 우승팀 맞히면 이용료 최대 10만원 페이백</b><span id="evW">10/12~ 나이트·통대관</span><span class="go" aria-hidden="true">→</span></a>
-  </div>
-  <div class="evdots" id="evdots"><button class="on" aria-label="롤드컵 예언 이벤트"></button></div>
 </div></section>
 <nav class="catbar" id="catbar" aria-label="이 페이지 바로가기"><div class="wrap">
   <a href="#events" class="ev" data-events-open>🎉 이벤트 <i>2</i></a><a href="#deals" data-s="deals">빈자리 특가</a><a href="#branches" data-s="branches">지점·요금</a><a href="#crew" data-s="crew">N CREW 혜택</a><a href="#reviews" data-s="reviews">후기</a><a href="#space" data-s="space">공간·즐길 거리</a><a href="#gear" data-s="gear">기어 월·입고 투표</a><a href="#magazine" data-s="magazine">게임 매거진</a><a href="#faq" data-s="faq">자주 묻는 질문</a>
@@ -731,7 +727,7 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
     <a class="o" href="league/"><span class="o-k">플레이앤 리그</span><b>다섯 명이서 몇 연승까지?</b><span class="d">매달 열리는 롤 5인 자유랭크 연승전. 지점별 1위는 명예의 전당에 영구히 남아요.</span><span class="go" aria-hidden="true">→</span></a>
     <a class="o" href="#magazine"><span class="o-k">게임 매거진</span><b>매일 올라오는 게임 정보</b><span class="d">친구랑 할 게임, 신작, 세일, 롤드컵 소식을 주제별로 모았어요.</span><span class="go" aria-hidden="true">→</span></a>
   </div>
-  <div class="for-row rv"><span>이럴 때 플레이앤</span><a href="for/military/">나라사랑 애국자 (군인)</a><a href="for/worlds/">롤드컵 단체 관람</a><a href="for/birthday/">생일 파티</a><a href="for/club/">동아리·회사 내전</a></div>
+  <div class="for-row rv"><span>이럴 때 플레이앤</span><a href="for/military/">나라사랑 애국자 (군인)</a><a href="for/birthday/">생일 파티</a><a href="for/club/">동아리·회사 내전</a></div>
 </div></section>
 
 <section class="blk" id="gear"><div class="wrap">
@@ -1013,9 +1009,7 @@ function homePulse(){const c=[];if(HP.live>=2)c.push(`<span class="lv"><i></i>�
 function loadPulse(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track?pulse=/").then(r=>r.json()).then(r=>{if(r.ok){HP=r;homePulse()}}).catch(()=>{})}
 const PNBOT=/bot|crawl|spider|slurp|meta-external|headless|lighthouse/i.test(navigator.userAgent);
 if(!PNBOT){loadPulse();setInterval(()=>{if(!document.hidden)loadPulse()},60000)}
-if(!PNBOT)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{if(!x.ok||!x.fan_total)return;
-  const top=Object.entries(x.fan||{}).sort((a,b)=>b[1]-a[1])[0];$("evW").innerHTML=(x.fan_total>=20?`지금까지 <em>${x.fan_total}표</em> · `:"")+`지금 1위 <em>${top?top[0]:"-"}</em> · 너의 픽은?`}).catch(()=>{});
-(function(){const ev=[...document.querySelectorAll("#evrot .event")],dt=[...document.querySelectorAll("#evdots button")];let i=0,t=null;
+(function(){const ev=[...document.querySelectorAll("#evrot .event")],dt=[...document.querySelectorAll("#evdots button")];let i=0,t=null;if(!ev.length)return;
   const show=n=>{i=n;ev.forEach((e,j)=>e.classList.toggle("on",j===i));dt.forEach((d,j)=>d.classList.toggle("on",j===i))};
   const run=()=>{clearInterval(t);if(!HRM)t=setInterval(()=>show((i+1)%ev.length),5000)};
   dt.forEach((d,j)=>d.onclick=()=>{show(j);run()});const box=$("evrot");box.onmouseenter=()=>clearInterval(t);box.onmouseleave=run;run()})();
