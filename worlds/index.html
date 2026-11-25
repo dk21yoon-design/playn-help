@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#0B0920">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/base.css">
 <title>롤드컵 우승 예언 투표 | 플레이앤 PREDICTION ARENA</title>
 <link rel="canonical" href="https://playn.kr/worlds/">
@@ -346,7 +346,8 @@ function burst(t){if(RM)return;const b=document.querySelector(`.tc[data-t="${CSS
   d.className="burst";d.style.cssText=`left:${r.left+r.width/2-10}px;top:${r.top+r.height/2-10}px;--tc:${meta(t).c}`;document.body.appendChild(d);setTimeout(()=>d.remove(),800)}
 async function pulse(){try{const r=await(await fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track?pulse=/worlds/")).json();const c=[];
   if(r.live>=2)c.push(`🟢 지금 ${r.live}명이 보는 중`);if(r.today>=3)c.push(`👀 오늘 ${r.today}명 방문`);$("pulsew").innerHTML=c.map(x=>`<span>${x}</span>`).join("")}catch(e){}}
-pulse();setInterval(pulse,60000);
+const PNBOT=/bot|crawl|spider|slurp|meta-external|headless|lighthouse/i.test(navigator.userAgent);
+if(!PNBOT)pulse();setInterval(()=>{if(!document.hidden&&!PNBOT)pulse()},60000);
 // 내 예언 카드 (공유용 이미지)
 async function ticket(scroll){
   if(!mine)return;const m=meta(mine),r=rarity(mine),W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
@@ -393,7 +394,7 @@ function pay(x){const E=$("lv"),el=new Set(x.eliminated||[]),R=Object.entries(x.
   if(!R.length)h+=`<div class="empty">10/12 이용 팀부터 집계돼요.</div>`;
   R.forEach(([t,n])=>{h+=`<div class="br ${el.has(t)?"out":""}" style="--tc:${meta(t).c}"><span class="no">·</span><span class="nm"><b>${esc(t)}</b><u><i style="width:${pct(n,x.total)}%"></i></u></span><span class="v">${pct(n,x.total)}%</span></div>`});
   if(x.winner)h+=`<div style="margin-top:8px"><b>🏆 우승: ${esc(x.winner)}</b></div>`;E.innerHTML=h}
-load().then(()=>{if(phone)check()});setInterval(load,15000);
+load().then(()=>{if(phone)check()});setInterval(()=>{if(!document.hidden&&!PNBOT)load()},60000);
 })();
 </script>
 </body></html>

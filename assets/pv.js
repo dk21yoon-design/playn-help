@@ -2,7 +2,7 @@
    view: 페이지 열림 · click: 누른 버튼/링크 · scroll: 25/50/75/100% 도달 · leave: 머문 시간과 최대 스크롤 */
 (() => {
   try {
-    if (navigator.webdriver || /^(localhost|127\.)/.test(location.hostname)) return;
+    if (navigator.webdriver || /bot|crawl|spider|slurp|meta-external|headless|lighthouse|preview|yeti|daum/i.test(navigator.userAgent) || /^(localhost|127\.)/.test(location.hostname)) return;
     const E = "https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track";
     const rid = () => Math.random().toString(36).slice(2, 12);
     const keep = (st, k, f) => { try { let v = st.getItem(k); if (!v) { v = f(); st.setItem(k, v); } return v; } catch (e) { return f(); } };

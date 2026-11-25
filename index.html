@@ -17,7 +17,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"플레이앤 Play N","alternateName":["플레이앤","PLAY N","게임파티룸 플레이앤"],"url":"https://playn.kr/","logo":"https://playn.kr/assets/brand/logo/playn_icon_1024.png","telephone":"+82-10-8339-5818","sameAs":["https://www.instagram.com/playn_no.1/"],"subOrganization":[{"@type":"EntertainmentBusiness","name":"게임파티룸 플레이앤 홍대루프탑점","url":"https://playn.kr/hongdae/"},{"@type":"EntertainmentBusiness","name":"게임파티룸 플레이앤 연남루프탑점","url":"https://playn.kr/yeonnam/"},{"@type":"EntertainmentBusiness","name":"게임파티룸 플레이앤 연트럴파크점","url":"https://playn.kr/yeontral/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="preload" as="image" href="assets/home/hero.webp">
 <style>
 /* 플레이앤 홈 v2: 루프탑 밤 + 스트링 전구 무드. 다크 고정(브랜드가 '밤'), 강조색은 전구 앰버 1개, 핑크는 '특가' 의미에만 사용 */
@@ -642,6 +642,9 @@ a,button{-webkit-tap-highlight-color:rgba(255,181,71,.18)}
 .qtoast.on{opacity:1;transform:translate(-50%,0)}
 .qbar{width:min(1000px,calc(100vw - 340px))}
 @media(max-width:1000px){.qbar{width:min(1000px,calc(100vw - 200px))}}
+/* 2026-11-26 휴대폰 첫 화면: 히어로 버튼 한 줄 + 버튼이 보이는 동안 견적 바는 요약 줄만 */
+@media(max-width:600px) and (min-width:341px){.hero .cta{flex-wrap:nowrap;gap:8px}.hero .cta .btn{flex:1 1 auto;padding:15px 10px;font-size:15px}}
+@media(max-width:760px){.qbar.mini:not(:has(#qPanel:not([hidden]))) .qact{display:none}}
 @media(max-width:760px){.qbar{width:auto}.qinfo{flex-basis:100%}.qact{flex-basis:100%}.qact>*{flex:1;justify-content:center}.qshare,.qgo{padding:0 10px;font-size:14px}body.has-qbar{padding-bottom:150px}}
 </style>
 <script src="/assets/pv.js" defer></script>
@@ -1008,8 +1011,9 @@ function homePulse(){const c=[];if(HP.live>=2)c.push(`<span class="lv"><i></i>�
   const dn=dealCount();if(dn)c.push(`<span>🔥 이번 주 특가 빈자리 <b>${dn}</b>칸</span>`);
   if(HP.today>=5)c.push(`<span>👀 오늘 <b>${HP.today}</b>명 방문</span>`);$("hpulse").innerHTML=c.join("")}
 function loadPulse(){fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-track?pulse=/").then(r=>r.json()).then(r=>{if(r.ok){HP=r;homePulse()}}).catch(()=>{})}
-loadPulse();setInterval(loadPulse,60000);
-fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{if(!x.ok||!x.fan_total)return;
+const PNBOT=/bot|crawl|spider|slurp|meta-external|headless|lighthouse/i.test(navigator.userAgent);
+if(!PNBOT){loadPulse();setInterval(()=>{if(!document.hidden)loadPulse()},60000)}
+if(!PNBOT)fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/playn-settle",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"worlds_public"})}).then(r=>r.json()).then(x=>{if(!x.ok||!x.fan_total)return;
   const top=Object.entries(x.fan||{}).sort((a,b)=>b[1]-a[1])[0];$("evW").innerHTML=(x.fan_total>=20?`지금까지 <em>${x.fan_total}표</em> · `:"")+`지금 1위 <em>${top?top[0]:"-"}</em> · 너의 픽은?`}).catch(()=>{});
 (function(){const ev=[...document.querySelectorAll("#evrot .event")],dt=[...document.querySelectorAll("#evdots button")];let i=0,t=null;
   const show=n=>{i=n;ev.forEach((e,j)=>e.classList.toggle("on",j===i));dt.forEach((d,j)=>d.classList.toggle("on",j===i))};
@@ -1235,6 +1239,7 @@ if(dock&&"IntersectionObserver" in window)new IntersectionObserver(es=>dock.clas
  if(new Date(Date.now()+9*36e5).getUTCDay()===6)$q("qSat").textContent="다음 토요일";
  document.addEventListener("pn:price",draw);draw();
  const form=document.getElementById("joinForm");if(form&&"IntersectionObserver" in window)new IntersectionObserver(es=>bar.classList.toggle("hide",es[0].isIntersecting),{threshold:.15}).observe(form);
+ const hc=document.querySelector(".hero .cta");if(hc&&"IntersectionObserver" in window)new IntersectionObserver(es=>bar.classList.toggle("mini",es[0].isIntersecting)).observe(hc);
  document.addEventListener("focusin",e=>{if(e.target.matches("input,select,textarea")&&!bar.contains(e.target))bar.classList.add("typing")});
  document.addEventListener("focusout",()=>setTimeout(()=>{const a=document.activeElement;if(!a||!a.matches("input,select,textarea"))bar.classList.remove("typing")},120));
  function badge(){const ch=window.pnChannel!==undefined?window.pnChannel:(()=>{const q=new URLSearchParams(location.search),s=(q.get("from")||q.get("utm_source")||"").toLowerCase(),r=document.referrer;

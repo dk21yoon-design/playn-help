@@ -2,4 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 
+# Meta AI 학습·색인 수집 봇: 하루 17만 건 호출로 서버 부하 (2026-11-26 차단). 링크 미리보기(facebookexternalhit)는 그대로 허용
+User-agent: meta-externalagent
+Disallow: /
+
 Sitemap: https://playn.kr/sitemap.xml

@@ -20,7 +20,7 @@ HEAD_COMMON = """<meta charset="utf-8">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
 <link rel="stylesheet" href="/assets/base.css">
 <script src="/assets/pv.js" defer></script>"""
 
@@ -108,9 +108,9 @@ REFUND = "이용 8일 전까지 취소하면 100% 환불되고, 7일 전부터�
 BR_CSS = """
 .pcalc{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
 .pcalc h3{font-size:18px}
-.pc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pc-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:12px}
 .pc-row label{font-size:13px;font-weight:700;color:var(--mute);display:flex;flex-direction:column;gap:4px}
-.pc-row input,.pc-row select{font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px}
+.pc-row input,.pc-row select{width:100%;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px}
 .pc-row .pc-bbq{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}
 .pc-row .pc-bbq input{width:20px;height:20px}
 .pc-out{margin-top:14px;font-size:17px;line-height:1.7}
