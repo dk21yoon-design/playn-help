@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>멈추는 훅 공식 5 · AI 문방구</title>
+<meta name="description" content="릴스 첫 문장을 넘기는 훅에서 멈추는 훅으로 바꾸는 공식 5개(숫자·볼 사람 부르기·통념 깨기·손해 먼저·궁금한 질문)와 예시 문장, 클로드한테 훅을 시키는 문장을 정리했어요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 훅 5</p><h1>넘기는 훅 →<br><em>멈추는 훅</em> 5</h1><p class="lead">댓글로 신청해주셔서 고마워요. 같은 내용이어도 첫 문장만 바꾸면 끝까지 보는 사람이 늘어요. 유형마다 바꾼 예시와 클로드한테 시키는 문장을 넣었어요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>숫자 넣기</h2><div class="card"><p>‘맛있어요’ 같은 말은 다들 해요. 얼마나·몇 번·며칠처럼 셀 수 있는 걸 넣으면 믿을 근거가 생겨요.</p><div class="copy" data-c>전: 저희 카페 라떼 맛있어요
+후: 하루 40잔 나가는 라떼, 비결은 우유 온도예요<button type="button">복사</button></div></div><h2><b>02</b>볼 사람 먼저 부르기</h2><div class="card"><p>누가 봐야 하는 영상인지 첫 단어에 말해요. 해당되는 사람이 멈춰요.</p><div class="copy" data-c>전: 다이어트 도시락 새로 나왔어요
+후: 점심마다 편의점 가는 직장인이면 이거 보세요<button type="button">복사</button></div></div><h2><b>03</b>통념 깨기</h2><div class="card"><p>다들 그렇다고 믿는 걸 뒤집으면 확인하고 싶어져요.</p><div class="copy" data-c>전: 홈카페 레시피 공유해요
+후: 비싼 머신 없어도 이 맛 나요<button type="button">복사</button></div></div><h2><b>04</b>손해 먼저 말하기</h2><div class="card"><p>얻는 것보다 잃는 걸 먼저 들으면 더 신경 써요. 겁주기보다 구체적인 손해 하나만 말해요.</p><div class="copy" data-c>전: 원두 보관 팁 알려드려요
+후: 이거 모르면 원두 반은 버리고 있어요<button type="button">복사</button></div></div><h2><b>05</b>답이 궁금한 질문</h2><div class="card"><p>끝까지 봐야 답이 나오는 질문을 던져요. 답은 영상 안에서 꼭 보여줘요.</p><div class="copy" data-c>전: 신메뉴 나왔어요
+후: 딸기 라떼에 소금을 넣으면 어떻게 될까요?<button type="button">복사</button></div></div><h2><b>06</b>클로드한테 훅 시키는 문장</h2><div class="card"><p>유형을 정해주고 여러 개 받아서 고르는 게 빨라요.</p><div class="copy" data-c>내 릴스 주제는 [주제]이고 보는 사람은 [대상]이야. 첫 문장 훅을 숫자 넣기·볼 사람 부르기·통념 깨기·손해 먼저·궁금한 질문 5가지 유형으로 2개씩 써줘. 한 문장 20자 안팎, 과장 표현과 느낌표는 빼줘.<button type="button">복사</button></div></div><h2><b>REF</b>참고</h2><div class="card"><p>레퍼런스 랩에 모은 훅 비교 카드뉴스(아쉬운 훅·무난한 훅·잘되는 훅)와 릴스 후킹 문구 6가지 유형 정리를 바탕으로 만들었어요.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['멈추는 훅 공식 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hook5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
