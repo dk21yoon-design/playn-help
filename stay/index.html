@@ -91,6 +91,29 @@ table.t td.bad{color:#FF8A8E;font-weight:700}
 .btn:focus-visible,.tabs a:focus-visible,.steps a:focus-visible,summary:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){details.sp>summary::after{transition:none}}
 
+.vg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(min-width:700px){.vg{grid-template-columns:repeat(3,1fr)}}
+.vc{background:var(--panel);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.vc img{width:100%;height:auto;display:block;aspect-ratio:900/678}
+.vc b{font-size:15.5px;line-height:1.35;padding:10px 12px 0}
+.vc span{font-size:13.5px;color:var(--mute);line-height:1.45;padding:4px 12px 12px}
+.vc.warn{outline:1.5px solid rgba(255,90,95,.55)}
+.dv{background:var(--panel);border-radius:18px;padding:14px;margin-top:12px}
+.dvh{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+.dvh h3{font-size:19px}.dvh small{color:var(--dim);font-size:12.5px;font-weight:600;text-align:right}
+.dv>img{width:100%;height:auto;border-radius:12px;display:block}
+.dv ol.how{list-style:none;margin:10px 0 0;padding:0;counter-reset:h}
+.dv ol.how li{counter-increment:h;position:relative;padding:7px 0 7px 32px;line-height:1.5;font-size:15.5px}
+.dv ol.how li::before{content:counter(h);position:absolute;left:0;top:7px;width:22px;height:22px;border-radius:50%;background:var(--lamp);color:#1a1300;font:800 13px/22px Pretendard,sans-serif;text-align:center}
+.dv .bad{margin-top:8px;border-radius:12px;background:rgba(255,90,95,.14);padding:10px 12px;font-size:14.5px;line-height:1.55}
+details.mr{margin-top:8px}details.mr>summary{cursor:pointer;color:var(--lamp);font-weight:700;font-size:14.5px;min-height:40px;display:flex;align-items:center}
+details.mr ul{list-style:none;margin:0;padding:0}details.mr li{padding:6px 0 6px 16px;position:relative;font-size:14.5px;line-height:1.55;color:var(--mute)}
+details.mr li::before{content:"";position:absolute;left:2px;top:15px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+details.mr li.no::before{background:#FF5A5F;width:8px;height:2px;border-radius:0;top:17px}
+.mini{display:grid;gap:8px;margin-top:12px}.mini>div{background:var(--panel);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;line-height:1.5}
+.mini svg{flex:none;width:22px;height:22px;stroke:var(--lamp);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
+.mini b{display:block}.mini span{color:var(--mute);font-size:14.5px}
+
 .shots{display:flex;gap:10px;margin-top:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.shots::-webkit-scrollbar{display:none}.ph img{width:100%;height:auto;border-radius:12px;margin-top:10px;display:block;background:var(--panel)}.shots img{flex:none;height:clamp(170px,46vw,300px);width:auto;border-radius:14px;scroll-snap-align:start;background:var(--panel)}</style>
 </head><body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -118,124 +141,64 @@ table.t td.bad{color:#FF8A8E;font-weight:700}
  <div class="facts">
   <div class="fact"><small>체크인</small><b>오후 2시</b></div>
   <div class="fact"><small>퇴실</small><b>오전 10시</b></div>
-  <div class="fact"><small>최소 이용</small><b>1주</b></div>
-  <div class="fact"><small>주차</small><b>불가</b></div>
   <div class="fact wide"><small>문의</small><b>삼삼엠투 앱 채팅</b></div>
  </div>
 
- <section class="must" aria-labelledby="mh">
-  <h2 class="disp" id="mh">입실 전에 이것만 먼저</h2>
-  <ol>
-   <li><b>도어락은 번호를 누른 뒤 # 또는 *</b><span>번호와 컴퓨터 비밀번호는 예약 확정 메시지로 보내드려요</span></li>
-   <li><b>신발은 현관문 앞 신발장에 넣어 주세요</b><span>실내화로 갈아 신고 들어오세요. 실내에서 신발을 신으면 안 돼요</span></li>
-   <li><b>안에 있는 실내화는 모두 실내용이에요</b><span>실내화를 신고 밖으로 나가지 말아 주세요</span></li>
-   <li><b>실내는 금연이에요</b><span>담배와 전자담배 모두 안 돼요</span></li>
-  </ol>
- </section>
+ <nav class="steps" aria-label="안내 순서"><a href="#s1"><i>1</i>꼭 지켜요</a><a href="#s2"><i>2</i>기기 사용법</a><a href="#s3"><i>3</i>퇴실</a><a href="#s4"><i>4</i>문제 해결</a></nav>
 
- <nav class="steps" aria-label="안내 순서"><a href="#s1"><i>1</i>도착</a><a href="#s2"><i>2</i>공간 사용법</a><a href="#s3"><i>3</i>퇴실</a><a href="#s4"><i>4</i>요금·비품</a><a href="#s5"><i>5</i>문제 해결</a></nav>
-
- <section class="sec" id="s1"><h2 class="disp"><i>1</i>도착</h2>
-  <div class="rows">
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg><div><b>서울 서초구 반포대로12길 33 현대오피스텔 4층</b><span>지번 주소는 서초동 1589-8이에요. 엘리베이터로 4층에 올라오세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg><div><b>가는 길</b><span>남부터미널과 서울교대역에서 걸어서 5분이에요. 예술의전당도 가까워요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shoe"/></svg><div><b>신발은 신발장, 안에서는 실내화</b><span>현관문 앞 신발장에 신발을 넣고 실내화로 갈아 신어 주세요. 실내화는 실내 전용이라 밖에서 신으면 안 돼요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wifi"/></svg><div><b>와이파이</b><span>실내에 붙어 있는 QR을 찍거나 공유기 뒷면에 적힌 이름과 비밀번호로 연결해 주세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-car"/></svg><div><b>주차는 안 돼요</b><span>주변 공영주차장을 이용해 주세요 ('모두의주차장' 앱 추천)</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bike"/></svg><div><b>배달·택배</b><span>위 주소에 건물명과 4층까지 적으시면 돼요. 편의점은 걸어서 1분 거리예요</span></div></div>
+ <section class="sec" id="s1"><h2 class="disp"><i>1</i>꼭 지켜 주세요</h2>
+  <div class="vg">
+   <div class="vc"><img src="/assets/stay/g/door-lock.webp" alt="도어락 번호를 누른 뒤 별표나 우물정 버튼을 누르는 모습" width="900" height="678" loading=lazy decoding="async"><b>도어락</b><span>번호 누르고 # 또는 *<br>번호는 예약 메시지에 있어요</span></div>
+   <div class="vc"><img src="/assets/stay/g/shoes-in.webp" alt="현관 앞 신발장에 신발을 넣고 실내화로 갈아 신는 모습" width="900" height="678" loading=lazy decoding="async"><b>신발은 현관 앞 신발장</b><span>실내화로 갈아 신고 들어와요. 실내에서 신발 금지</span></div>
+   <div class="vc warn"><img src="/assets/stay/g/slippers-stay.webp" alt="실내화를 신고 밖으로 나가면 안 된다는 표시" width="900" height="678" loading=lazy decoding="async"><b>실내화는 실내용</b><span>신고 밖으로 나가지 마세요</span></div>
+   <div class="vc warn"><img src="/assets/stay/g/shower-buttons.webp" alt="샤워기 손잡이 버튼 중 두 번째는 사용, 세 번째는 물이 위로 튀는 청소 버튼" width="900" height="678" loading=lazy decoding="async"><b>샤워기는 두 번째 버튼</b><span>세 번째는 청소용이라 물이 위로 튀어요</span></div>
+   <div class="vc"><img src="/assets/stay/g/shower-curtain.webp" alt="욕실 문에 달린 샤워커튼을 치고 샤워하는 모습" width="900" height="678" loading=lazy decoding="async"><b>샤워커튼 꼭 치기</b><span>안 치면 물이 밖으로 새요</span></div>
+   <div class="vc warn"><img src="/assets/stay/g/rollpan-wash.webp" alt="롤팬 모터는 물에 닿지 않게 빼 두고 팬과 뚜껑만 씻는 모습" width="900" height="678" loading=lazy decoding="async"><b>설거지는 꼭</b><span>롤팬 모터는 물에 닿으면 고장 나요</span></div>
+   <div class="vc"><img src="/assets/stay/g/recycle.webp" alt="캔·페트병·유리병·종이·일반 쓰레기를 나눠 버리는 모습" width="900" height="678" loading=lazy decoding="async"><b>분리수거</b><span>쓰레기는 매일 내놓을 수 있어요</span></div>
+   <div class="vc warn"><img src="/assets/stay/g/no-take.webp" alt="수건과 실내화는 가방에 넣어 가면 안 된다는 표시" width="900" height="678" loading=lazy decoding="async"><b>수건·비품은 두고 가기</b><span>퇴실 때마다 수량을 체크해요</span></div>
   </div>
-  <details class="ph"><summary>현관 입구와 도어락 사진 보기</summary><img src="/assets/stay/entrance-lock.webp" alt="현관 입구와 도어락" width="1200" height="800" loading=lazy decoding="async"></details>
+  <div class="mini">
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>실내는 금연이에요</b><span>담배와 전자담배 모두 안 돼요</span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wifi"/></svg><div><b>와이파이</b><span>실내 QR을 찍거나 공유기 뒷면의 이름·비밀번호로 연결해요</span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-car"/></svg><div><b>주차는 안 돼요</b><span>엘리베이터로 4층, 편의점은 걸어서 1분이에요</span></div></div>
+  </div>
  </section>
 
- <section class="sec" id="s2"><h2 class="disp"><i>2</i>공간 사용법</h2>
-  <p class="lead">누르면 펼쳐져요. 막히면 삼삼엠투 앱 채팅으로 물어보세요.</p>
+ <section class="sec" id="s2"><h2 class="disp"><i>2</i>기기 사용법</h2>
+  <article class="dv"><div class="dvh"><h3>세탁건조기</h3><small>마이디어 워시콤보 · 세탁 15kg / 건조 9kg</small></div><img src="/assets/stay/g/washer.webp" alt="검은색 드럼 세탁건조기에 세제를 넣고 빨래를 넣는 모습" width="900" height="678" loading=lazy decoding="async"><ol class="how"><li>주머니 비우기 (동전·라이터)</li><li>빨래 넣고 문을 딸깍 닫기</li><li>세제는 <b>본세탁 칸</b>, 섬유유연제는 <b>유연제 칸</b></li><li><b>세탁+건조</b> 코스 고르고 시작</li></ol><p class="bad">건조까지 할 땐 <b>9kg 이하</b>로. 울·실크·고무 붙은 옷은 건조 금지</p><details class="mr"><summary>더 보기</summary><div class="in"><ul><li>작동 중 유리문이 뜨거워요. 끝나고 잠금이 풀린 뒤 열어요</li><li>건조 중간에 멈췄다면 빨래를 바로 꺼내 펼쳐 주세요</li><li>E30이 뜨면 문이 덜 닫힌 거예요. 다시 닫고 시작해요</li><li>끝나면 바로 꺼내 주세요. 오래 두면 냄새가 나요</li></ul></div></details></article>
 
-  <details class="sp" open><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"/></svg>컴퓨터·작업 공간<em>PC 2대</em></summary><div class="in">
-   <ul><li>게이밍 PC가 2대 있고 자리마다 모니터 2개와 전동 높이조절 책상이 있어요. 의자 하나는 허먼밀러예요</li><li>컴퓨터 비밀번호는 예약 확정 메시지에 있어요</li><li>계정은 <b>본인 계정</b>으로 로그인하고 퇴실 전에 꼭 로그아웃해 주세요</li><li>책상 높이는 책상의 조절 버튼으로 바꿔요. 움직이는 동안 책상 아래에 물건을 두지 마세요</li><li>모니터가 한쪽만 나오면 <b>윈도우키 + P → '확장'</b>을 눌러 주세요</li></ul>
-   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/pc-monitors.webp" alt="듀얼 모니터가 놓인 컴퓨터 자리" width="1200" height="800" loading=lazy decoding="async"></details>
-  </div></details>
+  <article class="dv"><div class="dvh"><h3>인덕션</h3><small>홈플래닛 2구</small></div><img src="/assets/stay/g/induction.webp" alt="흰색 2구 인덕션의 전원 버튼을 누르고 다이얼을 돌리는 모습" width="900" height="678" loading=lazy decoding="async"><ol class="how"><li>왼쪽 <b>전원 버튼</b>을 눌러요</li><li>쓰는 화구 앞 <b>다이얼</b>을 돌려 세기를 맞춰요</li><li>다 쓰면 다이얼을 끝까지 돌려 끄고 전원 버튼</li></ol><p class="bad">인덕션용 냄비만 돼요. 켠 채로 자리를 비우지 마세요. 끄고 나서도 상판이 한동안 뜨거워요</p></article>
 
-  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wash"/></svg>세탁·건조<em>마이디어 워시콤보</em></summary><div class="in">
-   <p class="note" style="margin-top:0">세탁 15kg · 건조 9kg 일체형이에요. 한 대로 빨고 말리기까지 끝나요.</p>
-   <h3>쓰는 순서</h3>
-   <ol class="how"><li>주머니를 비워요 (동전·라이터·볼펜은 고장 원인이에요)</li><li>빨래를 넣고 문을 <b>딸깍 소리가 나게</b> 닫아요</li><li>세제는 세제함 <b>본세탁 칸</b>, 섬유유연제는 <b>유연제 칸</b>에 넣어요</li><li>코스를 골라요: <b>세탁+건조</b> / 세탁만 / 건조만</li><li>시작 버튼을 눌러요</li></ol>
-   <h3>꼭 지켜 주세요</h3>
-   <ul><li>건조까지 할 때는 <b>9kg</b>을 넘기지 마세요. 많으면 나눠서 돌려 주세요</li><li>작동 중에는 유리문이 뜨거워요. 문은 끝나고 잠금이 풀린 뒤에 열어 주세요</li><li>건조 중간에 멈추면 안쪽 빨래가 뜨거워요. 꼭 멈춰야 하면 바로 꺼내서 펼쳐 주세요</li><li>끝나면 바로 꺼내 주세요. 오래 두면 냄새가 나요</li><li class=no>울·실크, 고무가 붙은 옷, 방수 옷, 스펀지 패딩은 건조 금지</li><li class=no>문을 억지로 열지 마세요</li></ul>
-   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/bed-washer.webp" alt="침대 옆에 있는 세탁건조기" width="1200" height="800" loading=lazy decoding="async"></details>
-  </div></details>
+  <article class="dv"><div class="dvh"><h3>롤팬 (자동회전 팬)</h3><small>바이탈플랜트</small></div><img src="/assets/stay/g/rollpan-wash.webp" alt="롤팬 모터를 분리해 마른 행주에 두고 팬과 뚜껑만 물로 씻는 모습" width="900" height="678" loading=lazy decoding="async"><ol class="how"><li>팬을 인덕션 <b>한가운데</b>에 올려요</li><li>재료 넣고 뚜껑 홈을 날개 기둥에 맞춰 덮어요</li><li>모터 위 <b>회전 스위치</b> 켜기, 불은 <b>중간</b></li><li>다 쓰면 <b>불과 회전 스위치 둘 다</b> 끄기</li></ol><p class="bad"><b>씻을 때: 고정핀을 시계 반대로 돌려 모터부터 빼기.</b> 모터는 물에 담그거나 물을 뿌리면 고장 나요. 마른 행주로만 닦아 주세요</p><details class="mr"><summary>더 보기</summary><div class="in"><ul><li>기름은 손잡이 두 개를 같이 잡고 기울여 기름 배출구로 따라내요</li><li>다시 끼울 땐 고정핀을 시계 방향으로 끝까지 (덜 잠기면 날개가 헛돌아요)</li><li>예열이 필요 없어요. 센 불은 팬이 타요</li><li>손잡이와 뚜껑 구멍에서 나오는 김이 뜨거워요</li></ul></div></details></article>
 
-  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg>주방·롤팬<em>바이탈플랜트</em></summary><div class="in">
-   <p class="note" style="margin-top:0">회전 날개가 알아서 저어 주는 자동회전 팬이에요. 뚜껑을 닫고 구워서 기름이 덜 튀어요.</p>
-   <h3>쓰는 순서</h3>
-   <ol class="how"><li>팬을 인덕션 <b>한가운데</b>에 올려요</li><li>재료를 넣고 뚜껑 홈을 회전 날개 기둥에 맞춰 덮어요</li><li>모터 위쪽 <b>회전 스위치</b>를 켜요</li><li>불은 <b>중간 세기</b>로 해 주세요. 예열이 필요 없고 센 불은 팬이 타요</li><li>기름은 팬 손잡이와 뚜껑 손잡이를 같이 잡고 기울여 <b>기름 배출구</b>로 따라내요</li><li>다 쓰면 <b>불과 회전 스위치를 둘 다</b> 꺼요</li></ol>
-   <h3>설거지할 때 (중요)</h3>
-   <ol class="how"><li>고정핀을 시계 반대 방향으로 돌려 <b>모터를 먼저 빼요</b></li><li>팬·뚜껑·회전 날개만 물로 씻어요</li><li>다시 끼울 때는 고정핀을 시계 방향으로 끝까지 돌려요 (덜 잠기면 날개가 헛돌아요)</li></ol>
-   <ul><li class=no><b>모터는 물에 담그거나 물을 뿌리면 고장 나요.</b> 마른 행주로만 닦아 주세요</li><li class=no>쓰는 중이나 막 끝났을 때는 손잡이가 뜨거워요</li><li class=no>뚜껑 구멍과 기름 배출구에서 뜨거운 김이 나와요</li></ul>
-   <h3>그 밖의 주방</h3>
-   <ul><li>인덕션, 전자레인지, 에어프라이어, 냉장고, 싱크가 있어요</li><li>인덕션은 인덕션용 냄비와 팬만 쓸 수 있어요. 불을 켠 채로 자리를 비우지 마세요</li><li><b>설거지는 꼭 해 주세요.</b> 그릇·팬·싱크까지 정리해 주시면 돼요</li></ul>
-   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/kitchen-washer.webp" alt="싱크대와 인덕션 주변" width="1200" height="800" loading=lazy decoding="async"></details>
-  </div></details>
+  <article class="dv"><div class="dvh"><h3>음식물 처리기</h3><small>미닉스 더플렌더 MAX</small></div><img src="/assets/stay/g/food-disposer.webp" alt="음식물 처리기 건조통에 음식물을 한계선 아래로 넣고 가루로 만드는 모습" width="900" height="678" loading=lazy decoding="async"><ol class="how"><li><b>OPEN</b> 버튼으로 문 열기</li><li>건조통 <b>한계선 아래</b>까지만 넣기</li><li>통 넣고 문 닫고 <b>시작</b> 버튼</li></ol><p class="bad"><b>넘칠 것 같을 때만</b> 통을 꺼내 가루를 일반 쓰레기봉투에 버려요. 아니면 그대로 두고 퇴실하셔도 돼요</p><details class="mr"><summary>넣으면 안 되는 것</summary><div class="in"><ul><li class=no>뼈다귀, 조개·게 껍데기, 굵은 생선 뼈</li><li class=no>파 뿌리, 양파·마늘·옥수수 껍질</li><li class=no>호두·밤 껍데기, 복숭아·감 씨, 계란 껍데기</li><li class=no>찻잎, 병뚜껑, 나무젓가락, 기름 그 자체</li><li>밥·떡처럼 끈적한 음식은 다른 음식과 섞어서</li><li>돌아가는 중에 손 넣지 않기, Check가 뜨면 이물질 빼고 시작 버튼 5초</li></ul></div></details></article>
 
-  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>음식물 처리기<em>미닉스 더플렌더 MAX</em></summary><div class="in">
-   <h3>쓰는 순서</h3>
-   <ol class="how"><li>앞의 <b>OPEN</b> 버튼을 눌러 문을 열어요</li><li>건조통 안쪽 <b>투입 한계선</b>을 넘지 않게 음식물을 넣어요</li><li>건조통을 넣고 문을 닫은 뒤 <b>시작 버튼</b>을 눌러요. 말리고 갈아서 가루로 만들어요</li><li>돌아가는 중에 더 넣고 싶으면 시작/정지 버튼으로 멈춘 뒤 넣어요</li></ol>
-   <h3>비우는 건 이것만 기억하세요</h3>
-   <ul><li><b>넘칠 것 같을 때만</b> 건조통을 꺼내 가루를 일반 쓰레기봉투에 버려 주세요</li><li>넘치지 않으면 <b>그대로 두고 퇴실</b>하셔도 돼요. 퇴실 청소 때 저희가 처리해요</li></ul>
-   <h3>넣지 마세요</h3>
-   <ul><li class=no>대파·쪽파·미나리 뿌리, 양파·마늘·생강·옥수수 껍질, 고추씨, 옥수수대</li><li class=no>호두·밤·땅콩 껍데기, 복숭아·살구·감 씨, 과일 줄기·꼭지</li><li class=no>뼈다귀(소·돼지·닭), 조개·전복·굴·게 껍데기, 굵은 생선 뼈</li><li class=no>계란 껍데기, 찻잎·한약재 찌꺼기, 병뚜껑, 나무젓가락</li><li class=no>기름 그 자체나 뜨거운 물 (기름진 음식은 기름을 먼저 따라내고)</li></ul>
-   <h3>안전</h3>
-   <ul><li>돌아가는 중에 안에 손을 넣지 마세요</li><li>중간에 멈췄다면 건조통과 손잡이가 뜨거워요. 맨손으로 잡지 마세요</li><li>본체에 물을 뿌리거나 위에 물건을 올리지 마세요</li></ul>
-  </div></details>
-
-  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wc"/></svg>욕실·샤워<em>버튼 주의</em></summary><div class="in">
-   <ul><li>샤워기는 <b>두 번째 버튼</b>을 주로 써 주세요</li><li><b>세 번째 버튼은 청소용</b>이에요. 누르면 물이 위로 튀니 조심해 주세요</li><li>샤워할 때는 <b>문에 달린 샤워커튼을 꼭 쳐 주세요.</b> 안 치면 물이 밖으로 새요</li><li>비데, 헤어드라이어, 화장대가 있어요</li></ul>
-   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/bathroom.webp" alt="비데가 설치된 화장실" width="1200" height="800" loading=lazy decoding="async"></details>
-  </div></details>
-
-  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sofa"/></svg>냉난방·공기</summary><div class="in">
-   <ul><li>에어컨 리모컨은 본체 쪽으로 겨누고 한 번만 눌러 주세요. 안 켜지면 리모컨 건전지를 확인해 주세요</li><li>공기청정기는 켜 두셔도 돼요</li></ul>
-  </div></details>
-
-  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>쓰레기·분리수거<em>매일 배출</em></summary><div class="in">
-   <ul><li>쓰레기는 <b>매일</b> 내놓을 수 있어요</li><li>분리수거를 꼭 지켜 주세요. 캔·페트병·유리병·종이는 비워서 일반 쓰레기와 섞지 말아 주세요</li><li>음식물은 처리기에 넣으면 돼요 (위 음식물 처리기 안내 참고)</li></ul>
-  </div></details>
+  <article class="dv"><div class="dvh"><h3>컴퓨터 2대</h3><small>듀얼 모니터 · 전동 책상</small></div><img src="/assets/stay/pc-monitors.webp" alt="듀얼 모니터가 놓인 컴퓨터 자리" width="1200" height="800" loading=lazy decoding="async"><ol class="how"><li>비밀번호는 예약 메시지에 있어요</li><li><b>본인 계정</b>으로 로그인</li><li>퇴실 전에 꼭 로그아웃</li></ol><details class="mr"><summary>더 보기</summary><div class="in"><ul><li>모니터가 한쪽만 나오면 윈도우키 + P → 확장</li><li>책상 높이는 조절 버튼으로. 움직일 때 책상 아래 물건 치우기</li><li>의자 하나는 허먼밀러예요</li></ul></div></details></article>
  </section>
 
- <section class="sec" id="s3"><h2 class="disp"><i>3</i>퇴실</h2>
-  <p class="lead">오전 10시까지 퇴실해 주세요. 하나씩 눌러서 체크해 보세요.</p>
-  <div class="ck" id="ck"><label><input type="checkbox" data-i="0"><span>설거지 (그릇·팬·싱크 모두)</span></label><label><input type="checkbox" data-i="1"><span>롤팬 모터는 물에 닿지 않게 따로 닦기</span></label><label><input type="checkbox" data-i="2"><span>분리수거해서 쓰레기 내놓기</span></label><label><input type="checkbox" data-i="3"><span>음식물 처리기가 넘칠 것 같으면 비우기 (아니면 그대로 두셔도 돼요)</span></label><label><input type="checkbox" data-i="4"><span>세탁물 꺼내기</span></label><label><input type="checkbox" data-i="5"><span>수건·실내화·비품 제자리에 두기 (가져가면 안 돼요)</span></label><label><input type="checkbox" data-i="6"><span>컴퓨터 로그아웃 후 전원 끄기 (모니터 포함)</span></label><label><input type="checkbox" data-i="7"><span>에어컨 끄기</span></label><label><input type="checkbox" data-i="8"><span>오전 10시까지 퇴실, 도어락이 잠겼는지 확인</span></label></div>
+ <section class="sec" id="s3"><h2 class="disp"><i>3</i>퇴실 (오전 10시)</h2>
+  <p class="lead">눌러서 하나씩 체크해 보세요.</p>
+  <div class="ck" id="ck"><label><input type="checkbox" data-i="0"><span>설거지 (롤팬 모터는 물 없이)</span></label><label><input type="checkbox" data-i="1"><span>분리수거해서 쓰레기 내놓기</span></label><label><input type="checkbox" data-i="2"><span>음식물 처리기: 넘칠 것 같을 때만 비우기</span></label><label><input type="checkbox" data-i="3"><span>세탁물 꺼내기</span></label><label><input type="checkbox" data-i="4"><span>수건·실내화 제자리에 두기</span></label><label><input type="checkbox" data-i="5"><span>컴퓨터 로그아웃, 전원 끄기</span></label><label><input type="checkbox" data-i="6"><span>에어컨 끄기</span></label><label><input type="checkbox" data-i="7"><span>오전 10시까지 퇴실, 도어락 잠김 확인</span></label></div>
   <p class="prog" id="prog" aria-live="polite"></p>
  </section>
 
- <section class="sec" id="s4"><h2 class="disp"><i>4</i>요금·비품</h2>
-  <div class="rows">
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-box"/></svg><div><b>수건과 실내 용품은 가져가면 안 돼요</b><span>수량 체크리스트가 있어서 퇴실할 때마다 확인해요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg><div><b>요금·보증금·환불 규정</b><span>삼삼엠투 예약 화면이 기준이에요. 보증금은 삼삼엠투가 보관하고 퇴실하면 돌려받아요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>전기와 수도는 관리비에 포함돼 있어요</b><span>너무 많이 쓰면 추가 요금을 요청드릴 수 있어요. 가스는 관리비에 들어 있지 않아요</span></div></div>
+ <section class="sec" id="s4"><h2 class="disp"><i>4</i>문제 해결</h2>
+  <div class="mini">
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>도어락이 안 열려요</b><span>번호 뒤 # 또는 *를 눌렀는지 확인 → 안 되면 바로 채팅</span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div><b>모니터가 안 나와요</b><span>마우스 움직이기 → 모니터 전원 → 윈도우키 + P → 확장</span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wash"/></svg><div><b>세탁기 E30</b><span>문을 다시 꼭 닫고 시작. 다른 코드는 사진을 채팅으로</span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg><div><b>롤팬 날개가 헛돌아요</b><span>모터 고정핀을 시계 방향으로 끝까지 잠그기</span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg><div><b>그래도 안 되면</b><span>삼삼엠투 앱 채팅으로 알려 주세요. 파손·오염도 사진과 함께 바로 알려 주시면 돼요</span></div></div>
   </div>
-  <p class="note p">파손이나 오염이 생기면 숨기지 말고 사진과 함께 채팅으로 알려 주세요. 바로 알려 주시면 해결이 훨씬 쉬워요.</p>
- </section>
-
- <section class="sec" id="s5"><h2 class="disp"><i>5</i>문제 해결</h2>
-  <div class="rows">
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>도어락이 안 열려요</b><span>번호를 누른 뒤 # 또는 *를 눌렀는지 확인해 주세요. 그래도 안 열리면 바로 채팅으로 알려 주세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div><b>모니터가 안 나와요</b><span>마우스 움직이기 → 모니터 전원 확인 → 입력 소스(DP/HDMI) 확인</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div><b>모니터가 한쪽만 나와요</b><span>윈도우키 + P → '확장' 선택</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"/></svg><div><b>컴퓨터가 안 켜져요</b><span>본체에 불빛이나 팬 소리가 있으면 모니터 문제예요. 반응이 없으면 본체 뒤 전원 스위치와 멀티탭 스위치를 확인해 주세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wash"/></svg><div><b>세탁기에 E30이 떠요</b><span>문이 덜 닫힌 거예요. 문을 다시 꼭 닫고 시작해 주세요. 다른 코드는 화면 사진을 채팅으로 보내 주세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg><div><b>음식물 처리기에 Check가 떠요</b><span>딱딱한 이물질이나 너무 많이 넣은 음식물을 빼고 시작 버튼을 5초 길게 눌러 주세요. 그래도 같으면 사진과 함께 채팅해 주세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg><div><b>롤팬 날개가 헛돌아요</b><span>모터 고정핀을 시계 방향으로 끝까지 돌려 다시 잠가 주세요</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sofa"/></svg><div><b>에어컨이 안 켜져요</b><span>리모컨을 본체 쪽으로 겨누고 한 번만 누르기 → 리모컨 건전지 확인</span></div></div>
-   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg><div><b>그래도 안 되면</b><span>삼삼엠투 앱 채팅으로 문의해 주세요</span></div></div>
-  </div>
-  <p class="note r"><b>불·연기·가스 냄새·누수</b>가 있으면 바로 대피한 뒤 119에 연락하고 채팅으로 알려 주세요</p>
+  <p class="note r"><b>불·연기·가스 냄새·누수</b>가 있으면 바로 대피 → 119 → 채팅</p>
+  <details class="mr"><summary>요금·정산 안내</summary><div class="in"><ul><li>요금·보증금·환불은 삼삼엠투 예약 화면이 기준이에요. 보증금은 삼삼엠투가 보관하고 퇴실하면 돌려받아요</li><li>전기·수도는 관리비에 포함돼요. 너무 많이 쓰면 추가 요금을 요청드릴 수 있어요</li><li>가스는 관리비에 들어 있지 않아요</li></ul></div></details>
  </section>
 
  <div class="sig">호스트가 직접 지내 보면서 불편한 점을 하나씩 없앤 공간이에요. 편하게 지내다 가세요. 고맙습니다.<br><br>플레이앤 스테이 · 인스타 @playn_no.1</div>
  <p style="margin-top:20px"><a class="btn lamp" href="https://web.33m2.co.kr/guest/room/132363" rel="noopener" style="width:100%">삼삼엠투에서 플레이앤 스테이 보기</a></p>
 </div></main>
 <script>
-(function(){var ck=document.getElementById("ck"),prog=document.getElementById("prog"),SK="pn_ck_stay2",st={};
+(function(){var ck=document.getElementById("ck"),prog=document.getElementById("prog"),SK="pn_ck_stay3",st={};
 try{st=JSON.parse(localStorage.getItem(SK)||"{}")}catch(e){}
 function upd(){var b=[].slice.call(ck.querySelectorAll("input")),n=b.filter(function(x){return x.checked}).length;
 prog.textContent=n===b.length?"모두 끝났어요. 조심히 들어가세요!":n+" / "+b.length+" 완료";
