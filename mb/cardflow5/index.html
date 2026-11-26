@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>카드뉴스 장 역할 5 · AI 문방구</title>
+<meta name="description" content="카드뉴스가 3장에서 넘어가지 않게 표지·공감·본문·진행 표시·마지막 장의 역할 5개와 장마다 클로드한테 그대로 붙여 넣는 문장, 한 번에 7장 구성을 시키는 문장까지 정리했어요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#B6FF3B;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#0A1200;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#0A1200}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#0A1200;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 카드뉴스 5</p><h1>카드뉴스<br>장마다 <em>역할</em> 5</h1><p class="lead">댓글로 신청해주셔서 고마워요. 카드뉴스가 중간에 넘어가는 건 대부분 장마다 할 일이 정해지지 않아서예요. 장별로 역할과 클로드한테 시키는 문장을 넣었어요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>표지 · 숫자 + 얻는 것</h2><div class="card"><p>표지 문장은 두 줄까지만 써요. 숫자 하나와 보고 나서 얻는 것 한 줄이면 충분해요.</p><div class="copy" data-c>[주제] 카드뉴스 표지 문구 5안 써줘. 숫자 하나 + 보고 나서 얻는 것 한 줄. 두 줄 안으로, 느낌표 빼고.<button type="button">복사</button></div></div><h2><b>02</b>둘째 장 · 문제 먼저</h2><div class="card"><p>둘째 장에서 바로 해결책을 꺼내면 왜 봐야 하는지 몰라요. 읽는 사람이 겪는 장면 하나를 먼저 보여줘요.</p><div class="copy" data-c>둘째 장은 해결책 말고 [대상]이 겪는 문제 한 장면으로 써줘. "이런 적 있죠?" 느낌으로 두 문장 안.<button type="button">복사</button></div></div><h2><b>03</b>본문 · 한 장에 하나</h2><div class="card"><p>본문 한 장에는 팁 하나만 넣어요. 제목·부제·본문 크기를 세 단으로 나누면 훑어봐도 읽혀요.</p><div class="copy" data-c>본문을 한 장에 팁 하나씩 나눠줘. 장마다 제목 / 부제 / 본문 3단으로, 본문은 3줄 안. 몇 장이 되는지 먼저 알려줘.<button type="button">복사</button></div></div><h2><b>04</b>진행 표시 · 번호와 막대</h2><div class="card"><p>몇 장 남았는지 보이면 끝까지 넘겨요. 큰 번호(01. 02.)나 아래 진행 막대 중 하나를 써요.</p><div class="copy" data-c>장마다 왼쪽 위에 큰 번호 01. 02. 를 넣고 아래에 진행 막대(현재 장 / 전체 장)를 그려줘.<button type="button">복사</button></div></div><h2><b>05</b>마지막 장 · 요약 + 키워드 하나</h2><div class="card"><p>마지막 장은 한 줄 요약과 댓글 키워드 하나로 끝내요. 키워드가 두 개면 둘 다 안 남겨요.</p><div class="copy" data-c>마지막 장은 전체를 한 줄로 요약하고 댓글 키워드는 하나만 넣어줘. 예: 댓글에 "구성표" 남기면 보내드려요.<button type="button">복사</button></div></div><h2><b>06</b>한 번에 시키는 문장</h2><div class="card"><p>주제만 바꿔서 쓰면 돼요.</p><div class="copy" data-c>[주제]로 인스타 카드뉴스 7장 구성해줘. 1장 표지(숫자+얻는 것 2줄) · 2장 문제 한 장면 · 3~6장 팁 하나씩(제목/부제/본문 3단) · 7장 한 줄 요약+댓글 키워드 하나. 장마다 큰 번호와 진행 막대 위치도 적어줘.<button type="button">복사</button></div></div><h2><b>REF</b>참고</h2><div class="card"><p>레퍼런스 랩에 모은 카드뉴스 3편을 바탕으로 만들었어요: 제목·주황 부제·회색 본문 3단 위계와 진행 막대를 쓴 프롬프트 카드뉴스, 큰 번호와 회색 프롬프트 박스를 쓴 릴스 프롬프트 카드뉴스, AI 정보 계정 캐러셀 44개를 비교해 표지 숫자와 댓글→DM 구조가 반복된다고 정리한 카드뉴스.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['카드뉴스 장 역할 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cardflow5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
