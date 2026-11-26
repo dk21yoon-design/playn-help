@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/base.css">
+<title>플레이앤 스테이 이용 안내 | 삼삼엠투 서초</title>
+<meta name="description" content="삼삼엠투 플레이앤 스테이 투숙 안내. 도착 방법, PC·세탁건조기·음식물처리기 사용법, 퇴실 체크리스트, 문제 해결 방법을 한 페이지에 모았어요.">
+<style>
+
+.gw{max-width:620px;margin:0 auto;padding-bottom:56px;font-size:16px}
+.gw h1{font-size:30px;margin-top:20px}
+.addr{margin-top:6px;color:var(--mute);line-height:1.55}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.tabs a{min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--panel);color:var(--mute);text-decoration:none;font:700 14.5px Pretendard,sans-serif;text-align:center;padding:0 6px}
+.tabs a[aria-current=page]{background:var(--ink);color:var(--night)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.fact{background:var(--panel);border-radius:14px;padding:12px 14px}
+.fact b{display:block;font:400 22px "Black Han Sans",Pretendard,sans-serif;color:var(--ink);margin-top:2px}
+.fact small{color:var(--mute);font-size:13px;font-weight:600}
+.fact.wide{grid-column:1/-1}
+.fact.wide b{font:700 15px/1.6 Pretendard,sans-serif}
+.must{margin-top:18px;border-radius:18px;padding:18px;background:linear-gradient(160deg,#2A2560,#211D57);border:1.5px solid rgba(255,181,71,.5)}
+.must h2{font-size:21px;color:var(--lamp)}
+.must ol{list-style:none;margin:12px 0 0;padding:0;counter-reset:m}
+.must li{counter-increment:m;position:relative;padding:0 0 14px 40px;line-height:1.55}
+.must li:last-child{padding-bottom:0}
+.must li::before{content:counter(m);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--lamp);color:#1a1300;font:800 15px/28px Pretendard,sans-serif;text-align:center}
+.must li b{display:block;font-size:16.5px}
+.must li span{color:var(--mute);font-size:15px}
+.must .btn{margin-top:8px}
+.steps{position:sticky;top:58px;z-index:5;background:var(--night);display:flex;gap:6px;overflow-x:auto;margin:22px -16px 0;padding:8px 16px;border-bottom:1px solid var(--line)}
+.steps a{flex:none;min-height:40px;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border-radius:999px;background:var(--panel);color:var(--mute);text-decoration:none;font:700 14px Pretendard,sans-serif}
+.steps a i{font-style:normal;color:var(--lamp);font-family:"Black Han Sans",sans-serif}
+.sec{margin-top:30px;scroll-margin-top:120px}
+.sec>h2{display:flex;align-items:baseline;gap:10px;font-size:25px}
+.sec>h2 i{font-style:normal;color:var(--brand)}
+.sec>p.lead{margin-top:6px;color:var(--mute);line-height:1.6}
+.rows{margin-top:12px;border-radius:16px;background:var(--panel);overflow:hidden}
+.row{display:flex;gap:12px;padding:14px 16px;border-top:1px solid var(--line);line-height:1.6}
+.row:first-child{border-top:0}
+.row svg{flex:none;width:22px;height:22px;margin-top:2px;stroke:var(--lamp);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.row b{display:block}
+.row span{color:var(--mute);font-size:15px}
+details.sp{margin-top:10px;border-radius:16px;background:var(--panel);overflow:hidden}
+details.sp>summary{list-style:none;cursor:pointer;min-height:56px;display:flex;align-items:center;gap:12px;padding:12px 16px;font:800 17px Pretendard,sans-serif}
+details.sp>summary::-webkit-details-marker{display:none}
+details.sp>summary svg{width:24px;height:24px;stroke:var(--lamp);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+details.sp>summary em{margin-left:auto;font-style:normal;color:var(--dim);font-size:13px;font-weight:600}
+details.sp>summary::after{content:"";width:10px;height:10px;border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:rotate(45deg);margin:-4px 4px 0 6px;transition:transform .2s}
+details.sp[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
+.sp .in{padding:0 16px 16px}
+.sp ul{margin:0;padding:0;list-style:none}
+.sp ul li{position:relative;padding:9px 0 9px 18px;border-top:1px solid var(--line);line-height:1.6}
+.sp ul li:first-child{border-top:0}
+.sp ul li::before{content:"";position:absolute;left:2px;top:19px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.sp ul li.no::before{background:#FF5A5F;width:8px;height:2px;border-radius:0;top:21px}
+.sp h3{font:800 15px Pretendard,sans-serif;color:var(--lamp);margin:14px 0 4px}
+.sp ol.how{margin:6px 0 0;padding:0;list-style:none;counter-reset:h}
+.sp ol.how li{counter-increment:h;position:relative;padding:8px 0 8px 32px;line-height:1.55}
+.sp ol.how li::before{content:counter(h);position:absolute;left:0;top:8px;width:22px;height:22px;border-radius:6px;background:var(--panel2,#241F63);border:1px solid var(--line);color:var(--ink);font:800 13px/22px Pretendard,sans-serif;text-align:center}
+.sp img{width:100%;height:auto;border-radius:12px;margin-top:10px;display:block;background:var(--night)}
+.ph{margin-top:8px}
+.ph summary{cursor:pointer;color:var(--lamp);font-weight:700;font-size:14.5px;min-height:40px;display:flex;align-items:center}
+.ck{margin-top:12px;border-radius:16px;background:var(--panel);padding:6px 0}
+.ck label{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;line-height:1.55;cursor:pointer;min-height:44px}
+.ck input{flex:none;width:22px;height:22px;margin-top:1px;accent-color:var(--lamp)}
+.ck input:checked+span{color:var(--dim);text-decoration:line-through}
+.prog{margin-top:10px;color:var(--mute);font-size:14px;font-weight:600}
+table.t{width:100%;border-collapse:collapse;margin-top:12px;font-size:15px;background:var(--panel);border-radius:16px;overflow:hidden}
+table.t th,table.t td{padding:11px 12px;text-align:left;vertical-align:top;line-height:1.5;border-top:1px solid var(--line)}
+table.t tr:first-child th,table.t tr:first-child td{border-top:0}
+table.t thead th{color:var(--mute);font-size:13px;font-weight:700;background:rgba(255,255,255,.03)}
+table.t td.n{white-space:nowrap;font-weight:800;text-align:right}
+table.t td.bad{color:#FF8A8E;font-weight:700}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.flow div{background:var(--panel);border-radius:12px;padding:10px 8px;text-align:center;font-size:13.5px;line-height:1.4;font-weight:600;color:var(--mute)}
+.flow div b{display:block;color:var(--lamp);font:400 18px "Black Han Sans",sans-serif;margin-bottom:2px}
+.note{margin-top:10px;border-radius:14px;padding:13px 15px;line-height:1.6;background:var(--panel);font-size:15px}
+.note.r{background:rgba(255,90,95,.14)}.note.b{background:rgba(143,163,255,.14)}.note.p{background:rgba(255,46,110,.12)}.note.y{background:rgba(255,181,71,.14)}
+.note a{color:var(--lamp);font-weight:700}
+.perk{display:grid;gap:8px;margin-top:12px}
+.perk div{background:var(--panel);border-radius:14px;padding:14px 16px;line-height:1.55}
+.perk b{color:var(--ink)}
+.perk span{display:block;color:var(--mute);font-size:14.5px;margin-top:2px}
+.sig{margin-top:30px;color:var(--mute);font-size:14.5px;line-height:1.75;border-top:1px solid var(--line);padding-top:16px}
+.btn:focus-visible,.tabs a:focus-visible,.steps a:focus-visible,summary:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){details.sp>summary::after{transition:none}}
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+<symbol id="i-car" viewBox="0 0 24 24"><path d="M5 16h14M6 16l1.5-5h9L18 16M6 16v2.5M18 16v2.5"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/></symbol>
+<symbol id="i-bike" viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-8h5l3 8M10 9H8"/></symbol>
+<symbol id="i-game" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="11" rx="4"/><path d="M8 11v3M6.5 12.5h3M15 12h.01M17 14h.01"/></symbol>
+<symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+<symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-9-1 3-3 3-3 6-1-1-2-2-2-4-2 2-3 4-3 7a6 6 0 0 0 6 6z"/></symbol>
+<symbol id="i-sofa" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v2"/><path d="M3 12a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z"/><path d="M5 17v2M19 17v2"/></symbol>
+<symbol id="i-wc" viewBox="0 0 24 24"><path d="M6 4h12v5H6zM8 9v3a4 4 0 0 0 8 0V9M12 16v4M9 20h6"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></symbol>
+<symbol id="i-wash" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4.5"/><path d="M7.5 6.5h.01M10.5 6.5h.01"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+</defs></svg>
+<header class="top"><div class="wrap"><a class="logo" href="/"><img src="/assets/brand/logo/playn_logo.svg" alt="플레이앤 PlayN" style="height:1.15em;width:auto;display:block"></a></div></header>
+<main class="wrap"><div class="gw">
+ <h1 class="disp">플레이앤 스테이 이용 안내</h1>
+ <p class="addr">서울 서초구 반포대로12길 33 현대오피스텔 4층<br>남부터미널·서울교대역에서 걸어서 5분</p>
+ <div class="facts">
+  <div class="fact"><small>최소 이용</small><b>1주</b></div>
+  <div class="fact"><small>엘리베이터</small><b>있음</b></div>
+  <div class="fact"><small>주차</small><b>불가</b></div>
+  <div class="fact"><small>전기·수도</small><b>관리비 포함</b></div>
+  <div class="fact wide"><small>문의</small><b>삼삼엠투 앱 채팅</b></div>
+ </div>
+
+ <section class="must" aria-labelledby="mh">
+  <h2 class="disp" id="mh">입실 전에 이것만 먼저</h2>
+  <ol>
+   <li><b>도어락 번호는 예약 확정 뒤 채팅으로 보내드려요</b><span>입실 방법과 컴퓨터 비밀번호도 같은 메시지에 있어요</span></li>
+   <li><b>실내는 금연이에요</b><span>담배와 전자담배 모두 안 돼요</span></li>
+   <li><b>함께 지내는 분께 이 안내를 공유해 주세요</b><span>사용법을 몰라서 생기는 불편을 줄이려고 만들었어요</span></li>
+  </ol>
+ </section>
+
+ <nav class="steps" aria-label="안내 순서"><a href="#s1"><i>1</i>도착</a><a href="#s2"><i>2</i>공간 사용법</a><a href="#s3"><i>3</i>퇴실</a><a href="#s4"><i>4</i>요금·정산</a><a href="#s5"><i>5</i>문제 해결</a></nav>
+
+ <section class="sec" id="s1"><h2 class="disp"><i>1</i>도착</h2>
+  <div class="rows">
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg><div><b>서울 서초구 반포대로12길 33 현대오피스텔 4층</b><span>지번 주소는 서초동 1589-8이에요. 엘리베이터로 4층에 올라오세요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg><div><b>가는 길</b><span>남부터미널과 서울교대역에서 걸어서 5분이에요. 예술의전당도 가까워요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-car"/></svg><div><b>주차는 안 돼요</b><span>주변 공영주차장을 이용해 주세요 ('모두의주차장' 앱 추천)</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bike"/></svg><div><b>배달·택배</b><span>위 주소에 건물명과 4층까지 적으시면 돼요. 편의점은 걸어서 1분 거리예요</span></div></div>
+  </div>
+ </section>
+
+ <section class="sec" id="s2"><h2 class="disp"><i>2</i>공간 사용법</h2>
+  <p class="lead">누르면 펼쳐져요. 막히면 삼삼엠투 앱 채팅으로 물어보세요.</p>
+  <details class="sp" open><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"/></svg>컴퓨터·작업 공간<em>PC 2대</em></summary><div class="in">
+   <ul><li>게이밍 PC가 2대 있고 자리마다 모니터 2개와 전동 높이조절 책상이 있어요. 의자 하나는 허먼밀러예요</li><li>노트북 없이 업무나 시험 준비를 바로 할 수 있어요. 쉬는 시간에는 친구와 게임도 돼요</li><li>컴퓨터 비밀번호는 입실 안내 메시지에 있어요</li><li>계정은 <b>본인 계정</b>으로 로그인하고 퇴실 전에 꼭 로그아웃해 주세요</li><li>책상 높이는 책상의 조절 버튼으로 바꿔요. 움직이는 동안 책상 아래에 물건을 두지 마세요</li><li>모니터가 한쪽만 나오면 <b>윈도우키 + P → '확장'</b>을 눌러 주세요</li></ul>
+  </div></details>
+  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wash"/></svg>세탁·건조<em>올인원</em></summary><div class="in">
+   <ul><li>세탁과 건조를 한 대로 끝내요. 빨래방에 갈 필요가 없어요</li><li>건조는 세탁 용량보다 적게 넣어야 잘 말라요. 빨래가 많으면 나눠서 돌려 주세요</li><li>문이 완전히 닫혔는지 확인한 뒤 시작해 주세요</li><li>끝나면 바로 꺼내 주세요. 오래 두면 냄새가 나요</li><li>에러가 뜨면 화면을 사진으로 찍어 채팅으로 보내 주세요</li></ul>
+  </div></details>
+  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg>주방·요리<em>인덕션·그릴팬</em></summary><div class="in">
+   <ul><li>인덕션, 전자레인지, 에어프라이어, 냉장고, 싱크가 있어요</li><li>회전 그릴팬은 <b>뚜껑을 닫고</b> 구워요. 삼겹살처럼 기름 많은 고기도 벽과 바닥에 덜 튀어요</li><li>인덕션은 인덕션용 냄비와 팬만 쓸 수 있어요. 불을 켠 채로 자리를 비우지 마세요</li><li>쓴 팬과 그릇은 퇴실 전에 씻어 주세요</li></ul>
+  </div></details>
+  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>음식물 처리기<em>미닉스</em></summary><div class="in">
+   <h3>쓰는 순서</h3>
+   <ol class="how"><li>문을 열고 음식물을 넣은 뒤 문을 닫아요</li><li>시작 버튼을 누르면 말리고 갈아요. 다시 누르면 멈춰요</li><li>처리가 끝난 가루는 <b>일반 쓰레기</b>로 버려요. 별도 봉투는 필요 없어요</li></ol>
+   <h3>넣지 마세요</h3>
+   <ul><li class=no>대파·쪽파·미나리·양파·마늘·생강 껍질, 옥수수 껍질, 고추씨</li><li class=no>조개·소라·전복·굴 껍데기, 굵은 생선 뼈, 소·돼지 뼈</li><li class=no>계란 껍데기, 밤·호두·땅콩 껍데기, 복숭아·살구·감 씨</li><li class=no>찻잎, 한약재 찌꺼기, 병뚜껑, 나무젓가락</li></ul>
+   <h3>이렇게 넣으세요</h3>
+   <ul><li>밥·떡·면처럼 끈적한 음식과 비계·튀김처럼 기름진 음식은 <b>다른 음식물과 섞어서</b> 넣어요</li><li>바나나 껍질·양배추·열무김치·옥수수 심은 잘게 잘라서 넣어요</li><li>이 목록에 없는 음식이 헷갈리면 채팅으로 먼저 물어보세요</li></ul>
+  </div></details>
+  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sofa"/></svg>냉난방·욕실</summary><div class="in">
+   <ul><li>에어컨 리모컨은 본체 쪽으로 겨누고 한 번만 눌러 주세요. 안 켜지면 리모컨 건전지를 확인해 주세요</li><li>비데, 헤어드라이어, 공기청정기, 화장대가 있어요</li></ul>
+  </div></details>
+  <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>쓰레기·분리배출</summary><div class="in">
+   <ul><li>일반·음식물·재활용 배출 장소와 요일은 입실 안내 메시지에 적어 드려요</li><li>음식물은 처리기를 쓰면 가루가 되어 일반 쓰레기로 나가요</li><li>캔·페트병·유리병·종이는 비워서 일반 쓰레기와 섞지 말아 주세요</li></ul>
+  </div></details>
+ </section>
+
+ <section class="sec" id="s3"><h2 class="disp"><i>3</i>퇴실</h2>
+  <p class="lead">하나씩 눌러서 체크해 보세요.</p>
+  <div class="ck" id="ck"><label><input type="checkbox" data-i="0"><span>설거지 (팬·그릇·싱크)</span></label><label><input type="checkbox" data-i="1"><span>냉장고에 남은 음식 정리</span></label><label><input type="checkbox" data-i="2"><span>쓰레기를 나눠서 배출 장소에 버리기</span></label><label><input type="checkbox" data-i="3"><span>세탁물 꺼내기</span></label><label><input type="checkbox" data-i="4"><span>컴퓨터 로그아웃 후 전원 끄기 (모니터 포함)</span></label><label><input type="checkbox" data-i="5"><span>에어컨 끄기</span></label><label><input type="checkbox" data-i="6"><span>도어락이 잠겼는지 확인</span></label></div>
+  <p class="prog" id="prog" aria-live="polite"></p>
+  <p class="note">퇴실 시간과 방법은 입실 안내 메시지에 있어요.</p>
+ </section>
+
+ <section class="sec" id="s4"><h2 class="disp"><i>4</i>요금·정산</h2>
+  <div class="rows">
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg><div><b>요금·보증금·환불 규정</b><span>삼삼엠투 예약 화면이 기준이에요. 보증금은 삼삼엠투가 보관하고 퇴실하면 돌려받아요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>전기와 수도는 관리비에 포함돼 있어요</b><span>너무 많이 쓰면 추가 요금을 요청드릴 수 있어요. 가스는 관리비에 들어 있지 않아요</span></div></div>
+  </div>
+  <p class="note p">파손이나 오염이 생기면 숨기지 말고 사진과 함께 채팅으로 알려 주세요. 바로 알려 주시면 해결이 훨씬 쉬워요.</p>
+ </section>
+
+ <section class="sec" id="s5"><h2 class="disp"><i>5</i>문제 해결</h2>
+  <div class="rows">
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div><b>모니터가 안 나와요</b><span>마우스 움직이기 → 모니터 전원 확인 → 입력 소스(DP/HDMI) 확인</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tv"/></svg><div><b>모니터가 한쪽만 나와요</b><span>윈도우키 + P → '확장' 선택. 또는 바탕화면 우클릭 → 디스플레이 설정 → '디스플레이 확장'</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"/></svg><div><b>컴퓨터가 안 켜져요</b><span>본체에 불빛이나 팬 소리가 있으면 모니터 문제예요. 반응이 없으면 본체 뒤 전원 스위치와 멀티탭 스위치를 확인해 주세요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wash"/></svg><div><b>세탁기가 멈췄거나 에러가 떠요</b><span>문이 닫혔는지 확인하고 그래도 같으면 화면을 사진으로 찍어 채팅으로 보내 주세요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg><div><b>음식물 처리기가 멈췄어요</b><span>문이 닫혔는지, 넣으면 안 되는 음식이 들어갔는지 확인해 주세요. 그래도 멈춰 있으면 사진과 함께 채팅으로 알려 주세요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sofa"/></svg><div><b>에어컨이 안 켜져요</b><span>리모컨을 본체 쪽으로 겨누고 한 번만 누르기 → 리모컨 건전지 확인</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>도어락이 안 열려요</b><span>번호를 다시 확인하고 문이 완전히 닫혔는지 봐 주세요. 그래도 안 열리면 바로 채팅으로 알려 주세요</span></div></div>
+   <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg><div><b>그래도 안 되면</b><span>삼삼엠투 앱 채팅으로 문의해 주세요</span></div></div>
+  </div>
+  <p class="note r"><b>불·연기·가스 냄새·누수</b>가 있으면 바로 대피한 뒤 119에 연락하고 채팅으로 알려 주세요</p>
+ </section>
+
+ <div class="sig">호스트가 직접 지내 보면서 불편한 점을 하나씩 없앤 공간이에요. 편하게 지내다 가세요. 고맙습니다.<br><br>플레이앤 스테이 · 인스타 @playn_no.1</div>
+ <p style="margin-top:20px"><a class="btn lamp" href="https://web.33m2.co.kr/guest/room/132363" rel="noopener" style="width:100%">삼삼엠투에서 플레이앤 스테이 보기</a></p>
+</div></main>
+<script>
+(function(){var ck=document.getElementById("ck"),prog=document.getElementById("prog"),SK="pn_ck_stay",st={};
+try{st=JSON.parse(localStorage.getItem(SK)||"{}")}catch(e){}
+function upd(){var b=[].slice.call(ck.querySelectorAll("input")),n=b.filter(function(x){return x.checked}).length;
+prog.textContent=n===b.length?"모두 끝났어요. 조심히 들어가세요!":n+" / "+b.length+" 완료";
+try{var o={};b.forEach(function(x){o[x.dataset.i]=x.checked});localStorage.setItem(SK,JSON.stringify(o))}catch(e){}}
+ck.querySelectorAll("input").forEach(function(x){x.checked=!!st[x.dataset.i];x.onchange=upd});upd();})();
+</script>
+</body></html>
