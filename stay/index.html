@@ -90,7 +90,8 @@ table.t td.bad{color:#FF8A8E;font-weight:700}
 .sig{margin-top:30px;color:var(--mute);font-size:14.5px;line-height:1.75;border-top:1px solid var(--line);padding-top:16px}
 .btn:focus-visible,.tabs a:focus-visible,.steps a:focus-visible,summary:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){details.sp>summary::after{transition:none}}
-</style>
+
+.shots{display:flex;gap:10px;margin-top:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.shots::-webkit-scrollbar{display:none}.ph img{width:100%;height:auto;border-radius:12px;margin-top:10px;display:block;background:var(--panel)}.shots img{flex:none;height:clamp(170px,46vw,300px);width:auto;border-radius:14px;scroll-snap-align:start;background:var(--panel)}</style>
 </head><body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
@@ -110,6 +111,7 @@ table.t td.bad{color:#FF8A8E;font-weight:700}
 <main class="wrap"><div class="gw">
  <h1 class="disp">플레이앤 스테이 이용 안내</h1>
  <p class="addr">서울 서초구 반포대로12길 33 현대오피스텔 4층<br>남부터미널·서울교대역에서 걸어서 5분</p>
+ <div class="shots" role="group" aria-label="플레이앤 스테이 공간 사진"><img src="/assets/stay/room-desk.webp" alt="플레이앤 스테이 방 전경, 컴퓨터 책상과 냉장고" width="1200" height="800" decoding="async"><img src="/assets/stay/room-wide.webp" alt="플레이앤 스테이 방 전체 모습" width="1200" height="800" loading=lazy decoding="async"><img src="/assets/stay/desk-bed.webp" alt="컴퓨터 책상과 침대" width="1200" height="800" loading=lazy decoding="async"><img src="/assets/stay/pc-monitors.webp" alt="듀얼 모니터가 놓인 컴퓨터 자리" width="1200" height="800" loading=lazy decoding="async"><img src="/assets/stay/fridge-corner.webp" alt="냉장고와 공기청정기가 있는 코너" width="1200" height="800" loading=lazy decoding="async"></div>
  <div class="facts">
   <div class="fact"><small>최소 이용</small><b>1주</b></div>
   <div class="fact"><small>엘리베이터</small><b>있음</b></div>
@@ -136,18 +138,22 @@ table.t td.bad{color:#FF8A8E;font-weight:700}
    <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-car"/></svg><div><b>주차는 안 돼요</b><span>주변 공영주차장을 이용해 주세요 ('모두의주차장' 앱 추천)</span></div></div>
    <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bike"/></svg><div><b>배달·택배</b><span>위 주소에 건물명과 4층까지 적으시면 돼요. 편의점은 걸어서 1분 거리예요</span></div></div>
   </div>
+  <details class="ph"><summary>현관 입구와 도어락 사진 보기</summary><img src="/assets/stay/entrance-lock.webp" alt="현관 입구와 도어락" width="1200" height="800" loading=lazy decoding="async"></details>
  </section>
 
  <section class="sec" id="s2"><h2 class="disp"><i>2</i>공간 사용법</h2>
   <p class="lead">누르면 펼쳐져요. 막히면 삼삼엠투 앱 채팅으로 물어보세요.</p>
   <details class="sp" open><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"/></svg>컴퓨터·작업 공간<em>PC 2대</em></summary><div class="in">
    <ul><li>게이밍 PC가 2대 있고 자리마다 모니터 2개와 전동 높이조절 책상이 있어요. 의자 하나는 허먼밀러예요</li><li>노트북 없이 업무나 시험 준비를 바로 할 수 있어요. 쉬는 시간에는 친구와 게임도 돼요</li><li>컴퓨터 비밀번호는 입실 안내 메시지에 있어요</li><li>계정은 <b>본인 계정</b>으로 로그인하고 퇴실 전에 꼭 로그아웃해 주세요</li><li>책상 높이는 책상의 조절 버튼으로 바꿔요. 움직이는 동안 책상 아래에 물건을 두지 마세요</li><li>모니터가 한쪽만 나오면 <b>윈도우키 + P → '확장'</b>을 눌러 주세요</li></ul>
+   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/pc-monitors.webp" alt="듀얼 모니터가 놓인 컴퓨터 자리" width="1200" height="800" loading=lazy decoding="async"></details>
   </div></details>
   <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wash"/></svg>세탁·건조<em>올인원</em></summary><div class="in">
    <ul><li>세탁과 건조를 한 대로 끝내요. 빨래방에 갈 필요가 없어요</li><li>건조는 세탁 용량보다 적게 넣어야 잘 말라요. 빨래가 많으면 나눠서 돌려 주세요</li><li>문이 완전히 닫혔는지 확인한 뒤 시작해 주세요</li><li>끝나면 바로 꺼내 주세요. 오래 두면 냄새가 나요</li><li>에러가 뜨면 화면을 사진으로 찍어 채팅으로 보내 주세요</li></ul>
+   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/bed-washer.webp" alt="침대 옆에 있는 올인원 세탁건조기" width="1200" height="800" loading=lazy decoding="async"></details>
   </div></details>
   <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fire"/></svg>주방·요리<em>인덕션·그릴팬</em></summary><div class="in">
    <ul><li>인덕션, 전자레인지, 에어프라이어, 냉장고, 싱크가 있어요</li><li>회전 그릴팬은 <b>뚜껑을 닫고</b> 구워요. 삼겹살처럼 기름 많은 고기도 벽과 바닥에 덜 튀어요</li><li>인덕션은 인덕션용 냄비와 팬만 쓸 수 있어요. 불을 켠 채로 자리를 비우지 마세요</li><li>쓴 팬과 그릇은 퇴실 전에 씻어 주세요</li></ul>
+   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/kitchen-washer.webp" alt="싱크대와 인덕션 주변" width="1200" height="800" loading=lazy decoding="async"></details>
   </div></details>
   <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>음식물 처리기<em>미닉스</em></summary><div class="in">
    <h3>쓰는 순서</h3>
@@ -159,6 +165,7 @@ table.t td.bad{color:#FF8A8E;font-weight:700}
   </div></details>
   <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sofa"/></svg>냉난방·욕실</summary><div class="in">
    <ul><li>에어컨 리모컨은 본체 쪽으로 겨누고 한 번만 눌러 주세요. 안 켜지면 리모컨 건전지를 확인해 주세요</li><li>비데, 헤어드라이어, 공기청정기, 화장대가 있어요</li></ul>
+   <details class="ph"><summary>사진으로 보기</summary><img src="/assets/stay/bathroom.webp" alt="비데가 설치된 화장실" width="1200" height="800" loading=lazy decoding="async"></details>
   </div></details>
   <details class="sp"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>쓰레기·분리배출</summary><div class="in">
    <ul><li>일반·음식물·재활용 배출 장소와 요일은 입실 안내 메시지에 적어 드려요</li><li>음식물은 처리기를 쓰면 가루가 되어 일반 쓰레기로 나가요</li><li>캔·페트병·유리병·종이는 비워서 일반 쓰레기와 섞지 말아 주세요</li></ul>
