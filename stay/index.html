@@ -144,11 +144,20 @@ details.mr li.no::before{background:#FF5A5F;width:8px;height:2px;border-radius:0
   <div class="fact wide"><small>문의</small><b>삼삼엠투 앱 채팅</b></div>
  </div>
 
+ <section class="must" id="secret" aria-labelledby="sh" hidden>
+  <h2 class="disp" id="sh">입실 정보</h2>
+  <div class="mini">
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg><div><b>도어락</b><span id="s_door"></span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"/></svg><div><b>컴퓨터 비밀번호</b><span id="s_pc"></span></div></div>
+   <div><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wifi"/></svg><div><b>와이파이</b><span id="s_wifi"></span></div></div>
+  </div>
+ </section>
+
  <nav class="steps" aria-label="안내 순서"><a href="#s1"><i>1</i>꼭 지켜요</a><a href="#s2"><i>2</i>기기 사용법</a><a href="#s3"><i>3</i>퇴실</a><a href="#s4"><i>4</i>문제 해결</a></nav>
 
  <section class="sec" id="s1"><h2 class="disp"><i>1</i>꼭 지켜 주세요</h2>
   <div class="vg">
-   <div class="vc"><img src="/assets/stay/g/door-lock.webp" alt="도어락 번호를 누른 뒤 별표나 우물정 버튼을 누르는 모습" width="900" height="678" loading=lazy decoding="async"><b>도어락</b><span>번호 누르고 # 또는 *<br>번호는 예약 메시지에 있어요</span></div>
+   <div class="vc"><img src="/assets/stay/g/door-lock.webp" alt="도어락 번호를 누른 뒤 별표나 우물정 버튼을 누르는 모습" width="900" height="678" loading=lazy decoding="async"><b>도어락</b><span><span class=sd>번호 누르고 # 또는 *</span></span></div>
    <div class="vc"><img src="/assets/stay/g/shoes-in.webp" alt="현관 앞 신발장에 신발을 넣고 실내화로 갈아 신는 모습" width="900" height="678" loading=lazy decoding="async"><b>신발은 현관 앞 신발장</b><span>실내화로 갈아 신고 들어와요. 실내에서 신발 금지</span></div>
    <div class="vc warn"><img src="/assets/stay/g/slippers-stay.webp" alt="실내화를 신고 밖으로 나가면 안 된다는 표시" width="900" height="678" loading=lazy decoding="async"><b>실내화는 실내용</b><span>신고 밖으로 나가지 마세요</span></div>
    <div class="vc warn"><img src="/assets/stay/g/shower-buttons.webp" alt="샤워기 손잡이 버튼 중 두 번째는 사용, 세 번째는 물이 위로 튀는 청소 버튼" width="900" height="678" loading=lazy decoding="async"><b>샤워기는 두 번째 버튼</b><span>세 번째는 청소용이라 물이 위로 튀어요</span></div>
@@ -179,7 +188,7 @@ details.mr li.no::before{background:#FF5A5F;width:8px;height:2px;border-radius:0
    <details class="mr"><summary>넣으면 안 되는 것</summary><div class="in"><ul><li class=no>조개·게 껍데기, 굵은 생선 뼈, 큰 뼈다귀</li><li class=no>파 뿌리, 양파·마늘·옥수수 껍질</li><li class=no>호두·밤 껍데기, 복숭아·감 씨, 계란 껍데기</li><li class=no>찻잎, 병뚜껑, 나무젓가락, 기름 그 자체</li><li>처리 중에 더 넣고 싶으면 OPEN 버튼으로 열고 넣으면 돼요</li><li>밥·떡처럼 끈적한 음식은 다른 음식과 섞어서</li><li>돌아가는 중에 통 안에 손을 넣지 마세요. 이상한 표시가 뜨면 사진을 찍어 채팅으로 보내 주세요</li></ul></div></details>
   </article>
 
-  <article class="dv"><div class="dvh"><h3>컴퓨터 2대</h3><small>듀얼 모니터 · 전동 책상</small></div><img src="/assets/stay/pc-monitors.webp" alt="듀얼 모니터가 놓인 컴퓨터 자리" width="1200" height="800" loading=lazy decoding="async"><ol class="how"><li>비밀번호는 예약 메시지에 있어요</li><li><b>본인 계정</b>으로 로그인</li><li>퇴실 전에 꼭 로그아웃</li></ol><details class="mr"><summary>더 보기</summary><div class="in"><ul><li>모니터가 한쪽만 나오면 윈도우키 + P → 확장</li><li>책상 높이는 조절 버튼으로. 움직일 때 책상 아래 물건 치우기</li><li>의자 하나는 허먼밀러예요</li></ul></div></details></article>
+  <article class="dv"><div class="dvh"><h3>컴퓨터 2대</h3><small>듀얼 모니터 · 전동 책상</small></div><img src="/assets/stay/pc-monitors.webp" alt="듀얼 모니터가 놓인 컴퓨터 자리" width="1200" height="800" loading=lazy decoding="async"><ol class="how"><li>비밀번호: <b class=sp>예약 메시지 링크로 열면 보여요</b></li><li><b>본인 계정</b>으로 로그인</li><li>퇴실 전에 꼭 로그아웃</li></ol><details class="mr"><summary>더 보기</summary><div class="in"><ul><li>모니터가 한쪽만 나오면 윈도우키 + P → 확장</li><li>책상 높이는 조절 버튼으로. 움직일 때 책상 아래 물건 치우기</li><li>의자 하나는 허먼밀러예요</li></ul></div></details></article>
  </section>
 
  <section class="sec" id="s3"><h2 class="disp"><i>3</i>퇴실 (오전 10시)</h2>
@@ -210,5 +219,11 @@ function upd(){var b=[].slice.call(ck.querySelectorAll("input")),n=b.filter(func
 prog.textContent=n===b.length?"모두 끝났어요. 조심히 들어가세요!":n+" / "+b.length+" 완료";
 try{var o={};b.forEach(function(x){o[x.dataset.i]=x.checked});localStorage.setItem(SK,JSON.stringify(o))}catch(e){}}
 ck.querySelectorAll("input").forEach(function(x){x.checked=!!st[x.dataset.i];x.onchange=upd});upd();})();
+</script>
+<script>
+(function(){var m=(location.hash||"").match(/k=([A-Za-z0-9]+)/);if(!m)return;
+fetch("https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/stay-info",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({k:m[1]})}).then(function(r){return r.json()}).then(function(d){if(!d||!d.ok)return;
+document.getElementById("s_door").textContent=d.door;document.getElementById("s_pc").textContent=d.pc;document.getElementById("s_wifi").textContent=d.wifi;document.getElementById("secret").hidden=false;
+document.querySelectorAll(".sd").forEach(function(e){e.textContent=d.door});document.querySelectorAll(".sp").forEach(function(e){e.textContent=d.pc});}).catch(function(){});})();
 </script>
 </body></html>
