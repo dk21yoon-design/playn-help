@@ -1156,7 +1156,7 @@ function refsSection(){const s=el("section");s.id="refs";
   s.innerHTML=`<div class="sh"><span class="eye">REFERENCE LAB</span><h2>레퍼런스 랩</h2><span class="meta">우리 데이터센터 · 매일 밤 9시 23분 수집 · 숫자는 일주일마다 다시 재요</span></div>`;
   if(!REFS){s.insertAdjacentHTML("beforeend",`<div class="empty">불러오는 중…</div>`);loadRefs(true);return s}
   loadRefs(false);
-  const done=REFS.filter(r=>r.status!=="pending"),pend=REFS.filter(r=>r.status==="pending");
+  const done=REFS.filter(r=>r.status!=="pending"&&r.status!=="hidden"),pend=REFS.filter(r=>r.status==="pending");
   const wk=done.filter(r=>Date.now()-new Date(r.added_at)<7*864e5).length;
   const withL=done.filter(r=>r.likes!=null);const avg=withL.length?Math.round(withL.reduce((a,r)=>a+r.likes,0)/withL.length):null;
   const cats=[...new Set(done.map(r=>r.category).filter(Boolean))];
