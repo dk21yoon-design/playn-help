@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16133F">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
+<link rel="stylesheet" href="/assets/base.css">
+<title>청소 체크리스트 | 플레이앤 스테이</title>
+<style>
+body{background:var(--night,#100d2b);color:var(--ink,#fff)}
+.w{max-width:640px;margin:0 auto;padding:18px 16px 120px}
+h1{font-family:"Black Han Sans",sans-serif;font-weight:400;font-size:30px;margin:6px 0 2px}
+.sub{color:var(--mute);margin:0 0 14px}
+.card{background:var(--panel,#1f1b4d);border-radius:16px;padding:14px;margin-top:12px}
+.card h2{font-size:18px;margin:0 0 8px;display:flex;gap:8px;align-items:center}
+.card h2 i{font-style:normal;background:var(--lamp,#FFB547);color:#1a1300;border-radius:50%;width:24px;height:24px;display:inline-grid;place-items:center;font-size:13px;font-weight:800;flex:none}
+.hint{color:var(--mute);font-size:14px;line-height:1.55;margin:0 0 10px}
+.req{color:#FF7A7F;font-size:12.5px;font-weight:700;margin-left:auto}
+label.ck{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-top:1px solid var(--line,#2d2860);line-height:1.5;font-size:15.5px;cursor:pointer}
+label.ck:first-of-type{border-top:0}
+label.ck input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:#FFB547}
+label.ck small{display:block;color:var(--mute);font-size:13px}
+.grp{font-size:13px;color:var(--lamp);font-weight:800;margin:12px 0 2px;letter-spacing:.02em}
+textarea,input[type=number],input[type=date]{width:100%;box-sizing:border-box;background:#141038;color:#fff;border:1px solid var(--line,#2d2860);border-radius:12px;padding:12px;font:inherit;font-size:16px}
+textarea{min-height:84px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.seg button,.btn2{border:1px solid var(--line,#2d2860);background:#141038;color:#fff;border-radius:12px;padding:12px 8px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;min-height:46px}
+.seg button.on{background:var(--lamp,#FFB547);color:#1a1300;border-color:transparent}
+.seg button.low.on{background:#FF5A5F;color:#fff}
+.sup{display:grid;grid-template-columns:88px 1fr;gap:8px;align-items:center;padding:6px 0}
+.sup b{font-size:15.5px}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.thumbs div{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#141038}
+.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.thumbs span{position:absolute;inset:auto 0 0 0;font-size:11px;text-align:center;background:rgba(0,0,0,.55);padding:2px}
+.pick{display:block;text-align:center;border:1.5px dashed var(--lamp,#FFB547);color:var(--lamp,#FFB547);border-radius:14px;padding:16px;font-weight:800;font-size:16px;cursor:pointer}
+.pick input{display:none}
+.info{display:grid;gap:8px}
+.info div{background:#141038;border-radius:12px;padding:10px 12px}
+.info small{color:var(--mute);display:block;font-size:12.5px}
+.info b{font-size:17px;word-break:break-all}
+.sched{display:grid;gap:8px}
+.sched label{display:flex;gap:10px;align-items:center;background:#141038;border-radius:12px;padding:12px;cursor:pointer}
+.sched input{accent-color:#FFB547;width:20px;height:20px}
+.sched .done{color:#5BE39A;font-size:13px;margin-left:auto;font-weight:700}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(16,13,43,.96);border-top:1px solid var(--line,#2d2860)}
+.bar .in{max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .prog{color:var(--mute);font-size:13px;flex:1}
+.go{background:var(--lamp,#FFB547);color:#1a1300;border:0;border-radius:14px;padding:14px 18px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;min-height:50px}
+.go:disabled{opacity:.5}
+.msg{margin-top:10px;font-weight:700}
+.err{color:#FF7A7F}.okc{color:#5BE39A}
+.rep{border-top:1px solid var(--line,#2d2860);padding:12px 0}
+.rep:first-child{border-top:0}
+.rep .ph{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px}
+.rep .ph img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
+.lock{text-align:center;padding:60px 10px;color:var(--mute)}
+[hidden]{display:none!important}
+</style>
+</head><body>
+<div class="w">
+ <h1>청소 체크리스트</h1>
+ <p class="sub">플레이앤 스테이 · 서초 현대오피스텔 409호</p>
+ <div id="lock" class="lock">예약 문자로 받은 링크로 열어 주세요.</div>
+
+ <div id="app" hidden>
+  <!-- 사장님 전용 -->
+  <section class="card" id="owner" hidden>
+   <h2>예약 등록 <span class="req">사장님만 보여요</span></h2>
+   <p class="hint">등록하면 청소 일정 문자가 바로 나갑니다.</p>
+   <div class="row2"><div><small class="hint">입실일</small><input type="date" id="bin"></div><div><small class="hint">퇴실일</small><input type="date" id="bout"></div></div>
+   <label class="ck"><input type="checkbox" id="bnotify" checked><span>청소 일정 문자 보내기</span></label>
+   <button class="go" id="badd" style="width:100%;margin-top:6px">예약 등록</button>
+   <p class="msg" id="bmsg"></p>
+  </section>
+
+  <section class="card">
+   <h2>청소 일정</h2>
+   <div class="sched" id="sched"></div>
+   <p class="hint" id="nosched" hidden>등록된 일정이 없어요. 오늘 날짜로 보고가 저장됩니다.</p>
+  </section>
+
+  <section class="card">
+   <h2>입실 정보</h2>
+   <div class="info"><div><small>도어락</small><b id="door">-</b></div><div><small>컴퓨터 비밀번호</small><b id="pcpw">-</b></div></div>
+  </section>
+
+  <section class="card">
+   <h2><i>1</i>청소 전 사진 <span class="req">필수</span></h2>
+   <p class="hint">손대기 전에 구석구석 다 찍어 주세요. 방 전체, 침대, 주방, 냉장고 안, 욕실, 컴퓨터 자리, 책상 아래, 현관까지요.</p>
+   <label class="pick">📷 청소 전 사진 추가<input type="file" accept="image/*" multiple data-kind="before"></label>
+   <div class="thumbs" id="t_before"></div>
+  </section>
+
+  <section class="card">
+   <h2><i>2</i>퇴실 상태 확인</h2>
+   <label class="ck"><input type="checkbox" data-c="recycle"><span>분리수거가 되어 있는지</span></label>
+   <label class="ck"><input type="checkbox" data-c="dishes"><span>설거지가 되어 있는지 (그릇·팬·싱크)</span></label>
+   <label class="ck"><input type="checkbox" data-c="leftover"><span>손님이 놓고 간 물건 확인</span></label>
+   <div class="grp">파손·오염이 있으면 적어 주세요</div>
+   <textarea id="damage" placeholder="예) 책상 모서리 긁힘, 이불 얼룩 (사진도 함께 찍어 주세요)"></textarea>
+   <div class="grp">모자라거나 없어진 비품이 있으면 적어 주세요</div>
+   <textarea id="shortage" placeholder="예) 컵 1개 없음, 실내화 한 켤레 없음"></textarea>
+  </section>
+
+  <section class="card">
+   <h2><i>3</i>수건 총 개수</h2>
+   <p class="hint" id="towelhint">방에 있는 수건을 모두 세서 적어 주세요.</p>
+   <input type="number" id="towel" inputmode="numeric" min="0" max="200" placeholder="총 몇 개인지">
+  </section>
+
+  <section class="card">
+   <h2><i>4</i>욕실 용품·세제</h2>
+   <p class="hint">넉넉한지 모자란지 눌러 주세요. 모자라면 바로 채워 두겠습니다.</p>
+   <div id="sup"></div>
+  </section>
+
+  <section class="card">
+   <h2><i>5</i>컴퓨터 2대</h2>
+   <div class="grp">도착했을 때 컴퓨터는</div>
+   <div class="seg" id="pcstate"><button data-v="on" type="button">켜져 있음</button><button data-v="off" type="button">꺼져 있음</button></div>
+   <label class="ck"><input type="checkbox" data-c="pc_test"><span>비밀번호로 켜서 모니터·키보드·마우스가 잘 되는지 확인<small>2대 모두요. 위 입실 정보에 비밀번호가 있어요</small></span></label>
+   <label class="ck"><input type="checkbox" data-c="pc_dust"><span>본체 겉면 먼지 닦기<small>책상 아래는 먼지가 잘 쌓여요</small></span></label>
+   <label class="ck"><input type="checkbox" data-c="desk_floor"><span>책상 아래 바닥 청소</span></label>
+   <label class="ck"><input type="checkbox" data-c="desk_wipe"><span>책상·키보드·마우스·모니터 닦기</span></label>
+   <label class="ck"><input type="checkbox" data-c="pc_off"><span>확인 끝나면 컴퓨터 전원 끄기</span></label>
+  </section>
+
+  <section class="card">
+   <h2><i>6</i>청소</h2>
+   <div class="grp">주방</div>
+   <label class="ck"><input type="checkbox" data-c="k_top"><span>인덕션 상판·싱크·배수구</span></label>
+   <label class="ck"><input type="checkbox" data-c="k_rollpan"><span>롤팬 정리<small>모터는 물에 닿으면 고장 나요. 마른 행주로만 닦아 주세요</small></span></label>
+   <label class="ck"><input type="checkbox" data-c="k_app"><span>에어프라이어 바스켓·전자레인지 안쪽</span></label>
+   <label class="ck"><input type="checkbox" data-c="k_fridge"><span>냉장고 비우고 닦기</span></label>
+   <label class="ck"><input type="checkbox" data-c="k_minix"><span>음식물 처리기 건조통 가루 비우기</span></label>
+   <div class="grp">욕실</div>
+   <label class="ck"><input type="checkbox" data-c="b_toilet"><span>변기·비데 노즐</span></label>
+   <label class="ck"><input type="checkbox" data-c="b_sink"><span>세면대·거울</span></label>
+   <label class="ck"><input type="checkbox" data-c="b_drain"><span>배수구 머리카락</span></label>
+   <label class="ck"><input type="checkbox" data-c="b_curtain"><span>샤워커튼 물때·곰팡이</span></label>
+   <label class="ck"><input type="checkbox" data-c="b_refill"><span>휴지·샴푸·린스·바디워시 채우기</span></label>
+   <div class="grp">세탁·침구</div>
+   <label class="ck"><input type="checkbox" data-c="l_bedding"><span>침구 세탁 후 교체<small>방 안 세탁건조기로 돌려 주세요</small></span></label>
+   <label class="ck"><input type="checkbox" data-c="l_washer"><span>세탁건조기 비우고 고무패킹 닦기, 문 열어 두기</span></label>
+   <div class="grp">방·현관</div>
+   <label class="ck"><input type="checkbox" data-c="r_floor"><span>바닥 전체 청소</span></label>
+   <label class="ck"><input type="checkbox" data-c="r_shoes"><span>신발장 정리, 실내화 닦기</span></label>
+   <label class="ck"><input type="checkbox" data-c="r_qr"><span>와이파이 QR이 붙어 있는지</span></label>
+  </section>
+
+  <section class="card">
+   <h2><i>7</i>마무리</h2>
+   <label class="ck"><input type="checkbox" data-c="e_bathlight"><span>화장실 불 끄기<small>불을 켜 두면 환풍기·온수기가 계속 돌아가요</small></span></label>
+   <label class="ck"><input type="checkbox" data-c="e_ac"><span>에어컨 끄기, 창문 잠금</span></label>
+   <label class="ck"><input type="checkbox" data-c="e_trash"><span>쓰레기는 1층 분리수거장에</span></label>
+   <label class="ck"><input type="checkbox" data-c="e_lock"><span>나갈 때 도어락 잠김 확인</span></label>
+  </section>
+
+  <section class="card">
+   <h2><i>8</i>청소 후 사진</h2>
+   <p class="hint">방 전체·주방·욕실·침대 정도 찍어 주세요.</p>
+   <label class="pick">📷 청소 후 사진 추가<input type="file" accept="image/*" multiple data-kind="after"></label>
+   <div class="thumbs" id="t_after"></div>
+   <div class="grp">그 밖에 남길 말</div>
+   <textarea id="memo" placeholder="자유롭게 적어 주세요"></textarea>
+  </section>
+
+  <section class="card" id="reports" hidden>
+   <h2>지난 청소 보고</h2>
+   <div id="replist"></div>
+  </section>
+ </div>
+</div>
+
+<div class="bar" id="bar" hidden><div class="in"><span class="prog" id="prog"></span><button class="go" id="send">청소 완료 보내기</button></div></div>
+
+<script>
+(function(){
+var API="https://bjrgtoyjrggxmdexnwib.supabase.co/functions/v1/stay-clean";
+var m=(location.hash||"").match(/k=([A-Za-z0-9]+)/); if(!m) return;
+var K=m[1], D={}, st={photos:{before:[],after:[]},thumbs:{before:[],after:[]},supplies:{},pc:null,booking:null}, DK="pn_stayclean_"+K.slice(0,4);
+function $(i){return document.getElementById(i)}
+function post(o){o.k=K;return fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(o)}).then(function(r){return r.json()})}
+var WD="일월화수목금토";
+function md(d){var x=new Date(d+"T00:00:00Z");return (x.getUTCMonth()+1)+"월 "+x.getUTCDate()+"일("+WD[x.getUTCDay()]+")"}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+function save(){try{var c={};document.querySelectorAll("[data-c]").forEach(function(x){c[x.dataset.c]=x.checked});localStorage.setItem(DK,JSON.stringify({c:c,photos:st.photos,supplies:st.supplies,pc:st.pc,booking:st.booking,towel:$("towel").value,damage:$("damage").value,shortage:$("shortage").value,memo:$("memo").value}))}catch(e){} prog()}
+function load(){try{var s=JSON.parse(localStorage.getItem(DK)||"null");if(!s)return;
+ Object.keys(s.c||{}).forEach(function(k){var x=document.querySelector('[data-c="'+k+'"]');if(x)x.checked=!!s.c[k]});
+ st.photos=s.photos||st.photos;st.supplies=s.supplies||{};st.pc=s.pc||null;st.booking=s.booking||null;
+ $("towel").value=s.towel||"";$("damage").value=s.damage||"";$("shortage").value=s.shortage||"";$("memo").value=s.memo||"";
+ ["before","after"].forEach(function(k){st.photos[k].forEach(function(){addThumb(k,null,"올림")})});
+}catch(e){}}
+function prog(){var all=document.querySelectorAll("[data-c]"),n=0;all.forEach(function(x){if(x.checked)n++});
+ $("prog").textContent="체크 "+n+"/"+all.length+" · 사진 "+st.photos.before.length+"+"+st.photos.after.length+"장"}
+
+function addThumb(kind,src,label){var d=document.createElement("div");d.innerHTML=(src?'<img src="'+src+'" alt="">':"")+'<span>'+label+'</span>';$("t_"+kind).appendChild(d);return d}
+function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",0.8))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+document.querySelectorAll('input[type=file]').forEach(function(inp){inp.onchange=function(){var kind=inp.dataset.kind,files=[].slice.call(inp.files);inp.value="";
+ files.reduce(function(p,f){return p.then(function(){return shrink(f).then(function(du){var t=addThumb(kind,du,"올리는 중");
+  return post({action:"photo",kind:kind,out_date:outDate(),data:du}).then(function(r){if(r.ok){st.photos[kind].push(r.path);t.querySelector("span").textContent="✓";save()}else{t.querySelector("span").textContent="실패"}}).catch(function(){t.querySelector("span").textContent="실패"})})})},Promise.resolve())}});
+
+function outDate(){var b=(D.bookings||[]).filter(function(x){return x.id===st.booking})[0];return b?b.out_date:D.today}
+function supRow(name){var d=document.createElement("div");d.className="sup";d.innerHTML='<b>'+name+'</b><div class="seg"><button type="button" data-v="ok">넉넉해요</button><button type="button" class="low" data-v="low">모자라요</button></div>';
+ d.querySelectorAll("button").forEach(function(bt){if(st.supplies[name]===bt.dataset.v)bt.classList.add("on");bt.onclick=function(){st.supplies[name]=bt.dataset.v;d.querySelectorAll("button").forEach(function(x){x.classList.toggle("on",x===bt)});save()}});return d}
+
+function render(){
+ $("lock").hidden=true;$("app").hidden=false;$("bar").hidden=false;
+ $("door").textContent=D.door||"-";$("pcpw").textContent=D.pc||"-";
+ var done={};(D.reports||[]).forEach(function(r){if(r.booking_id)done[r.booking_id]=1});
+ var bk=D.bookings||[];$("nosched").hidden=bk.length>0;
+ if(st.booking==null&&bk.length){var pick=bk.filter(function(x){return !done[x.id]})[0]||bk[0];st.booking=pick.id}
+ $("sched").innerHTML=bk.map(function(b){return '<label><input type="radio" name="bk" value="'+b.id+'"'+(b.id===st.booking?" checked":"")+'><span>'+md(b.in_date)+' ~ '+md(b.out_date)+'<br><small style="color:var(--mute)">'+md(b.out_date)+' 오전 10시 체크아웃</small></span>'+(done[b.id]?'<span class="done">보고 완료</span>':"")+(D.owner?'<button type="button" class="btn2" data-cancel="'+b.id+'" style="margin-left:auto;padding:6px 10px;min-height:0;font-size:13px">취소</button>':"")+'</label>'}).join("");
+ document.querySelectorAll('input[name=bk]').forEach(function(x){x.onchange=function(){st.booking=+x.value;save()}});
+ document.querySelectorAll('[data-cancel]').forEach(function(bt){bt.onclick=function(e){e.preventDefault();if(!confirm("이 예약을 취소로 바꿀까요? 청소 연락처로 취소 문자가 갑니다."))return;post({action:"booking_cancel",id:+bt.dataset.cancel}).then(boot)}});
+ if(D.last_towel){$("towelhint").textContent="지난번에는 총 "+D.last_towel.towel_count+"개였어요. 이번에도 모두 세서 적어 주세요."}else{$("towelhint").textContent="첫 청소예요. 방에 있는 수건을 모두 세서 전체 수량을 적어 주세요."}
+ $("sup").innerHTML="";(D.supplies||[]).forEach(function(s){$("sup").appendChild(supRow(s))});
+ document.querySelectorAll("#pcstate button").forEach(function(bt){bt.classList.toggle("on",st.pc===bt.dataset.v);bt.onclick=function(){st.pc=bt.dataset.v;document.querySelectorAll("#pcstate button").forEach(function(x){x.classList.toggle("on",x===bt)});save()}});
+ $("owner").hidden=!D.owner;
+ if(D.owner&&(D.reports||[]).length){$("reports").hidden=false;$("replist").innerHTML=D.reports.map(function(r){var s=r.supplies||{},low=Object.keys(s).filter(function(k){return s[k]==="low"});var ph=[].concat((r.photos||{}).before||[],(r.photos||{}).after||[]);
+  return '<div class="rep"><b>'+md(r.out_date)+'</b> <small style="color:var(--mute)">'+new Date(r.at).toLocaleString("ko-KR")+'</small><div class="hint" style="margin:4px 0 0">수건 '+(r.towel_count==null?"-":r.towel_count+"개")+' · 컴퓨터 '+(r.pc_state==="on"?"켜져 있었음":r.pc_state==="off"?"꺼져 있었음":"-")+(low.length?' · <span class="err">부족: '+esc(low.join(", "))+'</span>':"")+(r.damage_memo?'<br>파손: '+esc(r.damage_memo):"")+(r.shortage_memo?'<br>비품: '+esc(r.shortage_memo):"")+(r.memo?'<br>메모: '+esc(r.memo):"")+'</div><div class="ph">'+ph.map(function(u){return '<a href="'+u+'" target="_blank" rel="noopener"><img src="'+u+'" alt="청소 사진" loading="lazy"></a>'}).join("")+'</div></div>'}).join("")}
+ prog();
+}
+document.addEventListener("change",function(e){if(e.target.matches("[data-c]"))save()});
+["towel","damage","shortage","memo"].forEach(function(i){$(i).addEventListener("input",save)});
+
+$("badd").onclick=function(){var a=$("bin").value,b=$("bout").value;if(!a||!b||b<=a){$("bmsg").className="msg err";$("bmsg").textContent="입실일과 퇴실일을 확인해 주세요";return}
+ $("badd").disabled=true;post({action:"booking_add",in_date:a,out_date:b,notify:$("bnotify").checked}).then(function(r){$("badd").disabled=false;$("bmsg").className="msg "+(r.ok?"okc":"err");$("bmsg").textContent=r.ok?("등록했어요"+(r.sent?" · 청소 일정 문자 보냄":"")):(r.error||"실패");if(r.ok)boot()})};
+
+$("send").onclick=function(){
+ if(!st.photos.before.length){alertBox("청소 전 사진을 먼저 올려 주세요");return}
+ var c={};document.querySelectorAll("[data-c]").forEach(function(x){c[x.dataset.c]=x.checked});
+ $("send").disabled=true;$("send").textContent="보내는 중";
+ post({action:"report",booking_id:st.booking,out_date:outDate(),photos:st.photos,checks:c,pc_state:st.pc,towel_count:$("towel").value,supplies:st.supplies,damage_memo:$("damage").value,shortage_memo:$("shortage").value,memo:$("memo").value}).then(function(r){
+  $("send").disabled=false;$("send").textContent="청소 완료 보내기";
+  if(r.ok){try{localStorage.removeItem(DK)}catch(e){};$("prog").textContent="보냈어요. 수고하셨습니다!";setTimeout(function(){location.reload()},1500)}else alertBox(r.error||"보내지 못했어요. 다시 눌러 주세요")
+ }).catch(function(){$("send").disabled=false;$("send").textContent="청소 완료 보내기";alertBox("인터넷 연결을 확인하고 다시 눌러 주세요")})};
+function alertBox(t){$("prog").innerHTML='<span class="err">'+esc(t)+'</span>'}
+
+function boot(){post({action:"board"}).then(function(r){if(!r.ok){$("lock").textContent=r.error||"링크를 다시 확인해 주세요";return}D=r;render()}).catch(function(){$("lock").textContent="인터넷 연결을 확인해 주세요"})}
+load();boot();
+})();
+</script>
+</body></html>
