@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>카드뉴스 글 줄이기 5 · AI 문방구</title>
+<meta name="description" content="카드뉴스 글이 길 때 줄이는 방법 5가지(숫자 하나 크게·번호로 끊기·강조는 한 단어·두 얘기는 두 장·제목에 결론)를 고치기 전후 문장과 클로드한테 시키는 문장으로 정리했어요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5FA2;--code:#FFD1E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 카드뉴스 고치기 5</p><h1>긴 카드뉴스 →<br><em>읽히는 카드뉴스</em> 5</h1><p class="lead">댓글로 신청해주셔서 고마워요. 영상에 나온 전후 카드 문장을 그대로 옮겼어요. 예시의 '문방구 카페'는 가상의 가게예요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button><h2><b>01</b>숫자 하나만 크게</h2><div class="card"><p>설명 세 줄보다 숫자 하나를 크게 쓰면 눈이 숫자부터 봐요. 영상 예시 글자 수 71 → 19.</p><div class="copy" data-c>전: 저희 카페에서는 단골 손님들께 감사한 마음을 담아 커피를 열 잔 드시면 한 잔을 무료로 드리는 쿠폰 이벤트를 진행하고 있어요. 도장은 계산할 때 찍어드려요.<button type="button">복사</button></div><div class="copy" data-c>후: (크게) 10+1 / 커피 열 잔 마시면 한 잔 무료<button type="button">복사</button></div></div><h2><b>02</b>긴 문장은 번호로</h2><div class="card"><p>쉼표로 이어진 문장은 할 일마다 번호를 붙여 끊어요.</p><div class="copy" data-c>전: 포장 주문은 매장 카운터에서 해주시고, 텀블러를 가져오시면 300원을 할인해드리며, 영수증은 교환할 때 필요하니 꼭 챙겨주세요.<button type="button">복사</button></div><div class="copy" data-c>후: 1 카운터에서 주문 / 2 텀블러 300원 할인 / 3 영수증 챙기기<button type="button">복사</button></div></div><h2><b>03</b>강조는 한 단어만</h2><div class="card"><p>전부 굵게 쓰면 아무것도 안 보여요. 꼭 기억할 한 단어에만 색을 넣어요.</p><div class="copy" data-c>전: (전체 굵게) 이번 주 토요일 오후 2시부터 라떼아트 원데이 클래스가 열려요. 자리는 8석이고 재료는 모두 준비돼 있어요.<button type="button">복사</button></div><div class="copy" data-c>후: (보통 굵기) … 자리는 [8석]이고 … ← 8석만 색<button type="button">복사</button></div></div><h2><b>04</b>두 얘기는 두 장으로</h2><div class="card"><p>한 장에 두 가지를 말하고 있으면 장을 나눠요.</p><div class="copy" data-c>전: 겨울 신메뉴 + 연말 휴무 안내 (한 장)<button type="button">복사</button></div><div class="copy" data-c>후: 1장 겨울 신메뉴 — 딸기라떼와 군고구마 라떼가 12월에 나와요 / 2장 연말 휴무 — 12월 31일 ~ 1월 2일 쉬어요<button type="button">복사</button></div></div><h2><b>05</b>제목에 결론부터</h2><div class="card"><p>"~에 대한 안내 말씀" 대신 무엇이 언제인지 제목에 써요.</p><div class="copy" data-c>전: 겨울 메뉴 변경에 대한 안내 말씀<button type="button">복사</button></div><div class="copy" data-c>후: 딸기라떼, 12월에 돌아와요<button type="button">복사</button></div></div><h2><b>06</b>클로드한테 시키는 문장</h2><div class="card"><p>카드 문장을 붙여넣고 이렇게 시키면 다섯 가지를 한 번에 점검해요.</p><div class="copy" data-c>이 카드뉴스 문장을 줄여줘. 1) 숫자로 말할 수 있는 건 숫자 하나로 2) 쉼표로 이어진 문장은 번호 목록으로 3) 강조는 한 단어만 4) 한 장에 주제가 둘이면 장을 나눠서 5) 제목은 결론부터. 장마다 전/후와 글자 수를 표로 보여줘.<button type="button">복사</button></div></div><h2><b>REF</b>참고</h2><div class="card"><p>레퍼런스 랩의 큰 글자 하나 표지(해외 디자이너가 쓰는 무료 폰트 사이트 7개)의 노랑 배경 + 거대한 글자 + 검정 띠 구성을 따라 만들었어요.</p></div><footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['카드뉴스 글 줄이기 5 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cardcut5_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
