@@ -203,7 +203,7 @@ function draw(){if(!DATA)return;
  $("tlist").innerHTML=T.length?T.map(i=>card(i,false)).join(""):'<div class="empty">오늘은 청소 일정이 없어요 😊</div>';
  const by={};L.filter(i=>i.date!==DATA.today).forEach(i=>(by[i.date]=by[i.date]||[]).push(i));
  const ds=Object.keys(by).sort();
- $("days").innerHTML=ds.length?ds.map((d,x)=>'<div class="day"><h2>'+md(d)+(x===0&&new Date(d+"T00:00:00")-new Date(DATA.today+"T00:00:00")===864e5?" 내일":"")+' <small>'+by[d].length+'건</small></h2>'+by[d].map(i=>card(i,!(i.key===OPEN))).join("")+'</div>').join(""):'<div class="day"><h2>다음 일정</h2><div class="empty">앞으로 7일 동안 다른 청소 일정이 없어요</div></div>';
+ $("days").innerHTML=ds.length?ds.map((d,x)=>'<div class="day"><h2>'+md(d)+(x===0&&new Date(d+"T00:00:00")-new Date(DATA.today+"T00:00:00")===864e5?" 내일":"")+' <small>'+by[d].length+'건</small></h2>'+by[d].map(i=>card(i,!(i.key===OPEN))).join("")+'</div>').join(""):'<div class="day"><h2>다음 일정</h2><div class="empty">앞으로 한 달 동안 다른 청소 일정이 없어요</div></div>';
  drawQuest();bind()}
 
 function bind(){const root=document.body;
@@ -255,7 +255,7 @@ function drawReg(){const ph=ls("pn_clean_phone");
   if(!j.ok){$("rgo").disabled=false;$("rgo").textContent="알림 등록하기";$("rmsg").innerHTML='<div class="msg e">'+esc(j.error||"다시 눌러 주세요")+'</div>';return}
   ls("pn_clean_phone",phone);drawReg()}}
 
-async function load(force){const j=await call(API,{action:"board",days:7});
+async function load(force){const j=await call(API,{action:"board",days:31});
  if(!j.ok){$("upd").textContent=j.error||"불러오지 못했어요. 잠시 뒤 다시 열어 주세요";if(!DATA){$("tlist").innerHTML='<div class="empty">'+esc(j.error||"불러오지 못했어요")+'</div>'}return}
  DATA=j;$("upd").textContent="예약 기준 실시간 · "+tm(j.now)+" 확인 (1분마다 새로고침)";
  const typing=document.activeElement&&/TEXTAREA|INPUT/.test(document.activeElement.tagName);
