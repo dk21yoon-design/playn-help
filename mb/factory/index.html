@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>릴스 공장 설계도 · AI 문방구</title>
+<meta name="description" content="AI 문방구가 하루 릴스 3개를 만드는 여섯 칸(소재·대본·목소리·화면·검수·발행) 규칙과 클로드한테 시키는 문장, 오늘 바로 해볼 쉬운 버전 3단계를 한 장에 정리했어요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/assets/pretendard.css">
+<style>
+:root{--bg:#0E0E10;--card:#17171B;--line:#2C2C33;--ink:#F4F2EE;--mute:#A9A7B0;--pink:#FF5A43;--code:#FFD6CF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,sans-serif;line-height:1.6;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 16px 80px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+h1{font-size:clamp(30px,7vw,44px);line-height:1.2;letter-spacing:-.03em;margin:22px 0 12px}
+h1 em{font-style:normal;color:var(--pink)}
+.lead{color:var(--mute);font-size:17px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--pink);color:#160A10;font-weight:800;font-size:17px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;min-height:48px}
+h2{font-size:22px;margin:48px 0 14px;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+h2 b{color:var(--pink);font-size:15px;letter-spacing:.06em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:4px}
+.card p{color:var(--mute);font-size:15px}
+.copy{position:relative;margin-top:10px;background:#0B0B0D;border:1px solid var(--line);border-radius:10px;padding:14px 64px 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;color:var(--code);white-space:pre-wrap;word-break:break-all}
+.copy button{position:absolute;right:8px;top:8px;background:#26262C;color:var(--ink);border:0;border-radius:8px;font:600 13px Pretendard,sans-serif;padding:8px 10px;cursor:pointer;min-height:36px}
+.copy button.ok{background:var(--pink);color:#160A10}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#160A10;font-weight:800;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.cmd code{font-family:ui-monospace,Menlo,monospace;color:var(--code);font-size:16px}
+.cmd small{float:right;color:var(--mute);font-size:12px;letter-spacing:.06em}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.res{grid-template-columns:1fr}}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.res b{display:block;font-size:26px;color:var(--pink)}
+.res span{font-size:14px;color:var(--mute)}
+footer{margin-top:56px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+a{color:var(--pink)}
+</style>
+</head>
+<body>
+<main><p class="brand"><i></i>AI 문방구 · 릴스 공장</p><h1>하루 릴스 3개<br><em>공장 설계도</em></h1><p class="lead">댓글로 신청해주셔서 고마워요. 영상에서 보여드린 여섯 칸의 실제 규칙과 클로드한테 시키는 문장을 그대로 옮겼어요.</p><button class="dl" id="dl" type="button">텍스트 파일로 받기 ↓</button>
+<h2><b>01</b>소재</h2><div class="card"><p>반응 좋은 릴스·카드뉴스를 매일 모으고 좋아요·댓글·조회수 숫자를 같이 저장해요. 같은 날 세 편은 전부 다른 주제, 같은 디자인 틀은 이틀 연속 금지.</p><div class="copy" data-c>저장해둔 레퍼런스 목록에서 댓글 수가 많은 순으로 10개를 보고, 오늘 만들 주제 3개를 골라줘. 어제 만든 주제와 겹치면 빼고, 고른 이유를 숫자로 한 줄씩 적어줘.<button type="button">복사</button></div></div>
+<h2><b>02</b>대본</h2><div class="card"><p>항목 다섯 개, 항목마다 문장 하나. 번역투·"다양한"·"한층 더" 같은 표현과 연결어미 쉼표를 빼요.</p><div class="copy" data-c>이 대본에서 AI 티 나는 부분을 고쳐줘. 번역투, 다양한/한층 더/~할 수 있습니다 같은 표현, 연결어미 뒤 쉼표, 같은 문장 모양 반복을 찾아서 원문 → 고친 문장으로 보여줘. 숫자랑 고유명사는 그대로 둬.<button type="button">복사</button></div></div>
+<h2><b>03</b>목소리</h2><div class="card"><p>대본을 폴더에 넣으면 15분마다 한 줄씩 녹음해요. 녹음 뒤 받아쓰기로 다시 듣고 대본과 다르게 들린 줄만 다시 녹음해요. 영어는 소리 나는 대로 한글로 적어요(쓰리디, 에이아이).</p></div>
+<h2><b>04</b>화면</h2><div class="card"><p>장면을 웹페이지로 만들고 1초에 30장씩 찍어 이어 붙여요. 디자인은 레퍼런스 틀 하나를 골라 조금 바꿔 따라 하고, 항목마다 전 → 후를 꼭 보여줘요.</p><div class="copy" data-c>이 레퍼런스 카드뉴스의 레이아웃(제목 위치, 카드 크기, 색 2개, 칩 위치)만 따라서 1080×1920 장면 HTML을 만들어줘. 내용은 내 대본으로 바꾸고, 항목마다 전 → 후가 옆으로 밀리며 바뀌게 해줘.<button type="button">복사</button></div></div>
+<h2><b>05</b>검수</h2><div class="card"><p>프레임을 한 장씩 비교해서 화면이 3장 넘게 멈추면 다시 만들어요. 끝이 뚝 끊기지 않는지, 자막이 목소리와 맞는지, 썸네일이 첫 화면과 같은지도 봐요.</p><div class="copy" data-c>ffmpeg로 이 영상을 270×480 흑백으로 줄여서 앞뒤 프레임 차이 평균을 계산하고, 차이가 0.05 아래로 연속된 가장 긴 구간이 몇 장인지 알려줘. 3장 넘으면 그 구간 시간을 표로 보여줘.<button type="button">복사</button></div></div>
+<h2><b>06</b>발행</h2><div class="card"><p>대기열에 넣으면 정한 시간(9시·20시·22시)에 인스타·유튜브에 같이 올라가요. 댓글에 "문방구"가 달리면 5분 안에 자료 링크를 DM으로 보내요.</p></div>
+<h2><b>EASY</b>오늘 바로 해보는 3단계</h2><div class="card"><h3>1. 잘 된 릴스 10개 공통점</h3><div class="copy" data-c>이 릴스 10개 링크의 첫 문장, 장면 수, 자막 위치, 끝 문장을 표로 정리하고 반응 좋은 영상끼리 겹치는 공통점을 5개만 뽑아줘.<button type="button">복사</button></div></div><div class="card"><h3>2. 대본 틀 하나 → 다섯 편</h3><div class="copy" data-c>방금 뽑은 공통점으로 30초 대본 틀을 만들어줘. 그 틀로 주제만 바꿔서 대본 5개 써줘. 번역투랑 뻔한 표현은 빼고.<button type="button">복사</button></div></div><div class="card"><h3>3. 예약 작업에 걸어두기</h3><div class="copy" data-c>매일 아침 8시에 이 틀로 오늘 올릴 대본 3개를 써서 옵시디언 '릴스 대본' 폴더에 저장해줘. 같은 날 주제는 겹치지 않게.<button type="button">복사</button></div></div>
+<footer>정리 <a href="https://www.instagram.com/ai.munbanggu/" rel="noopener">@ai.munbanggu</a> · <a href="../">자료실 전체 보기</a></footer></main><script>
+document.querySelectorAll('.copy').forEach(function(box){var b=box.querySelector('button');b.addEventListener('click',function(){var t=box.firstChild.textContent.trim();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}).finally(function(){b.textContent='복사됨';b.classList.add('ok');setTimeout(function(){b.textContent='복사';b.classList.remove('ok')},1500)})})});
+document.getElementById('dl').addEventListener('click',function(){var out=['릴스 공장 설계도 · AI 문방구 (@ai.munbanggu)',''];document.querySelectorAll('main h2, .card h3, .steps strong, .copy').forEach(function(e){if(e.tagName==='H2')out.push('','■ '+e.textContent.replace(/^[A-Z]+/,'').trim());else if(e.classList&&e.classList.contains('copy'))out.push('  '+e.firstChild.textContent.trim());else out.push('- '+e.textContent.trim())});var blob=new Blob([out.join('\n')],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='factory_AI문방구.txt';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)});
+</script>
+</body>
+</html>
